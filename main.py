@@ -58,21 +58,22 @@ def run_pipeline(force_push: bool = False):
 
     # 导出静态 JSON 供 GitHub Pages 网页直接读取
     try:
-        data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "web", "data")
-        os.makedirs(data_dir, exist_ok=True)
-        with db._get_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute("SELECT * FROM policies ORDER BY pub_date DESC, id DESC LIMIT 200")
-            all_policies = [dict(r) for r in cursor.fetchall()]
-            cursor.execute("SELECT category, COUNT(*) as cnt FROM policies GROUP BY category")
-            cat_stats = {r["category"]: r["cnt"] for r in cursor.fetchall()}
-        
-        with open(os.path.join(data_dir, "policies.json"), "w", encoding="utf-8") as f:
-            import json
-            json.dump({"code": 0, "data": all_policies, "count": len(all_policies)}, f, ensure_ascii=False, indent=2)
-        with open(os.path.join(data_dir, "stats.json"), "w", encoding="utf-8") as f:
-            json.dump({"code": 0, "data": {"stats": db.get_stats(), "categories": cat_stats}}, f, ensure_ascii=False, indent=2)
-        logger.info("[静态数据] 已成功同步 web/data/ 供 GitHub Pages 在线访问！")
+        for folder in ["web", "docs"]:
+            data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), folder, "data")
+            os.makedirs(data_dir, exist_ok=True)
+            with db._get_connection() as conn:
+                cursor = conn.cursor()
+                cursor.execute("SELECT * FROM policies ORDER BY pub_date DESC, id DESC LIMIT 200")
+                all_policies = [dict(r) for r in cursor.fetchall()]
+                cursor.execute("SELECT category, COUNT(*) as cnt FROM policies GROUP BY category")
+                cat_stats = {r["category"]: r["cnt"] for r in cursor.fetchall()}
+            
+            with open(os.path.join(data_dir, "policies.json"), "w", encoding="utf-8") as f:
+                import json
+                json.dump({"code": 0, "data": all_policies, "count": len(all_policies)}, f, ensure_ascii=False, indent=2)
+            with open(os.path.join(data_dir, "stats.json"), "w", encoding="utf-8") as f:
+                json.dump({"code": 0, "data": {"stats": db.get_stats(), "categories": cat_stats}}, f, ensure_ascii=False, indent=2)
+        logger.info("[静态数据] 已成功同步 web/data/ 和 docs/data/ 供 GitHub Pages 在线访问！")
     except Exception as e:
         logger.warning(f"导出静态网页数据失败: {e}")
 

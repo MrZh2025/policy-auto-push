@@ -1,0 +1,845 @@
+/* ==========================================================================
+   医药健康产业政策监测与申报研判系统
+   设计参照：国家药品监督管理局 (NMPA) 官方门户网站视觉规范
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. 亮色模式 (国家药监局官方标准配色: 经典政务蓝 #004886 + 党政红 #c5161d + 权威白)
+   -------------------------------------------------------------------------- */
+:root, [data-theme="light"] {
+    --nmpa-blue-dark: #003366;       /* 药监局深蓝 */
+    --nmpa-blue-main: #004886;       /* 药监局经典主蓝 */
+    --nmpa-blue-hover: #005bac;      /* 药监局亮蓝 */
+    --nmpa-red-gov: #c5161d;         /* 党政权威红 */
+    --nmpa-gold: #e6a23c;            /* 导航金色高亮 */
+
+    --bg-page: #f0f2f5;              /* 页面政务底灰 */
+    --bg-card: #ffffff;              /* 卡片纯白 */
+    --bg-subtle: #f8fafc;
+    --bg-inset: #eef2f6;
+
+    --text-title: #1a1a1a;
+    --text-body: #333333;
+    --text-muted: #666666;
+    --text-caption: #888888;
+
+    --border-color: #dcdfe6;
+    --border-light: #ebeef5;
+    --border-hover: #004886;
+
+    --shadow-gov: 0 2px 10px rgba(0, 0, 0, 0.06);
+    --shadow-card: 0 1px 4px rgba(0, 0, 0, 0.05);
+
+    --font-serif: 'Noto Serif SC', SimSun, "宋体", serif;
+    --font-sans: 'Noto Sans SC', "Microsoft YaHei", "微软雅黑", sans-serif;
+    --font-mono: 'JetBrains Mono', Consolas, monospace;
+}
+
+/* --------------------------------------------------------------------------
+   2. 深色模式 (政务内参夜间护眼模式)
+   -------------------------------------------------------------------------- */
+[data-theme="dark"] {
+    --nmpa-blue-dark: #08101e;
+    --nmpa-blue-main: #0f2b4c;
+    --nmpa-blue-hover: #1b4b7e;
+    --nmpa-red-gov: #e02424;
+    --nmpa-gold: #f59e0b;
+
+    --bg-page: #0b111a;
+    --bg-card: #121d2b;
+    --bg-subtle: #162436;
+    --bg-inset: #1a2c42;
+
+    --text-title: #f0f4f8;
+    --text-body: #c5d1de;
+    --text-muted: #8a9ba8;
+    --text-caption: #627585;
+
+    --border-color: #24364a;
+    --border-light: #1c2b3c;
+    --border-hover: #3880c8;
+
+    --shadow-gov: 0 2px 10px rgba(0, 0, 0, 0.4);
+    --shadow-card: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-sans);
+    background-color: var(--bg-page);
+    color: var(--text-body);
+    line-height: 1.6;
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* --------------------------------------------------------------------------
+   3. 顶部政务红蓝辅助条
+   -------------------------------------------------------------------------- */
+.top-gov-bar {
+    background-color: var(--bg-card);
+    border-bottom: 1px solid var(--border-light);
+    font-size: 12px;
+    color: var(--text-muted);
+    padding: 4px 0;
+}
+
+.gov-container {
+    max-width: 1560px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.gov-top-links {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.gov-status-dot {
+    width: 6px;
+    height: 6px;
+    background-color: #10b981;
+    border-radius: 50%;
+}
+
+.top-theme-btn {
+    background: none;
+    border: 1px solid var(--border-color);
+    color: var(--text-body);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+.top-theme-btn:hover {
+    border-color: var(--nmpa-blue-main);
+    color: var(--nmpa-blue-main);
+}
+
+/* --------------------------------------------------------------------------
+   4. NMPA 权威大标题 Header 区
+   -------------------------------------------------------------------------- */
+.nmpa-header {
+    background-color: var(--bg-card);
+    border-bottom: 2px solid var(--nmpa-red-gov);
+    padding: 18px 0;
+}
+
+.nmpa-header-wrap {
+    max-width: 1560px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.nmpa-brand {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.nmpa-emblem {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, #c5161d 0%, #a01017 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(197, 22, 29, 0.35);
+    border: 2px solid #fff;
+    outline: 2px solid #c5161d;
+}
+
+.emblem-inner {
+    text-align: center;
+    color: #ffd700;
+}
+.emblem-star {
+    font-size: 16px;
+    display: block;
+    line-height: 1;
+}
+.emblem-text {
+    font-size: 11px;
+    font-weight: 900;
+    color: #ffffff;
+    display: block;
+    letter-spacing: 1px;
+}
+
+.nmpa-title-box .main-title {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--text-title);
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+}
+
+.nmpa-title-box .en-title {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 9.5px;
+    color: var(--nmpa-blue-main);
+    letter-spacing: 0.8px;
+    font-weight: 700;
+    margin: 2px 0;
+}
+
+.nmpa-title-box .org-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* 顶部操作按钮 */
+.nmpa-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background-color: var(--bg-subtle);
+    border: 1px solid var(--border-color);
+    color: var(--text-body);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 7px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+    background-color: var(--bg-inset);
+    border-color: var(--nmpa-blue-main);
+    color: var(--nmpa-blue-main);
+}
+
+.action-btn.action-primary {
+    background-color: var(--nmpa-blue-main);
+    color: #ffffff;
+    border-color: var(--nmpa-blue-main);
+}
+.action-btn.action-primary:hover {
+    background-color: var(--nmpa-blue-hover);
+}
+
+.action-btn.action-wechat {
+    background-color: #07c160;
+    color: #ffffff;
+    border-color: #07c160;
+}
+.action-btn.action-wechat:hover {
+    background-color: #06ad56;
+}
+
+/* --------------------------------------------------------------------------
+   5. NMPA 经典政务深蓝主导航栏 (Navbar)
+   -------------------------------------------------------------------------- */
+.nmpa-navbar {
+    background-color: var(--nmpa-blue-main);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.nmpa-nav-wrap {
+    max-width: 1560px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.nav-menu {
+    list-style: none;
+    display: flex;
+    overflow-x: auto;
+}
+
+.nav-item a {
+    display: block;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 14.5px;
+    font-weight: 600;
+    padding: 12px 18px;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.nav-item:hover a {
+    background-color: rgba(255, 255, 255, 0.12);
+    border-bottom-color: var(--nmpa-gold);
+}
+
+.nav-item.active a {
+    background-color: var(--nmpa-blue-dark);
+    border-bottom-color: var(--nmpa-gold);
+    color: #ffffff;
+}
+
+/* --------------------------------------------------------------------------
+   6. 主体网格布局 (70% 政策主流 + 30% 四川专项/研判)
+   -------------------------------------------------------------------------- */
+.nmpa-main {
+    max-width: 1560px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+.nmpa-main-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 20px;
+    align-items: start;
+}
+
+.gov-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    box-shadow: var(--shadow-gov);
+    padding: 16px 20px;
+}
+
+/* 左侧栏标题 */
+.gov-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--border-light);
+    margin-bottom: 14px;
+    gap: 15px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.header-red-bar {
+    width: 4px;
+    height: 18px;
+    background-color: var(--nmpa-red-gov);
+    border-radius: 2px;
+}
+
+.header-title {
+    font-family: var(--font-serif);
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-title);
+}
+
+.header-badge {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--nmpa-blue-main);
+    background-color: var(--bg-inset);
+    padding: 2px 6px;
+    border-radius: 2px;
+    border: 1px solid var(--border-color);
+}
+
+.header-search {
+    display: flex;
+    align-items: center;
+}
+
+.header-search input {
+    border: 1px solid var(--border-color);
+    border-right: none;
+    border-radius: 3px 0 0 3px;
+    padding: 6px 10px;
+    font-size: 13px;
+    width: 240px;
+    outline: none;
+    background-color: var(--bg-subtle);
+    color: var(--text-title);
+}
+
+.search-btn {
+    background-color: var(--nmpa-blue-main);
+    color: #ffffff;
+    border: 1px solid var(--nmpa-blue-main);
+    border-radius: 0 3px 3px 0;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.search-btn:hover {
+    background-color: var(--nmpa-blue-hover);
+}
+
+/* --------------------------------------------------------------------------
+   7. 官方政策法规条目 (NMPA 公文列表排版)
+   -------------------------------------------------------------------------- */
+.policy-table-stream {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 780px;
+    overflow-y: auto;
+    padding-right: 6px;
+}
+
+.policy-table-stream::-webkit-scrollbar {
+    width: 6px;
+}
+.policy-table-stream::-webkit-scrollbar-thumb {
+    background-color: var(--border-color);
+    border-radius: 3px;
+}
+
+.nmpa-policy-row {
+    background-color: var(--bg-subtle);
+    border: 1px solid var(--border-light);
+    border-left: 3px solid var(--nmpa-blue-main);
+    border-radius: 3px;
+    padding: 14px 16px;
+    transition: all 0.2s ease;
+}
+
+.nmpa-policy-row:hover {
+    border-color: var(--nmpa-blue-main);
+    border-left-width: 5px;
+    background-color: var(--bg-card);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.row-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    font-size: 12px;
+}
+
+.tag-dept {
+    font-weight: 700;
+    color: #ffffff;
+    background-color: var(--nmpa-blue-main);
+    padding: 1px 6px;
+    border-radius: 2px;
+    font-size: 11px;
+}
+
+.tag-category {
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 2px;
+    font-size: 11px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-inset);
+    color: var(--text-muted);
+}
+
+.row-date {
+    font-family: var(--font-mono);
+    color: var(--text-caption);
+    margin-left: auto;
+    font-weight: 600;
+}
+
+.row-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-title);
+    margin-bottom: 6px;
+    line-height: 1.45;
+}
+
+.row-summary {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.55;
+    margin-bottom: 8px;
+}
+
+.row-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 6px;
+    border-top: 1px dashed var(--border-light);
+    font-size: 12px;
+}
+
+.link-detail {
+    color: var(--nmpa-blue-main);
+    text-decoration: none;
+    font-weight: 700;
+}
+.link-detail:hover {
+    color: var(--nmpa-red-gov);
+    text-decoration: underline;
+}
+
+/* --------------------------------------------------------------------------
+   8. 右侧：四川省专项专栏 & 研判工作台
+   -------------------------------------------------------------------------- */
+.nmpa-right-col {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* 四川红头专题卡片 */
+.special-sichuan-box {
+    border-top: 4px solid var(--nmpa-red-gov);
+}
+
+.special-badge {
+    display: inline-block;
+    background-color: var(--nmpa-red-gov);
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-bottom: 8px;
+}
+
+.special-card-title {
+    font-family: var(--font-serif);
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--text-title);
+    margin-bottom: 6px;
+}
+
+.special-card-desc {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 12px;
+}
+
+.btn-generate-report {
+    width: 100%;
+    background: linear-gradient(135deg, #c5161d 0%, #a01017 100%);
+    color: #ffffff;
+    border: none;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 9px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(197, 22, 29, 0.3);
+    transition: opacity 0.2s ease;
+}
+.btn-generate-report:hover {
+    opacity: 0.92;
+}
+
+/* 研判咨询台 */
+.consult-box {
+    display: flex;
+    flex-direction: column;
+}
+
+.consult-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border-light);
+    margin-bottom: 12px;
+}
+
+.consult-title-area {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.consult-title-area h4 {
+    font-family: var(--font-serif);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-title);
+}
+
+.btn-text-link {
+    background: none;
+    border: none;
+    color: var(--nmpa-blue-main);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* 模型抽屉 */
+.config-drawer {
+    background-color: var(--bg-inset);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 12px;
+}
+.config-drawer.hidden { display: none; }
+
+.drawer-field label {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 4px;
+}
+
+.drawer-field input, .drawer-row input {
+    width: 100%;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-title);
+    padding: 5px 8px;
+    font-size: 12px;
+    border-radius: 3px;
+    outline: none;
+}
+
+.drawer-row {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+.btn-save-key {
+    background-color: var(--nmpa-blue-main);
+    color: #ffffff;
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 0 12px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+/* 研判快捷议题 */
+.query-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.tag-chip {
+    background-color: var(--bg-subtle);
+    border: 1px solid var(--border-color);
+    color: var(--text-body);
+    font-size: 11.5px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.tag-chip:hover {
+    border-color: var(--nmpa-blue-main);
+    color: var(--nmpa-blue-main);
+    background-color: var(--bg-inset);
+}
+
+/* 研判对话区 */
+.consult-dialog-viewport {
+    height: 400px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 6px 2px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.consult-dialog-viewport::-webkit-scrollbar {
+    width: 5px;
+}
+.consult-dialog-viewport::-webkit-scrollbar-thumb {
+    background-color: var(--border-color);
+    border-radius: 3px;
+}
+
+.dialog-row {
+    display: flex;
+    max-width: 94%;
+}
+
+.dialog-row.bot-row { align-self: flex-start; }
+.dialog-row.user-row { align-self: flex-end; }
+
+.dialog-card {
+    padding: 10px 14px;
+    border-radius: 4px;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.dialog-row.bot-row .dialog-card {
+    background-color: var(--bg-subtle);
+    border: 1px solid var(--border-color);
+    color: var(--text-title);
+}
+
+.dialog-row.user-row .dialog-card {
+    background-color: var(--nmpa-blue-main);
+    color: #ffffff;
+}
+
+.dialog-author {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--nmpa-red-gov);
+    margin-bottom: 4px;
+}
+
+.dialog-card h2, .dialog-card h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--nmpa-blue-main);
+    margin: 8px 0 4px;
+}
+
+.dialog-card ul, .dialog-card ol {
+    padding-left: 18px;
+    margin: 4px 0;
+}
+
+/* 输入栏 */
+.consult-input-area {
+    display: flex;
+    gap: 6px;
+    align-items: flex-end;
+}
+
+.consult-input-area textarea {
+    flex: 1;
+    background-color: var(--bg-subtle);
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    color: var(--text-title);
+    padding: 6px 10px;
+    font-size: 12.5px;
+    font-family: inherit;
+    resize: none;
+    outline: none;
+}
+
+.consult-input-area textarea:focus {
+    border-color: var(--nmpa-blue-main);
+    background-color: var(--bg-card);
+}
+
+.btn-send-msg {
+    background-color: var(--nmpa-blue-main);
+    color: #ffffff;
+    border: none;
+    padding: 6px 14px;
+    height: 42px;
+    border-radius: 3px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.btn-send-msg:hover {
+    background-color: var(--nmpa-blue-hover);
+}
+
+/* --------------------------------------------------------------------------
+   9. NMPA 底部政务版记 (Footer)
+   -------------------------------------------------------------------------- */
+.nmpa-footer {
+    background-color: var(--nmpa-blue-dark);
+    color: #d1d8e0;
+    padding: 24px 0;
+    margin-top: 30px;
+    border-top: 3px solid var(--nmpa-red-gov);
+}
+
+.footer-wrap {
+    max-width: 1560px;
+    margin: 0 auto;
+    padding: 0 20px;
+    text-align: center;
+    font-size: 12.5px;
+    line-height: 1.8;
+}
+
+.footer-org {
+    font-weight: 700;
+    color: #ffffff;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.footer-meta {
+    color: #a0aec0;
+}
+
+.footer-copy {
+    color: #718096;
+    font-size: 11.5px;
+    margin-top: 4px;
+}
+
+/* 提示通知 */
+.nmpa-toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background-color: var(--nmpa-blue-dark);
+    color: #ffffff;
+    border-left: 4px solid var(--nmpa-gold);
+    padding: 10px 18px;
+    border-radius: 3px;
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    z-index: 1000;
+    transition: all 0.2s ease;
+}
+.nmpa-toast.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(12px);
+}
+
+.loading-state {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 30px;
+    font-size: 13px;
+}
+
+@media (max-width: 1024px) {
+    .nmpa-main-grid {
+        grid-template-columns: 1fr;
+    }
+    .nmpa-header-wrap {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
