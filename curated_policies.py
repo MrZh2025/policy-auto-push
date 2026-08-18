@@ -9,6 +9,22 @@ from datetime import datetime
 
 CURATED_POLICIES: List[Dict[str, Any]] = [
     {
+        "title": "四川省药品监督管理局关于深化药品医疗器械审评审批制度改革鼓励创新药械发展的若干措施",
+        "url": "https://yjj.sc.gov.cn/scyjj/c103142/2026/8/16/content_sichuan_mpa_innovate.shtml",
+        "source": "四川省药品监督管理局",
+        "pub_date": "2026-08-16",
+        "category": "科技申报政策",
+        "summary": "【创新药械绿色通道】川药监发〔2026〕18号：对进入国家和省级重大科技专项的创新药、罕见病治疗药、首创医疗器械实行‘提前介入、一企一策、全程辅导’；压缩审评审批与检验检测时限50%；建立全省生物医药企业申报专班对接机制。"
+    },
+    {
+        "title": "四川省药品监督管理局关于加强放射性药品生产经营监管促进核医疗产业健康发展的指导意见",
+        "url": "https://yjj.sc.gov.cn/scyjj/c103142/2026/8/13/content_sichuan_mpa_nuclear.shtml",
+        "source": "四川省药品监督管理局",
+        "pub_date": "2026-08-13",
+        "category": "核医药",
+        "summary": "【核药监管与合规保障】川药监办〔2026〕29号：明确短半衰期医用核素及靶向放药生产许可（GMP）快速现场核查规程；支持天府国际生物城及乐山核技术基地建设区域放射性药品检测中心，优化院内放药制剂调剂使用审批流程。"
+    },
+    {
         "title": "四川省发展和改革委员会等部门关于印发《四川省支持医用同位素及放射性药物产业高质量发展若干政策实施细则》的通知",
         "url": "https://fgw.sc.gov.cn/sfgw/c106092/2026/8/15/content_sichuan_nuclear_med.shtml",
         "source": "四川省发展改革委 省经济和信息化厅",
