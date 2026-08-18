@@ -84,8 +84,8 @@ def set_run_font(run, font_type='body', size_pt=Pt(16), bold=False, italic=False
     rFonts.set(qn('w:eastAsia'), east_asia_font)
     rFonts.set(qn('w:cs'), ascii_font)
 
-def set_para_spacing(p, line_spacing_rule=WD_LINE_SPACING.SINGLE, space_before_pt=Pt(0), space_after_pt=Pt(0), align=WD_ALIGN_PARAGRAPH.JUSTIFY, first_line_indent_pt=Pt(24)):
-    """设置段落单倍行距、首行缩进 2 字符 (小4号字为24pt) 与对齐"""
+def set_para_spacing(p, line_spacing_rule=WD_LINE_SPACING.ONE_POINT_FIVE, space_before_pt=Pt(0), space_after_pt=Pt(0), align=WD_ALIGN_PARAGRAPH.JUSTIFY, first_line_indent_pt=Pt(24)):
+    """设置段落 1.5 倍行距、首行缩进 2 字符 (小4号字为24pt) 与对齐"""
     p.paragraph_format.line_spacing_rule = line_spacing_rule
     p.paragraph_format.space_before = space_before_pt
     p.paragraph_format.space_after = space_after_pt
@@ -200,21 +200,21 @@ class PolicyDocExporter:
         today_str = datetime.now().strftime("%Y年%m月%d日")
         date_tag = datetime.now().strftime("%Y%m%d")
 
-        # 2. 公文大标题：2号 方正小标宋简体，居中排布，单倍行距，末尾不加标点
+        # 2. 公文大标题：2号 方正小标宋简体，居中排布，1.5 倍行距，末尾不加标点
         p_title = doc.add_paragraph()
-        set_para_spacing(p_title, line_spacing_rule=WD_LINE_SPACING.SINGLE, space_before_pt=Pt(6), space_after_pt=Pt(12), first_line_indent_pt=Pt(0), align=WD_ALIGN_PARAGRAPH.CENTER)
+        set_para_spacing(p_title, line_spacing_rule=WD_LINE_SPACING.ONE_POINT_FIVE, space_before_pt=Pt(6), space_after_pt=Pt(12), first_line_indent_pt=Pt(0), align=WD_ALIGN_PARAGRAPH.CENTER)
         r_title = p_title.add_run("医药健康产业集团政策监测信息简报")
         set_run_font(r_title, font_type='title', size_pt=FONT_SIZES['2号'], bold=True)
 
-        # 3. 导语段落：小4号 方正仿宋简体（英文和数字 Times New Roman），首行缩进 2 字符 (24pt)，单倍行距
+        # 3. 导语段落：小4号 方正仿宋简体（英文和数字 Times New Roman），首行缩进 2 字符 (24pt)，1.5 倍行距
         p_lead = doc.add_paragraph()
-        set_para_spacing(p_lead, line_spacing_rule=WD_LINE_SPACING.SINGLE, space_before_pt=Pt(0), space_after_pt=Pt(4), first_line_indent_pt=Pt(24), align=WD_ALIGN_PARAGRAPH.JUSTIFY)
+        set_para_spacing(p_lead, line_spacing_rule=WD_LINE_SPACING.ONE_POINT_FIVE, space_before_pt=Pt(0), space_after_pt=Pt(4), first_line_indent_pt=Pt(24), align=WD_ALIGN_PARAGRAPH.JUSTIFY)
         r_lead = p_lead.add_run(f"为及时研判行业监管动向与政策红利，现将截至{today_str}本周最新发布的医药产业重点政策及文件摘要汇总如下：")
         set_run_font(r_lead, font_type='body', size_pt=FONT_SIZES['小4号'])
 
-        # 4. 一级标题：一、本周重点政策速览清单（小4号 黑体，首行缩进 2 字符，单倍行距，末尾不加标点）
+        # 4. 一级标题：一、本周重点政策速览清单（小4号 黑体，首行缩进 2 字符，1.5 倍行距，末尾不加标点）
         p_h1 = doc.add_paragraph()
-        set_para_spacing(p_h1, line_spacing_rule=WD_LINE_SPACING.SINGLE, space_before_pt=Pt(6), space_after_pt=Pt(3), first_line_indent_pt=Pt(24), align=WD_ALIGN_PARAGRAPH.JUSTIFY)
+        set_para_spacing(p_h1, line_spacing_rule=WD_LINE_SPACING.ONE_POINT_FIVE, space_before_pt=Pt(6), space_after_pt=Pt(3), first_line_indent_pt=Pt(24), align=WD_ALIGN_PARAGRAPH.JUSTIFY)
         r_h1 = p_h1.add_run("一、本周重点政策速览清单")
         set_run_font(r_h1, font_type='h1', size_pt=FONT_SIZES['小4号'])
 
@@ -282,36 +282,36 @@ class PolicyDocExporter:
                     set_cell_border(cell, bottom={'val': 'none'}, top={'val': 'none'},
                                           left={'val': 'none'}, right={'val': 'none'})
 
-        # 6. 一级标题：二、本周重点政策要点与文件摘要（小4号 黑体，首行缩进 2 字符，单倍行距）
+        # 6. 一级标题：二、本周重点政策要点与文件摘要（小4号 黑体，首行缩进 2 字符，1.5 倍行距）
         p_h2 = doc.add_paragraph()
-        set_para_spacing(p_h2, line_spacing_rule=WD_LINE_SPACING.SINGLE, space_before_pt=Pt(8), space_after_pt=Pt(3), first_line_indent_pt=Pt(24), align=WD_ALIGN_PARAGRAPH.JUSTIFY)
+        set_para_spacing(p_h2, line_spacing_rule=WD_LINE_SPACING.ONE_POINT_FIVE, space_before_pt=Pt(8), space_after_pt=Pt(3), first_line_indent_pt=Pt(24), align=WD_ALIGN_PARAGRAPH.JUSTIFY)
         r_h2 = p_h2.add_run("二、本周重点政策要点与文件摘要")
         set_run_font(r_h2, font_type='h1', size_pt=FONT_SIZES['小4号'])
 
-        # 7. 政策要点逐条排版（遵循三级标题规范：小4号 方正仿宋加粗 + 方正仿宋正文，单倍行距，首行缩进 2 字符）
+        # 7. 政策要点逐条排版（遵循三级标题规范：小4号 方正仿宋加粗 + 方正仿宋正文，1.5 倍行距，首行缩进 2 字符）
         for idx, item in enumerate(policies, 1):
             # 三级标题：1. 《政策标题》。（方正仿宋加粗 小4号）
             p_item = doc.add_paragraph()
-            set_para_spacing(p_item, line_spacing_rule=WD_LINE_SPACING.SINGLE, space_before_pt=Pt(4), space_after_pt=Pt(1), first_line_indent_pt=Pt(24), align=WD_ALIGN_PARAGRAPH.JUSTIFY)
+            set_para_spacing(p_item, line_spacing_rule=WD_LINE_SPACING.ONE_POINT_FIVE, space_before_pt=Pt(4), space_after_pt=Pt(1), first_line_indent_pt=Pt(24), align=WD_ALIGN_PARAGRAPH.JUSTIFY)
             
             title_text = f"{idx}. 《{item.get('title')}》。"
             r_ititle = p_item.add_run(title_text)
             set_run_font(r_ititle, font_type='h3', size_pt=FONT_SIZES['小4号'], bold=True)
 
-            # 内容与要点（方正仿宋简体 小4号，首行缩进 2 字符，单倍行距）
+            # 内容与要点（方正仿宋简体 小4号，首行缩进 2 字符，1.5 倍行距）
             summary = item.get("summary", "") or item.get("title")
             dept = item.get("source", "国家部委")
             date_str = item.get("pub_date", "") or "近期"
             
             p_desc = doc.add_paragraph()
-            set_para_spacing(p_desc, line_spacing_rule=WD_LINE_SPACING.SINGLE, space_before_pt=Pt(0), space_after_pt=Pt(1), first_line_indent_pt=Pt(24), align=WD_ALIGN_PARAGRAPH.JUSTIFY)
+            set_para_spacing(p_desc, line_spacing_rule=WD_LINE_SPACING.ONE_POINT_FIVE, space_before_pt=Pt(0), space_after_pt=Pt(1), first_line_indent_pt=Pt(24), align=WD_ALIGN_PARAGRAPH.JUSTIFY)
             r_desc = p_desc.add_run(f"该文件由{dept}于{date_str}公开发布。文件摘要与核心要点：{summary}")
             set_run_font(r_desc, font_type='body', size_pt=FONT_SIZES['小4号'])
 
             # 官方原文链接（方正仿宋 小4号 / 蓝色下划线）
             url = item.get("url", "#")
             p_url = doc.add_paragraph()
-            set_para_spacing(p_url, line_spacing_rule=WD_LINE_SPACING.SINGLE, space_before_pt=Pt(0), space_after_pt=Pt(4), first_line_indent_pt=Pt(24), align=WD_ALIGN_PARAGRAPH.JUSTIFY)
+            set_para_spacing(p_url, line_spacing_rule=WD_LINE_SPACING.ONE_POINT_FIVE, space_before_pt=Pt(0), space_after_pt=Pt(4), first_line_indent_pt=Pt(24), align=WD_ALIGN_PARAGRAPH.JUSTIFY)
             r_ulabel = p_url.add_run("官方原文直达链接：")
             set_run_font(r_ulabel, font_type='body', size_pt=FONT_SIZES['小4号'])
             r_u = p_url.add_run(url)

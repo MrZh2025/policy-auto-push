@@ -619,7 +619,7 @@ async function callDirectLLM(prompt, apiKey) {
     const key = apiKey || state.apiKey || DEFAULT_AI_KEY;
     const timeAnchor = getCurrentTimeAnchor();
 
-    const systemPrompt = `你是一名服务于四川省医药健康产业集团的政策研究室主任兼科技申报总监。
+    const systemPrompt = `你是一名服务于四川省医药健康产业集团创新事业部的政策研究总监兼科技申报总监。
 【重要时间基准】：当前系统真实时间为 ${timeAnchor.fullDateStr}（即【${timeAnchor.periodStr}】）。
 【硬性规定】：
 1. 涉及所有政策周报标题、研判周期、申报时效必须严格以当前真实时间（${timeAnchor.year}年${timeAnchor.month}月）为准，严禁出现过期的 2024 年、2025 年等历史年份！
