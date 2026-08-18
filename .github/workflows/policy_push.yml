@@ -1,15 +1,12 @@
 name: 医药政策每日自动化监控与微信推送
 
-# 触发条件：
-# 1. 每日定时触发 (UTC 时间对应北京时间)
-# 2. 支持在 GitHub 页面随时手动点击 "Run workflow" 立即触发
 on:
   schedule:
     # 北京时间 08:30 (UTC 00:30)
     - cron: '30 0 * * 1-5'
     # 北京时间 17:30 (UTC 09:30)
     - cron: '30 9 * * 1-5'
-  workflow_dispatch: # 允许手动一键触发测试
+  workflow_dispatch:
 
 jobs:
   run-policy-crawler:
@@ -30,7 +27,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: 执行政策采集与微信推送
+      - name: 执行政策采集、Word简报生成与微信推送
         env:
           PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN || 'be87fdcbcef94066ab9132f5e8575005' }}
           WECHAT_WORK_WEBHOOK: ${{ secrets.WECHAT_WORK_WEBHOOK }}
@@ -39,9 +36,17 @@ jobs:
         run: |
           python main.py
 
-      - name: 提交并持久化去重数据库
+      - name: 上传 Word 简报附件到 GitHub Artifacts (供网页下载)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: 医药产业政策每日监测简报-Word
+          path: reports/*.docx
+          retention-days: 30
+
+      - name: 提交并持久化去重数据库与 Word 归档
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add policy_records.db policy_runner.log || true
-          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: update policy database [skip ci]" && git push)
+          git add policy_records.db policy_runner.log reports/*.docx || true
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: update policy db & reports [skip ci]" && git push)

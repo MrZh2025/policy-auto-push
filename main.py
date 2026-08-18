@@ -16,6 +16,7 @@ if hasattr(sys.stderr, "buffer"):
 from database import PolicyDatabase
 from notifier import WeChatNotifier
 from formatter import PolicyFormatter
+from doc_exporter import PolicyDocExporter
 from scrapers import get_enabled_scrapers
 import config
 
@@ -64,6 +65,15 @@ def run_pipeline(force_push: bool = False):
     logger.info(f"[排版] 正在打包 {len(unpushed_items)} 条新政策并推送到微信...")
     digest = PolicyFormatter.build_daily_digest(unpushed_items)
 
+    # 自动生成一份排版精美的 Word 简报保存到桌面与归档
+    try:
+        saved_words = PolicyDocExporter.export(unpushed_items)
+        if saved_words:
+            logger.info(f"📄 [Word已生成] 已保存至: {saved_words[0]}")
+    except Exception as e:
+        logger.warning(f"生成 Word 简报失败: {e}")
+
+    # 发送微信推送
     success = notifier.dispatch(
         title=digest["title"],
         content=digest["content"]
