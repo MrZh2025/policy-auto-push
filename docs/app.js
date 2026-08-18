@@ -4,13 +4,13 @@
  */
 
 // 默认 DeepSeek 大模型配置
-const DEFAULT_AI_KEY = 'sk-7daca4b5395646c39f282ed7227c047d';
+const DEFAULT_AI_KEY = 'sk-1be5b76a1ca7418e8e0ca3ca94744297';
 const DEFAULT_AI_BASE_URL = 'https://api.deepseek.com';
 const DEFAULT_AI_MODEL = 'deepseek-chat';
 
-// 自动纠偏与自愈机制（防止浏览器残留旧的历史无效配置导致 404）
+// 自动纠偏与自愈机制（平滑升级至最新有效 Key 与绝对路径）
 let rawStoredKey = localStorage.getItem('POLICY_AI_API_KEY');
-if (!rawStoredKey || rawStoredKey.length < 20 || rawStoredKey.includes('5043')) {
+if (!rawStoredKey || rawStoredKey.length < 20 || rawStoredKey.includes('7daca') || rawStoredKey.includes('5043')) {
     rawStoredKey = DEFAULT_AI_KEY;
     localStorage.setItem('POLICY_AI_API_KEY', rawStoredKey);
 }
@@ -59,9 +59,13 @@ const el = {
     toggleApiKey: document.getElementById('toggleApiKey'),
     apiKeyDrawer: document.getElementById('apiKeyDrawer'),
     inputApiKey: document.getElementById('inputApiKey'),
+    btnToggleKeyEye: document.getElementById('btnToggleKeyEye'),
+    keyStatusHint: document.getElementById('keyStatusHint'),
     inputBaseUrl: document.getElementById('inputBaseUrl'),
+    selectModel: document.getElementById('selectModel'),
     inputModel: document.getElementById('inputModel'),
     btnSaveKey: document.getElementById('btnSaveKey'),
+    btnResetKey: document.getElementById('btnResetKey'),
     toast: document.getElementById('toast'),
     listBadge: document.getElementById('listBadge'),
 };
@@ -170,13 +174,62 @@ function bindEvents() {
     if (el.btnTopAiConfig) el.btnTopAiConfig.addEventListener('click', openDrawerFunc);
     if (el.toggleApiKey) el.toggleApiKey.addEventListener('click', openDrawerFunc);
 
+    // 查看密钥明文切换按钮
+    if (el.btnToggleKeyEye) {
+        el.btnToggleKeyEye.addEventListener('click', () => {
+            if (el.inputApiKey.type === 'password') {
+                el.inputApiKey.type = 'text';
+                el.btnToggleKeyEye.textContent = '🙈';
+                el.btnToggleKeyEye.title = '点击隐藏密钥';
+            } else {
+                el.inputApiKey.type = 'password';
+                el.btnToggleKeyEye.textContent = '👁️';
+                el.btnToggleKeyEye.title = '点击查看明文密钥';
+            }
+        });
+    }
+
+    // 模型下拉选择框联动
+    if (el.selectModel) {
+        el.selectModel.addEventListener('change', () => {
+            const selected = el.selectModel.value;
+            if (selected === 'custom') {
+                el.inputModel.focus();
+                el.inputModel.select();
+            } else {
+                el.inputModel.value = selected;
+                // 智能联动调整 Base URL
+                if (selected.startsWith('deepseek')) {
+                    el.inputBaseUrl.value = 'https://api.deepseek.com';
+                } else if (selected.startsWith('qwen')) {
+                    el.inputBaseUrl.value = 'https://dashscope.aliyuncs.com/compatible-mode/v1';
+                } else if (selected.startsWith('gpt')) {
+                    el.inputBaseUrl.value = 'https://api.openai.com/v1';
+                }
+            }
+        });
+    }
+
+    // 模型手动输入反向联动下拉框
+    if (el.inputModel) {
+        el.inputModel.addEventListener('input', () => {
+            const val = el.inputModel.value.trim();
+            const optionExists = Array.from(el.selectModel.options).some(opt => opt.value === val);
+            if (optionExists) {
+                el.selectModel.value = val;
+            } else {
+                el.selectModel.value = 'custom';
+            }
+        });
+    }
+
     el.btnSaveKey.addEventListener('click', () => {
         const rawKey = el.inputApiKey.value.trim() || DEFAULT_AI_KEY;
         const rawBaseUrl = el.inputBaseUrl.value.trim() || DEFAULT_AI_BASE_URL;
         const rawModel = el.inputModel.value.trim() || DEFAULT_AI_MODEL;
 
         if (rawKey && rawKey.length < 15) {
-            showToast('⚠️ 提示：标准 API Key 通常是一串以 sk- 开头的长字符串（如 sk-xxxxxxxx...），请检查是否复制完整！');
+            showToast('⚠️ 提示：标准 API Key 通常是一串以 sk- 开头的长字符串，请检查是否复制完整！');
         }
 
         state.apiKey = rawKey;
@@ -186,12 +239,12 @@ function bindEvents() {
         localStorage.setItem('POLICY_AI_BASE_URL', state.baseUrl);
         localStorage.setItem('POLICY_AI_MODEL', state.model);
         el.apiKeyDrawer.classList.add('hidden');
-        showToast('✅ 模型参数与密钥已更新并成功连接 DeepSeek！');
+        if (el.keyStatusHint) el.keyStatusHint.textContent = `已配置 (${state.model})`;
+        showToast(`✅ 已更新模型为【${state.model}】并连接 DeepSeek 官方通道！`);
     });
 
-    const resetBtn = document.getElementById('btnResetKey');
-    if (resetBtn) {
-        resetBtn.addEventListener('click', () => {
+    if (el.btnResetKey) {
+        el.btnResetKey.addEventListener('click', () => {
             state.apiKey = DEFAULT_AI_KEY;
             state.baseUrl = DEFAULT_AI_BASE_URL;
             state.model = DEFAULT_AI_MODEL;
@@ -199,7 +252,7 @@ function bindEvents() {
             localStorage.setItem('POLICY_AI_BASE_URL', state.baseUrl);
             localStorage.setItem('POLICY_AI_MODEL', state.model);
             initApiKeyForm();
-            showToast('✅ 已恢复 DeepSeek 官方默认配置！');
+            showToast('✅ 已恢复 DeepSeek 官方最新默认配置！');
         });
     }
 
@@ -212,6 +265,16 @@ function initApiKeyForm() {
     el.inputApiKey.value = state.apiKey;
     el.inputBaseUrl.value = state.baseUrl;
     el.inputModel.value = state.model;
+    
+    // 初始化下拉选框
+    if (el.selectModel) {
+        const val = state.model;
+        const optionExists = Array.from(el.selectModel.options).some(opt => opt.value === val);
+        el.selectModel.value = optionExists ? val : 'custom';
+    }
+    if (el.keyStatusHint) {
+        el.keyStatusHint.textContent = `已绑定 (${state.model})`;
+    }
 }
 
 function handleSearch() {
@@ -438,26 +501,34 @@ function renderPolicyList(list) {
 }
 
 // 智能解析 API 候选端点列表（自动兼容带 /v1、不带 /v1、带 /chat/completions 等各类输入格式）
-function getCandidateEndpoints(rawBaseUrl) {
+function getCandidateEndpoints(rawBaseUrl, model) {
     let clean = (rawBaseUrl || DEFAULT_AI_BASE_URL).trim().replace(/\/+$/, '');
     
-    // 如果不是合法的绝对 URL，自动重置为官方 DeepSeek 地址
+    // 如果是 deepseek 模型系列或官方域名，直接使用官方标准端点
+    if ((model && model.startsWith('deepseek')) || clean.includes('deepseek.com')) {
+        return [
+            'https://api.deepseek.com/chat/completions',
+            'https://api.deepseek.com/v1/chat/completions'
+        ];
+    }
+
     if (!clean.startsWith('http://') && !clean.startsWith('https://')) {
-        clean = DEFAULT_AI_BASE_URL;
+        clean = 'https://' + clean;
     }
 
     if (clean.includes('/chat/completions')) {
-        return [clean];
+        return [clean, 'https://api.deepseek.com/chat/completions'];
     }
     if (clean.endsWith('/v1')) {
         return [
             `${clean}/chat/completions`,
-            `${clean.replace(/\/v1$/, '')}/chat/completions`
+            'https://api.deepseek.com/chat/completions'
         ];
     }
     return [
         `${clean}/chat/completions`,
-        `${clean}/v1/chat/completions`
+        `${clean}/v1/chat/completions`,
+        'https://api.deepseek.com/chat/completions'
     ];
 }
 
@@ -522,8 +593,8 @@ async function sendChatMessage() {
 // 纯前端直接调用 OpenAI / DeepSeek / 通义千问 兼容 API（多端点智能自动容错重试）
 async function callDirectLLM(prompt, apiKey) {
     const rawBase = state.baseUrl || DEFAULT_AI_BASE_URL;
-    const endpoints = getCandidateEndpoints(rawBase);
     const model = state.model || DEFAULT_AI_MODEL;
+    const endpoints = getCandidateEndpoints(rawBase, model);
     const key = apiKey || state.apiKey || DEFAULT_AI_KEY;
 
     const systemPrompt = `你是一名服务于四川大型国有医药健康产业集团的政策研究室主任兼科技申报总监。文风要求：严谨、干练、精炼，彻底去除AI味与机械套话，结论前置，直接给出政策依据、适用对象、奖补金额及实操申报建议。`;

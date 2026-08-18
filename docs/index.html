@@ -163,23 +163,50 @@
                             <strong>🔑 AI 政策研判大模型参数配置</strong>
                             <span style="font-size:11px;color:var(--text-muted)">（默认直连 DeepSeek 官方接口）</span>
                         </div>
+                        
+                        <!-- API Key 输入与明文查看切换 -->
                         <div class="drawer-field">
-                            <label>API Key（保存在本地浏览器中，安全私密）：</label>
-                            <input type="password" id="inputApiKey" placeholder="sk-7daca4b5395646c39f282ed7227c047d">
+                            <label style="font-size:11.5px;color:var(--text-muted);display:flex;justify-content:space-between;margin-bottom:3px;">
+                                <span>API Key（保存在本地浏览器，安全私密）：</span>
+                                <span id="keyStatusHint" style="color:var(--nmpa-blue-main);font-weight:600;font-size:11px;">已绑定 DeepSeek</span>
+                            </label>
+                            <div class="input-with-eye">
+                                <input type="password" id="inputApiKey" placeholder="sk-1be5b76a1ca7418e8e0ca3ca94744297">
+                                <button type="button" id="btnToggleKeyEye" class="btn-toggle-eye" title="点击查看/隐藏明文密钥">👁️</button>
+                            </div>
                         </div>
+
+                        <!-- 接口地址与模型选择 -->
                         <div class="drawer-row">
-                            <div style="flex:1.2">
-                                <label style="font-size:11px;color:var(--text-muted)">接口地址 (Base URL):</label>
+                            <div style="flex:1">
+                                <label style="font-size:11.5px;color:var(--text-muted);display:block;margin-bottom:3px;">接口地址 (Base URL):</label>
                                 <input type="text" id="inputBaseUrl" placeholder="https://api.deepseek.com">
                             </div>
-                            <div style="flex:0.8">
-                                <label style="font-size:11px;color:var(--text-muted)">模型名称:</label>
+                        </div>
+
+                        <!-- 模型选择与自定义输入 -->
+                        <div class="drawer-row" style="margin-top:6px;">
+                            <div style="flex:1.15">
+                                <label style="font-size:11.5px;color:var(--text-muted);display:block;margin-bottom:3px;">选择常用模型:</label>
+                                <select id="selectModel" class="drawer-select">
+                                    <option value="deepseek-chat" selected>deepseek-chat (DeepSeek V3 官方通用·推荐)</option>
+                                    <option value="deepseek-reasoner">deepseek-reasoner (DeepSeek R1 深度思考推理)</option>
+                                    <option value="qwen-plus">qwen-plus (通义千问 Plus)</option>
+                                    <option value="qwen-max">qwen-max (通义千问 Max)</option>
+                                    <option value="gpt-4o">gpt-4o (OpenAI GPT-4o)</option>
+                                    <option value="gpt-4o-mini">gpt-4o-mini (OpenAI Mini)</option>
+                                    <option value="custom">⚙️ 自定义模型名称...</option>
+                                </select>
+                            </div>
+                            <div style="flex:0.85">
+                                <label style="font-size:11.5px;color:var(--text-muted);display:block;margin-bottom:3px;">模型标识 (Model ID):</label>
                                 <input type="text" id="inputModel" placeholder="deepseek-chat">
                             </div>
                         </div>
-                        <div style="display:flex; gap:8px; margin-top:8px;">
+
+                        <div style="display:flex; gap:8px; margin-top:10px;">
                             <button class="btn-save-key-full" id="btnSaveKey" style="flex:1;">✓ 保存配置并启用</button>
-                            <button class="btn-reset-key" id="btnResetKey" type="button" style="background:var(--bg-inset);border:1px solid var(--border-color);color:var(--text-muted);font-size:12px;padding:0 10px;border-radius:3px;cursor:pointer;">🔄 恢复默认</button>
+                            <button class="btn-reset-key" id="btnResetKey" type="button" style="background:var(--bg-inset);border:1px solid var(--border-color);color:var(--text-muted);font-size:12px;padding:0 12px;border-radius:3px;cursor:pointer;">🔄 恢复默认</button>
                         </div>
                     </div>
 
@@ -229,6 +256,6 @@
     <!-- 弹窗通知 -->
     <div id="toast" class="nmpa-toast hidden"></div>
 
-    <script src="app.js?v=20260818v15"></script>
+    <script src="app.js?v=20260818v16"></script>
 </body>
 </html>

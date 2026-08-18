@@ -20,7 +20,7 @@ class AIAnalyst:
 
     @staticmethod
     def chat(prompt: str, api_key: str = "", base_url: str = "", model: str = "", context_policies: Optional[List[Dict]] = None) -> str:
-        real_key = api_key or config.AI_API_KEY or "sk-7daca4b5395646c39f282ed7227c047d"
+        real_key = api_key or config.AI_API_KEY or "sk-1be5b76a1ca7418e8e0ca3ca94744297"
         raw_base_url = (base_url or config.AI_BASE_URL or "https://api.deepseek.com").rstrip("/")
         # 兼容 DeepSeek 及各类 OpenAI 兼容接口的标准路径
         if raw_base_url.endswith("/chat/completions"):

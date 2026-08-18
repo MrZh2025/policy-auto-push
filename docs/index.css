@@ -777,15 +777,97 @@ body {
     font-size: 16px;
     font-weight: 800;
     color: var(--text-title);
+/* 模型抽屉 */
+.config-drawer {
+    background-color: var(--bg-inset);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 12px;
+    margin-bottom: 14px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+.config-drawer.hidden { display: none; }
+
+.drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+    font-size: 12.5px;
+    color: var(--text-title);
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: 6px;
 }
 
-.btn-text-link {
+.drawer-field {
+    margin-bottom: 8px;
+}
+
+.drawer-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.input-with-eye {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.input-with-eye input {
+    width: 100%;
+    padding-right: 38px;
+}
+
+.btn-toggle-eye {
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
     background: none;
     border: none;
-    color: var(--nmpa-blue-main);
-    font-size: 12.5px;
-    font-weight: 600;
     cursor: pointer;
+    font-size: 15px;
+    padding: 3px 6px;
+    border-radius: 3px;
+    opacity: 0.75;
+    transition: opacity 0.15s ease;
+}
+.btn-toggle-eye:hover {
+    opacity: 1;
+    background-color: var(--bg-inset);
+}
+
+.drawer-field input, .drawer-row input, .drawer-select {
+    width: 100%;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-title);
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 3px;
+    outline: none;
+    transition: border-color 0.15s ease;
+}
+
+.drawer-field input:focus, .drawer-row input:focus, .drawer-select:focus {
+    border-color: var(--nmpa-blue-main);
+}
+
+.btn-save-key-full {
+    background-color: var(--nmpa-blue-main);
+    color: #ffffff;
+    border: none;
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 7px 14px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+.btn-save-key-full:hover {
+    background-color: var(--nmpa-blue-hover);
 }
 
 /* 研判快捷议题 */
