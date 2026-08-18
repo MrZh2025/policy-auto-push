@@ -541,17 +541,155 @@ async function handleScrapeNow() {
     showToast('💡 提示：在 GitHub Pages 静态模式下，系统将在后台工作日 08:30 自动全网检索并更新数据！');
 }
 
-async function handleExportWord() {
-    showToast('正在按照 GB/T 9704-2012 公文标准导出 Word 报告...');
-    try {
-        const resp = await fetch('/api/export-word', { method: 'POST' });
-        if (resp.ok) {
-            const res = await resp.json();
-            showToast(res.msg || 'Word 简报已成功保存到您的桌面！');
-            return;
-        }
-    } catch (e) {}
-    showToast('💡 提示：公文 Word 简报每天在 GitHub Actions 运行后会自动生成，可在 Actions 页面右上角 Artifacts 随时下载！');
+// 纯前端直接生成符合《党政机关公文格式》(GB/T 9704-2012) 标准的 Word 文档并弹出保存对话框
+function handleExportWord() {
+    showToast('📄 正在生成公文 Word 简报并准备下载...');
+
+    const policies = (state.filteredPolicies && state.filteredPolicies.length > 0) 
+        ? state.filteredPolicies 
+        : (state.allPolicies && state.allPolicies.length > 0 ? state.allPolicies : []);
+
+    if (policies.length === 0) {
+        showToast('⚠️ 当前暂无政策数据可导出！');
+        return;
+    }
+
+    const now = new Date();
+    const dateStr = `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日`;
+    const fileDateTag = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`;
+    const filename = `医药产业政策每日监测简报_${fileDateTag}.doc`;
+
+    // 构造符合 GB/T 9704-2012 国家公文格式的 HTML Word 模板
+    let tableRows = '';
+    policies.forEach((item, idx) => {
+        const isLast = (idx === policies.length - 1);
+        tableRows += `
+            <tr style="height:28pt;">
+                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:center; font-family:'仿宋','FangSong','仿宋_GB2312',serif; font-size:12pt;">${idx + 1}</td>
+                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:left; font-family:'仿宋','FangSong','仿宋_GB2312',serif; font-size:12pt;">${item.title || ''}</td>
+                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:center; font-family:'仿宋','FangSong','仿宋_GB2312',serif; font-size:12pt;">${item.source || '国家部委'}</td>
+                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:center; font-family:'仿宋','FangSong','仿宋_GB2312',serif; font-size:12pt;">${item.pub_date || '近期'}</td>
+            </tr>
+        `;
+    });
+
+    let detailsHtml = '';
+    policies.forEach((item, idx) => {
+        const title = item.title || '';
+        const dept = item.source || '国家部委';
+        const pubDate = item.pub_date || '近期';
+        const summary = item.summary || title;
+        const url = item.url || '#';
+
+        detailsHtml += `
+            <p style="margin:6pt 0 2pt 0; text-indent:2em; font-family:'仿宋','FangSong','仿宋_GB2312',serif; font-size:16pt; font-weight:bold; line-height:28.5pt;">
+                ${idx + 1}. ${title}。
+            </p>
+            <p style="margin:0 0 2pt 0; text-indent:2em; font-family:'仿宋','FangSong','仿宋_GB2312',serif; font-size:16pt; line-height:28.5pt;">
+                该文件由${dept}于${pubDate}公开发布。核心内容：${summary}
+            </p>
+            <p style="margin:0 0 8pt 0; text-indent:2em; font-family:'仿宋','FangSong','仿宋_GB2312',serif; font-size:16pt; line-height:28.5pt;">
+                官方原文直达链接：<a href="${url}" target="_blank" style="color:#004886; text-decoration:underline;">${url}</a>
+            </p>
+        `;
+    });
+
+    const wordHtml = `
+        <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+        <head>
+            <meta charset='utf-8'>
+            <title>医药产业政策每日监测简报</title>
+            <style>
+                @page Section1 {
+                    size: 210mm 297mm;
+                    margin: 37mm 26mm 35mm 28mm;
+                    mso-header-margin: 35.4pt;
+                    mso-footer-margin: 35.4pt;
+                    mso-paper-source: 0;
+                }
+                div.Section1 { page: Section1; }
+                body {
+                    font-family: '仿宋', 'FangSong', '仿宋_GB2312', 'Times New Roman', serif;
+                    font-size: 16pt;
+                    line-height: 28.5pt;
+                    color: #000000;
+                }
+                h1.doc-title {
+                    font-family: '方正小标宋简体', '小标宋', '宋体', 'SimSun', serif;
+                    font-size: 22pt;
+                    font-weight: bold;
+                    text-align: center;
+                    margin-top: 0;
+                    margin-bottom: 16pt;
+                    line-height: 32pt;
+                }
+                h2.h1-title {
+                    font-family: '黑体', 'SimHei', sans-serif;
+                    font-size: 16pt;
+                    font-weight: bold;
+                    text-indent: 2em;
+                    margin-top: 12pt;
+                    margin-bottom: 6pt;
+                    line-height: 28.5pt;
+                }
+                p.lead {
+                    font-family: '仿宋', 'FangSong', '仿宋_GB2312', serif;
+                    font-size: 16pt;
+                    text-indent: 2em;
+                    margin-top: 0;
+                    margin-bottom: 8pt;
+                    line-height: 28.5pt;
+                    text-align: justify;
+                }
+                table.three-line-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin: 8pt 0 16pt 0;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="Section1">
+                <h1 class="doc-title">医药产业政策每日监测简报</h1>
+                
+                <p class="lead">为及时研判行业监管动向与政策红利，现将截至${dateStr}最新发布的医药产业重点政策监测汇总如下：</p>
+                
+                <h2 class="h1-title">一、重点政策速览清单</h2>
+                
+                <table class="three-line-table">
+                    <thead>
+                        <tr style="height:26pt;">
+                            <th style="border-top:1.5pt solid black; border-bottom:0.75pt solid black; padding:4pt; text-align:center; font-family:'黑体','SimHei',sans-serif; font-size:12pt; width:10%;">序号</th>
+                            <th style="border-top:1.5pt solid black; border-bottom:0.75pt solid black; padding:4pt; text-align:center; font-family:'黑体','SimHei',sans-serif; font-size:12pt; width:52%;">政策文件名称</th>
+                            <th style="border-top:1.5pt solid black; border-bottom:0.75pt solid black; padding:4pt; text-align:center; font-family:'黑体','SimHei',sans-serif; font-size:12pt; width:22%;">发布机关</th>
+                            <th style="border-top:1.5pt solid black; border-bottom:0.75pt solid black; padding:4pt; text-align:center; font-family:'黑体','SimHei',sans-serif; font-size:12pt; width:16%;">发布日期</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${tableRows}
+                    </tbody>
+                </table>
+                
+                <h2 class="h1-title">二、重点政策要点与链接直达</h2>
+                
+                ${detailsHtml}
+            </div>
+        </body>
+        </html>
+    `;
+
+    // 生成二进制 Blob 并触发浏览器标准保存对话框
+    const blob = new Blob(['\ufeff', wordHtml], { type: 'application/msword;charset=utf-8' });
+    const downloadUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(downloadUrl);
+
+    showToast(`✅ 已弹出保存对话框，正在下载：${filename}`);
 }
 
 async function handlePushWechat() {
