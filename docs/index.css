@@ -963,12 +963,267 @@ body {
     font-size: 13px;
 }
 
+/* ==========================================================================
+   10. 移动端与平板多端深度响应式适配 (Mobile & Tablet Responsive)
+   ========================================================================== */
+
+/* 平板与窄屏桌面 (<= 1024px) */
 @media (max-width: 1024px) {
     .nmpa-main-grid {
         grid-template-columns: 1fr;
+        gap: 16px;
     }
     .nmpa-header-wrap {
         flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+    .nmpa-header-actions {
+        width: 100%;
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: 4px;
+    }
+}
+
+/* 手机端 (<= 768px) */
+@media (max-width: 768px) {
+    /* 容器与边距紧凑化 */
+    .gov-container,
+    .nmpa-header-wrap,
+    .nmpa-nav-wrap,
+    .nmpa-main,
+    .footer-wrap {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    /* 顶部辅助条 */
+    .top-gov-bar {
+        padding: 6px 0;
+        font-size: 11px;
+    }
+    .gov-container {
+        flex-direction: column;
         align-items: flex-start;
+        gap: 4px;
+    }
+    .gov-top-links {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    /* 头部品牌区与标题 */
+    .nmpa-header {
+        padding: 12px 0;
+    }
+    .nmpa-brand {
+        gap: 10px;
+    }
+    .nmpa-emblem {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+    }
+    .emblem-star {
+        font-size: 13px;
+    }
+    .emblem-text {
+        font-size: 9px;
+    }
+    .nmpa-title-box .main-title {
+        font-size: 16px;
+        line-height: 1.3;
+        word-break: break-all;
+    }
+
+    /* 顶部操作按钮 (网格平铺，触控体验佳) */
+    .nmpa-header-actions {
+        display: grid;
+        grid-template-columns: 1.1fr 1.1fr 0.9fr;
+        gap: 6px;
+        width: 100%;
+    }
+    .action-btn {
+        padding: 8px 4px;
+        font-size: 12px;
+        justify-content: center;
+        text-align: center;
+        min-height: 38px;
+    }
+    .action-btn .btn-i {
+        font-size: 13px;
+    }
+
+    /* 导航栏 (横向平滑滑动，支持手势，隐藏突兀滚动条) */
+    .nmpa-navbar {
+        position: sticky;
+        top: 0;
+        z-index: 99;
+    }
+    .nav-menu {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding: 2px 0;
+    }
+    .nav-menu::-webkit-scrollbar {
+        display: none;
+    }
+    .nav-item a {
+        padding: 10px 14px;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    /* 主体卡片与搜索区 */
+    .nmpa-main {
+        margin: 12px auto;
+    }
+    .gov-card {
+        padding: 14px 12px;
+    }
+    .gov-card-title-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    .header-title {
+        font-size: 16px;
+    }
+
+    /* 搜索栏与过滤 Tab 垂直适配 */
+    .gov-card-filter-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+    .time-filter-tabs {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1.2fr;
+    }
+    .time-tab {
+        padding: 6px 4px;
+        font-size: 11.5px;
+        text-align: center;
+    }
+    .search-filter-box {
+        width: 100%;
+    }
+    .search-bar-nmpa {
+        width: 100%;
+    }
+
+    /* 政策卡片行 */
+    .policy-table-stream {
+        max-height: none;
+        overflow-y: visible;
+        padding-right: 0;
+    }
+    .nmpa-policy-row {
+        padding: 12px 10px;
+    }
+    .row-top {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    .row-date {
+        margin-left: 0;
+        width: 100%;
+        font-size: 11.5px;
+    }
+    .row-title {
+        font-size: 14.5px;
+        margin-bottom: 6px;
+    }
+    .row-summary {
+        font-size: 12.5px;
+        line-height: 1.5;
+        max-height: 6em;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    .row-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+    .link-detail {
+        font-size: 12.5px;
+        padding: 4px 0;
+        display: inline-block;
+    }
+
+    /* AI 研判工作台抽屉与对话框 */
+    .config-drawer {
+        padding: 12px;
+    }
+    .drawer-row {
+        flex-direction: column;
+        gap: 8px;
+    }
+    .query-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    .tag-chip {
+        font-size: 11.5px;
+        padding: 4px 8px;
+    }
+    .consult-dialog-viewport {
+        max-height: 350px;
+    }
+    .dialog-row {
+        max-width: 98%;
+    }
+    .dialog-card {
+        font-size: 12.5px;
+        padding: 8px 10px;
+    }
+    .consult-input-area {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .btn-send-msg {
+        height: 38px;
+        width: 100%;
+    }
+
+    /* Toast 通知 */
+    .nmpa-toast {
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        text-align: center;
+    }
+
+    /* 底部版记 */
+    .nmpa-footer {
+        padding: 18px 0;
+        margin-top: 20px;
+    }
+    .footer-org {
+        font-size: 13px;
+    }
+    .footer-meta {
+        font-size: 11px;
+    }
+}
+
+/* 超小屏手机 (<= 380px) */
+@media (max-width: 380px) {
+    .nmpa-title-box .main-title {
+        font-size: 14.5px;
+    }
+    .action-btn {
+        font-size: 11px;
+        padding: 6px 2px;
+    }
+    .time-tab {
+        font-size: 10.5px;
     }
 }
