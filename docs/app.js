@@ -285,38 +285,38 @@ function filterAndRenderPolicies() {
         );
     }
 
-    // 3. 核心时间算法过滤：默认只展示【本周最新更新】
+    // 3. 核心时间算法过滤：严格基于当前日期过滤，绝不混入历史年份数据
     const now = new Date();
     let timeFilteredList = list;
     let timeLabel = '本周最新更新';
 
     if (state.timeRange === 'week') {
         timeLabel = '🔥 本周最新更新';
-        // 筛选 7 天内发布的政策
-        const weekList = list.filter(p => {
-            if (!p.pub_date) return false;
-            const pDate = new Date(p.pub_date.replace(/[\.年]/g, '-').replace(/月/g, '-').replace(/日/g, ''));
-            if (isNaN(pDate.getTime())) return false;
-            const diffDays = (now - pDate) / (1000 * 3600 * 24);
-            return diffDays <= 7 && diffDays >= -1; // 包含今天及未来微调
-        });
-
-        // 智能保底策略：若本周因长假/周末少于4篇，自动取最新前 8 篇展示
-        if (weekList.length >= 2) {
-            timeFilteredList = weekList;
-        } else {
-            timeFilteredList = list.slice(0, 8);
-        }
-    } else if (state.timeRange === 'month') {
-        timeLabel = '📅 近30天更新';
+        // 严格筛选当前日期 7 天内发布的政策 (diffDays <= 7 且必须是近期有效数据)
         timeFilteredList = list.filter(p => {
             if (!p.pub_date) return false;
-            const pDate = new Date(p.pub_date.replace(/[\.年]/g, '-').replace(/月/g, '-').replace(/日/g, ''));
+            // 规范化日期格式 YYYY-MM-DD
+            const cleanDateStr = p.pub_date.replace(/[\.年]/g, '-').replace(/月/g, '-').replace(/日/g, '').trim();
+            const pDate = new Date(cleanDateStr);
             if (isNaN(pDate.getTime())) return false;
-            const diffDays = (now - pDate) / (1000 * 3600 * 24);
-            return diffDays <= 30 && diffDays >= -1;
+
+            // 计算与今天的时间差（天数）
+            const diffDays = (now.getTime() - pDate.getTime()) / (1000 * 3600 * 24);
+            // 严格限制在近 7 天内，并且年份必须与当前年份相符
+            return diffDays >= -1 && diffDays <= 7;
         });
-        if (timeFilteredList.length === 0) timeFilteredList = list.slice(0, 15);
+    } else if (state.timeRange === 'month') {
+        timeLabel = '📅 近30天更新';
+        // 严格筛选近 30 天内发布的政策
+        timeFilteredList = list.filter(p => {
+            if (!p.pub_date) return false;
+            const cleanDateStr = p.pub_date.replace(/[\.年]/g, '-').replace(/月/g, '-').replace(/日/g, '').trim();
+            const pDate = new Date(cleanDateStr);
+            if (isNaN(pDate.getTime())) return false;
+
+            const diffDays = (now.getTime() - pDate.getTime()) / (1000 * 3600 * 24);
+            return diffDays >= -1 && diffDays <= 30;
+        });
     } else {
         timeLabel = '📚 历史全量政策库';
         timeFilteredList = list;
@@ -332,11 +332,15 @@ function filterAndRenderPolicies() {
     if (badge) badge.textContent = `${trackName} · ${timeLabel}`;
     if (banner) {
         if (state.timeRange === 'week') {
-            banner.innerHTML = `<span>📌 默认仅呈现 <strong>本周最新政策更新</strong>（当前精选 <strong>${timeFilteredList.length}</strong> 篇），历史政策已归档，可随时点击右上角切换 <strong>[历史全量政策库]</strong>。</span>`;
+            if (timeFilteredList.length > 0) {
+                banner.innerHTML = `<span>📌 严格按当前日期筛选：<strong>本周共有 ${timeFilteredList.length} 篇最新政策更新</strong>，2024/2025等往期历史政策已收录至右上角 <strong>[历史全量政策库]</strong>。</span>`;
+            } else {
+                banner.innerHTML = `<span>📌 严格按当前日期筛选：<strong>本周暂未监测到新增官方政策发布</strong>，您可以点击右上角 <strong>[历史全量政策库]</strong> 查阅以往在库文件。</span>`;
+            }
         } else if (state.timeRange === 'month') {
-            banner.innerHTML = `<span>📅 当前呈现 <strong>近 30 天政策文件</strong>（共 <strong>${timeFilteredList.length}</strong> 篇）。</span>`;
+            banner.innerHTML = `<span>📅 严格按当前日期筛选：<strong>近 30 天共有 ${timeFilteredList.length} 篇政策文件</strong>。</span>`;
         } else {
-            banner.innerHTML = `<span>📚 当前呈现 <strong>历史全量政策库</strong>（共 <strong>${timeFilteredList.length}</strong> 篇全量在库文件）。</span>`;
+            banner.innerHTML = `<span>📚 当前呈现 <strong>历史全量政策库</strong>（共收录 <strong>${timeFilteredList.length}</strong> 篇历史在库文件）。</span>`;
         }
     }
 
