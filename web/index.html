@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>国家药品监督管理局政策监测与申报研判系统 - 四川发展·医药集团</title>
-    <link rel="stylesheet" href="index.css?v=20260818v3">
+    <link rel="stylesheet" href="index.css?v=20260818v4">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700;900&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -100,29 +100,31 @@
             <!-- 左侧主栏 (70%): 官方政策法规与通知公告列表 -->
             <section class="nmpa-left-col">
                 <div class="gov-card">
-                    <div class="gov-card-header">
+                    <!-- 第一行：大标题与搜索框 -->
+                    <div class="gov-card-title-row">
                         <div class="header-left">
                             <span class="header-red-bar"></span>
                             <h2 class="header-title">政策法规与通知公告</h2>
-                            <span class="header-badge" id="listBadge">本周最新更新</span>
                         </div>
-                        
-                        <!-- 时间周期过滤器：默认只看本周更新，以前的归入历史政策库 -->
+                        <div class="header-search">
+                            <input type="text" id="searchInput" placeholder="搜索政策标题、文号、发文单位...">
+                            <button id="searchBtn" class="search-btn">搜索</button>
+                        </div>
+                    </div>
+
+                    <!-- 第二行：时间范围切换栏与当前赛道状态 -->
+                    <div class="gov-card-filter-row">
                         <div class="time-filter-tabs">
                             <button class="time-tab active" data-time="week" id="tabTimeWeek">🔥 本周最新更新</button>
                             <button class="time-tab" data-time="month" id="tabTimeMonth">📅 近30天</button>
                             <button class="time-tab" data-time="all" id="tabTimeAll">📚 历史全量政策库</button>
                         </div>
-
-                        <div class="header-search">
-                            <input type="text" id="searchInput" placeholder="搜索标题、文号、发文单位...">
-                            <button id="searchBtn" class="search-btn">搜索</button>
-                        </div>
+                        <div class="filter-status-tag" id="listBadge">全部赛道 · 🔥 本周最新更新</div>
                     </div>
 
                     <!-- 动态状态提示横条 -->
                     <div class="filter-status-banner" id="filterStatusBanner">
-                        <span>📌 默认仅呈现 <strong>本周最新政策更新</strong>（共 <span id="currentFilteredCount">0</span> 篇），历史政策已归入政策库。</span>
+                        <span>📌 严格按当前日期筛选：<strong>本周最新政策更新已置顶</strong>，历史政策已归入政策库。</span>
                     </div>
 
                     <!-- 政策法规列表 -->
@@ -229,6 +231,6 @@
     <!-- 弹窗通知 -->
     <div id="toast" class="nmpa-toast hidden"></div>
 
-    <script src="app.js?v=20260818v3"></script>
+    <script src="app.js?v=20260818v4"></script>
 </body>
 </html>

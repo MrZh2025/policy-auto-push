@@ -357,40 +357,65 @@ body {
     padding: 16px 20px;
 }
 
-/* 左侧栏标题 */
-.gov-card-header {
+/* 左侧栏标题与操作区 (优雅分层排版，彻底消除文字堆砌挤压) */
+.gov-card-title-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding-bottom: 12px;
-    border-bottom: 2px solid var(--border-light);
-    margin-bottom: 14px;
-    gap: 15px;
+    border-bottom: 1px solid var(--border-light);
+    margin-bottom: 12px;
+    gap: 20px;
 }
 
 .header-left {
     display: flex;
     align-items: center;
     gap: 8px;
+    white-space: nowrap;
+}
+
+.header-red-bar {
+    width: 4px;
+    height: 20px;
+    background-color: var(--nmpa-red-gov);
+    border-radius: 2px;
+}
+
+.header-title {
+    font-family: var(--font-serif);
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text-title);
+    white-space: nowrap;
+    letter-spacing: 0.5px;
+}
+
+.gov-card-filter-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 12px;
 }
 
 /* 时间周期分段切换 (本周最新 / 近30天 / 历史全量库) */
 .time-filter-tabs {
-    display: flex;
+    display: inline-flex;
     background-color: var(--bg-inset);
     border: 1px solid var(--border-color);
     border-radius: 4px;
-    padding: 2px;
-    gap: 2px;
+    padding: 3px;
+    gap: 4px;
 }
 
 .time-tab {
     background: none;
     border: none;
     color: var(--text-muted);
-    font-size: 12px;
+    font-size: 12.5px;
     font-weight: 600;
-    padding: 4px 10px;
+    padding: 5px 12px;
     border-radius: 3px;
     cursor: pointer;
     transition: all 0.15s ease;
@@ -399,50 +424,39 @@ body {
 
 .time-tab:hover {
     color: var(--nmpa-blue-main);
+    background-color: var(--bg-card);
 }
 
 .time-tab.active {
     background-color: var(--nmpa-blue-main);
     color: #ffffff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 1px 4px rgba(0, 72, 134, 0.25);
+}
+
+.filter-status-tag {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--nmpa-blue-main);
+    background-color: var(--bg-inset);
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    white-space: nowrap;
 }
 
 /* 过滤状态提示条 */
 .filter-status-banner {
     background-color: var(--bg-inset);
     border-left: 3px solid var(--nmpa-blue-main);
-    padding: 6px 12px;
-    font-size: 12px;
+    padding: 8px 14px;
+    font-size: 12.5px;
     color: var(--text-muted);
-    margin-bottom: 12px;
-    border-radius: 2px;
+    margin-bottom: 14px;
+    border-radius: 3px;
+    line-height: 1.5;
 }
 .filter-status-banner strong {
     color: var(--nmpa-red-gov);
-}
-
-.header-red-bar {
-    width: 4px;
-    height: 18px;
-    background-color: var(--nmpa-red-gov);
-    border-radius: 2px;
-}
-
-.header-title {
-    font-family: var(--font-serif);
-    font-size: 17px;
-    font-weight: 700;
-    color: var(--text-title);
-}
-
-.header-badge {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--nmpa-blue-main);
-    background-color: var(--bg-inset);
-    padding: 2px 6px;
-    border-radius: 2px;
-    border: 1px solid var(--border-color);
 }
 
 .header-search {
@@ -454,12 +468,17 @@ body {
     border: 1px solid var(--border-color);
     border-right: none;
     border-radius: 3px 0 0 3px;
-    padding: 6px 10px;
+    padding: 7px 12px;
     font-size: 13px;
-    width: 240px;
+    width: 260px;
     outline: none;
     background-color: var(--bg-subtle);
     color: var(--text-title);
+    transition: border-color 0.2s ease;
+}
+.header-search input:focus {
+    border-color: var(--nmpa-blue-main);
+    background-color: var(--bg-card);
 }
 
 .search-btn {
@@ -467,7 +486,7 @@ body {
     color: #ffffff;
     border: 1px solid var(--nmpa-blue-main);
     border-radius: 0 3px 3px 0;
-    padding: 6px 14px;
+    padding: 7px 16px;
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
