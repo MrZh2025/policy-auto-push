@@ -8,7 +8,19 @@ const DEFAULT_AI_KEY = 'sk-7daca4b5395646c39f282ed7227c047d';
 const DEFAULT_AI_BASE_URL = 'https://api.deepseek.com';
 const DEFAULT_AI_MODEL = 'deepseek-chat';
 
-const storedKey = localStorage.getItem('POLICY_AI_API_KEY');
+// 自动纠偏与自愈机制（防止浏览器残留旧的历史无效配置导致 404）
+let rawStoredKey = localStorage.getItem('POLICY_AI_API_KEY');
+if (!rawStoredKey || rawStoredKey.length < 20 || rawStoredKey.includes('5043')) {
+    rawStoredKey = DEFAULT_AI_KEY;
+    localStorage.setItem('POLICY_AI_API_KEY', rawStoredKey);
+}
+
+let rawStoredBase = localStorage.getItem('POLICY_AI_BASE_URL');
+if (!rawStoredBase || !rawStoredBase.startsWith('http') || rawStoredBase.includes('localhost') || rawStoredBase.includes('/api/')) {
+    rawStoredBase = DEFAULT_AI_BASE_URL;
+    localStorage.setItem('POLICY_AI_BASE_URL', rawStoredBase);
+}
+
 // 状态管理
 const state = {
     currentTrack: 'all',
@@ -17,9 +29,8 @@ const state = {
     allPolicies: [],
     filteredPolicies: [],
     theme: localStorage.getItem('POLICY_THEME') || 'light',
-    // 如果没有配置或之前配置了无效短key，直接默认使用 DeepSeek 官方配置
-    apiKey: (storedKey && storedKey.length > 20 && !storedKey.includes('5043')) ? storedKey : DEFAULT_AI_KEY,
-    baseUrl: localStorage.getItem('POLICY_AI_BASE_URL') || DEFAULT_AI_BASE_URL,
+    apiKey: rawStoredKey,
+    baseUrl: rawStoredBase,
     model: localStorage.getItem('POLICY_AI_MODEL') || DEFAULT_AI_MODEL,
 };
 
@@ -177,6 +188,20 @@ function bindEvents() {
         el.apiKeyDrawer.classList.add('hidden');
         showToast('✅ 模型参数与密钥已更新并成功连接 DeepSeek！');
     });
+
+    const resetBtn = document.getElementById('btnResetKey');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+            state.apiKey = DEFAULT_AI_KEY;
+            state.baseUrl = DEFAULT_AI_BASE_URL;
+            state.model = DEFAULT_AI_MODEL;
+            localStorage.setItem('POLICY_AI_API_KEY', state.apiKey);
+            localStorage.setItem('POLICY_AI_BASE_URL', state.baseUrl);
+            localStorage.setItem('POLICY_AI_MODEL', state.model);
+            initApiKeyForm();
+            showToast('✅ 已恢复 DeepSeek 官方默认配置！');
+        });
+    }
 
     // 顶部按钮
     el.btnScrape.addEventListener('click', handleScrapeNow);
@@ -416,6 +441,11 @@ function renderPolicyList(list) {
 function getCandidateEndpoints(rawBaseUrl) {
     let clean = (rawBaseUrl || DEFAULT_AI_BASE_URL).trim().replace(/\/+$/, '');
     
+    // 如果不是合法的绝对 URL，自动重置为官方 DeepSeek 地址
+    if (!clean.startsWith('http://') && !clean.startsWith('https://')) {
+        clean = DEFAULT_AI_BASE_URL;
+    }
+
     if (clean.includes('/chat/completions')) {
         return [clean];
     }
@@ -680,7 +710,7 @@ function updateMessage(msgId, text) {
     if (row) {
         const card = row.querySelector('.dialog-card');
         if (card) {
-            const authorHtml = row.classList.contains('bot-row') ? '<div class="dialog-author">政策研究室工作台</div>' : '';
+            const authorHtml = row.classList.contains('bot-row') ? '<div class="dialog-author">AI·政策研判与申报咨询</div>' : '';
             card.innerHTML = authorHtml + parseMarkdownSimple(text);
         }
     }

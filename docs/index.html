@@ -145,12 +145,12 @@
                     </div>
                 </div>
 
-                <!-- 专栏二：政策研判与专家咨询台 -->
+                <!-- 专栏二：AI·政策研判与申报咨询 -->
                 <div class="gov-card consult-box">
                     <div class="consult-top">
                         <div class="consult-title-area">
-                            <span class="consult-icon">🏛️</span>
-                            <h4>政策研判与申报咨询台</h4>
+                            <span class="consult-icon">🤖</span>
+                            <h4>AI·政策研判与申报咨询</h4>
                         </div>
                         <button class="btn-ai-setup" id="toggleApiKey">
                             🔑 配置 AI 密钥
@@ -161,10 +161,10 @@
                     <div class="config-drawer hidden" id="apiKeyDrawer">
                         <div class="drawer-header">
                             <strong>🔑 AI 政策研判大模型参数配置</strong>
-                            <span style="font-size:11px;color:var(--text-muted)">（默认直连 DeepSeek，支持通义千问 / OpenAI / Kimi）</span>
+                            <span style="font-size:11px;color:var(--text-muted)">（默认直连 DeepSeek 官方接口）</span>
                         </div>
                         <div class="drawer-field">
-                            <label>API Key（密钥保存在您本地浏览器中，安全私密）：</label>
+                            <label>API Key（保存在本地浏览器中，安全私密）：</label>
                             <input type="password" id="inputApiKey" placeholder="sk-7daca4b5395646c39f282ed7227c047d">
                         </div>
                         <div class="drawer-row">
@@ -177,7 +177,10 @@
                                 <input type="text" id="inputModel" placeholder="deepseek-chat">
                             </div>
                         </div>
-                        <button class="btn-save-key-full" id="btnSaveKey">✓ 保存配置并开启实时研判</button>
+                        <div style="display:flex; gap:8px; margin-top:8px;">
+                            <button class="btn-save-key-full" id="btnSaveKey" style="flex:1;">✓ 保存配置并启用</button>
+                            <button class="btn-reset-key" id="btnResetKey" type="button" style="background:var(--bg-inset);border:1px solid var(--border-color);color:var(--text-muted);font-size:12px;padding:0 10px;border-radius:3px;cursor:pointer;">🔄 恢复默认</button>
+                        </div>
                     </div>
 
                     <!-- 常用高频政策研判议题 -->
@@ -192,7 +195,7 @@
                     <div class="consult-dialog-viewport" id="chatMessages">
                         <div class="dialog-row bot-row">
                             <div class="dialog-card">
-                                <div class="dialog-author">政策研究室工作台</div>
+                                <div class="dialog-author">AI·政策研判与申报咨询</div>
                                 本系统已对接国家药监局、国家医保局、四川省药监局及省科技厅官方政策库，默认接入 DeepSeek 智能分析。您可以直接咨询核医药、脑机接口、AI制药、医疗机器人、医保集采或科技资金申报等具体问题，或点击上方按钮生成 <strong>《四川省生物医药周回顾报告》</strong>。
                             </div>
                         </div>
@@ -226,6 +229,6 @@
     <!-- 弹窗通知 -->
     <div id="toast" class="nmpa-toast hidden"></div>
 
-    <script src="app.js?v=20260818v12"></script>
+    <script src="app.js?v=20260818v14"></script>
 </body>
 </html>
