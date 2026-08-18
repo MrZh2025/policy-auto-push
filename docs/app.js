@@ -575,13 +575,6 @@ function getGovRootUrl(source) {
     return 'https://www.nmpa.gov.cn/';
 }
 
-// 构造官方文件百度精准秒查链接 (100% 秒开，直达各大官方公文通告与解读，绝无 404)
-function getBaiduSearchUrl(title, source) {
-    const cleanTitle = (title || '').replace(/^《|》$/g, '').trim();
-    const query = (source ? source + ' ' : '') + cleanTitle;
-    return `https://www.baidu.com/s?wd=${encodeURIComponent(query)}`;
-}
-
 function renderPolicyList(list) {
     if (!list || list.length === 0) {
         el.policyList.innerHTML = '<div class="loading-state">暂未检索到符合条件的官方政策文件</div>';
@@ -593,7 +586,7 @@ function renderPolicyList(list) {
         const pubDate = item.pub_date || '近期发布';
         const source = item.source || '官方部门';
         const summary = item.summary || item.title;
-        const searchUrl = getBaiduSearchUrl(item.title, source);
+        const govRootUrl = getGovRootUrl(source);
 
         return `
             <article class="nmpa-policy-row" onclick="openPolicyModal(${idx})" style="cursor:pointer;" title="点击查阅政策申报详情与研判指引">
@@ -610,8 +603,8 @@ function renderPolicyList(list) {
                         <button onclick="openPolicyModal(${idx})" style="background:var(--nmpa-blue-soft); color:var(--nmpa-blue-main); border:1px solid var(--border-color); padding:4px 9px; border-radius:3px; font-size:12px; font-weight:600; cursor:pointer;">
                             📋 研判详情
                         </button>
-                        <a href="${searchUrl}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" class="link-detail" title="一键秒开官方公文通告与原文" style="font-weight:700;">
-                            🔍 检索官方原文 ➔
+                        <a href="${govRootUrl}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" class="link-detail" title="直达发文主管机关官方网站" style="font-weight:700;">
+                            🏛️ 查看官方文件 ➔
                         </a>
                     </div>
                 </div>
@@ -635,7 +628,6 @@ function openPolicyModal(policyIndex) {
     const pubDate = item.pub_date || '近期发布';
     const source = item.source || '官方部门';
     const summary = item.summary || item.title;
-    const searchUrl = getBaiduSearchUrl(item.title, source);
     const govRootUrl = getGovRootUrl(source);
 
     if (el.modalPolicyTitle) el.modalPolicyTitle.textContent = item.title;
@@ -644,12 +636,9 @@ function openPolicyModal(policyIndex) {
     if (el.modalDate) el.modalDate.textContent = `发布日期: ${pubDate}`;
     if (el.modalSummary) el.modalSummary.textContent = summary;
 
-    if (el.modalSearchBaiduBtn) {
-        el.modalSearchBaiduBtn.href = searchUrl;
-    }
     if (el.modalGovLinkBtn) {
         el.modalGovLinkBtn.href = govRootUrl;
-        el.modalGovLinkBtn.innerHTML = `🏛️ 访问【${source}】官网`;
+        el.modalGovLinkBtn.innerHTML = `🏛️ 访问【${source}】官方网站 ➔`;
     }
 
     el.policyDetailModal.classList.remove('hidden');

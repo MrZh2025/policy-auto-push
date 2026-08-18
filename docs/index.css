@@ -1974,25 +1974,16 @@ body {
 }
 
 .btn-visit-gov {
-    background-color: var(--bg-card);
-    border: 1px solid #004886;
-    color: #004886;
-    font-weight: 600;
-}
-.btn-visit-gov:hover {
-    background-color: #f0f7fd;
-}
-
-.btn-search-baidu {
-    background: linear-gradient(135deg, #c5161d 0%, #a01217 100%);
+    background: linear-gradient(135deg, #004886 0%, #003366 100%);
     border: none;
     color: #ffffff;
     font-weight: 700;
-    box-shadow: 0 2px 6px rgba(197, 22, 29, 0.25);
+    box-shadow: 0 2px 6px rgba(0, 72, 134, 0.25);
+    padding: 8px 16px;
 }
-.btn-search-baidu:hover {
-    background: linear-gradient(135deg, #dc2626 0%, #c5161d 100%);
-    box-shadow: 0 3px 8px rgba(197, 22, 29, 0.35);
+.btn-visit-gov:hover {
+    background: linear-gradient(135deg, #00569e 0%, #004886 100%);
+    box-shadow: 0 3px 8px rgba(0, 72, 134, 0.35);
     color: #ffffff;
 }
 
