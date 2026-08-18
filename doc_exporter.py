@@ -203,7 +203,7 @@ class PolicyDocExporter:
         # 2. 公文大标题：2号 方正小标宋简体，居中排布，1.5 倍行距，末尾不加标点
         p_title = doc.add_paragraph()
         set_para_spacing(p_title, line_spacing_rule=WD_LINE_SPACING.ONE_POINT_FIVE, space_before_pt=Pt(6), space_after_pt=Pt(12), first_line_indent_pt=Pt(0), align=WD_ALIGN_PARAGRAPH.CENTER)
-        r_title = p_title.add_run("医药健康产业集团政策监测信息简报")
+        r_title = p_title.add_run("四川生物医药产业集团创新事业部政策信息简报")
         set_run_font(r_title, font_type='title', size_pt=FONT_SIZES['2号'], bold=True)
 
         # 3. 导语段落：小4号 方正仿宋简体（英文和数字 Times New Roman），首行缩进 2 字符 (24pt)，1.5 倍行距
@@ -321,7 +321,7 @@ class PolicyDocExporter:
         add_side_page_number(doc)
 
         # 10. 保存文件
-        filename = custom_filename or f"医药健康产业集团政策监测信息简报_{date_tag}.docx"
+        filename = custom_filename or f"四川生物医药产业集团创新事业部政策信息简报_{date_tag}.docx"
         saved_paths = []
 
         # 9.1 保存到 Windows 桌面

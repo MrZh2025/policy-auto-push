@@ -621,7 +621,7 @@ async function callDirectLLM(prompt, apiKey) {
     const key = apiKey || state.apiKey || DEFAULT_AI_KEY;
     const timeAnchor = getCurrentTimeAnchor();
 
-    const systemPrompt = `你是一名服务于四川省医药健康产业集团创新事业部的政策研究总监兼科技申报总监。
+    const systemPrompt = `你是一名服务于四川生物医药产业集团创新事业部的政策研究总监兼科技申报总监。
 【重要时间基准】：当前系统真实时间为 ${timeAnchor.fullDateStr}（即【${timeAnchor.periodStr}】）。
 【硬性规定】：
 1. 涉及所有政策周报标题、研判周期、申报时效必须严格以当前真实时间（${timeAnchor.year}年${timeAnchor.month}月）为准，严禁出现过期的 2024 年、2025 年等历史年份！
@@ -909,7 +909,7 @@ async function handleExportWord() {
     const timeAnchor = getCurrentTimeAnchor();
     const dateStr = timeAnchor.fullDateStr;
     const fileDateTag = `${timeAnchor.year}${String(timeAnchor.month).padStart(2, '0')}${String(timeAnchor.date).padStart(2, '0')}`;
-    const filename = `医药健康产业集团政策监测信息简报_${fileDateTag}.docx`;
+    const filename = `四川生物医药产业集团创新事业部政策信息简报_${fileDateTag}.docx`;
 
     showToast(`📄 正在生成标准公文 Word 简报（共 ${policies.length} 篇重点政策）...`);
 
@@ -974,7 +974,7 @@ async function exportPoliciesViaDocxJS(policies, dateStr, filename) {
         spacing: { before: 120, after: 200, line: 360, lineRule: "auto" },
         children: [
             new TextRun({
-                text: "医药健康产业集团政策监测信息简报",
+                text: "四川生物医药产业集团创新事业部政策信息简报",
                 font: { name: "Times New Roman", eastAsia: "方正小标宋简体" },
                 size: 44,
                 bold: true,
@@ -1392,7 +1392,7 @@ function exportPoliciesViaWordXML(policies, dateStr, filename) {
         </head>
         <body>
             <div class="Section1">
-                <h1 class="doc-title">医药健康产业集团政策监测信息简报</h1>
+                <h1 class="doc-title">四川生物医药产业集团创新事业部政策信息简报</h1>
                 <p class="lead">为及时研判行业监管动向与政策红利，现将截至 ${dateStr} 本周最新发布的医药产业重点政策及文件摘要汇总如下：</p>
                 <h2 class="h1-title">一、本周重点政策速览清单</h2>
                 <table class="three-line-table">
