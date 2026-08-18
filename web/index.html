@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#004886">
     <title>医药健康产业集团政策监测信息系统 - 四川发展·医药集团</title>
-    <link rel="stylesheet" href="index.css?v=20260818v23">
+    <link rel="stylesheet" href="index.css?v=20260818v24">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700;900&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -139,9 +139,14 @@
                         <p class="special-card-desc">
                             重点跟踪四川省科技厅、省发改委、成都市经信局关于科技创新奖励、研发补助、重大专项及资金奖补政策。
                         </p>
-                        <button class="btn-generate-report" id="btnGenWeekly">
-                            ⚡ 一键生成本周回顾报告 (5大要点)
-                        </button>
+                        <div class="weekly-btn-group" style="display:flex; gap:8px; margin-top:8px;">
+                            <button class="btn-generate-report" id="btnGenWeekly" style="flex:1;">
+                                ⚡ 一键生成本周回顾报告
+                            </button>
+                            <button class="btn-export-weekly-doc" id="btnExportWeeklyDoc" title="将本周回顾报告导出为规范公文 Word" style="background:#f0f5fb; color:var(--nmpa-blue-main); border:1px solid #c0d8f0; font-weight:600; padding:0 12px; border-radius:3px; cursor:pointer; font-size:12.5px; display:inline-flex; align-items:center; gap:4px; white-space:nowrap;">
+                                📄 导出周报Word
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -304,14 +309,6 @@
                     </select>
                 </div>
 
-                <!-- 辅助功能 -->
-                <div class="footer-aux-links">
-                    <a href="javascript:void(0)" onclick="alert('系统运行状态良好，后台数据同步正常。')" class="aux-link">📄 网站管理</a>
-                    <span class="foot-divider">|</span>
-                    <a href="javascript:void(0)" onclick="alert('使用指南：支持按政策类型筛选、一键导出符合GB/T 9704-2012国家标准的公文Word、直连DeepSeek进行政策研判与申报咨询。')" class="aux-link">🧭 网站使用指南</a>
-                    <span class="foot-divider">|</span>
-                    <a href="javascript:void(0)" onclick="alert('本系统监测数据均来源于国家部委及省级政府官方公开网站，仅供集团内部研判参考。')" class="aux-link">⚖️ 网站声明</a>
-                </div>
             </div>
         </div>
 
@@ -363,6 +360,6 @@
     <!-- 弹窗通知 -->
     <div id="toast" class="nmpa-toast hidden"></div>
 
-    <script src="app.js?v=20260818v23"></script>
+    <script src="app.js?v=20260818v24"></script>
 </body>
 </html>

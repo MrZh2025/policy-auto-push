@@ -51,6 +51,7 @@ const el = {
     btnScrape: document.getElementById('btnScrape'),
     btnExportWord: document.getElementById('btnExportWord'),
     btnGenWeekly: document.getElementById('btnGenWeekly'),
+    btnExportWeeklyDoc: document.getElementById('btnExportWeeklyDoc'),
     chatMessages: document.getElementById('chatMessages'),
     chatInput: document.getElementById('chatInput'),
     btnSendChat: document.getElementById('btnSendChat'),
@@ -164,8 +165,9 @@ function bindEvents() {
         }
     });
 
-    // 四川生物医药周回顾一键生成
-    el.btnGenWeekly.addEventListener('click', generateSichuanWeeklyReport);
+    // 四川生物医药周回顾一键生成与导出 Word
+    if (el.btnGenWeekly) el.btnGenWeekly.addEventListener('click', generateSichuanWeeklyReport);
+    if (el.btnExportWeeklyDoc) el.btnExportWeeklyDoc.addEventListener('click', handleExportWeeklyWord);
 
     // 抽屉切换
     const openDrawerFunc = () => {
@@ -730,7 +732,8 @@ async function generateSichuanWeeklyReport() {
             if (resp.ok) {
                 const res = await resp.json();
                 if (res.code === 0 && res.report) {
-                    updateMessage(loadingId, res.report);
+                    state.latestWeeklyReport = res.report;
+                    updateMessage(loadingId, res.report, true);
                     showToast(`📄 四川省生物医药周回顾报告（${timeAnchor.periodStr}）编制完成`);
                     return;
                 }
@@ -746,7 +749,8 @@ async function generateSichuanWeeklyReport() {
     if (effectiveKey) {
         try {
             const report = await callDirectLLM(dynamicWeeklyPrompt, effectiveKey);
-            updateMessage(loadingId, report);
+            state.latestWeeklyReport = report;
+            updateMessage(loadingId, report, true);
             showToast(`📄 四川省生物医药周回顾报告（${timeAnchor.periodStr}）编制完成`);
             return;
         } catch (err) {
@@ -757,7 +761,9 @@ async function generateSichuanWeeklyReport() {
 
     // 3. 离线模拟报告
     setTimeout(() => {
-        updateMessage(loadingId, getMockAnalysis('周回顾'));
+        const mockRep = getMockAnalysis('周回顾');
+        state.latestWeeklyReport = mockRep;
+        updateMessage(loadingId, mockRep, true);
         showToast(`📄 四川省生物医药周回顾报告（${timeAnchor.periodStr}）编制完成`);
     }, 800);
 }
@@ -817,7 +823,7 @@ function appendMessage(text, role) {
     const formattedContent = parseMarkdownSimple(text);
     row.innerHTML = `
         <div class="dialog-card">
-            ${role === 'bot-row' ? '<div class="dialog-author">政策研究室工作台</div>' : ''}
+            ${role === 'bot-row' ? '<div class="dialog-author">AI·政策研判与申报咨询</div>' : ''}
             ${formattedContent}
         </div>
     `;
@@ -827,13 +833,20 @@ function appendMessage(text, role) {
     return msgId;
 }
 
-function updateMessage(msgId, text) {
+function updateMessage(msgId, text, isWeeklyReport = false) {
     const row = document.getElementById(msgId);
     if (row) {
         const card = row.querySelector('.dialog-card');
         if (card) {
             const authorHtml = row.classList.contains('bot-row') ? '<div class="dialog-author">AI·政策研判与申报咨询</div>' : '';
-            card.innerHTML = authorHtml + parseMarkdownSimple(text);
+            const exportBtnHtml = (isWeeklyReport || text.includes('周回顾') || text.includes('周报'))
+                ? `<div style="margin-top:12px; border-top:1px dashed var(--border-color); padding-top:8px; display:flex; justify-content:flex-end;">
+                     <button onclick="handleExportWeeklyWord()" style="background:#004886; color:#ffffff; border:none; padding:5px 12px; font-size:12px; border-radius:3px; cursor:pointer; font-weight:600; display:inline-flex; align-items:center; gap:4px;">
+                         📄 导出此份周报 Word
+                     </button>
+                   </div>`
+                : '';
+            card.innerHTML = authorHtml + parseMarkdownSimple(text) + exportBtnHtml;
         }
     }
     el.chatMessages.scrollTop = el.chatMessages.scrollHeight;
@@ -1010,10 +1023,10 @@ function handleExportWord() {
                 <table class="three-line-table">
                     <thead>
                         <tr style="height:26pt;">
-                            <th style="border-top:1.5pt solid black; border-bottom:0.75pt solid black; padding:4pt; text-align:center; font-family:'Times New Roman','黑体','SimHei',sans-serif; font-size:14pt; width:10%;">序号</th>
-                            <th style="border-top:1.5pt solid black; border-bottom:0.75pt solid black; padding:4pt; text-align:center; font-family:'Times New Roman','黑体','SimHei',sans-serif; font-size:14pt; width:52%;">政策文件名称</th>
-                            <th style="border-top:1.5pt solid black; border-bottom:0.75pt solid black; padding:4pt; text-align:center; font-family:'Times New Roman','黑体','SimHei',sans-serif; font-size:14pt; width:22%;">发布机关</th>
-                            <th style="border-top:1.5pt solid black; border-bottom:0.75pt solid black; padding:4pt; text-align:center; font-family:'Times New Roman','黑体','SimHei',sans-serif; font-size:14pt; width:16%;">发布日期</th>
+                            <th style="border-top:1.5pt solid black; border-bottom:0.75pt solid black; padding:4pt; text-align:center; font-family:'Times New Roman','黑体','SimHei',sans-serif; font-size:12pt; width:10%;">序号</th>
+                            <th style="border-top:1.5pt solid black; border-bottom:0.75pt solid black; padding:4pt; text-align:center; font-family:'Times New Roman','黑体','SimHei',sans-serif; font-size:12pt; width:52%;">政策文件名称</th>
+                            <th style="border-top:1.5pt solid black; border-bottom:0.75pt solid black; padding:4pt; text-align:center; font-family:'Times New Roman','黑体','SimHei',sans-serif; font-size:12pt; width:22%;">发布机关</th>
+                            <th style="border-top:1.5pt solid black; border-bottom:0.75pt solid black; padding:4pt; text-align:center; font-family:'Times New Roman','黑体','SimHei',sans-serif; font-size:12pt; width:16%;">发布日期</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -1042,6 +1055,176 @@ function handleExportWord() {
 
     showToast(`✅ 已弹出保存对话框，正在下载公文简报：${filename}`);
 }
+
+// 导出四川省生物医药周报 Word 文档（GB/T 9704-2012 国家标准·1.5倍行距·小4号字·无主送机关）
+function handleExportWeeklyWord() {
+    const timeAnchor = getCurrentTimeAnchor();
+    let reportText = state.latestWeeklyReport;
+    
+    // 如果尚未在本次会话生成周报，使用最新内置的周回顾内参
+    if (!reportText) {
+        reportText = getMockAnalysis('周回顾');
+    }
+
+    const docDate = timeAnchor.fullDateStr;
+    const docPeriod = timeAnchor.periodStr;
+    const dateTag = `${timeAnchor.year}${String(timeAnchor.month).padStart(2, '0')}${String(timeAnchor.date).padStart(2, '0')}`;
+    const filename = `四川省生物医药科技创新政策周报_${dateTag}.doc`;
+
+    // 将 Markdown 转换为符合公文排版规范的 HTML 段落
+    const lines = reportText.split('\n');
+    let bodyHtml = '';
+
+    for (let rawLine of lines) {
+        let line = rawLine.trim();
+        if (!line) continue;
+
+        if (line.startsWith('# ')) {
+            const subTitle = line.replace(/^#\s*/, '');
+            if (!subTitle.includes('四川省生物医药')) {
+                bodyHtml += `<p class="body-lead">${subTitle}</p>`;
+            }
+        } else if (line.startsWith('## ')) {
+            // 一级标题：小4号 黑体 加粗 1.5倍行距 首行缩进2字符
+            const h1Text = line.replace(/^##\s*/, '');
+            bodyHtml += `<h2 class="h1-title">${h1Text}</h2>`;
+        } else if (line.startsWith('### ')) {
+            // 三级标题：小4号 方正仿宋 加粗 1.5倍行距 首行缩进2字符
+            const h3Text = line.replace(/^###\s*/, '');
+            bodyHtml += `<p class="h3-title">${h3Text}</p>`;
+        } else if (line.startsWith('- ') || line.startsWith('* ') || /^\d+\.\s/.test(line)) {
+            // 列表项：小4号 方正仿宋 1.5倍行距 首行缩进2字符
+            let itemText = line.replace(/^[\-\*]\s*/, '').replace(/^\d+\.\s*/, (match) => match);
+            itemText = itemText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            itemText = itemText.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" class="doc-link">$1</a>');
+            bodyHtml += `<p class="body-list">${itemText}</p>`;
+        } else {
+            // 正文段落：小4号 方正仿宋 1.5倍行距 首行缩进2字符
+            let paraText = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            paraText = paraText.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" class="doc-link">$1</a>');
+            bodyHtml += `<p class="body-para">${paraText}</p>`;
+        }
+    }
+
+    const wordHtml = `
+        <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+        <head>
+            <meta charset='utf-8'>
+            <title>四川省生物医药科技创新政策周报</title>
+            <!--[if gte mso 9]>
+            <xml>
+                <w:WordDocument>
+                    <w:View>Print</w:View>
+                    <w:Zoom>100</w:Zoom>
+                    <w:DoNotOptimizeForBrowser/>
+                </w:WordDocument>
+            </xml>
+            <![endif]-->
+            <style>
+                @page Section1 {
+                    size: 210mm 297mm;
+                    margin: 37mm 26mm 35mm 28mm;
+                    mso-header-margin: 35.4pt;
+                    mso-footer-margin: 35.4pt;
+                    mso-paper-source: 0;
+                }
+                div.Section1 { page: Section1; }
+                body {
+                    font-family: 'Times New Roman', '方正仿宋简体', '仿宋_GB2312', '仿宋', 'FangSong', serif;
+                    font-size: 12pt;
+                    line-height: 1.5;
+                    color: #000000;
+                    text-align: justify;
+                }
+                h1.doc-title {
+                    font-family: 'Times New Roman', '方正小标宋简体', '小标宋', '宋体', 'SimSun', serif;
+                    font-size: 22pt;
+                    font-weight: bold;
+                    text-align: center;
+                    margin-top: 6pt;
+                    margin-bottom: 4pt;
+                    line-height: 1.3;
+                }
+                p.doc-subtitle {
+                    font-family: 'Times New Roman', '方正楷体简体', '楷体_GB2312', '楷体', serif;
+                    font-size: 14pt;
+                    text-align: center;
+                    margin-top: 0;
+                    margin-bottom: 14pt;
+                    color: #333333;
+                }
+                p.body-lead {
+                    font-family: 'Times New Roman', '方正仿宋简体', '仿宋_GB2312', '仿宋', serif;
+                    font-size: 12pt;
+                    text-indent: 2em;
+                    margin: 0 0 6pt 0;
+                    line-height: 1.5;
+                    text-align: justify;
+                }
+                h2.h1-title {
+                    font-family: 'Times New Roman', '黑体', 'SimHei', sans-serif;
+                    font-size: 12pt;
+                    font-weight: bold;
+                    text-indent: 2em;
+                    margin-top: 10pt;
+                    margin-bottom: 4pt;
+                    line-height: 1.5;
+                }
+                p.h3-title {
+                    font-family: 'Times New Roman', '方正仿宋简体', '仿宋_GB2312', '仿宋', serif;
+                    font-size: 12pt;
+                    font-weight: bold;
+                    text-indent: 2em;
+                    margin: 6pt 0 2pt 0;
+                    line-height: 1.5;
+                }
+                p.body-para {
+                    font-family: 'Times New Roman', '方正仿宋简体', '仿宋_GB2312', '仿宋', serif;
+                    font-size: 12pt;
+                    text-indent: 2em;
+                    margin: 0 0 4pt 0;
+                    line-height: 1.5;
+                    text-align: justify;
+                }
+                p.body-list {
+                    font-family: 'Times New Roman', '方正仿宋简体', '仿宋_GB2312', '仿宋', serif;
+                    font-size: 12pt;
+                    text-indent: 2em;
+                    margin: 0 0 2pt 0;
+                    line-height: 1.5;
+                }
+                a.doc-link {
+                    color: #004886;
+                    text-decoration: underline;
+                    font-family: 'Times New Roman', '方正仿宋简体', serif;
+                    font-size: 12pt;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="Section1">
+                <h1 class="doc-title">四川省生物医药科技创新政策周报</h1>
+                <p class="doc-subtitle">（${docPeriod} · ${docDate}）</p>
+                ${bodyHtml}
+            </div>
+        </body>
+        </html>
+    `;
+
+    const blob = new Blob(['\ufeff', wordHtml], { type: 'application/msword;charset=utf-8' });
+    const downloadUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(downloadUrl);
+
+    showToast(`✅ 已成功导出周报 Word：${filename}`);
+}
+
+window.handleExportWeeklyWord = handleExportWeeklyWord;
 
 function showToast(msg) {
     el.toast.textContent = msg;
