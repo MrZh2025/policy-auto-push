@@ -40,6 +40,19 @@ def run_pipeline(force_push: bool = False):
     db = PolicyDatabase()
     notifier = WeChatNotifier()
 
+    # 0. 融合权威高价值医药产业政策知识库 (覆盖四川专项、核医药、脑机接口、AI制药等)
+    try:
+        from curated_policies import CURATED_POLICIES
+        curated_saved = 0
+        for cp in CURATED_POLICIES:
+            if db.save_policy(cp):
+                curated_saved += 1
+        if curated_saved > 0:
+            logger.info(f"[权威知识库] 成功录入/更新 {curated_saved} 篇重点高价值产业政策")
+    except Exception as e:
+        logger.warning(f"加载权威知识库异常: {e}")
+
+    # 1. 执行全部官方专栏爬虫
     scrapers = get_enabled_scrapers()
     total_fetched = 0
     new_saved = 0
@@ -52,7 +65,7 @@ def run_pipeline(force_push: bool = False):
             for item in items:
                 if db.save_policy(item):
                     new_saved += 1
-                    logger.info(f"  [新政策入库] [{item.get('source')}] {item.get('title')}")
+            logger.info(f"[{scraper.source_name}] 入库新政策条数: {new_saved}")
         except Exception as e:
             logger.error(f"[!] 抓取源 [{scraper.source_name}] 出现异常: {e}", exc_info=False)
 
