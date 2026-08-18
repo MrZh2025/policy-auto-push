@@ -37,6 +37,7 @@ const el = {
     chatInput: document.getElementById('chatInput'),
     btnSendChat: document.getElementById('btnSendChat'),
     queryTags: document.querySelectorAll('.tag-chip'),
+    btnTopAiConfig: document.getElementById('btnTopAiConfig'),
     toggleApiKey: document.getElementById('toggleApiKey'),
     apiKeyDrawer: document.getElementById('apiKeyDrawer'),
     inputApiKey: document.getElementById('inputApiKey'),
@@ -131,9 +132,15 @@ function bindEvents() {
     el.btnGenWeekly.addEventListener('click', generateSichuanWeeklyReport);
 
     // 抽屉切换
-    el.toggleApiKey.addEventListener('click', () => {
+    const openDrawerFunc = () => {
         el.apiKeyDrawer.classList.toggle('hidden');
-    });
+        if (!el.apiKeyDrawer.classList.contains('hidden')) {
+            el.apiKeyDrawer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            el.inputApiKey.focus();
+        }
+    };
+    if (el.btnTopAiConfig) el.btnTopAiConfig.addEventListener('click', openDrawerFunc);
+    if (el.toggleApiKey) el.toggleApiKey.addEventListener('click', openDrawerFunc);
 
     el.btnSaveKey.addEventListener('click', () => {
         state.apiKey = el.inputApiKey.value.trim();

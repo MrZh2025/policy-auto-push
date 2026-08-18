@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700;900&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- 顶部政务红蓝权威辅助条 (NMPA 风格) -->
+    <!-- 顶部政务红蓝权威辅助条 -->
     <div class="top-gov-bar">
         <div class="gov-container">
             <div class="gov-date" id="currentDateStr">
@@ -43,11 +43,11 @@
                 </div>
             </div>
 
-            <!-- 右侧快捷政务操作工具栏 -->
+            <!-- 右侧顶部显眼操作工具栏 (包含超显眼的 AI 密钥配置) -->
             <div class="nmpa-header-actions">
-                <button class="action-btn" id="btnScrape" title="触发全网最新政策检索">
-                    <span class="btn-i">🔄</span>
-                    <span>检索更新</span>
+                <button class="action-btn action-ai" id="btnTopAiConfig" title="配置 DeepSeek / 通义千问 / OpenAI API Key 开启实时 AI 政策专家问答">
+                    <span class="btn-i">🔑</span>
+                    <span>AI 研判密钥配置</span>
                 </button>
                 <button class="action-btn action-primary" id="btnExportWord" title="导出符合GB/T 9704-2012国家公文标准的Word简报到桌面">
                     <span class="btn-i">📄</span>
@@ -56,6 +56,10 @@
                 <button class="action-btn action-wechat" id="btnPushWechat" title="将政策简报推送到个人微信">
                     <span class="btn-i">📱</span>
                     <span>推送微信</span>
+                </button>
+                <button class="action-btn" id="btnScrape" title="触发全网最新政策检索">
+                    <span class="btn-i">🔄</span>
+                    <span>检索更新</span>
                 </button>
             </div>
         </div>
@@ -90,7 +94,7 @@
         </div>
     </nav>
 
-    <!-- 主体内容区 (NMPA 经典政务排版架构) -->
+    <!-- 主体内容区 -->
     <main class="nmpa-main">
         <div class="nmpa-main-grid">
             <!-- 左侧主栏 (70%): 官方政策法规与通知公告列表 -->
@@ -117,7 +121,7 @@
 
             <!-- 右侧辅栏 (30%): 四川省专项周回顾 & 智能研判工作台 -->
             <aside class="nmpa-right-col">
-                <!-- 专栏一：四川省生物医药科技奖补周回顾 (政务红头专题) -->
+                <!-- 专栏一：四川省生物医药科技奖补周回顾 -->
                 <div class="gov-card special-sichuan-box">
                     <div class="special-card-top">
                         <div class="special-badge">四川省专项内参</div>
@@ -131,27 +135,39 @@
                     </div>
                 </div>
 
-                <!-- 专栏二：政策研判与专家咨询台 (NMPA 智库咨询厅) -->
+                <!-- 专栏二：政策研判与专家咨询台 -->
                 <div class="gov-card consult-box">
                     <div class="consult-top">
                         <div class="consult-title-area">
                             <span class="consult-icon">🏛️</span>
                             <h4>政策研判与申报咨询台</h4>
                         </div>
-                        <button class="btn-text-link" id="toggleApiKey">模型配置</button>
+                        <button class="btn-ai-setup" id="toggleApiKey">
+                            🔑 配置 AI 密钥
+                        </button>
                     </div>
 
                     <!-- 模型密钥配置抽屉 -->
                     <div class="config-drawer hidden" id="apiKeyDrawer">
+                        <div class="drawer-header">
+                            <strong>🔑 AI 政策研判大模型参数配置</strong>
+                            <span style="font-size:11px;color:var(--text-muted)">（支持 DeepSeek / 通义千问 / OpenAI / Kimi）</span>
+                        </div>
                         <div class="drawer-field">
-                            <label>API Key (支持 DeepSeek / 通义千问 / OpenAI):</label>
+                            <label>API Key（密钥保存在您本地浏览器中，安全私密）：</label>
                             <input type="password" id="inputApiKey" placeholder="sk-xxxxxxxxxxxxxxxx">
                         </div>
                         <div class="drawer-row">
-                            <input type="text" id="inputBaseUrl" placeholder="https://api.deepseek.com/v1">
-                            <input type="text" id="inputModel" placeholder="deepseek-chat">
-                            <button class="btn-save-key" id="btnSaveKey">保存配置</button>
+                            <div style="flex:1.2">
+                                <label style="font-size:11px;color:var(--text-muted)">接口地址 (Base URL):</label>
+                                <input type="text" id="inputBaseUrl" placeholder="https://api.deepseek.com/v1">
+                            </div>
+                            <div style="flex:0.8">
+                                <label style="font-size:11px;color:var(--text-muted)">模型名称:</label>
+                                <input type="text" id="inputModel" placeholder="deepseek-chat">
+                            </div>
                         </div>
+                        <button class="btn-save-key-full" id="btnSaveKey">✓ 保存配置并开启实时研判</button>
                     </div>
 
                     <!-- 常用高频政策研判议题 -->
