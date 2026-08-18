@@ -50,20 +50,20 @@ FONT_SIZES = {
     '5号': Pt(10.5)
 }
 
-# ----------------- 标准公文字体映射 -----------------
+# ----------------- 标准公文字体映射（中文字体 + Times New Roman 英文与数值） -----------------
 FONT_NAMES = {
-    'title': ('方正小标宋简体', 'FZXiaoBiaoSong-B05S', '宋体'),
+    'title': ('方正小标宋简体', 'FZXiaoBiaoSong-B05S', 'Times New Roman'),
     'body': ('方正仿宋简体', '仿宋_GB2312', '仿宋', 'Times New Roman'),
-    'h1': ('黑体', 'SimHei', '黑体'),
-    'h2': ('楷体_GB2312', 'KaiTi_GB2312', '楷体', 'Times New Roman'),
+    'h1': ('黑体', 'SimHei', 'Times New Roman'),
+    'h2': ('楷体_GB2312', 'KaiTi_GB2312', 'Times New Roman'),
     'h3': ('方正仿宋简体', '仿宋_GB2312', '仿宋', 'Times New Roman'),
-    'table_header': ('黑体', 'SimHei', '黑体'),
+    'table_header': ('黑体', 'SimHei', 'Times New Roman'),
     'table': ('方正仿宋简体', '仿宋_GB2312', '仿宋', 'Times New Roman'),
-    'page_num': ('宋体', 'SimSun', 'Times New Roman')
+    'page_num': ('Times New Roman', 'SimSun', 'Times New Roman')
 }
 
 def set_run_font(run, font_type='body', size_pt=Pt(16), bold=False, italic=False, color_rgb=(0, 0, 0)):
-    """设置文本中西文字体、字号与样式，严格绑定 eastAsia 字体"""
+    """设置文本中西文字体、字号与样式，严格绑定 eastAsia 为中文字体，ascii/hAnsi/cs 为 Times New Roman"""
     run.font.size = size_pt
     run.font.bold = bold
     run.font.italic = italic
@@ -71,7 +71,7 @@ def set_run_font(run, font_type='body', size_pt=Pt(16), bold=False, italic=False
     
     font_tuple = FONT_NAMES.get(font_type, ('方正仿宋简体', '仿宋_GB2312', '仿宋', 'Times New Roman'))
     east_asia_font = font_tuple[0]
-    ascii_font = font_tuple[-1]
+    ascii_font = 'Times New Roman'
     
     run.font.name = ascii_font
     rPr = run._r.get_or_add_rPr()
@@ -207,19 +207,13 @@ class PolicyDocExporter:
         r_title = p_title.add_run("医药健康产业集团政策监测信息简报")
         set_run_font(r_title, font_type='title', size_pt=FONT_SIZES['2号'], bold=True)
 
-        # 3. 主送机关：3号 方正仿宋简体加粗，顶格书写，后接全角冒号
-        p_main_send = doc.add_paragraph()
-        set_para_spacing(p_main_send, line_spacing_pt=Pt(28.5), space_before_pt=Pt(0), space_after_pt=Pt(4), first_line_indent_pt=Pt(0), align=WD_ALIGN_PARAGRAPH.LEFT)
-        r_main_send = p_main_send.add_run("各权属企业、各部门、各重点产业投资平台：")
-        set_run_font(r_main_send, font_type='body', size_pt=FONT_SIZES['3号'], bold=True)
-
-        # 4. 导语段落：3号 方正仿宋简体，首行缩进 2 字符，固定行距 28.5 磅
+        # 3. 导语段落：3号 方正仿宋简体（英文和数字 Times New Roman），首行缩进 2 字符，固定行距 28.5 磅
         p_lead = doc.add_paragraph()
         set_para_spacing(p_lead, line_spacing_pt=Pt(28.5), space_before_pt=Pt(0), space_after_pt=Pt(6), first_line_indent_pt=Pt(32), align=WD_ALIGN_PARAGRAPH.JUSTIFY)
         r_lead = p_lead.add_run(f"为及时研判行业监管动向与政策红利，现将截至{today_str}本周最新发布的医药产业重点政策及文件摘要汇总如下：")
         set_run_font(r_lead, font_type='body', size_pt=FONT_SIZES['3号'])
 
-        # 5. 一级标题：一、本周重点政策速览清单（3号 黑体，首行缩进 2 字符，末尾不加标点）
+        # 4. 一级标题：一、本周重点政策速览清单（3号 黑体，首行缩进 2 字符，末尾不加标点）
         p_h1 = doc.add_paragraph()
         set_para_spacing(p_h1, line_spacing_pt=Pt(28.5), space_before_pt=Pt(6), space_after_pt=Pt(4), first_line_indent_pt=Pt(32), align=WD_ALIGN_PARAGRAPH.JUSTIFY)
         r_h1 = p_h1.add_run("一、本周重点政策速览清单")

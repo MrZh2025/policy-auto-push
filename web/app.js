@@ -777,16 +777,16 @@ function handleExportWord() {
     const fileDateTag = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`;
     const filename = `医药健康产业集团政策监测信息周报_${fileDateTag}.doc`;
 
-    // 构造符合 GB/T 9704-2012 国家公文格式的 HTML Word 模板
+    // 构造符合 GB/T 9704-2012 国家公文格式的 HTML Word 模板（英文与数值采用 Times New Roman）
     let tableRows = '';
     policies.forEach((item, idx) => {
         const isLast = (idx === policies.length - 1);
         tableRows += `
             <tr style="height:28pt;">
-                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:center; font-family:'方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt;">${idx + 1}</td>
-                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:left; font-family:'方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt; line-height:20pt;">${item.title || ''}</td>
-                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:center; font-family:'方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt;">${item.source || '官方部门'}</td>
-                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:center; font-family:'方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt;">${item.pub_date || '近期'}</td>
+                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:center; font-family:'Times New Roman','方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt;">${idx + 1}</td>
+                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:left; font-family:'Times New Roman','方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt; line-height:20pt;">${item.title || ''}</td>
+                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:center; font-family:'Times New Roman','方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt;">${item.source || '官方部门'}</td>
+                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:center; font-family:'Times New Roman','方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt;">${item.pub_date || '近期'}</td>
             </tr>
         `;
     });
@@ -799,16 +799,16 @@ function handleExportWord() {
         const summary = item.summary || title;
         const url = item.url || '#';
 
-        // 遵循三级标题规范：3号 方正仿宋加粗 + 方正仿宋正文，固定行距 28.5 磅，首行缩进 2 字符
+        // 遵循三级标题规范：3号 方正仿宋加粗 + 方正仿宋正文（英文与数值 Times New Roman），固定行距 28.5 磅，首行缩进 2 字符
         detailsHtml += `
-            <p style="margin:8pt 0 2pt 0; text-indent:2em; font-family:'方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:16pt; font-weight:bold; line-height:28.5pt; color:#000000;">
+            <p style="margin:8pt 0 2pt 0; text-indent:2em; font-family:'Times New Roman','方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:16pt; font-weight:bold; line-height:28.5pt; color:#000000;">
                 ${idx + 1}. 《${title}》。
             </p>
-            <p style="margin:0 0 2pt 0; text-indent:2em; font-family:'方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:16pt; line-height:28.5pt; color:#000000; text-align:justify;">
+            <p style="margin:0 0 2pt 0; text-indent:2em; font-family:'Times New Roman','方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:16pt; line-height:28.5pt; color:#000000; text-align:justify;">
                 该文件由 <strong>${dept}</strong> 于 ${pubDate} 公开发布。<strong>文件摘要与核心要点：</strong>${summary}
             </p>
-            <p style="margin:0 0 10pt 0; text-indent:2em; font-family:'方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:15pt; line-height:28.5pt;">
-                官方原文直达链接：<a href="${url}" target="_blank" style="color:#004886; text-decoration:underline;">${url}</a>
+            <p style="margin:0 0 10pt 0; text-indent:2em; font-family:'Times New Roman','方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:15pt; line-height:28.5pt;">
+                官方原文直达链接：<a href="${url}" target="_blank" style="color:#004886; text-decoration:underline; font-family:'Times New Roman','方正仿宋简体',serif;">${url}</a>
             </p>
         `;
     });
@@ -837,14 +837,14 @@ function handleExportWord() {
                 }
                 div.Section1 { page: Section1; }
                 body {
-                    font-family: '方正仿宋简体', '仿宋_GB2312', '仿宋', 'FangSong', 'Times New Roman', serif;
+                    font-family: 'Times New Roman', '方正仿宋简体', '仿宋_GB2312', '仿宋', 'FangSong', serif;
                     font-size: 16pt;
                     line-height: 28.5pt;
                     color: #000000;
                     text-align: justify;
                 }
                 h1.doc-title {
-                    font-family: '方正小标宋简体', '小标宋', '宋体', 'SimSun', serif;
+                    font-family: 'Times New Roman', '方正小标宋简体', '小标宋', '宋体', 'SimSun', serif;
                     font-size: 22pt;
                     font-weight: bold;
                     text-align: center;
@@ -852,18 +852,8 @@ function handleExportWord() {
                     margin-bottom: 14pt;
                     line-height: 32pt;
                 }
-                p.main-send {
-                    font-family: '方正仿宋简体', '仿宋_GB2312', '仿宋', serif;
-                    font-size: 16pt;
-                    font-weight: bold;
-                    text-indent: 0;
-                    margin-top: 0;
-                    margin-bottom: 4pt;
-                    line-height: 28.5pt;
-                    text-align: left;
-                }
                 h2.h1-title {
-                    font-family: '黑体', 'SimHei', sans-serif;
+                    font-family: 'Times New Roman', '黑体', 'SimHei', sans-serif;
                     font-size: 16pt;
                     font-weight: bold;
                     text-indent: 2em;
@@ -872,7 +862,7 @@ function handleExportWord() {
                     line-height: 28.5pt;
                 }
                 p.lead {
-                    font-family: '方正仿宋简体', '仿宋_GB2312', '仿宋', serif;
+                    font-family: 'Times New Roman', '方正仿宋简体', '仿宋_GB2312', '仿宋', serif;
                     font-size: 16pt;
                     text-indent: 2em;
                     margin-top: 0;
@@ -890,8 +880,6 @@ function handleExportWord() {
         <body>
             <div class="Section1">
                 <h1 class="doc-title">医药健康产业集团政策监测信息简报</h1>
-
-                <p class="main-send">各权属企业、各部门、各重点产业投资平台：</p>
                 
                 <p class="lead">为及时研判行业监管动向与政策红利，现将截至 ${dateStr} 本周最新发布的医药产业重点政策及文件摘要汇总如下：</p>
                 
@@ -900,10 +888,10 @@ function handleExportWord() {
                 <table class="three-line-table">
                     <thead>
                         <tr style="height:26pt;">
-                            <th style="border-top:1.5pt solid black; border-bottom:0.75pt solid black; padding:4pt; text-align:center; font-family:'黑体','SimHei',sans-serif; font-size:14pt; width:10%;">序号</th>
-                            <th style="border-top:1.5pt solid black; border-bottom:0.75pt solid black; padding:4pt; text-align:center; font-family:'黑体','SimHei',sans-serif; font-size:14pt; width:52%;">政策文件名称</th>
-                            <th style="border-top:1.5pt solid black; border-bottom:0.75pt solid black; padding:4pt; text-align:center; font-family:'黑体','SimHei',sans-serif; font-size:14pt; width:22%;">发布机关</th>
-                            <th style="border-top:1.5pt solid black; border-bottom:0.75pt solid black; padding:4pt; text-align:center; font-family:'黑体','SimHei',sans-serif; font-size:14pt; width:16%;">发布日期</th>
+                            <th style="border-top:1.5pt solid black; border-bottom:0.75pt solid black; padding:4pt; text-align:center; font-family:'Times New Roman','黑体','SimHei',sans-serif; font-size:14pt; width:10%;">序号</th>
+                            <th style="border-top:1.5pt solid black; border-bottom:0.75pt solid black; padding:4pt; text-align:center; font-family:'Times New Roman','黑体','SimHei',sans-serif; font-size:14pt; width:52%;">政策文件名称</th>
+                            <th style="border-top:1.5pt solid black; border-bottom:0.75pt solid black; padding:4pt; text-align:center; font-family:'Times New Roman','黑体','SimHei',sans-serif; font-size:14pt; width:22%;">发布机关</th>
+                            <th style="border-top:1.5pt solid black; border-bottom:0.75pt solid black; padding:4pt; text-align:center; font-family:'Times New Roman','黑体','SimHei',sans-serif; font-size:14pt; width:16%;">发布日期</th>
                         </tr>
                     </thead>
                     <tbody>
