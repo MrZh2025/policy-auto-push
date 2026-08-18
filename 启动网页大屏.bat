@@ -1,13 +1,14 @@
 @echo off
 chcp 65001 >nul
-title 医药产业政策自动化与智能分析大屏
+title 医药产业政策大屏
 
+cd /d "%~dp0"
 echo ========================================================
-echo   正在启动【医药产业政策自动化与智能分析大屏】...
+echo Starting Medical Policy Web Dashboard...
+echo Open your browser at http://127.0.0.1:8080
 echo ========================================================
 echo.
 
-cd /d "%~dp0"
 python web_server.py
 
 pause

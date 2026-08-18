@@ -11,9 +11,13 @@ import io
 import urllib.parse
 from datetime import datetime
 
-# 强制 UTF-8
-if hasattr(sys.stdout, "buffer"):
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
+# 安全配置 Windows 控制台输出编码
+if sys.platform == 'win32' and hasattr(sys.stdout, 'reconfigure'):
+    try:
+        sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+        sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+    except Exception:
+        pass
 
 from database import PolicyDatabase
 from ai_analyst import AIAnalyst, SICHUAN_WEEKLY_PROMPT_TEMPLATE
@@ -25,9 +29,19 @@ import config
 PORT = 8080
 WEB_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "web")
 
+def safe_log(msg: str):
+    try:
+        print(msg, flush=True)
+    except Exception:
+        pass
+
 class PolicyWebHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=WEB_DIR, **kwargs)
+
+    def log_message(self, format, *args):
+        # 简化日志，避免控制台报错
+        pass
 
     def do_GET(self):
         parsed = urllib.parse.urlparse(self.path)
@@ -63,11 +77,14 @@ class PolicyWebHandler(http.server.SimpleHTTPRequestHandler):
             self.send_error(404, "Endpoint Not Found")
 
     def _json_response(self, data, status=200):
-        self.send_response(status)
-        self.send_header("Content-Type", "application/json; charset=utf-8")
-        self.send_header("Access-Control-Allow-Origin", "*")
-        self.end_headers()
-        self.wfile.write(json.dumps(data, ensure_ascii=False).encode("utf-8"))
+        try:
+            self.send_response(status)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.end_headers()
+            self.wfile.write(json.dumps(data, ensure_ascii=False).encode("utf-8"))
+        except Exception as e:
+            safe_log(f"Response error: {e}")
 
     def handle_get_policies(self, parsed):
         db = PolicyDatabase()
@@ -93,7 +110,6 @@ class PolicyWebHandler(http.server.SimpleHTTPRequestHandler):
     def handle_get_stats(self):
         db = PolicyDatabase()
         stats = db.get_stats()
-        # 统计各大赛道分布
         with db._get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute("SELECT category, COUNT(*) as cnt FROM policies GROUP BY category")
@@ -178,19 +194,32 @@ class PolicyWebHandler(http.server.SimpleHTTPRequestHandler):
         except Exception as e:
             self._json_response({"code": -1, "msg": str(e)}, status=500)
 
+class ThreadingHTTPServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
+    daemon_threads = True
+
 def start_server():
     os.makedirs(WEB_DIR, exist_ok=True)
-    with socketserver.TCPServer(("", PORT), PolicyWebHandler) as httpd:
-        print("=" * 60)
-        print(f"🚀 医药政策自动化平台 Web 服务已启动！")
-        print(f"👉 访问地址: http://127.0.0.1:{PORT}")
-        print("=" * 60)
-        import webbrowser
+    # 允许端口快速重用
+    socketserver.TCPServer.allow_reuse_address = True
+    
+    server_address = ("", PORT)
+    with ThreadingHTTPServer(server_address, PolicyWebHandler) as httpd:
+        safe_log("=" * 60)
+        safe_log(f"🚀 医药产业政策大屏 Web 服务已启动！")
+        safe_log(f"👉 本地访问地址: http://127.0.0.1:{PORT}")
+        safe_log("=" * 60)
+        
         try:
+            import webbrowser
             webbrowser.open(f"http://127.0.0.1:{PORT}")
         except Exception:
             pass
-        httpd.serve_forever()
+            
+        try:
+            httpd.serve_forever()
+        except KeyboardInterrupt:
+            safe_log("\n正在停止服务...")
+            httpd.server_close()
 
 if __name__ == "__main__":
     start_server()
