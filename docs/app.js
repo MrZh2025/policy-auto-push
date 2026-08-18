@@ -874,15 +874,15 @@ function handleExportWord() {
         const summary = item.summary || title;
         const url = item.url || '#';
 
-        // 遵循三级标题规范：4号 方正仿宋加粗 + 方正仿宋正文（英文与数值 Times New Roman），固定行距 58 磅，首行缩进 2 字符
+        // 遵循三级标题规范：小4号 方正仿宋加粗 + 方正仿宋正文（英文与数值 Times New Roman），单倍行距，首行缩进 2 字符
         detailsHtml += `
-            <p style="margin:8pt 0 2pt 0; text-indent:2em; font-family:'Times New Roman','方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:14pt; font-weight:bold; line-height:58pt; color:#000000;">
+            <p style="margin:6pt 0 2pt 0; text-indent:2em; font-family:'Times New Roman','方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt; font-weight:bold; line-height:1.5; color:#000000;">
                 ${idx + 1}. 《${title}》。
             </p>
-            <p style="margin:0 0 2pt 0; text-indent:2em; font-family:'Times New Roman','方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:14pt; line-height:58pt; color:#000000; text-align:justify;">
+            <p style="margin:0 0 2pt 0; text-indent:2em; font-family:'Times New Roman','方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt; line-height:1.5; color:#000000; text-align:justify;">
                 该文件由 <strong>${dept}</strong> 于 ${pubDate} 公开发布。<strong>文件摘要与核心要点：</strong>${summary}
             </p>
-            <p style="margin:0 0 10pt 0; text-indent:2em; font-family:'Times New Roman','方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:14pt; line-height:58pt;">
+            <p style="margin:0 0 8pt 0; text-indent:2em; font-family:'Times New Roman','方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt; line-height:1.5;">
                 官方原文直达链接：<a href="${url}" target="_blank" style="color:#004886; text-decoration:underline; font-family:'Times New Roman','方正仿宋简体',serif;">${url}</a>
             </p>
         `;
@@ -913,8 +913,8 @@ function handleExportWord() {
                 div.Section1 { page: Section1; }
                 body {
                     font-family: 'Times New Roman', '方正仿宋简体', '仿宋_GB2312', '仿宋', 'FangSong', serif;
-                    font-size: 14pt;
-                    line-height: 58pt;
+                    font-size: 12pt;
+                    line-height: 1.5;
                     color: #000000;
                     text-align: justify;
                 }
@@ -924,31 +924,31 @@ function handleExportWord() {
                     font-weight: bold;
                     text-align: center;
                     margin-top: 6pt;
-                    margin-bottom: 14pt;
-                    line-height: 32pt;
+                    margin-bottom: 12pt;
+                    line-height: 1.3;
                 }
                 h2.h1-title {
                     font-family: 'Times New Roman', '黑体', 'SimHei', sans-serif;
-                    font-size: 14pt;
+                    font-size: 12pt;
                     font-weight: bold;
                     text-indent: 2em;
-                    margin-top: 12pt;
+                    margin-top: 10pt;
                     margin-bottom: 4pt;
-                    line-height: 58pt;
+                    line-height: 1.5;
                 }
                 p.lead {
                     font-family: 'Times New Roman', '方正仿宋简体', '仿宋_GB2312', '仿宋', serif;
-                    font-size: 14pt;
+                    font-size: 12pt;
                     text-indent: 2em;
                     margin-top: 0;
                     margin-bottom: 6pt;
-                    line-height: 58pt;
+                    line-height: 1.5;
                     text-align: justify;
                 }
                 table.three-line-table {
                     width: 100%;
                     border-collapse: collapse;
-                    margin: 6pt 0 14pt 0;
+                    margin: 6pt 0 12pt 0;
                 }
             </style>
         </head>
