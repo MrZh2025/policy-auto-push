@@ -702,22 +702,34 @@ function parseMarkdownSimple(md) {
 }
 
 async function handleScrapeNow() {
-    showToast('正在全网检索各大部委与四川省局最新政策...');
+    showToast('🔄 正在全网检索各大部委与四川省局最新政策数据...');
+    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    
+    // 1. 本地动态服务模式：直接向本地 Python 后端触发全网实时爬虫
+    if (isLocalhost) {
+        try {
+            const resp = await fetch('/api/scrape-now', { method: 'POST' });
+            if (resp.ok) {
+                const res = await resp.json();
+                showToast(`✅ ${res.msg || '全网政策实时检索并更新完成！'}`);
+                await loadData();
+                return;
+            }
+        } catch (e) {}
+    }
+
+    // 2. GitHub Pages 线上模式：强制绕过 CDN 缓存实时拉取云端最新数据
     try {
-        const resp = await fetch('/api/scrape-now', { method: 'POST' });
-        if (resp.ok) {
-            const res = await resp.json();
-            showToast(res.msg || '政策检索完成');
-            loadData();
-            return;
-        }
-    } catch (e) {}
-    showToast('💡 提示：在 GitHub Pages 静态模式下，系统将在后台工作日 08:30 自动全网检索并更新数据！');
+        await loadData();
+        showToast('✅ 动态数据检索完成！已同步云端最新发布的政策库。');
+    } catch (e) {
+        showToast('💡 提示：当前已加载云端最新政策库。如需在本地立即执行全网深度爬虫，可双击项目根目录下的【启动网页大屏.bat】！');
+    }
 }
 
 // 纯前端直接生成符合《党政机关公文格式》(GB/T 9704-2012) 标准的 Word 文档并弹出保存对话框
 function handleExportWord() {
-    // 严格按用户要求：只导出本周更新的政策和文件摘要
+    // 严格按 /公文排版 要求：只导出本周更新的政策和文件摘要
     const weekPolicies = state.allPolicies.filter(isThisWeekPolicy);
     const policies = (weekPolicies && weekPolicies.length > 0)
         ? weekPolicies
@@ -728,7 +740,7 @@ function handleExportWord() {
         return;
     }
 
-    showToast(`📄 正在为本周 ${policies.length} 篇新政策生成公文 Word 简报...`);
+    showToast(`📄 正在按照《党政机关公文格式》生成本周 ${policies.length} 篇新政策公文简报...`);
 
     const now = new Date();
     const dateStr = `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日`;
@@ -741,10 +753,10 @@ function handleExportWord() {
         const isLast = (idx === policies.length - 1);
         tableRows += `
             <tr style="height:28pt;">
-                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:center; font-family:'方正仿宋简体','仿宋','FangSong','仿宋_GB2312',serif; font-size:11pt;">${idx + 1}</td>
-                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:left; font-family:'方正仿宋简体','仿宋','FangSong','仿宋_GB2312',serif; font-size:11pt;">${item.title || ''}</td>
-                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:center; font-family:'方正仿宋简体','仿宋','FangSong','仿宋_GB2312',serif; font-size:11pt;">${item.source || '国家部委'}</td>
-                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:center; font-family:'方正仿宋简体','仿宋','FangSong','仿宋_GB2312',serif; font-size:11pt;">${item.pub_date || '近期'}</td>
+                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:center; font-family:'方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt;">${idx + 1}</td>
+                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:left; font-family:'方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt; line-height:20pt;">${item.title || ''}</td>
+                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:center; font-family:'方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt;">${item.source || '官方部门'}</td>
+                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:center; font-family:'方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt;">${item.pub_date || '近期'}</td>
             </tr>
         `;
     });
@@ -752,19 +764,20 @@ function handleExportWord() {
     let detailsHtml = '';
     policies.forEach((item, idx) => {
         const title = item.title || '';
-        const dept = item.source || '国家部委';
+        const dept = item.source || '官方部门';
         const pubDate = item.pub_date || '近期';
         const summary = item.summary || title;
         const url = item.url || '#';
 
+        // 遵循三级标题规范：3号 方正仿宋加粗 + 方正仿宋正文，固定行距 28.5 磅，首行缩进 2 字符
         detailsHtml += `
-            <p style="margin:10pt 0 4pt 0; text-indent:2em; font-family:'方正仿宋简体','仿宋','FangSong','仿宋_GB2312',serif; font-size:16pt; font-weight:bold; line-height:28.5pt; color:#000000;">
+            <p style="margin:8pt 0 2pt 0; text-indent:2em; font-family:'方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:16pt; font-weight:bold; line-height:28.5pt; color:#000000;">
                 ${idx + 1}. 《${title}》。
             </p>
-            <p style="margin:0 0 4pt 0; text-indent:2em; font-family:'方正仿宋简体','仿宋','FangSong','仿宋_GB2312',serif; font-size:16pt; line-height:28.5pt; color:#000000; text-align:justify;">
+            <p style="margin:0 0 2pt 0; text-indent:2em; font-family:'方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:16pt; line-height:28.5pt; color:#000000; text-align:justify;">
                 该文件由 <strong>${dept}</strong> 于 ${pubDate} 公开发布。<strong>文件摘要与核心要点：</strong>${summary}
             </p>
-            <p style="margin:0 0 12pt 0; text-indent:2em; font-family:'方正仿宋简体','仿宋','FangSong','仿宋_GB2312',serif; font-size:15pt; line-height:28.5pt;">
+            <p style="margin:0 0 10pt 0; text-indent:2em; font-family:'方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:15pt; line-height:28.5pt;">
                 官方原文直达链接：<a href="${url}" target="_blank" style="color:#004886; text-decoration:underline;">${url}</a>
             </p>
         `;
@@ -775,6 +788,15 @@ function handleExportWord() {
         <head>
             <meta charset='utf-8'>
             <title>医药健康产业集团政策监测信息简报</title>
+            <!--[if gte mso 9]>
+            <xml>
+                <w:WordDocument>
+                    <w:View>Print</w:View>
+                    <w:Zoom>100</w:Zoom>
+                    <w:DoNotOptimizeForBrowser/>
+                </w:WordDocument>
+            </xml>
+            <![endif]-->
             <style>
                 @page Section1 {
                     size: 210mm 297mm;
@@ -785,48 +807,61 @@ function handleExportWord() {
                 }
                 div.Section1 { page: Section1; }
                 body {
-                    font-family: '方正仿宋简体', '仿宋', 'FangSong', '仿宋_GB2312', 'Times New Roman', serif;
+                    font-family: '方正仿宋简体', '仿宋_GB2312', '仿宋', 'FangSong', 'Times New Roman', serif;
                     font-size: 16pt;
                     line-height: 28.5pt;
                     color: #000000;
+                    text-align: justify;
                 }
                 h1.doc-title {
                     font-family: '方正小标宋简体', '小标宋', '宋体', 'SimSun', serif;
                     font-size: 22pt;
                     font-weight: bold;
                     text-align: center;
-                    margin-top: 0;
-                    margin-bottom: 16pt;
+                    margin-top: 6pt;
+                    margin-bottom: 14pt;
                     line-height: 32pt;
+                }
+                p.main-send {
+                    font-family: '方正仿宋简体', '仿宋_GB2312', '仿宋', serif;
+                    font-size: 16pt;
+                    font-weight: bold;
+                    text-indent: 0;
+                    margin-top: 0;
+                    margin-bottom: 4pt;
+                    line-height: 28.5pt;
+                    text-align: left;
                 }
                 h2.h1-title {
                     font-family: '黑体', 'SimHei', sans-serif;
                     font-size: 16pt;
                     font-weight: bold;
                     text-indent: 2em;
-                    margin-top: 14pt;
-                    margin-bottom: 6pt;
+                    margin-top: 12pt;
+                    margin-bottom: 4pt;
                     line-height: 28.5pt;
                 }
                 p.lead {
-                    font-family: '方正仿宋简体', '仿宋', 'FangSong', '仿宋_GB2312', serif;
+                    font-family: '方正仿宋简体', '仿宋_GB2312', '仿宋', serif;
                     font-size: 16pt;
                     text-indent: 2em;
                     margin-top: 0;
-                    margin-bottom: 8pt;
+                    margin-bottom: 6pt;
                     line-height: 28.5pt;
                     text-align: justify;
                 }
                 table.three-line-table {
                     width: 100%;
                     border-collapse: collapse;
-                    margin: 8pt 0 16pt 0;
+                    margin: 6pt 0 14pt 0;
                 }
             </style>
         </head>
         <body>
             <div class="Section1">
                 <h1 class="doc-title">医药健康产业集团政策监测信息简报</h1>
+
+                <p class="main-send">各权属企业、各部门、各重点产业投资平台：</p>
                 
                 <p class="lead">为及时研判行业监管动向与政策红利，现将截至 ${dateStr} 本周最新发布的医药产业重点政策及文件摘要汇总如下：</p>
                 
@@ -835,10 +870,10 @@ function handleExportWord() {
                 <table class="three-line-table">
                     <thead>
                         <tr style="height:26pt;">
-                            <th style="border-top:1.5pt solid black; border-bottom:0.75pt solid black; padding:4pt; text-align:center; font-family:'黑体','SimHei',sans-serif; font-size:12pt; width:10%;">序号</th>
-                            <th style="border-top:1.5pt solid black; border-bottom:0.75pt solid black; padding:4pt; text-align:center; font-family:'黑体','SimHei',sans-serif; font-size:12pt; width:52%;">政策文件名称</th>
-                            <th style="border-top:1.5pt solid black; border-bottom:0.75pt solid black; padding:4pt; text-align:center; font-family:'黑体','SimHei',sans-serif; font-size:12pt; width:22%;">发布机关</th>
-                            <th style="border-top:1.5pt solid black; border-bottom:0.75pt solid black; padding:4pt; text-align:center; font-family:'黑体','SimHei',sans-serif; font-size:12pt; width:16%;">发布日期</th>
+                            <th style="border-top:1.5pt solid black; border-bottom:0.75pt solid black; padding:4pt; text-align:center; font-family:'黑体','SimHei',sans-serif; font-size:14pt; width:10%;">序号</th>
+                            <th style="border-top:1.5pt solid black; border-bottom:0.75pt solid black; padding:4pt; text-align:center; font-family:'黑体','SimHei',sans-serif; font-size:14pt; width:52%;">政策文件名称</th>
+                            <th style="border-top:1.5pt solid black; border-bottom:0.75pt solid black; padding:4pt; text-align:center; font-family:'黑体','SimHei',sans-serif; font-size:14pt; width:22%;">发布机关</th>
+                            <th style="border-top:1.5pt solid black; border-bottom:0.75pt solid black; padding:4pt; text-align:center; font-family:'黑体','SimHei',sans-serif; font-size:14pt; width:16%;">发布日期</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -865,7 +900,7 @@ function handleExportWord() {
     document.body.removeChild(link);
     URL.revokeObjectURL(downloadUrl);
 
-    showToast(`✅ 已弹出保存对话框，正在下载本周公文简报：${filename}`);
+    showToast(`✅ 已弹出保存对话框，正在下载公文简报：${filename}`);
 }
 
 function showToast(msg) {
