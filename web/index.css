@@ -1,88 +1,68 @@
 /* ==========================================================================
-   医药产业政策监测与申报研判系统
-   设计规范：GitHub Primer + 专业智库内参系统 (支持亮色/深色主题无缝切换)
+   医药健康产业政策监测与申报研判系统
+   设计参照：国家药品监督管理局 (NMPA) 官方门户网站视觉规范
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   1. 亮色主题 (GitHub Primer Light & 智库深蓝)
+   1. 亮色模式 (国家药监局官方标准配色: 经典政务蓝 #004886 + 党政红 #c5161d + 权威白)
    -------------------------------------------------------------------------- */
 :root, [data-theme="light"] {
-    --canvas-default: #f6f8fa;
-    --canvas-subtle: #ffffff;
-    --canvas-inset: #f3f4f6;
-    --canvas-overlay: #ffffff;
+    --nmpa-blue-dark: #003366;       /* 药监局深蓝 */
+    --nmpa-blue-main: #004886;       /* 药监局经典主蓝 */
+    --nmpa-blue-hover: #005bac;      /* 药监局亮蓝 */
+    --nmpa-red-gov: #c5161d;         /* 党政权威红 */
+    --nmpa-gold: #e6a23c;            /* 导航金色高亮 */
 
-    --fg-default: #1f2328;
-    --fg-muted: #59636e;
-    --fg-subtle: #6e7781;
-    --fg-on-emphasis: #ffffff;
+    --bg-page: #f0f2f5;              /* 页面政务底灰 */
+    --bg-card: #ffffff;              /* 卡片纯白 */
+    --bg-subtle: #f8fafc;
+    --bg-inset: #eef2f6;
 
-    --border-default: #d1d9e0;
-    --border-muted: #e1e4e8;
-    --border-subtle: rgba(31, 35, 40, 0.08);
+    --text-title: #1a1a1a;
+    --text-body: #333333;
+    --text-muted: #666666;
+    --text-caption: #888888;
 
-    --accent-fg: #0969da;
-    --accent-emphasis: #1e3a8a;       /* 智库主色：深海蓝 */
-    --accent-muted: rgba(9, 105, 218, 0.12);
-    --accent-subtle: #ddf4ff;
+    --border-color: #dcdfe6;
+    --border-light: #ebeef5;
+    --border-hover: #004886;
 
-    --success-fg: #1a7f37;
-    --success-emphasis: #1f883d;
-    --success-subtle: #dafbe1;
+    --shadow-gov: 0 2px 10px rgba(0, 0, 0, 0.06);
+    --shadow-card: 0 1px 4px rgba(0, 0, 0, 0.05);
 
-    --attention-fg: #9a6700;
-    --attention-subtle: #fff8c5;
-
-    --shadow-subtle: 0 1px 2px rgba(31, 35, 40, 0.04);
-    --shadow-medium: 0 3px 6px rgba(140, 149, 159, 0.15);
-    --shadow-floating: 0 8px 24px rgba(140, 149, 159, 0.2);
-
-    --radius-sm: 4px;
-    --radius-md: 6px;
-    --radius-lg: 10px;
-    --radius-full: 9999px;
-
-    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    --font-serif: 'Noto Serif SC', SimSun, "宋体", serif;
+    --font-sans: 'Noto Sans SC', "Microsoft YaHei", "微软雅黑", sans-serif;
+    --font-mono: 'JetBrains Mono', Consolas, monospace;
 }
 
 /* --------------------------------------------------------------------------
-   2. 深色主题 (GitHub Primer Dark Dimmed)
+   2. 深色模式 (政务内参夜间护眼模式)
    -------------------------------------------------------------------------- */
 [data-theme="dark"] {
-    --canvas-default: #0d1117;
-    --canvas-subtle: #161b22;
-    --canvas-inset: #010409;
-    --canvas-overlay: #1c2128;
+    --nmpa-blue-dark: #08101e;
+    --nmpa-blue-main: #0f2b4c;
+    --nmpa-blue-hover: #1b4b7e;
+    --nmpa-red-gov: #e02424;
+    --nmpa-gold: #f59e0b;
 
-    --fg-default: #e6edf3;
-    --fg-muted: #848d97;
-    --fg-subtle: #6e7681;
-    --fg-on-emphasis: #ffffff;
+    --bg-page: #0b111a;
+    --bg-card: #121d2b;
+    --bg-subtle: #162436;
+    --bg-inset: #1a2c42;
 
-    --border-default: #30363d;
-    --border-muted: #21262d;
-    --border-subtle: rgba(240, 246, 252, 0.1);
+    --text-title: #f0f4f8;
+    --text-body: #c5d1de;
+    --text-muted: #8a9ba8;
+    --text-caption: #627585;
 
-    --accent-fg: #4493f8;
-    --accent-emphasis: #1f6feb;
-    --accent-muted: rgba(56, 139, 253, 0.15);
-    --accent-subtle: rgba(56, 139, 253, 0.1);
+    --border-color: #24364a;
+    --border-light: #1c2b3c;
+    --border-hover: #3880c8;
 
-    --success-fg: #3fb950;
-    --success-emphasis: #238636;
-    --success-subtle: rgba(46, 160, 67, 0.15);
-
-    --attention-fg: #d29922;
-    --attention-subtle: rgba(187, 128, 9, 0.15);
-
-    --shadow-subtle: 0 1px 2px rgba(0, 0, 0, 0.2);
-    --shadow-medium: 0 3px 6px rgba(0, 0, 0, 0.4);
-    --shadow-floating: 0 8px 24px rgba(0, 0, 0, 0.6);
+    --shadow-gov: 0 2px 10px rgba(0, 0, 0, 0.4);
+    --shadow-card: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* --------------------------------------------------------------------------
-   3. 全局重置与排版
-   -------------------------------------------------------------------------- */
 * {
     margin: 0;
     padding: 0;
@@ -90,731 +70,776 @@
 }
 
 body {
-    font-family: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background-color: var(--canvas-default);
-    color: var(--fg-default);
-    line-height: 1.5;
+    font-family: var(--font-sans);
+    background-color: var(--bg-page);
+    color: var(--text-body);
+    line-height: 1.6;
     font-size: 14px;
     -webkit-font-smoothing: antialiased;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 /* --------------------------------------------------------------------------
-   4. 导航栏 (Navbar)
+   3. 顶部政务红蓝辅助条
    -------------------------------------------------------------------------- */
-.app-navbar {
-    background-color: var(--canvas-subtle);
-    border-bottom: 1px solid var(--border-default);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: var(--shadow-subtle);
+.top-gov-bar {
+    background-color: var(--bg-card);
+    border-bottom: 1px solid var(--border-light);
+    font-size: 12px;
+    color: var(--text-muted);
+    padding: 4px 0;
 }
 
-.nav-container {
-    max-width: 1600px;
+.gov-container {
+    max-width: 1560px;
     margin: 0 auto;
-    padding: 0.75rem 1.5rem;
+    padding: 0 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 1.25rem;
 }
 
-.nav-brand {
+.gov-top-links {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 12px;
 }
 
-.brand-logo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--accent-emphasis);
-    color: var(--fg-on-emphasis);
-    width: 34px;
-    height: 34px;
-    border-radius: var(--radius-md);
-}
-
-.brand-title {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--fg-default);
-    line-height: 1.2;
-}
-
-.brand-org {
-    font-size: 0.75rem;
-    color: var(--fg-muted);
-}
-
-.nav-tools {
-    display: flex;
-    align-items: center;
-    gap: 0.65rem;
-}
-
-.sys-status {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.775rem;
-    color: var(--fg-muted);
-    background-color: var(--canvas-inset);
-    border: 1px solid var(--border-muted);
-    padding: 0.3rem 0.65rem;
-    border-radius: var(--radius-full);
-}
-
-.status-dot {
-    width: 7px;
-    height: 7px;
-    background-color: var(--success-fg);
+.gov-status-dot {
+    width: 6px;
+    height: 6px;
+    background-color: #10b981;
     border-radius: 50%;
 }
 
-.btn-group {
-    display: flex;
-    gap: 0.4rem;
-}
-
-.nav-btn {
+.top-theme-btn {
+    background: none;
+    border: 1px solid var(--border-color);
+    color: var(--text-body);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
-    background-color: var(--canvas-subtle);
-    border: 1px solid var(--border-default);
-    color: var(--fg-default);
-    font-size: 0.8rem;
-    font-weight: 600;
-    padding: 0.35rem 0.75rem;
-    border-radius: var(--radius-md);
-    cursor: pointer;
-    transition: all 0.15s ease;
+    gap: 4px;
 }
-
-.nav-btn:hover {
-    background-color: var(--canvas-inset);
-    border-color: var(--border-default);
-}
-
-.nav-btn.btn-highlight {
-    background-color: var(--accent-emphasis);
-    color: var(--fg-on-emphasis);
-    border-color: transparent;
-}
-.nav-btn.btn-highlight:hover {
-    opacity: 0.92;
-}
-
-.theme-switch-btn {
-    padding: 0.35rem 0.65rem;
+.top-theme-btn:hover {
+    border-color: var(--nmpa-blue-main);
+    color: var(--nmpa-blue-main);
 }
 
 /* --------------------------------------------------------------------------
-   5. 指标条 (KPI Metric Ribbon)
+   4. NMPA 权威大标题 Header 区
    -------------------------------------------------------------------------- */
-.metric-ribbon {
-    background-color: var(--canvas-subtle);
-    border-bottom: 1px solid var(--border-muted);
-    padding: 0.6rem 1.5rem;
+.nmpa-header {
+    background-color: var(--bg-card);
+    border-bottom: 2px solid var(--nmpa-red-gov);
+    padding: 18px 0;
 }
 
-.metric-container {
-    max-width: 1600px;
+.nmpa-header-wrap {
+    max-width: 1560px;
     margin: 0 auto;
+    padding: 0 20px;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 1.5rem;
-    overflow-x: auto;
+    gap: 20px;
 }
 
-.metric-item {
+.nmpa-brand {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
-    white-space: nowrap;
+    gap: 16px;
 }
 
-.metric-label {
-    font-size: 0.775rem;
-    color: var(--fg-muted);
+.nmpa-emblem {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, #c5161d 0%, #a01017 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(197, 22, 29, 0.35);
+    border: 2px solid #fff;
+    outline: 2px solid #c5161d;
+}
+
+.emblem-inner {
+    text-align: center;
+    color: #ffd700;
+}
+.emblem-star {
+    font-size: 16px;
+    display: block;
+    line-height: 1;
+}
+.emblem-text {
+    font-size: 11px;
+    font-weight: 900;
+    color: #ffffff;
+    display: block;
+    letter-spacing: 1px;
+}
+
+.nmpa-title-box .main-title {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--text-title);
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+}
+
+.nmpa-title-box .en-title {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 9.5px;
+    color: var(--nmpa-blue-main);
+    letter-spacing: 0.8px;
+    font-weight: 700;
+    margin: 2px 0;
+}
+
+.nmpa-title-box .org-sub {
+    font-size: 12px;
+    color: var(--text-muted);
     font-weight: 500;
 }
 
-.metric-val {
-    font-family: var(--font-mono);
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--fg-default);
-}
-
-.metric-val.text-primary {
-    color: var(--accent-fg);
-}
-
-.metric-divider {
-    width: 1px;
-    height: 16px;
-    background-color: var(--border-muted);
-}
-
-/* --------------------------------------------------------------------------
-   6. 赛道导航药丸 (Category Pills)
-   -------------------------------------------------------------------------- */
-.dashboard-body {
-    max-width: 1600px;
-    margin: 1.25rem auto;
-    padding: 0 1.5rem;
-}
-
-.category-nav {
-    display: flex;
-    gap: 0.5rem;
-    overflow-x: auto;
-    margin-bottom: 1.25rem;
-    padding-bottom: 0.25rem;
-}
-
-.nav-pill {
+/* 顶部操作按钮 */
+.nmpa-header-actions {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    background-color: var(--canvas-subtle);
-    border: 1px solid var(--border-default);
-    color: var(--fg-muted);
-    font-size: 0.8rem;
+    gap: 8px;
+}
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background-color: var(--bg-subtle);
+    border: 1px solid var(--border-color);
+    color: var(--text-body);
+    font-size: 13px;
     font-weight: 600;
-    padding: 0.45rem 0.85rem;
-    border-radius: var(--radius-full);
+    padding: 7px 14px;
+    border-radius: 4px;
     cursor: pointer;
-    white-space: nowrap;
-    transition: all 0.15s ease;
+    transition: all 0.2s ease;
 }
 
-.nav-pill:hover {
-    color: var(--fg-default);
-    border-color: var(--border-default);
-    background-color: var(--canvas-inset);
+.action-btn:hover {
+    background-color: var(--bg-inset);
+    border-color: var(--nmpa-blue-main);
+    color: var(--nmpa-blue-main);
 }
 
-.nav-pill.active {
-    background-color: var(--fg-default);
-    color: var(--canvas-default);
-    border-color: var(--fg-default);
+.action-btn.action-primary {
+    background-color: var(--nmpa-blue-main);
+    color: #ffffff;
+    border-color: var(--nmpa-blue-main);
+}
+.action-btn.action-primary:hover {
+    background-color: var(--nmpa-blue-hover);
 }
 
-.count-badge {
-    font-family: var(--font-mono);
-    font-size: 0.725rem;
-    background-color: var(--canvas-inset);
-    color: var(--fg-muted);
-    padding: 0.1rem 0.4rem;
-    border-radius: var(--radius-full);
+.action-btn.action-wechat {
+    background-color: #07c160;
+    color: #ffffff;
+    border-color: #07c160;
 }
-
-.nav-pill.active .count-badge {
-    background-color: rgba(255, 255, 255, 0.2);
-    color: var(--canvas-default);
+.action-btn.action-wechat:hover {
+    background-color: #06ad56;
 }
 
 /* --------------------------------------------------------------------------
-   7. 主工作区双栏 (Grid)
+   5. NMPA 经典政务深蓝主导航栏 (Navbar)
    -------------------------------------------------------------------------- */
-.dashboard-grid {
+.nmpa-navbar {
+    background-color: var(--nmpa-blue-main);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.nmpa-nav-wrap {
+    max-width: 1560px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.nav-menu {
+    list-style: none;
+    display: flex;
+    overflow-x: auto;
+}
+
+.nav-item a {
+    display: block;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 14.5px;
+    font-weight: 600;
+    padding: 12px 18px;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.nav-item:hover a {
+    background-color: rgba(255, 255, 255, 0.12);
+    border-bottom-color: var(--nmpa-gold);
+}
+
+.nav-item.active a {
+    background-color: var(--nmpa-blue-dark);
+    border-bottom-color: var(--nmpa-gold);
+    color: #ffffff;
+}
+
+/* --------------------------------------------------------------------------
+   6. 主体网格布局 (70% 政策主流 + 30% 四川专项/研判)
+   -------------------------------------------------------------------------- */
+.nmpa-main {
+    max-width: 1560px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+.nmpa-main-grid {
     display: grid;
     grid-template-columns: 1.15fr 0.85fr;
-    gap: 1.25rem;
+    gap: 20px;
     align-items: start;
 }
 
-.panel-box {
-    background-color: var(--canvas-subtle);
-    border: 1px solid var(--border-default);
-    border-radius: var(--radius-lg);
-    padding: 1.25rem;
-    box-shadow: var(--shadow-subtle);
+.gov-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    box-shadow: var(--shadow-gov);
+    padding: 16px 20px;
 }
 
-/* 政策流 (左侧) */
-.panel-header {
+/* 左侧栏标题 */
+.gov-card-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--border-muted);
-    gap: 1rem;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--border-light);
+    margin-bottom: 14px;
+    gap: 15px;
 }
 
-.panel-title-area {
+.header-left {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 8px;
 }
 
-.panel-title {
-    font-size: 0.975rem;
+.header-red-bar {
+    width: 4px;
+    height: 18px;
+    background-color: var(--nmpa-red-gov);
+    border-radius: 2px;
+}
+
+.header-title {
+    font-family: var(--font-serif);
+    font-size: 17px;
     font-weight: 700;
-    color: var(--fg-default);
+    color: var(--text-title);
 }
 
-.filter-indicator {
-    font-size: 0.725rem;
+.header-badge {
+    font-size: 11px;
     font-weight: 600;
-    color: var(--fg-muted);
-    background-color: var(--canvas-inset);
-    border: 1px solid var(--border-muted);
-    padding: 0.15rem 0.5rem;
-    border-radius: var(--radius-sm);
+    color: var(--nmpa-blue-main);
+    background-color: var(--bg-inset);
+    padding: 2px 6px;
+    border-radius: 2px;
+    border: 1px solid var(--border-color);
 }
 
-.search-bar {
+.header-search {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
-    background-color: var(--canvas-inset);
-    border: 1px solid var(--border-default);
-    border-radius: var(--radius-md);
-    padding: 0.25rem 0.55rem;
 }
 
-.search-bar input {
-    border: none;
-    background: none;
-    color: var(--fg-default);
-    font-size: 0.8rem;
-    width: 200px;
+.header-search input {
+    border: 1px solid var(--border-color);
+    border-right: none;
+    border-radius: 3px 0 0 3px;
+    padding: 6px 10px;
+    font-size: 13px;
+    width: 240px;
     outline: none;
+    background-color: var(--bg-subtle);
+    color: var(--text-title);
 }
 
-.btn-search {
-    border: none;
-    background: none;
-    color: var(--accent-fg);
-    font-size: 0.775rem;
+.search-btn {
+    background-color: var(--nmpa-blue-main);
+    color: #ffffff;
+    border: 1px solid var(--nmpa-blue-main);
+    border-radius: 0 3px 3px 0;
+    padding: 6px 14px;
+    font-size: 13px;
     font-weight: 600;
     cursor: pointer;
 }
+.search-btn:hover {
+    background-color: var(--nmpa-blue-hover);
+}
 
-.policy-stream {
+/* --------------------------------------------------------------------------
+   7. 官方政策法规条目 (NMPA 公文列表排版)
+   -------------------------------------------------------------------------- */
+.policy-table-stream {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
-    max-height: 750px;
+    gap: 12px;
+    max-height: 780px;
     overflow-y: auto;
-    padding-right: 0.35rem;
+    padding-right: 6px;
 }
 
-.policy-stream::-webkit-scrollbar {
-    width: 5px;
+.policy-table-stream::-webkit-scrollbar {
+    width: 6px;
 }
-.policy-stream::-webkit-scrollbar-thumb {
-    background: var(--border-default);
+.policy-table-stream::-webkit-scrollbar-thumb {
+    background-color: var(--border-color);
     border-radius: 3px;
 }
 
-/* 政策条目卡片 (GitHub Primer 列表项美学) */
-.policy-card {
-    background-color: var(--canvas-default);
-    border: 1px solid var(--border-default);
-    border-radius: var(--radius-md);
-    padding: 0.95rem 1.15rem;
-    transition: all 0.15s ease;
+.nmpa-policy-row {
+    background-color: var(--bg-subtle);
+    border: 1px solid var(--border-light);
+    border-left: 3px solid var(--nmpa-blue-main);
+    border-radius: 3px;
+    padding: 14px 16px;
+    transition: all 0.2s ease;
 }
 
-.policy-card:hover {
-    border-color: var(--accent-fg);
-    background-color: var(--canvas-subtle);
-    box-shadow: var(--shadow-medium);
+.nmpa-policy-row:hover {
+    border-color: var(--nmpa-blue-main);
+    border-left-width: 5px;
+    background-color: var(--bg-card);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-.policy-header {
+.row-top {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.35rem;
-    font-size: 0.75rem;
+    gap: 8px;
+    margin-bottom: 6px;
+    font-size: 12px;
 }
 
-.tag-label {
-    font-size: 0.725rem;
-    font-weight: 600;
-    padding: 0.1rem 0.45rem;
-    border-radius: 4px;
-    border: 1px solid var(--border-default);
-    background-color: var(--canvas-subtle);
-    color: var(--fg-muted);
-}
-
-.tag-label.tag-核医药 { color: #5746af; background-color: rgba(87, 70, 175, 0.08); border-color: rgba(87, 70, 175, 0.2); }
-.tag-label.tag-脑机接口 { color: #9f1239; background-color: rgba(159, 18, 57, 0.08); border-color: rgba(159, 18, 57, 0.2); }
-.tag-label.tag-AI制药 { color: #0369a1; background-color: rgba(3, 105, 161, 0.08); border-color: rgba(3, 105, 161, 0.2); }
-.tag-label.tag-医疗机器人 { color: #b45309; background-color: rgba(180, 83, 9, 0.08); border-color: rgba(180, 83, 9, 0.2); }
-.tag-label.tag-医保政策 { color: #15803d; background-color: rgba(21, 128, 61, 0.08); border-color: rgba(21, 128, 61, 0.2); }
-.tag-label.tag-科技申报政策 { color: #1d4ed8; background-color: rgba(29, 78, 216, 0.08); border-color: rgba(29, 78, 216, 0.2); }
-
-.policy-source {
-    font-weight: 600;
-    color: var(--fg-default);
-}
-
-.policy-date {
-    font-family: var(--font-mono);
-    color: var(--fg-muted);
-    margin-left: auto;
-}
-
-.policy-item-title {
-    font-size: 0.925rem;
+.tag-dept {
     font-weight: 700;
-    color: var(--fg-default);
-    margin-bottom: 0.35rem;
-    line-height: 1.4;
+    color: #ffffff;
+    background-color: var(--nmpa-blue-main);
+    padding: 1px 6px;
+    border-radius: 2px;
+    font-size: 11px;
 }
 
-.policy-desc {
-    font-size: 0.825rem;
-    color: var(--fg-muted);
-    line-height: 1.5;
-    margin-bottom: 0.5rem;
+.tag-category {
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 2px;
+    font-size: 11px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-inset);
+    color: var(--text-muted);
 }
 
-.policy-action-row {
+.row-date {
+    font-family: var(--font-mono);
+    color: var(--text-caption);
+    margin-left: auto;
+    font-weight: 600;
+}
+
+.row-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-title);
+    margin-bottom: 6px;
+    line-height: 1.45;
+}
+
+.row-summary {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.55;
+    margin-bottom: 8px;
+}
+
+.row-bottom {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 0.45rem;
-    border-top: 1px solid var(--border-muted);
-    font-size: 0.75rem;
+    padding-top: 6px;
+    border-top: 1px dashed var(--border-light);
+    font-size: 12px;
 }
 
-.policy-link-out {
-    color: var(--accent-fg);
+.link-detail {
+    color: var(--nmpa-blue-main);
     text-decoration: none;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.2rem;
+    font-weight: 700;
 }
-.policy-link-out:hover {
+.link-detail:hover {
+    color: var(--nmpa-red-gov);
     text-decoration: underline;
 }
 
 /* --------------------------------------------------------------------------
-   8. 右侧辅列 (四川周回顾 & 研判工作台)
+   8. 右侧：四川省专项专栏 & 研判工作台
    -------------------------------------------------------------------------- */
-.side-intelligence {
+.nmpa-right-col {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 18px;
 }
 
-.special-box {
-    border-left: 3px solid var(--accent-emphasis);
+/* 四川红头专题卡片 */
+.special-sichuan-box {
+    border-top: 4px solid var(--nmpa-red-gov);
 }
 
-.special-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 1rem;
-    margin-bottom: 0.5rem;
-}
-
-.badge-capsule {
-    font-size: 0.7rem;
+.special-badge {
+    display: inline-block;
+    background-color: var(--nmpa-red-gov);
+    color: #ffffff;
+    font-size: 11px;
     font-weight: 700;
-    color: var(--accent-emphasis);
-    letter-spacing: 0.05em;
-    margin-bottom: 0.2rem;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-bottom: 8px;
 }
 
-.special-title {
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--fg-default);
+.special-card-title {
+    font-family: var(--font-serif);
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--text-title);
+    margin-bottom: 6px;
 }
 
-.special-summary {
-    font-size: 0.8rem;
-    color: var(--fg-muted);
-    line-height: 1.45;
+.special-card-desc {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 12px;
 }
 
-.btn-action-sm {
-    background-color: var(--accent-emphasis);
-    color: var(--fg-on-emphasis);
+.btn-generate-report {
+    width: 100%;
+    background: linear-gradient(135deg, #c5161d 0%, #a01017 100%);
+    color: #ffffff;
     border: none;
-    font-size: 0.775rem;
-    font-weight: 600;
-    padding: 0.35rem 0.75rem;
-    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 9px 16px;
+    border-radius: 4px;
     cursor: pointer;
-    white-space: nowrap;
-    transition: opacity 0.15s ease;
+    box-shadow: 0 2px 6px rgba(197, 22, 29, 0.3);
+    transition: opacity 0.2s ease;
 }
-.btn-action-sm:hover {
-    opacity: 0.9;
+.btn-generate-report:hover {
+    opacity: 0.92;
 }
 
-/* 研判工作台 */
+/* 研判咨询台 */
 .consult-box {
     display: flex;
     flex-direction: column;
 }
 
-.consult-header {
+.consult-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--border-muted);
-    margin-bottom: 0.75rem;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border-light);
+    margin-bottom: 12px;
 }
 
-.consult-heading {
+.consult-title-area {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 6px;
 }
 
-.consult-heading h3 {
-    font-size: 0.925rem;
+.consult-title-area h4 {
+    font-family: var(--font-serif);
+    font-size: 15px;
     font-weight: 700;
-    color: var(--fg-default);
+    color: var(--text-title);
 }
 
-.badge-tag {
-    font-size: 0.7rem;
-    font-weight: 600;
-    background-color: var(--accent-subtle);
-    color: var(--accent-fg);
-    padding: 0.1rem 0.4rem;
-    border-radius: var(--radius-sm);
-}
-
-.btn-link {
+.btn-text-link {
     background: none;
     border: none;
-    color: var(--accent-fg);
-    font-size: 0.775rem;
+    color: var(--nmpa-blue-main);
+    font-size: 12px;
     font-weight: 600;
     cursor: pointer;
 }
 
 /* 模型抽屉 */
 .config-drawer {
-    background-color: var(--canvas-inset);
-    border: 1px solid var(--border-default);
-    border-radius: var(--radius-md);
-    padding: 0.75rem;
-    margin-bottom: 0.75rem;
+    background-color: var(--bg-inset);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 12px;
 }
 .config-drawer.hidden { display: none; }
 
 .drawer-field label {
-    font-size: 0.725rem;
-    color: var(--fg-muted);
+    font-size: 11.5px;
     font-weight: 600;
+    color: var(--text-muted);
     display: block;
-    margin-bottom: 0.25rem;
+    margin-bottom: 4px;
 }
+
 .drawer-field input, .drawer-row input {
     width: 100%;
-    background-color: var(--canvas-subtle);
-    border: 1px solid var(--border-default);
-    color: var(--fg-default);
-    padding: 0.35rem 0.5rem;
-    font-size: 0.775rem;
-    border-radius: var(--radius-sm);
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-title);
+    padding: 5px 8px;
+    font-size: 12px;
+    border-radius: 3px;
     outline: none;
 }
+
 .drawer-row {
     display: flex;
-    gap: 0.4rem;
-    margin-top: 0.4rem;
+    gap: 6px;
+    margin-top: 6px;
 }
-.btn-save {
-    background-color: var(--accent-emphasis);
-    color: var(--fg-on-emphasis);
+
+.btn-save-key {
+    background-color: var(--nmpa-blue-main);
+    color: #ffffff;
     border: none;
-    font-size: 0.75rem;
+    font-size: 12px;
     font-weight: 600;
-    padding: 0 0.75rem;
-    border-radius: var(--radius-sm);
+    padding: 0 12px;
+    border-radius: 3px;
     cursor: pointer;
 }
 
-/* 预设研判胶囊 */
-.query-pills {
+/* 研判快捷议题 */
+.query-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.35rem;
-    margin-bottom: 0.75rem;
+    gap: 6px;
+    margin-bottom: 12px;
 }
 
-.pill {
-    background-color: var(--canvas-inset);
-    border: 1px solid var(--border-default);
-    color: var(--fg-muted);
-    font-size: 0.725rem;
+.tag-chip {
+    background-color: var(--bg-subtle);
+    border: 1px solid var(--border-color);
+    color: var(--text-body);
+    font-size: 11.5px;
     font-weight: 500;
-    padding: 0.2rem 0.55rem;
-    border-radius: var(--radius-full);
+    padding: 3px 8px;
+    border-radius: 3px;
     cursor: pointer;
     transition: all 0.15s ease;
 }
 
-.pill:hover {
-    color: var(--accent-fg);
-    border-color: var(--accent-fg);
-    background-color: var(--canvas-subtle);
+.tag-chip:hover {
+    border-color: var(--nmpa-blue-main);
+    color: var(--nmpa-blue-main);
+    background-color: var(--bg-inset);
 }
 
 /* 研判对话区 */
-.chat-viewport {
-    height: 420px;
+.consult-dialog-viewport {
+    height: 400px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
-    padding: 0.5rem 0.25rem;
-    margin-bottom: 0.75rem;
-    border-bottom: 1px solid var(--border-muted);
+    gap: 10px;
+    padding: 6px 2px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--border-light);
 }
 
-.chat-viewport::-webkit-scrollbar {
+.consult-dialog-viewport::-webkit-scrollbar {
     width: 5px;
 }
-.chat-viewport::-webkit-scrollbar-thumb {
-    background: var(--border-default);
+.consult-dialog-viewport::-webkit-scrollbar-thumb {
+    background-color: var(--border-color);
     border-radius: 3px;
 }
 
-.chat-row {
+.dialog-row {
     display: flex;
     max-width: 94%;
 }
 
-.chat-row.bot { align-self: flex-start; }
-.chat-row.user { align-self: flex-end; }
+.dialog-row.bot-row { align-self: flex-start; }
+.dialog-row.user-row { align-self: flex-end; }
 
-.chat-content {
-    padding: 0.75rem 1rem;
-    border-radius: var(--radius-md);
-    font-size: 0.825rem;
+.dialog-card {
+    padding: 10px 14px;
+    border-radius: 4px;
+    font-size: 13px;
     line-height: 1.6;
 }
 
-.chat-row.bot .chat-content {
-    background-color: var(--canvas-inset);
-    border: 1px solid var(--border-default);
-    color: var(--fg-default);
+.dialog-row.bot-row .dialog-card {
+    background-color: var(--bg-subtle);
+    border: 1px solid var(--border-color);
+    color: var(--text-title);
 }
 
-.chat-row.user .chat-content {
-    background-color: var(--accent-emphasis);
-    color: var(--fg-on-emphasis);
+.dialog-row.user-row .dialog-card {
+    background-color: var(--nmpa-blue-main);
+    color: #ffffff;
 }
 
-.content-header {
-    font-size: 0.75rem;
+.dialog-author {
+    font-size: 11.5px;
     font-weight: 700;
-    color: var(--accent-fg);
-    margin-bottom: 0.25rem;
+    color: var(--nmpa-red-gov);
+    margin-bottom: 4px;
 }
 
-.chat-content h2, .chat-content h3 {
-    font-size: 0.9rem;
+.dialog-card h2, .dialog-card h3 {
+    font-size: 14px;
     font-weight: 700;
-    color: var(--fg-default);
-    margin: 0.45rem 0 0.25rem;
+    color: var(--nmpa-blue-main);
+    margin: 8px 0 4px;
 }
 
-.chat-content ul, .chat-content ol {
-    padding-left: 1.15rem;
-    margin: 0.3rem 0;
+.dialog-card ul, .dialog-card ol {
+    padding-left: 18px;
+    margin: 4px 0;
 }
 
 /* 输入栏 */
-.chat-input-wrapper {
+.consult-input-area {
     display: flex;
-    gap: 0.5rem;
+    gap: 6px;
     align-items: flex-end;
 }
 
-.chat-input-wrapper textarea {
+.consult-input-area textarea {
     flex: 1;
-    background-color: var(--canvas-inset);
-    border: 1px solid var(--border-default);
-    border-radius: var(--radius-md);
-    color: var(--fg-default);
-    padding: 0.5rem 0.65rem;
-    font-size: 0.8rem;
+    background-color: var(--bg-subtle);
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    color: var(--text-title);
+    padding: 6px 10px;
+    font-size: 12.5px;
     font-family: inherit;
     resize: none;
     outline: none;
-    transition: border-color 0.15s ease;
 }
 
-.chat-input-wrapper textarea:focus {
-    border-color: var(--accent-fg);
-    background-color: var(--canvas-subtle);
+.consult-input-area textarea:focus {
+    border-color: var(--nmpa-blue-main);
+    background-color: var(--bg-card);
 }
 
-.btn-send-consult {
-    background-color: var(--accent-emphasis);
-    color: var(--fg-on-emphasis);
+.btn-send-msg {
+    background-color: var(--nmpa-blue-main);
+    color: #ffffff;
     border: none;
-    padding: 0.5rem 1rem;
-    height: 40px;
-    border-radius: var(--radius-md);
-    font-size: 0.8rem;
+    padding: 6px 14px;
+    height: 42px;
+    border-radius: 3px;
+    font-size: 13px;
     font-weight: 600;
     cursor: pointer;
 }
+.btn-send-msg:hover {
+    background-color: var(--nmpa-blue-hover);
+}
+
+/* --------------------------------------------------------------------------
+   9. NMPA 底部政务版记 (Footer)
+   -------------------------------------------------------------------------- */
+.nmpa-footer {
+    background-color: var(--nmpa-blue-dark);
+    color: #d1d8e0;
+    padding: 24px 0;
+    margin-top: 30px;
+    border-top: 3px solid var(--nmpa-red-gov);
+}
+
+.footer-wrap {
+    max-width: 1560px;
+    margin: 0 auto;
+    padding: 0 20px;
+    text-align: center;
+    font-size: 12.5px;
+    line-height: 1.8;
+}
+
+.footer-org {
+    font-weight: 700;
+    color: #ffffff;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.footer-meta {
+    color: #a0aec0;
+}
+
+.footer-copy {
+    color: #718096;
+    font-size: 11.5px;
+    margin-top: 4px;
+}
 
 /* 提示通知 */
-.toast-card {
+.nmpa-toast {
     position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    background-color: var(--fg-default);
-    color: var(--canvas-default);
-    padding: 0.65rem 1.15rem;
-    border-radius: var(--radius-md);
-    font-size: 0.85rem;
-    font-weight: 500;
-    box-shadow: var(--shadow-floating);
+    bottom: 24px;
+    right: 24px;
+    background-color: var(--nmpa-blue-dark);
+    color: #ffffff;
+    border-left: 4px solid var(--nmpa-gold);
+    padding: 10px 18px;
+    border-radius: 3px;
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
     z-index: 1000;
     transition: all 0.2s ease;
 }
-.toast-card.hidden {
+.nmpa-toast.hidden {
     opacity: 0;
     pointer-events: none;
-    transform: translateY(10px);
+    transform: translateY(12px);
 }
 
-.loading-box {
+.loading-state {
     text-align: center;
-    color: var(--fg-muted);
-    padding: 2rem;
-    font-size: 0.825rem;
+    color: var(--text-muted);
+    padding: 30px;
+    font-size: 13px;
 }
 
 @media (max-width: 1024px) {
-    .dashboard-grid {
+    .nmpa-main-grid {
         grid-template-columns: 1fr;
     }
-    .nav-container {
+    .nmpa-header-wrap {
         flex-direction: column;
         align-items: flex-start;
-    }
-    .nav-tools {
-        width: 100%;
-        flex-wrap: wrap;
     }
 }

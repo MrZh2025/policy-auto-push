@@ -3,171 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>医药产业政策监测与申报研判系统 - 四川发展·医药集团</title>
+    <title>国家药品监督管理局政策监测与申报研判系统 - 四川发展·医药集团</title>
     <link rel="stylesheet" href="index.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700;900&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- 顶部导航栏 (GitHub Primer / 智库内参风格) -->
-    <header class="app-navbar">
-        <div class="nav-container">
-            <div class="nav-brand">
-                <div class="brand-logo">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                    </svg>
-                </div>
-                <div class="brand-text">
-                    <div class="brand-title">医药产业政策监测与申报研判系统</div>
-                    <div class="brand-org">四川省医药健康产业政策内参 · 投资与科技申报中心</div>
-                </div>
+    <!-- 顶部政务红蓝权威辅助条 (NMPA 风格) -->
+    <div class="top-gov-bar">
+        <div class="gov-container">
+            <div class="gov-date" id="currentDateStr">
+                📅 2026年8月18日 星期二 · 官方政策实时监测中
             </div>
-
-            <div class="nav-tools">
-                <div class="sys-status" id="sysStatus">
-                    <span class="status-dot"></span>
-                    <span id="statsSummary">数据实时更新 · 34 篇政策在库</span>
-                </div>
-                
-                <!-- 主题切换 (亮色/深色) -->
-                <button class="nav-btn theme-switch-btn" id="themeToggleBtn" title="切换亮色/深色模式">
-                    <span id="themeIcon">☀️</span>
-                    <span id="themeText">亮色</span>
+            <div class="gov-top-links">
+                <span class="gov-status-dot"></span>
+                <span id="statsSummary">系统已就绪 · 累计收录 34 篇政策法规</span>
+                <button class="top-theme-btn" id="themeToggleBtn" title="切换亮色/深色模式">
+                    <span id="themeIcon">☀️</span> <span id="themeText">政务亮色</span>
                 </button>
-
-                <div class="btn-group">
-                    <button class="nav-btn" id="btnScrape" title="触发全网最新政策检索">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-                        <span>检索更新</span>
-                    </button>
-                    <button class="nav-btn btn-highlight" id="btnExportWord" title="导出符合 GB/T 9704-2012 国家公文标准的 Word 简报到桌面">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-                        <span>导出公文Word</span>
-                    </button>
-                    <button class="nav-btn" id="btnPushWechat" title="推送政策早报到个人微信">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-                        <span>推送微信</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- 顶部关键指标看板 (KPI Metric Bar) -->
-    <div class="metric-ribbon">
-        <div class="metric-container">
-            <div class="metric-item">
-                <span class="metric-label">收录政策总数</span>
-                <span class="metric-val" id="metric-total">34</span>
-            </div>
-            <div class="metric-divider"></div>
-            <div class="metric-item">
-                <span class="metric-label">核医药专项目标</span>
-                <span class="metric-val" id="metric-nuclearmed">12</span>
-            </div>
-            <div class="metric-divider"></div>
-            <div class="metric-item">
-                <span class="metric-label">脑机接口与AI制药</span>
-                <span class="metric-val" id="metric-frontier">8</span>
-            </div>
-            <div class="metric-divider"></div>
-            <div class="metric-item">
-                <span class="metric-label">医疗机器人与器械</span>
-                <span class="metric-val" id="metric-device">6</span>
-            </div>
-            <div class="metric-divider"></div>
-            <div class="metric-item">
-                <span class="metric-label">四川及成都市申报政策</span>
-                <span class="metric-val text-primary" id="metric-sc">8</span>
             </div>
         </div>
     </div>
 
-    <!-- 主工作区 (Layout) -->
-    <main class="dashboard-body">
-        <!-- 赛道分类与导航切换 -->
-        <nav class="category-nav">
-            <div class="nav-pill active" data-track="all">
-                <span>全部政策库</span>
-                <span class="count-badge" id="count-all">34</span>
+    <!-- NMPA 标志性权威大标题区 (Header) -->
+    <header class="nmpa-header">
+        <div class="nmpa-header-wrap">
+            <div class="nmpa-brand">
+                <div class="nmpa-emblem">
+                    <div class="emblem-inner">
+                        <span class="emblem-star">★</span>
+                        <span class="emblem-text">医药</span>
+                    </div>
+                </div>
+                <div class="nmpa-title-box">
+                    <div class="main-title">医药健康产业政策监测与申报研判系统</div>
+                    <div class="en-title">MEDICAL HEALTH POLICY MONITORING & GRANT INTELLIGENCE SYSTEM</div>
+                    <div class="org-sub">四川省医药健康产业政策内参 · 投资与科技申报中心（对接国家药监局/国家医保局/四川省局）</div>
+                </div>
             </div>
-            <div class="nav-pill" data-track="核医药">
-                <span>核医药与同位素</span>
-                <span class="count-badge" id="count-核医药">0</span>
-            </div>
-            <div class="nav-pill" data-track="脑机接口">
-                <span>脑机接口</span>
-                <span class="count-badge" id="count-脑机接口">0</span>
-            </div>
-            <div class="nav-pill" data-track="AI制药">
-                <span>AI制药与计算生物</span>
-                <span class="count-badge" id="count-AI制药">0</span>
-            </div>
-            <div class="nav-pill" data-track="医疗机器人">
-                <span>医疗机器人与器械</span>
-                <span class="count-badge" id="count-医疗机器人">0</span>
-            </div>
-            <div class="nav-pill" data-track="医保政策">
-                <span>医保集采与支付</span>
-                <span class="count-badge" id="count-医保政策">0</span>
-            </div>
-            <div class="nav-pill" data-track="科技申报政策">
-                <span>科技创新与资金申报</span>
-                <span class="count-badge" id="count-科技申报政策">0</span>
-            </div>
-        </nav>
 
-        <div class="dashboard-grid">
-            <!-- 左侧主列：政策动态与文献清单 -->
-            <section class="panel-column main-stream">
-                <div class="panel-box">
-                    <div class="panel-header">
-                        <div class="panel-title-area">
-                            <h2 class="panel-title">官方政策文件监测列表</h2>
-                            <span class="filter-indicator" id="listBadge">全部政策</span>
+            <!-- 右侧快捷政务操作工具栏 -->
+            <div class="nmpa-header-actions">
+                <button class="action-btn" id="btnScrape" title="触发全网最新政策检索">
+                    <span class="btn-i">🔄</span>
+                    <span>检索更新</span>
+                </button>
+                <button class="action-btn action-primary" id="btnExportWord" title="导出符合GB/T 9704-2012国家公文标准的Word简报到桌面">
+                    <span class="btn-i">📄</span>
+                    <span>导出公文Word</span>
+                </button>
+                <button class="action-btn action-wechat" id="btnPushWechat" title="将政策简报推送到个人微信">
+                    <span class="btn-i">📱</span>
+                    <span>推送微信</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- NMPA 经典政务深蓝导航栏 (Primary Nav Bar) -->
+    <nav class="nmpa-navbar">
+        <div class="nmpa-nav-wrap">
+            <ul class="nav-menu">
+                <li class="nav-item active" data-track="all">
+                    <a href="javascript:void(0)">全部政策库 (<span id="count-all">34</span>)</a>
+                </li>
+                <li class="nav-item" data-track="核医药">
+                    <a href="javascript:void(0)">⚛️ 核医药与放药 (<span id="count-核医药">0</span>)</a>
+                </li>
+                <li class="nav-item" data-track="脑机接口">
+                    <a href="javascript:void(0)">🧠 脑机接口 (<span id="count-脑机接口">0</span>)</a>
+                </li>
+                <li class="nav-item" data-track="AI制药">
+                    <a href="javascript:void(0)">🧬 AI制药与算法 (<span id="count-AI制药">0</span>)</a>
+                </li>
+                <li class="nav-item" data-track="医疗机器人">
+                    <a href="javascript:void(0)">🤖 医疗机器人与器械 (<span id="count-医疗机器人">0</span>)</a>
+                </li>
+                <li class="nav-item" data-track="医保政策">
+                    <a href="javascript:void(0)">💳 医保集采与支付 (<span id="count-医保政策">0</span>)</a>
+                </li>
+                <li class="nav-item" data-track="科技申报政策">
+                    <a href="javascript:void(0)">📑 科技创新与资金申报 (<span id="count-科技申报政策">0</span>)</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 主体内容区 (NMPA 经典政务排版架构) -->
+    <main class="nmpa-main">
+        <div class="nmpa-main-grid">
+            <!-- 左侧主栏 (70%): 官方政策法规与通知公告列表 -->
+            <section class="nmpa-left-col">
+                <div class="gov-card">
+                    <div class="gov-card-header">
+                        <div class="header-left">
+                            <span class="header-red-bar"></span>
+                            <h2 class="header-title">政策法规与通知公告</h2>
+                            <span class="header-badge" id="listBadge">全部政策</span>
                         </div>
-                        <div class="search-bar">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                            <input type="text" id="searchInput" placeholder="按文件名称、文号、发文单位检索...">
-                            <button id="searchBtn" class="btn-search">检索</button>
+                        <div class="header-search">
+                            <input type="text" id="searchInput" placeholder="请输入政策标题、文号、发文机构关键字...">
+                            <button id="searchBtn" class="search-btn">搜索</button>
                         </div>
                     </div>
 
-                    <!-- 政策流容器 -->
-                    <div class="policy-stream" id="policyList">
-                        <div class="loading-box">正在检索官方数据库...</div>
+                    <!-- 政策法规列表 -->
+                    <div class="policy-table-stream" id="policyList">
+                        <div class="loading-state">正在调取国家及省局官方政策库...</div>
                     </div>
                 </div>
             </section>
 
-            <!-- 右侧辅列：四川生物医药周回顾与研判工作站 -->
-            <section class="panel-column side-intelligence">
-                <!-- 四川生物医药周回顾专区 -->
-                <div class="panel-box special-box">
-                    <div class="special-header">
-                        <div>
-                            <div class="badge-capsule">四川省专项</div>
-                            <h3 class="special-title">生物医药科技创新与奖补周回顾</h3>
-                        </div>
-                        <button class="btn-action-sm" id="btnGenWeekly">
-                            ⚡ 一键生成本周简报
+            <!-- 右侧辅栏 (30%): 四川省专项周回顾 & 智能研判工作台 -->
+            <aside class="nmpa-right-col">
+                <!-- 专栏一：四川省生物医药科技奖补周回顾 (政务红头专题) -->
+                <div class="gov-card special-sichuan-box">
+                    <div class="special-card-top">
+                        <div class="special-badge">四川省专项内参</div>
+                        <h3 class="special-card-title">生物医药科技创新与奖补周回顾</h3>
+                        <p class="special-card-desc">
+                            重点跟踪四川省科技厅、省发改委、成都市经信局关于科技创新奖励、研发补助、重大专项及资金奖补政策。
+                        </p>
+                        <button class="btn-generate-report" id="btnGenWeekly">
+                            ⚡ 一键生成本周回顾报告 (5大要点)
                         </button>
                     </div>
-                    <p class="special-summary">
-                        覆盖四川省科技厅、省发改委、成都市经信局关于科技创新奖励、研发资助、创新平台与资金申报动态。
-                    </p>
                 </div>
 
-                <!-- 政策研判与专家咨询台 -->
-                <div class="panel-box consult-box">
-                    <div class="consult-header">
-                        <div class="consult-heading">
-                            <h3>政策研判与申报咨询台</h3>
-                            <span class="badge-tag">专家内参模式</span>
+                <!-- 专栏二：政策研判与专家咨询台 (NMPA 智库咨询厅) -->
+                <div class="gov-card consult-box">
+                    <div class="consult-top">
+                        <div class="consult-title-area">
+                            <span class="consult-icon">🏛️</span>
+                            <h4>政策研判与申报咨询台</h4>
                         </div>
-                        <button class="btn-link" id="toggleApiKey">模型配置</button>
+                        <button class="btn-text-link" id="toggleApiKey">模型配置</button>
                     </div>
 
                     <!-- 模型密钥配置抽屉 -->
@@ -179,40 +150,55 @@
                         <div class="drawer-row">
                             <input type="text" id="inputBaseUrl" placeholder="https://api.deepseek.com/v1">
                             <input type="text" id="inputModel" placeholder="deepseek-chat">
-                            <button class="btn-save" id="btnSaveKey">保存</button>
+                            <button class="btn-save-key" id="btnSaveKey">保存配置</button>
                         </div>
                     </div>
 
-                    <!-- 常用研判议题 -->
-                    <div class="query-pills">
-                        <button class="pill" data-prompt="梳理四川省及成都市对核医疗、放射性药物产业的最新扶持举措与申报要求。">四川核医疗政策</button>
-                        <button class="pill" data-prompt="分析最新国家医保目录谈判及挂网集采政策对创新药械企业的影响。">医保集采影响</button>
-                        <button class="pill" data-prompt="当前四川省科技创新重大专项中，脑机接口与AI制药支持方向与资助标准。">脑机接口申报</button>
-                        <button class="pill" data-prompt="起草一份生物医药科技成果转化与研发费用奖补资金申报策略要点。">资金申报策略</button>
+                    <!-- 常用高频政策研判议题 -->
+                    <div class="query-tags">
+                        <button class="tag-chip" data-prompt="梳理四川省及成都市对核医疗、放射性药物产业的最新扶持举措与申报要求。">四川核医疗政策</button>
+                        <button class="tag-chip" data-prompt="分析最新国家医保目录谈判及挂网集采政策对创新药械企业的影响。">医保集采影响</button>
+                        <button class="tag-chip" data-prompt="当前四川省科技创新重大专项中，脑机接口与AI制药支持方向与资助标准。">脑机接口申报</button>
+                        <button class="tag-chip" data-prompt="起草一份生物医药科技成果转化与研发费用奖补资金申报策略要点。">资金申报策略</button>
                     </div>
 
-                    <!-- 交互记录区 -->
-                    <div class="chat-viewport" id="chatMessages">
-                        <div class="chat-row bot">
-                            <div class="chat-content">
-                                <div class="content-header">政策研究室工作台</div>
-                                本系统已连接国家及四川省官方政策数据库。您可以直接咨询核医药、脑机接口、AI制药、医疗机器人、医保集采或科技资金申报等具体实操问题，或点击上方按钮生成 <strong>《四川省生物医药周回顾报告》</strong>。
+                    <!-- 对话交流区 -->
+                    <div class="consult-dialog-viewport" id="chatMessages">
+                        <div class="dialog-row bot-row">
+                            <div class="dialog-card">
+                                <div class="dialog-author">政策研究室工作台</div>
+                                本系统已对接国家药监局、国家医保局及四川省局官方政策库。您可以直接咨询核医药、脑机接口、AI制药、医疗机器人、医保集采或科技资金申报等具体问题，或点击上方按钮生成 <strong>《四川省生物医药周回顾报告》</strong>。
                             </div>
                         </div>
                     </div>
 
-                    <!-- 底部输入栏 -->
-                    <div class="chat-input-wrapper">
-                        <textarea id="chatInput" placeholder="输入政策咨询内容或特定品种申报疑问..." rows="2"></textarea>
-                        <button id="btnSendChat" class="btn-send-consult">发送研判</button>
+                    <!-- 底部输入框 -->
+                    <div class="consult-input-area">
+                        <textarea id="chatInput" placeholder="输入政策咨询议题或品种申报疑问..." rows="2"></textarea>
+                        <button id="btnSendChat" class="btn-send-msg">发送研判</button>
                     </div>
                 </div>
-            </section>
+            </aside>
         </div>
     </main>
 
+    <!-- 底部权威政务版记 (NMPA 风格) -->
+    <footer class="nmpa-footer">
+        <div class="footer-wrap">
+            <div class="footer-org">
+                四川省医药健康产业集团 · 政策研究室 & 投资与科技申报中心
+            </div>
+            <div class="footer-meta">
+                数据来源：国家药品监督管理局 (NMPA) · 国家医疗保障局 (NHSA) · 国家卫生健康委员会 (NHC) · 四川省科学技术厅 · 中国政府网
+            </div>
+            <div class="footer-copy">
+                严格遵循《党政机关公文格式》（GB/T 9704-2012）国家标准排版生成
+            </div>
+        </div>
+    </footer>
+
     <!-- 弹窗通知 -->
-    <div id="toast" class="toast-card hidden"></div>
+    <div id="toast" class="nmpa-toast hidden"></div>
 
     <script src="app.js"></script>
 </body>
