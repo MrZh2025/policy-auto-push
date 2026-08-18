@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#004886">
     <title>四川生物医药产业集团创新事业部政策信息系统 - 四川发展·医药集团</title>
-    <link rel="stylesheet" href="index.css?v=20260818v27">
+    <link rel="stylesheet" href="index.css?v=20260818v28">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700;900&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -157,9 +157,14 @@
                             <span class="consult-icon">🤖</span>
                             <h4>AI·政策研判与申报咨询</h4>
                         </div>
-                        <button class="btn-ai-setup" id="toggleApiKey">
-                            🔑 配置 AI 密钥
-                        </button>
+                        <div class="consult-actions">
+                            <button class="btn-clear-chat" id="btnClearChat" title="清除对话研判记录">
+                                🗑️ 清除记录
+                            </button>
+                            <button class="btn-ai-setup" id="toggleApiKey">
+                                🔑 配置 AI 密钥
+                            </button>
+                        </div>
                     </div>
 
                     <!-- 模型密钥配置抽屉 -->
@@ -362,6 +367,6 @@
 
     <!-- 原生 OpenXML docx 生成库 -->
     <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
-    <script src="app.js?v=20260818v27"></script>
+    <script src="app.js?v=20260818v28"></script>
 </body>
 </html>

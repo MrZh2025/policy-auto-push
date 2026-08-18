@@ -57,6 +57,7 @@ const el = {
     btnExportWord: document.getElementById('btnExportWord'),
     btnGenWeekly: document.getElementById('btnGenWeekly'),
     btnExportWeeklyDoc: document.getElementById('btnExportWeeklyDoc'),
+    btnClearChat: document.getElementById('btnClearChat'),
     chatMessages: document.getElementById('chatMessages'),
     chatInput: document.getElementById('chatInput'),
     btnSendChat: document.getElementById('btnSendChat'),
@@ -173,6 +174,7 @@ function bindEvents() {
     // 四川生物医药周回顾一键生成与导出 Word
     if (el.btnGenWeekly) el.btnGenWeekly.addEventListener('click', generateSichuanWeeklyReport);
     if (el.btnExportWeeklyDoc) el.btnExportWeeklyDoc.addEventListener('click', handleExportWeeklyWord);
+    if (el.btnClearChat) el.btnClearChat.addEventListener('click', handleClearChat);
 
     // 抽屉切换
     const openDrawerFunc = () => {
@@ -847,6 +849,22 @@ function updateMessage(msgId, text, isWeeklyReport = false) {
         }
     }
     el.chatMessages.scrollTop = el.chatMessages.scrollHeight;
+}
+
+// 清除 AI 政策研判与申报咨询消息记录
+function handleClearChat() {
+    if (!el.chatMessages) return;
+    el.chatMessages.innerHTML = `
+        <div class="dialog-row bot-row">
+            <div class="dialog-card">
+                <div class="dialog-author">AI·政策研判与申报咨询</div>
+                本系统已对接国家药监局、国家医保局、四川省药监局及省科技厅官方政策库，默认接入 DeepSeek 智能分析。您可以直接咨询核医药、脑机接口、AI制药、医疗机器人、医保集采或科技资金申报等具体问题，或点击上方按钮生成 <strong>《四川省生物医药周回顾报告》</strong>。
+            </div>
+        </div>
+    `;
+    state.latestWeeklyReport = null;
+    if (el.chatInput) el.chatInput.value = '';
+    showToast('🗑️ 已成功清除研判消息记录！');
 }
 
 function parseMarkdownSimple(md) {
@@ -1764,6 +1782,7 @@ function downloadBlobFile(blob, filename) {
 }
 
 window.handleExportWeeklyWord = handleExportWeeklyWord;
+window.handleClearChat = handleClearChat;
 
 function showToast(msg) {
     el.toast.textContent = msg;
