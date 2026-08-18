@@ -58,7 +58,8 @@ jobs:
           if [ -n "$(git status --porcelain)" ]; then
             git commit -m "chore: update policy db & reports [skip ci]" || true
             git pull --rebase origin main || true
-            git push origin main || true
+            git push origin main || git push --force-with-lease origin main || true
           else
             echo "没有新增数据变更，无需提交。"
           fi
+          exit 0
