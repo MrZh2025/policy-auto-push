@@ -328,8 +328,15 @@ function filterAndRenderPolicies() {
             return diffDays >= -0.5 && diffDays <= 30;
         });
     } else {
-        timeLabel = '📚 历史全量政策库';
-        timeFilteredList = list;
+        timeLabel = '📚 近两年政策库';
+        // 严格过滤：仅展示近两年的政策（如 2025、2026 年）
+        timeFilteredList = list.filter(p => {
+            if (!p.pub_date) return true;
+            const m = p.pub_date.match(/(\d{4})/);
+            if (!m) return true;
+            const pYear = parseInt(m[1], 10);
+            return pYear >= (nowYear - 1); // 严格保留近两年
+        });
     }
 
     state.filteredPolicies = timeFilteredList;
@@ -343,14 +350,14 @@ function filterAndRenderPolicies() {
     if (banner) {
         if (state.timeRange === 'week') {
             if (timeFilteredList.length > 0) {
-                banner.innerHTML = `<span>📌 严格按当前日期筛选：<strong>本周共有 ${timeFilteredList.length} 篇最新政策更新</strong>，2024/2025等往期历史政策已收录至右上角 <strong>[历史全量政策库]</strong>。</span>`;
+                banner.innerHTML = `<span>📌 严格按当前日期筛选：<strong>本周共有 ${timeFilteredList.length} 篇最新政策更新</strong>，其余在期政策可点击 <strong>[近两年政策库]</strong> 查阅。</span>`;
             } else {
-                banner.innerHTML = `<span>📌 严格按当前日期筛选：<strong>本周暂未监测到新增官方政策发布</strong>，您可以点击右上角 <strong>[历史全量政策库]</strong> 查阅以往在库文件。</span>`;
+                banner.innerHTML = `<span>📌 严格按当前日期筛选：<strong>本周暂未监测到新增官方政策发布</strong>，您可以点击 <strong>[近两年政策库]</strong> 查阅以往在库文件。</span>`;
             }
         } else if (state.timeRange === 'month') {
             banner.innerHTML = `<span>📅 严格按当前日期筛选：<strong>近 30 天共有 ${timeFilteredList.length} 篇政策文件</strong>。</span>`;
         } else {
-            banner.innerHTML = `<span>📚 当前呈现 <strong>历史全量政策库</strong>（共收录 <strong>${timeFilteredList.length}</strong> 篇历史在库文件）。</span>`;
+            banner.innerHTML = `<span>📚 当前呈现 <strong>近两年政策库</strong>（共收录 <strong>${timeFilteredList.length}</strong> 篇近两年有效政策，超期陈旧文件已自动淘汰清理）。</span>`;
         }
     }
 

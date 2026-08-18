@@ -40,6 +40,9 @@ def run_pipeline(force_push: bool = False):
     db = PolicyDatabase()
     notifier = WeChatNotifier()
 
+    # 自动执行历史政策库治理：只保留近两年（2025-2026）的有效政策，淘汰超期陈旧数据
+    db.clean_expired_policies(max_years=2)
+
     # 0. 融合权威高价值医药产业政策知识库 (覆盖四川专项、核医药、脑机接口、AI制药等)
     try:
         from curated_policies import CURATED_POLICIES

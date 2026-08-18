@@ -71,9 +71,22 @@ class PolicyDatabase:
         if not title or not url:
             return False
 
+        pub_date = policy.get("pub_date", "")
+        # 严格过滤：仅允许近两年的政策入库（如 2025、2026 年）
+        if pub_date:
+            try:
+                import re
+                m = re.search(r'(\d{4})', pub_date)
+                if m:
+                    p_year = int(m.group(1))
+                    curr_year = datetime.now().year
+                    if p_year < (curr_year - 1): # 早于去年的历史数据直接拦截
+                        return False
+            except Exception:
+                pass
+
         fp = self.generate_fingerprint(title, url)
         source = policy.get("source", "官方发布")
-        pub_date = policy.get("pub_date", "")
         category = policy.get("category", "")
         summary = policy.get("summary", "")
 
@@ -91,6 +104,31 @@ class PolicyDatabase:
         except Exception as e:
             logger.error(f"保存政策数据失败: {e}")
             return False
+
+    def clean_expired_policies(self, max_years: int = 2) -> int:
+        """
+        自动清理超出近两年的历史陈旧政策，保证政策库只存放近两年有效数据
+        """
+        curr_year = datetime.now().year
+        cutoff_year = curr_year - (max_years - 1) # 例如 2026 - (2 - 1) = 2025
+        cutoff_date_str = f"{cutoff_year}-01-01"
+
+        try:
+            with self._get_connection() as conn:
+                cursor = conn.cursor()
+                cursor.execute("""
+                    DELETE FROM policies 
+                    WHERE (pub_date != '' AND pub_date < ?)
+                       OR (pub_date LIKE '2024%' OR pub_date LIKE '2023%' OR pub_date LIKE '2022%' OR pub_date LIKE '2021%')
+                """, (cutoff_date_str,))
+                deleted_count = cursor.rowcount
+                conn.commit()
+                if deleted_count > 0:
+                    logger.info(f"[历史库治理] 已自动淘汰并清理 {deleted_count} 条超过两年的陈旧历史政策文件（截止年份: {cutoff_year} 年前）")
+                return deleted_count
+        except Exception as e:
+            logger.error(f"清理过期政策数据失败: {e}")
+            return 0
 
     def get_unpushed_policies(self, limit: int = config.MAX_PUSH_COUNT) -> List[Dict[str, Any]]:
         """获取尚未推送到微信的最新政策列表"""
