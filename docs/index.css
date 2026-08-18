@@ -1020,40 +1020,277 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   9. NMPA 底部政务版记 (Footer)
+   9. NMPA 底部政务版记与部门官网导航 (Footer)
    -------------------------------------------------------------------------- */
 .nmpa-footer {
-    background-color: var(--nmpa-blue-dark);
-    color: #d1d8e0;
-    padding: 24px 0;
-    margin-top: 30px;
+    margin-top: 36px;
     border-top: 3px solid var(--nmpa-red-gov);
+    background-color: var(--nmpa-blue-dark);
 }
 
-.footer-wrap {
-    max-width: 1560px;
-    margin: 0 auto;
-    padding: 0 20px;
-    text-align: center;
-    font-size: 12.5px;
-    line-height: 1.8;
+/* 上层：部委与直属单位官网链接导航条 */
+.footer-links-bar {
+    background-color: #eef1f5;
+    border-bottom: 1px solid #d8dee6;
+    padding: 12px 0;
+    font-size: 12px;
+    color: #4a5568;
 }
-
-.footer-org {
-    font-weight: 700;
-    color: #ffffff;
-    font-size: 14px;
-    margin-bottom: 4px;
-}
-
-.footer-meta {
+[data-theme="dark"] .footer-links-bar {
+    background-color: #17202e;
+    border-bottom: 1px solid #2d3748;
     color: #a0aec0;
 }
 
-.footer-copy {
-    color: #718096;
+.footer-links-container {
+    max-width: 1560px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.footer-quick-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.foot-link {
+    color: #2d3748;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+}
+[data-theme="dark"] .foot-link {
+    color: #cbd5e0;
+}
+.foot-link:hover {
+    color: var(--nmpa-blue-main);
+    text-decoration: underline;
+}
+.foot-link.highlight {
+    font-weight: 600;
+    color: #004886;
+}
+[data-theme="dark"] .foot-link.highlight {
+    color: #63b3ed;
+}
+
+.foot-divider {
+    color: #cbd5e0;
+    font-size: 11px;
+}
+[data-theme="dark"] .foot-divider {
+    color: #4a5568;
+}
+
+.footer-selects {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.gov-select {
+    background-color: #ffffff;
+    border: 1px solid #cbd5e0;
+    color: #2d3748;
+    padding: 4px 8px;
     font-size: 11.5px;
-    margin-top: 4px;
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+    max-width: 190px;
+}
+[data-theme="dark"] .gov-select {
+    background-color: #1a202c;
+    border-color: #4a5568;
+    color: #e2e8f0;
+}
+.gov-select:focus {
+    border-color: var(--nmpa-blue-main);
+}
+
+.footer-aux-links {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #718096;
+}
+.aux-link {
+    color: #4a5568;
+    text-decoration: none;
+    font-size: 11.5px;
+}
+[data-theme="dark"] .aux-link {
+    color: #a0aec0;
+}
+.aux-link:hover {
+    color: var(--nmpa-blue-main);
+    text-decoration: underline;
+}
+
+/* 下层：政务版权与权威徽章 */
+.footer-main-bar {
+    padding: 24px 0 28px 0;
+    color: #d1d8e0;
+}
+
+.footer-main-container {
+    max-width: 1560px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.footer-info-text {
+    flex: 1;
+    min-width: 320px;
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+.foot-org-title {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+.foot-org-title strong {
+    color: var(--nmpa-gold);
+}
+
+.foot-copy-line {
+    color: #a0aec0;
+    margin-bottom: 4px;
+}
+
+.foot-cert-line {
+    color: #718096;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 11.5px;
+}
+
+.badge-police {
+    font-size: 13px;
+    margin-right: 2px;
+}
+
+/* 右侧政务徽章组 */
+.footer-gov-badges {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.gov-badge-card {
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: default;
+    transition: transform 0.15s ease;
+    user-select: none;
+}
+.gov-badge-card:hover {
+    transform: translateY(-2px);
+}
+
+/* 1. 党政机关红盾 */
+.badge-red-shield {
+    background: linear-gradient(135deg, #a71d2a 0%, #6e0c15 100%);
+    border: 1px solid #d4af37;
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+.shield-icon {
+    font-size: 20px;
+    margin-right: 6px;
+}
+.shield-text {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+.shield-line1 {
+    font-size: 10px;
+    color: #ffd700;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+.shield-line2 {
+    font-size: 9px;
+    color: #f7fafc;
+    font-family: serif;
+}
+
+/* 2. 政府网站找错 */
+.badge-error-check {
+    background-color: #b81c22;
+    border: 1px solid #e53e3e;
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+}
+.error-icon {
+    font-size: 18px;
+    margin-right: 6px;
+}
+.error-text {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+.error-line1 {
+    font-size: 10px;
+    font-weight: 700;
+    color: #ffffff;
+}
+.error-line2 {
+    font-size: 11px;
+    font-weight: 800;
+    color: #fff566;
+    letter-spacing: 2px;
+}
+
+/* 3. 适老化无障碍 */
+.badge-barrier-free {
+    background-color: #2b6cb0;
+    border: 1px solid #4299e1;
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+.bf-icon {
+    font-size: 18px;
+    margin-right: 6px;
+}
+.bf-text {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+.bf-line1 {
+    font-size: 9.5px;
+    font-weight: 700;
+    color: #ffffff;
+}
+.bf-line2 {
+    font-size: 8.5px;
+    color: #ebf8ff;
 }
 
 /* 提示通知 */
