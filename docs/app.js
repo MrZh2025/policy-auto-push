@@ -108,12 +108,14 @@ function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
     state.theme = theme;
     localStorage.setItem('POLICY_THEME', theme);
-    if (theme === 'dark') {
-        el.themeIcon.textContent = '🌙';
-        el.themeText.textContent = '夜间内参';
-    } else {
-        el.themeIcon.textContent = '☀️';
-        el.themeText.textContent = '政务亮色';
+    if (el.themeIcon && el.themeText) {
+        if (theme === 'dark') {
+            el.themeIcon.textContent = '🌙';
+            el.themeText.textContent = '夜间内参';
+        } else {
+            el.themeIcon.textContent = '☀️';
+            el.themeText.textContent = '政务亮色';
+        }
     }
 }
 
@@ -124,7 +126,9 @@ function toggleTheme() {
 
 // 事件绑定
 function bindEvents() {
-    el.themeToggleBtn.addEventListener('click', toggleTheme);
+    if (el.themeToggleBtn) {
+        el.themeToggleBtn.addEventListener('click', toggleTheme);
+    }
 
     // 时间范围切换 (本周最新 / 近30天 / 历史全量库)
     const timeTabs = document.querySelectorAll('.time-tab');
