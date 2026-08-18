@@ -1,192 +1,168 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>医药产业政策自动化监控与智能分析平台</title>
+    <title>医药产业政策监测与申报研判系统 - 四川发展·医药集团</title>
     <link rel="stylesheet" href="index.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- 顶部导航栏 -->
+    <!-- 顶部权威导航栏 -->
     <header class="app-header">
         <div class="header-container">
-            <div class="logo-area">
-                <div class="logo-icon">🧬</div>
-                <div class="logo-text">
-                    <h1>医药产业政策智能监测平台</h1>
-                    <span class="sub-text">四川发展 · 医药集团政策研究中心</span>
+            <div class="brand-area">
+                <div class="brand-badge">SICI</div>
+                <div class="brand-info">
+                    <h1>医药产业政策监测与申报研判系统</h1>
+                    <span class="sub-title">四川省医药健康产业政策内参 · 投资与科技申报中心</span>
                 </div>
             </div>
             
             <div class="header-actions">
-                <div class="status-badge" id="statsBadge">
-                    <span class="pulse-dot"></span>
-                    <span id="statsSummary">系统已就绪 · 累计收录 48 篇政策</span>
+                <div class="status-indicator">
+                    <span class="dot"></span>
+                    <span id="statsSummary">数据实时更新 · 累计收录 34 篇政策</span>
                 </div>
-                <button class="btn btn-secondary" id="btnScrape" title="触发全网最新政策采集">
-                    <span class="icon">🔄</span> 立即采集
+                <!-- 亮色/深色 切换开关 -->
+                <button class="btn btn-icon theme-toggle-btn" id="themeToggleBtn" title="切换亮色/深色主题">
+                    <span class="theme-icon" id="themeIcon">☀️</span>
+                    <span class="theme-text" id="themeText">亮色模式</span>
                 </button>
-                <button class="btn btn-primary" id="btnExportWord" title="导出符合GB/T 9704-2012标准的Word简报到桌面">
-                    <span class="icon">📄</span> 导出公文Word
+                <button class="btn btn-secondary" id="btnScrape">
+                    <span class="btn-icon">🔄</span> 检索更新
                 </button>
-                <button class="btn btn-success" id="btnPushWechat" title="推送到个人微信">
-                    <span class="icon">📱</span> 推送微信
+                <button class="btn btn-primary" id="btnExportWord" title="导出符合GB/T 9704-2012国家公文标准的Word报告">
+                    <span class="btn-icon">📄</span> 导出公文Word
+                </button>
+                <button class="btn btn-outline" id="btnPushWechat">
+                    <span class="btn-icon">📱</span> 推送微信
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- 主体容器 -->
-    <main class="main-container">
-        <!-- 核心赛道统计指标条 -->
-        <section class="tracks-bar">
-            <div class="track-card active" data-track="all">
-                <div class="track-icon">🌐</div>
-                <div class="track-info">
-                    <div class="track-title">全部政策</div>
-                    <div class="track-count" id="count-all">--</div>
-                </div>
+    <main class="main-layout">
+        <!-- 重点赛道分类导航 -->
+        <section class="tracks-navigation">
+            <div class="track-tab active" data-track="all">
+                <div class="track-name">全部政策库</div>
+                <div class="track-badge" id="count-all">34</div>
             </div>
-            <div class="track-card" data-track="核医药">
-                <div class="track-icon">⚛️</div>
-                <div class="track-info">
-                    <div class="track-title">核医药</div>
-                    <div class="track-count" id="count-核医药">--</div>
-                </div>
+            <div class="track-tab" data-track="核医药">
+                <div class="track-name">核医药</div>
+                <div class="track-badge" id="count-核医药">0</div>
             </div>
-            <div class="track-card" data-track="脑机接口">
-                <div class="track-icon">🧠</div>
-                <div class="track-info">
-                    <div class="track-title">脑机接口</div>
-                    <div class="track-count" id="count-脑机接口">--</div>
-                </div>
+            <div class="track-tab" data-track="脑机接口">
+                <div class="track-name">脑机接口</div>
+                <div class="track-badge" id="count-脑机接口">0</div>
             </div>
-            <div class="track-card" data-track="AI制药">
-                <div class="track-icon">🧬</div>
-                <div class="track-info">
-                    <div class="track-title">AI制药</div>
-                    <div class="track-count" id="count-AI制药">--</div>
-                </div>
+            <div class="track-tab" data-track="AI制药">
+                <div class="track-name">AI制药</div>
+                <div class="track-badge" id="count-AI制药">0</div>
             </div>
-            <div class="track-card" data-track="医疗机器人">
-                <div class="track-icon">🤖</div>
-                <div class="track-info">
-                    <div class="track-title">医疗机器人</div>
-                    <div class="track-count" id="count-医疗机器人">--</div>
-                </div>
+            <div class="track-tab" data-track="医疗机器人">
+                <div class="track-name">医疗机器人</div>
+                <div class="track-badge" id="count-医疗机器人">0</div>
             </div>
-            <div class="track-card" data-track="医保政策">
-                <div class="track-icon">💳</div>
-                <div class="track-info">
-                    <div class="track-title">医保政策</div>
-                    <div class="track-count" id="count-医保政策">--</div>
-                </div>
+            <div class="track-tab" data-track="医保政策">
+                <div class="track-name">医保政策</div>
+                <div class="track-badge" id="count-医保政策">0</div>
             </div>
-            <div class="track-card" data-track="科技申报政策">
-                <div class="track-icon">📑</div>
-                <div class="track-info">
-                    <div class="track-title">科技申报</div>
-                    <div class="track-count" id="count-科技申报政策">--</div>
-                </div>
+            <div class="track-tab" data-track="科技申报政策">
+                <div class="track-name">科技申报与奖补</div>
+                <div class="track-badge" id="count-科技申报政策">0</div>
             </div>
         </section>
 
-        <!-- 核心内容双栏布局 -->
-        <div class="content-grid">
-            <!-- 左侧：每日最新政策大屏 -->
-            <section class="left-panel">
-                <div class="panel-header">
-                    <div class="panel-title-wrap">
-                        <h2>📋 每日最新政策速览</h2>
-                        <span class="badge" id="listBadge">最新发布</span>
+        <!-- 主内容双栏 -->
+        <div class="workspace-grid">
+            <!-- 左侧：最新政策文件列表 -->
+            <section class="policy-section">
+                <div class="section-toolbar">
+                    <div class="section-heading">
+                        <h2>最新政策文件</h2>
+                        <span class="section-tag" id="listBadge">全部政策</span>
                     </div>
-                    <div class="search-box">
-                        <input type="text" id="searchInput" placeholder="搜索政策标题、发文机构、关键词...">
-                        <button id="searchBtn">🔍</button>
+                    <div class="search-input-wrap">
+                        <input type="text" id="searchInput" placeholder="搜索文件名称、文号、发文单位...">
+                        <button id="searchBtn" class="search-submit-btn">检索</button>
                     </div>
                 </div>
 
-                <!-- 政策卡片列表容器 -->
-                <div class="policy-list" id="policyList">
-                    <div class="loading-spinner">正在加载最新政策数据...</div>
+                <div class="policy-stream" id="policyList">
+                    <div class="loading-state">正在检索数据库...</div>
                 </div>
             </section>
 
-            <!-- 右侧：AI 政策专家智库 & 四川省生物医药周回顾专区 -->
-            <section class="right-panel">
-                <!-- 四川生物医药专项周回顾板块 -->
-                <div class="sichuan-box">
-                    <div class="sichuan-header">
-                        <div class="sichuan-title">
-                            <span class="star-icon">✨</span>
+            <!-- 右侧：四川省生物医药周回顾与政策分析工作站 -->
+            <section class="analysis-section">
+                <!-- 四川生物医药科技创新与奖补周回顾 -->
+                <div class="special-card sichuan-card">
+                    <div class="special-card-header">
+                        <div>
                             <h3>四川省生物医药科技创新与奖补周回顾</h3>
+                            <p class="special-card-subtitle">重点跟踪四川省科技厅、省发改委、成都市经信局关于研发补助、重大专项及资金申报动态</p>
                         </div>
-                        <button class="btn-sm btn-accent" id="btnGenWeekly">
-                            ⚡ 一键生成本周回顾报告
+                        <button class="btn btn-accent" id="btnGenWeekly">
+                            生成本周简报
                         </button>
                     </div>
-                    <p class="sichuan-desc">
-                        聚焦四川省科技厅、发改委、成都市经信局关于生物医药科技奖励、研发补助、创新平台及资金奖补最新动态。
-                    </p>
                 </div>
 
-                <!-- AI 专家问答交互工作台 -->
-                <div class="ai-chat-card">
-                    <div class="chat-header">
-                        <div class="bot-info">
-                            <div class="bot-avatar">🤖</div>
-                            <div>
-                                <h4>AI 医药政策智能助理</h4>
-                                <span class="online-tag">● 在线解读</span>
-                            </div>
+                <!-- 政策研判与专家咨询台 -->
+                <div class="analyst-workbench">
+                    <div class="workbench-header">
+                        <div class="workbench-title">
+                            <h4>政策研判与申报咨询台</h4>
+                            <span class="mode-tag">产业内参模式</span>
                         </div>
-                        <button class="btn-link" id="toggleApiKey">⚙️ 密钥配置</button>
+                        <button class="btn-text" id="toggleApiKey">⚙️ 模型配置</button>
                     </div>
 
-                    <!-- API 密钥折叠配置栏 -->
-                    <div class="api-key-drawer hidden" id="apiKeyDrawer">
-                        <div class="drawer-row">
-                            <label>API Key (支持 DeepSeek / OpenAI / 通义千问):</label>
+                    <!-- 模型密钥配置抽屉 -->
+                    <div class="config-panel hidden" id="apiKeyDrawer">
+                        <div class="config-item">
+                            <label>API Key (可选，支持 DeepSeek / 通义千问 / OpenAI):</label>
                             <input type="password" id="inputApiKey" placeholder="sk-xxxxxxxxxxxxxxxx">
                         </div>
-                        <div class="drawer-row-flex">
+                        <div class="config-row">
                             <input type="text" id="inputBaseUrl" placeholder="https://api.deepseek.com/v1">
                             <input type="text" id="inputModel" placeholder="deepseek-chat">
-                            <button class="btn btn-sm btn-primary" id="btnSaveKey">保存</button>
+                            <button class="btn btn-sm btn-primary" id="btnSaveKey">保存配置</button>
                         </div>
                     </div>
 
-                    <!-- 快捷 Prompt 胶囊 -->
-                    <div class="prompt-pills">
-                        <span class="pill-chip" data-prompt="请分析当前国家药监局对核药与放射性药物审评审批的最新支持政策。">⚛️ 核药审评政策</span>
-                        <span class="pill-chip" data-prompt="成都市对生物医药和医疗机器人有哪些具体的资金奖补措施？">🤖 成都奖补细则</span>
-                        <span class="pill-chip" data-prompt="最新一轮国家医保目录调整和支付方式对创新药有何影响？">💳 医保准入影响</span>
-                        <span class="pill-chip" data-prompt="请帮我起草一份脑机接口科技创新专项申报书的政策契合点与研究背景。">🧠 脑机申报提炼</span>
+                    <!-- 常用研判议题 -->
+                    <div class="preset-queries">
+                        <button class="query-chip" data-prompt="梳理四川省及成都市对核医疗、放射性药物产业的最新扶持举措与申报要求。">四川核医疗政策</button>
+                        <button class="query-chip" data-prompt="分析最新国家医保目录谈判及挂网集采政策对创新药械企业的影响。">医保集采影响</button>
+                        <button class="query-chip" data-prompt="当前四川省科技创新重大专项中，脑机接口与AI制药支持方向与资助标准。">脑机接口专项申报</button>
+                        <button class="query-chip" data-prompt="起草一份生物医药科技成果转化与研发费用奖补资金申报策略要点。">科技资金申报策略</button>
                     </div>
 
-                    <!-- 聊天消息气泡区 -->
-                    <div class="chat-messages" id="chatMessages">
-                        <div class="message-bubble bot">
-                            <div class="bubble-content">
-                                您好！我是您的 <strong>医药产业政策与科技申报智能助理</strong>。您可以向我咨询核医药、脑机接口、AI制药、医疗机器人、医保集采以及四川省/成都市最新的科技奖补申报政策，也可以点击上方按钮一键生成 <strong>《四川省生物医药周回顾报告》</strong>！
+                    <!-- 交互记录区 -->
+                    <div class="consult-dialog" id="chatMessages">
+                        <div class="consult-bubble bot-bubble">
+                            <div class="dialog-body">
+                                <strong>政策研究室工作台已就绪。</strong><br>
+                                本系统已连接国家及四川省官方政策数据库。您可以直接咨询核医药、脑机接口、AI制药、医疗机器人、医保集采或科技资金申报等具体实操问题，或点击上方按钮生成 <strong>《四川省生物医药周回顾报告》</strong>。
                             </div>
                         </div>
                     </div>
 
-                    <!-- 输入框区域 -->
-                    <div class="chat-input-box">
-                        <textarea id="chatInput" placeholder="输入您的政策疑问，按 Enter 快速发送..." rows="2"></textarea>
-                        <button id="btnSendChat" class="btn btn-primary">发送</button>
+                    <!-- 输入栏 -->
+                    <div class="consult-input-bar">
+                        <textarea id="chatInput" placeholder="输入政策咨询内容或特定品种申报疑问..." rows="2"></textarea>
+                        <button id="btnSendChat" class="btn btn-primary btn-send">发送研判</button>
                     </div>
                 </div>
             </section>
         </div>
     </main>
 
-    <!-- 弹窗通知组件 -->
     <div id="toast" class="toast hidden"></div>
 
     <script src="app.js"></script>

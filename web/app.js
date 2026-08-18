@@ -1,5 +1,6 @@
 /**
- * 医药产业政策监控与智能分析平台 - 前端主交互逻辑
+ * 医药产业政策监测与申报研判系统 - 前端交互逻辑
+ * 支持亮色/深色主题无缝切换、专业智库去AI味文风、四川省专项周回顾一键生成
  */
 
 // 状态管理
@@ -7,7 +8,7 @@ const state = {
     currentTrack: 'all',
     searchQuery: '',
     policies: [],
-    stats: {},
+    theme: localStorage.getItem('POLICY_THEME') || 'light',
     apiKey: localStorage.getItem('POLICY_AI_API_KEY') || '',
     baseUrl: localStorage.getItem('POLICY_AI_BASE_URL') || 'https://api.deepseek.com/v1',
     model: localStorage.getItem('POLICY_AI_MODEL') || 'deepseek-chat',
@@ -15,11 +16,14 @@ const state = {
 
 // DOM 元素引用
 const el = {
+    themeToggleBtn: document.getElementById('themeToggleBtn'),
+    themeIcon: document.getElementById('themeIcon'),
+    themeText: document.getElementById('themeText'),
     policyList: document.getElementById('policyList'),
     statsBadge: document.getElementById('statsSummary'),
     searchInput: document.getElementById('searchInput'),
     searchBtn: document.getElementById('searchBtn'),
-    trackCards: document.querySelectorAll('.track-card'),
+    trackTabs: document.querySelectorAll('.track-tab'),
     btnScrape: document.getElementById('btnScrape'),
     btnExportWord: document.getElementById('btnExportWord'),
     btnPushWechat: document.getElementById('btnPushWechat'),
@@ -27,7 +31,7 @@ const el = {
     chatMessages: document.getElementById('chatMessages'),
     chatInput: document.getElementById('chatInput'),
     btnSendChat: document.getElementById('btnSendChat'),
-    promptPills: document.querySelectorAll('.pill-chip'),
+    presetChips: document.querySelectorAll('.query-chip'),
     toggleApiKey: document.getElementById('toggleApiKey'),
     apiKeyDrawer: document.getElementById('apiKeyDrawer'),
     inputApiKey: document.getElementById('inputApiKey'),
@@ -40,21 +44,44 @@ const el = {
 
 // 初始化
 document.addEventListener('DOMContentLoaded', () => {
+    applyTheme(state.theme);
     initApiKeyForm();
     loadStats();
     loadPolicies();
     bindEvents();
 });
 
+// 主题切换逻辑
+function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    state.theme = theme;
+    localStorage.setItem('POLICY_THEME', theme);
+    if (theme === 'dark') {
+        el.themeIcon.textContent = '🌙';
+        el.themeText.textContent = '深色模式';
+    } else {
+        el.themeIcon.textContent = '☀️';
+        el.themeText.textContent = '亮色模式';
+    }
+}
+
+function toggleTheme() {
+    const nextTheme = state.theme === 'dark' ? 'light' : 'dark';
+    applyTheme(nextTheme);
+}
+
 // 事件绑定
 function bindEvents() {
-    // 赛道卡片点击切换
-    el.trackCards.forEach(card => {
-        card.addEventListener('click', () => {
-            el.trackCards.forEach(c => c.classList.remove('active'));
-            card.classList.add('active');
-            state.currentTrack = card.getAttribute('data-track');
-            el.listBadge.textContent = card.querySelector('.track-title').textContent;
+    // 主题切换
+    el.themeToggleBtn.addEventListener('click', toggleTheme);
+
+    // 赛道 Tab 点击切换
+    el.trackTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            el.trackTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            state.currentTrack = tab.getAttribute('data-track');
+            el.listBadge.textContent = tab.querySelector('.track-name').textContent;
             loadPolicies();
         });
     });
@@ -65,16 +92,16 @@ function bindEvents() {
         if (e.key === 'Enter') handleSearch();
     });
 
-    // 快捷 Prompt 点击
-    el.promptPills.forEach(pill => {
-        pill.addEventListener('click', () => {
-            const prompt = pill.getAttribute('data-prompt');
+    // 常用研判议题点击
+    el.presetChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+            const prompt = chip.getAttribute('data-prompt');
             el.chatInput.value = prompt;
             sendChatMessage();
         });
     });
 
-    // 发送聊天
+    // 发送研判
     el.btnSendChat.addEventListener('click', sendChatMessage);
     el.chatInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
@@ -83,7 +110,7 @@ function bindEvents() {
         }
     });
 
-    // 四川专项周回顾一键生成
+    // 四川生物医药专项周回顾一键生成
     el.btnGenWeekly.addEventListener('click', generateSichuanWeeklyReport);
 
     // API Key 抽屉切换
@@ -100,7 +127,7 @@ function bindEvents() {
         localStorage.setItem('POLICY_AI_BASE_URL', state.baseUrl);
         localStorage.setItem('POLICY_AI_MODEL', state.model);
         el.apiKeyDrawer.classList.add('hidden');
-        showToast('✅ API Key 与模型配置已保存！');
+        showToast('✅ 模型参数与密钥已更新');
     });
 
     // 顶部按钮操作
@@ -130,9 +157,8 @@ async function loadStats() {
         if (res.code === 0) {
             const stats = res.data.stats;
             const categories = res.data.categories || {};
-            el.statsBadge.textContent = `系统正常运行 · 累计收录 ${stats.total} 篇政策`;
+            el.statsBadge.textContent = `数据实时更新 · 累计收录 ${stats.total} 篇政策`;
 
-            // 更新赛道数字
             const countAll = document.getElementById('count-all');
             if (countAll) countAll.textContent = stats.total;
 
@@ -151,7 +177,7 @@ async function loadStats() {
 
 // 加载政策列表
 async function loadPolicies() {
-    el.policyList.innerHTML = '<div class="loading-spinner">正在检索政策数据...</div>';
+    el.policyList.innerHTML = '<div class="loading-state">正在检索数据库...</div>';
     try {
         const url = `/api/policies?category=${encodeURIComponent(state.currentTrack)}&q=${encodeURIComponent(state.searchQuery)}`;
         const resp = await fetch(url);
@@ -161,14 +187,14 @@ async function loadPolicies() {
             renderPolicyList(res.data);
         }
     } catch (e) {
-        el.policyList.innerHTML = `<div class="loading-spinner" style="color:#f43f5e">加载失败: ${e.message}</div>`;
+        el.policyList.innerHTML = `<div class="loading-state" style="color:#ef4444">检索异常: ${e.message}</div>`;
     }
 }
 
-// 渲染政策卡片
+// 渲染政策列表
 function renderPolicyList(list) {
     if (!list || list.length === 0) {
-        el.policyList.innerHTML = '<div class="loading-spinner">暂未检索到相关政策文件</div>';
+        el.policyList.innerHTML = '<div class="loading-state">暂无符合条件的政策文件</div>';
         return;
     }
 
@@ -179,38 +205,36 @@ function renderPolicyList(list) {
         const summary = item.summary || item.title;
 
         return `
-            <div class="policy-item-card">
+            <article class="policy-item-card">
                 <div class="policy-meta">
                     <span class="tag-pill tag-${category}">${category}</span>
-                    <span class="source-tag">🏛️ ${source}</span>
-                    <span class="date-tag">📅 ${pubDate}</span>
+                    <span class="source-tag">${source}</span>
+                    <span class="date-tag">${pubDate}</span>
                 </div>
                 <h3 class="policy-title">${idx + 1}. ${item.title}</h3>
                 <p class="policy-summary">${summary}</p>
                 <div class="policy-footer">
-                    <span style="color:#64748b">ID: #${item.id}</span>
+                    <span style="color:var(--text-caption)">编号: #${item.id}</span>
                     <a href="${item.url}" target="_blank" rel="noopener" class="policy-link">
-                        查看官方原文 ➔
+                        官方原文直达 ➔
                     </a>
                 </div>
-            </div>
+            </article>
         `;
     }).join('');
 
     el.policyList.innerHTML = html;
 }
 
-// 发送 AI 聊天
+// 发送研判问答
 async function sendChatMessage() {
     const prompt = el.chatInput.value.trim();
     if (!prompt) return;
 
-    // 添加用户气泡
-    appendMessage(prompt, 'user');
+    appendMessage(prompt, 'user-bubble');
     el.chatInput.value = '';
 
-    // 添加 Bot 加载中气泡
-    const loadingId = appendMessage('🤖 正在深度分析中，请稍候...', 'bot');
+    const loadingId = appendMessage('正在研判相关政策细则...', 'bot-bubble');
 
     try {
         const resp = await fetch('/api/chat', {
@@ -226,14 +250,14 @@ async function sendChatMessage() {
         const res = await resp.json();
         updateMessage(loadingId, res.reply || '无应答');
     } catch (e) {
-        updateMessage(loadingId, `❌ 调用失败: ${e.message}`);
+        updateMessage(loadingId, `研判服务调用失败: ${e.message}`);
     }
 }
 
-// 一键生成四川生物医药周回顾
+// 一键生成四川生物医药周回顾报告
 async function generateSichuanWeeklyReport() {
-    appendMessage('⚡ 正在调取四川省科技厅、发改委、成都市经信局最新生物医药科技奖补与资金申报数据，生成深度周回顾...', 'user');
-    const loadingId = appendMessage('🤖 正在起草《四川省生物医药科技创新与奖补周回顾报告》5大结构化模块...', 'bot');
+    appendMessage('调取四川省科技厅、省发改委、成都市经信局最新生物医药科技奖补与资金申报数据，生成深度周回顾简报。', 'user-bubble');
+    const loadingId = appendMessage('正在编制《四川省生物医药科技创新与奖补周回顾报告》（5大核心要点）...', 'bot-bubble');
 
     try {
         const resp = await fetch('/api/weekly-report', {
@@ -246,22 +270,22 @@ async function generateSichuanWeeklyReport() {
             })
         });
         const res = await resp.json();
-        updateMessage(loadingId, res.report || '生成完毕');
-        showToast('📄 四川省生物医药周回顾报告已生成！');
+        updateMessage(loadingId, res.report || '报告已生成');
+        showToast('📄 四川省生物医药周回顾报告编制完成');
     } catch (e) {
-        updateMessage(loadingId, `❌ 生成失败: ${e.message}`);
+        updateMessage(loadingId, `报告编制失败: ${e.message}`);
     }
 }
 
-// 渲染聊天气泡辅助函数
-function appendMessage(text, role) {
+// 气泡添加与更新
+function appendMessage(text, roleClass) {
     const msgId = 'msg-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5);
     const bubble = document.createElement('div');
-    bubble.className = `message-bubble ${role}`;
+    bubble.className = `consult-bubble ${roleClass}`;
     bubble.id = msgId;
 
     const formattedContent = parseMarkdownSimple(text);
-    bubble.innerHTML = `<div class="bubble-content">${formattedContent}</div>`;
+    bubble.innerHTML = `<div class="dialog-body">${formattedContent}</div>`;
 
     el.chatMessages.appendChild(bubble);
     el.chatMessages.scrollTop = el.chatMessages.scrollHeight;
@@ -271,7 +295,7 @@ function appendMessage(text, role) {
 function updateMessage(msgId, text) {
     const bubble = document.getElementById(msgId);
     if (bubble) {
-        const contentEl = bubble.querySelector('.bubble-content');
+        const contentEl = bubble.querySelector('.dialog-body');
         if (contentEl) {
             contentEl.innerHTML = parseMarkdownSimple(text);
         }
@@ -279,63 +303,57 @@ function updateMessage(msgId, text) {
     el.chatMessages.scrollTop = el.chatMessages.scrollHeight;
 }
 
-// 轻量 Markdown 转 HTML 解析器
+// Markdown 转 HTML 格式化 (公文与内参级清爽排版)
 function parseMarkdownSimple(md) {
     if (!md) return '';
     let html = md;
-    // 标题
     html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
     html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
     html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
-    // 加粗
     html = html.replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>');
-    // 列表项
     html = html.replace(/^\- (.*$)/gim, '<li>$1</li>');
-    // 链接
-    html = html.replace(/\[(.*?)\]\((.*?)\)/gim, '<a href="$2" target="_blank" style="color:#38bdf8">$1</a>');
-    // 换行
+    html = html.replace(/\[(.*?)\]\((.*?)\)/gim, '<a href="$2" target="_blank" style="color:var(--brand-primary);text-decoration:underline;">$1</a>');
     html = html.replace(/\n\n/gim, '<br><br>');
     html = html.replace(/\n/gim, '<br>');
     return html;
 }
 
-// 顶部按钮操作实现
+// 顶部操作处理
 async function handleScrapeNow() {
-    showToast('🔄 正在全网检索各大部委与四川省局最新政策...');
+    showToast('正在全网检索各大部委与四川省局最新政策...');
     try {
         const resp = await fetch('/api/scrape-now', { method: 'POST' });
         const res = await resp.json();
-        showToast(res.msg || '全网政策采集完成！');
+        showToast(res.msg || '政策检索完成');
         loadStats();
         loadPolicies();
     } catch (e) {
-        showToast('❌ 采集出错: ' + e.message);
+        showToast('检索出错: ' + e.message);
     }
 }
 
 async function handleExportWord() {
-    showToast('📄 正在导出符合 GB/T 9704-2012 公文标准的 Word 简报...');
+    showToast('正在按照 GB/T 9704-2012 公文标准导出 Word 报告...');
     try {
         const resp = await fetch('/api/export-word', { method: 'POST' });
         const res = await resp.json();
         showToast(res.msg || 'Word 简报已成功保存到您的桌面！');
     } catch (e) {
-        showToast('❌ 导出出错: ' + e.message);
+        showToast('导出出错: ' + e.message);
     }
 }
 
 async function handlePushWechat() {
-    showToast('📱 正在向个人微信派发最新医药政策早报...');
+    showToast('正在向个人微信派发最新医药政策早报...');
     try {
         const resp = await fetch('/api/push-wechat', { method: 'POST' });
         const res = await resp.json();
-        showToast(res.msg || '微信推送完成！');
+        showToast(res.msg || '微信推送完成');
     } catch (e) {
-        showToast('❌ 推送出错: ' + e.message);
+        showToast('推送出错: ' + e.message);
     }
 }
 
-// 吐司通知
 function showToast(msg) {
     el.toast.textContent = msg;
     el.toast.classList.remove('hidden');
