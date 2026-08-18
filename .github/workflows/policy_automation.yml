@@ -1,10 +1,10 @@
-name: 医药政策每日自动化监控与微信推送
+name: 医药产业政策每日监控与微信推送
 
 on:
   schedule:
-    # 北京时间 08:30 (UTC 00:30)
+    # 每个工作日北京时间 08:30 (UTC 00:30)
     - cron: '30 0 * * 1-5'
-    # 北京时间 17:30 (UTC 09:30)
+    # 每个工作日北京时间 17:30 (UTC 09:30)
     - cron: '30 9 * * 1-5'
   workflow_dispatch:
 
@@ -22,18 +22,18 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 配置 Python 3.12 环境
+      - name: 配置 Python 3.12 运行环境
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
           cache: 'pip'
 
-      - name: 安装依赖包
+      - name: 安装 Python 依赖包
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: 执行政策采集、Word简报生成与微信推送
+      - name: 执行政策采集、Word公文简报生成与微信推送
         env:
           PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN || 'be87fdcbcef94066ab9132f5e8575005' }}
           WECHAT_WORK_WEBHOOK: ${{ secrets.WECHAT_WORK_WEBHOOK }}
@@ -42,7 +42,7 @@ jobs:
         run: |
           python main.py
 
-      - name: 上传 Word 简报附件到 GitHub Artifacts (供网页下载)
+      - name: 上传公文 Word 简报到 GitHub 制品区 (供一键下载)
         uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -51,7 +51,7 @@ jobs:
           if-no-files-found: ignore
           retention-days: 30
 
-      - name: 提交并持久化去重数据库与 Word 归档
+      - name: 自动持久化政策去重数据库与 Word 归档
         if: always()
         run: |
           set +e
@@ -59,9 +59,9 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add policy_records.db policy_runner.log reports/*.docx
           if [ -n "$(git status --porcelain)" ]; then
-            git commit -m "chore: update policy db & reports [skip ci]"
+            git commit -m "chore: auto update policy database [skip ci]"
             git pull --rebase origin main
             git push origin HEAD:main
           fi
-          echo "持久化流程已执行完毕。"
+          echo "数据库持久化流程已安全执行完毕。"
           exit 0
