@@ -888,13 +888,14 @@ async function handleScrapeNow() {
         await loadData();
         showToast('✅ 动态数据检索完成！已同步云端最新发布的政策库。');
     } catch (e) {
-        showToast('💡 提示：当前已加载云端最新政策库。如需在本地立即执行全网深度爬虫，可双击项目根目录下的【启动网页大屏.bat】！');
-    }
-}
+    // ==========================================
+// 权威标准公文 Word 导出引擎 (GB/T 9704-2012)
+// 1. 原生 OpenXML (.docx) 引擎 (基于 docx.js)
+// 2. 精确 WordprocessingML XML 容错引擎 (保底方案)
+// ==========================================
 
-// 纯前端直接生成符合《党政机关公文格式》(GB/T 9704-2012) 标准的 Word 文档并弹出保存对话框
-function handleExportWord() {
-    // 严格按 /公文排版 要求：只导出本周更新的政策和文件摘要
+// 一、导出政策监测信息公文简报
+async function handleExportWord() {
     const weekPolicies = state.allPolicies.filter(isThisWeekPolicy);
     const policies = (weekPolicies && weekPolicies.length > 0)
         ? weekPolicies
@@ -905,21 +906,403 @@ function handleExportWord() {
         return;
     }
 
-    showToast(`📄 正在按照《党政机关公文格式》生成本周 ${policies.length} 篇新政策公文简报...`);
+    const timeAnchor = getCurrentTimeAnchor();
+    const dateStr = timeAnchor.fullDateStr;
+    const fileDateTag = `${timeAnchor.year}${String(timeAnchor.month).padStart(2, '0')}${String(timeAnchor.date).padStart(2, '0')}`;
+    const filename = `医药健康产业集团政策监测信息简报_${fileDateTag}.docx`;
 
-    const now = new Date();
-    const dateStr = `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日`;
-    const fileDateTag = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`;
-    const filename = `医药健康产业集团政策监测信息周报_${fileDateTag}.doc`;
+    showToast(`📄 正在生成标准公文 Word 简报（共 ${policies.length} 篇重点政策）...`);
 
-    // 构造符合 GB/T 9704-2012 国家公文格式的 HTML Word 模板（英文与数值采用 Times New Roman）
-    let tableRows = '';
+    // 优先尝试 原生 docx.js 引擎
+    if (window.docx && window.docx.Document) {
+        try {
+            await exportPoliciesViaDocxJS(policies, dateStr, filename);
+            showToast(`✅ 已成功导出标准公文 Word：${filename}`);
+            return;
+        } catch (err) {
+            console.warn('docx.js 导出异常，降级至标准 XML 引擎:', err);
+        }
+    }
+
+    // 降级使用标准 Word XML 引擎
+    exportPoliciesViaWordXML(policies, dateStr, filename);
+}
+
+// 二、导出四川省生物医药周回顾报告
+async function handleExportWeeklyWord() {
+    const timeAnchor = getCurrentTimeAnchor();
+    let reportText = state.latestWeeklyReport;
+    
+    if (!reportText) {
+        reportText = getMockAnalysis('周回顾');
+    }
+
+    const docDate = timeAnchor.fullDateStr;
+    const docPeriod = timeAnchor.periodStr;
+    const dateTag = `${timeAnchor.year}${String(timeAnchor.month).padStart(2, '0')}${String(timeAnchor.date).padStart(2, '0')}`;
+    const filename = `四川省生物医药科技创新政策周报_${dateTag}.docx`;
+
+    showToast(`📄 正在生成《四川省生物医药科技创新政策周报》Word 文档...`);
+
+    // 优先尝试 原生 docx.js 引擎
+    if (window.docx && window.docx.Document) {
+        try {
+            await exportWeeklyReportViaDocxJS(reportText, docPeriod, docDate, filename);
+            showToast(`✅ 已成功导出周报 Word：${filename}`);
+            return;
+        } catch (err) {
+            console.warn('docx.js 导出异常，降级至标准 XML 引擎:', err);
+        }
+    }
+
+    // 降级使用标准 Word XML 引擎
+    exportWeeklyReportViaWordXML(reportText, docPeriod, docDate, filename);
+}
+
+// ----------------------------------------------------
+// 原生 docx.js 引擎实现 (100% 纯正 OpenXML .docx 文件)
+// ----------------------------------------------------
+
+async function exportPoliciesViaDocxJS(policies, dateStr, filename) {
+    const { Document, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, BorderStyle, AlignmentType, PageNumber, Footer, Header, HeadingLevel } = window.docx;
+
+    const children = [];
+
+    // 1. 公文大标题：2号 (22pt / size:44) 方正小标宋简体，居中加粗，单倍/1.3倍行距
+    children.push(new Paragraph({
+        alignment: AlignmentType.CENTER,
+        spacing: { before: 120, after: 200, line: 360, lineRule: "auto" },
+        children: [
+            new TextRun({
+                text: "医药健康产业集团政策监测信息简报",
+                font: { name: "Times New Roman", eastAsia: "方正小标宋简体" },
+                size: 44,
+                bold: true,
+                color: "000000"
+            })
+        ]
+    }));
+
+    // 2. 导语段落：小4号 (12pt / size:24) 方正仿宋简体，首行缩进 2 字符 (480 dxa)，1.5 倍行距
+    children.push(new Paragraph({
+        alignment: AlignmentType.JUSTIFIED,
+        indent: { firstLine: 480 },
+        spacing: { before: 0, after: 80, line: 360, lineRule: "auto" },
+        children: [
+            new TextRun({
+                text: `为及时研判行业监管动向与政策红利，现将截至${dateStr}本周最新发布的医药产业重点政策及文件摘要汇总如下：`,
+                font: { name: "Times New Roman", eastAsia: "方正仿宋简体" },
+                size: 24,
+                color: "000000"
+            })
+        ]
+    }));
+
+    // 3. 一级标题：一、本周重点政策速览清单（小4号 黑体 加粗 首行缩进 2 字符 1.5倍行距）
+    children.push(new Paragraph({
+        alignment: AlignmentType.JUSTIFIED,
+        indent: { firstLine: 480 },
+        spacing: { before: 140, after: 60, line: 360, lineRule: "auto" },
+        children: [
+            new TextRun({
+                text: "一、本周重点政策速览清单",
+                font: { name: "Times New Roman", eastAsia: "黑体" },
+                size: 24,
+                bold: true,
+                color: "000000"
+            })
+        ]
+    }));
+
+    // 4. 标准公文三线表（顶底线 1.5pt = sz:12，栏目线 0.75pt = sz:6，无竖线）
+    const tableRows = [];
+
+    // 4.1 表头 (小4号 黑体居中)
+    const headers = [
+        { text: "序号", width: 10, align: AlignmentType.CENTER },
+        { text: "政策文件名称", width: 52, align: AlignmentType.CENTER },
+        { text: "发布机关", width: 22, align: AlignmentType.CENTER },
+        { text: "发布日期", width: 16, align: AlignmentType.CENTER }
+    ];
+
+    tableRows.push(new TableRow({
+        tableHeader: true,
+        children: headers.map(h => new TableCell({
+            width: { size: h.width, type: WidthType.PERCENTAGE },
+            borders: {
+                top: { style: BorderStyle.SINGLE, size: 12, color: "000000" },
+                bottom: { style: BorderStyle.SINGLE, size: 6, color: "000000" },
+                left: { style: BorderStyle.NONE },
+                right: { style: BorderStyle.NONE }
+            },
+            margins: { top: 100, bottom: 100, left: 100, right: 100 },
+            children: [
+                new Paragraph({
+                    alignment: h.align,
+                    spacing: { line: 260, before: 0, after: 0 },
+                    children: [
+                        new TextRun({
+                            text: h.text,
+                            font: { name: "Times New Roman", eastAsia: "黑体" },
+                            size: 24,
+                            bold: true
+                        })
+                    ]
+                })
+            ]
+        }))
+    }));
+
+    // 4.2 数据行 (小4号 方正仿宋简体，最后一行底线 1.5pt，其余行无横线)
     policies.forEach((item, idx) => {
         const isLast = (idx === policies.length - 1);
-        tableRows += `
-            <tr style="height:28pt;">
+        const rowData = [
+            { text: String(idx + 1), align: AlignmentType.CENTER },
+            { text: item.title || '', align: AlignmentType.LEFT },
+            { text: item.source || '官方部门', align: AlignmentType.CENTER },
+            { text: item.pub_date || '近期', align: AlignmentType.CENTER }
+        ];
+
+        tableRows.push(new TableRow({
+            children: rowData.map((cellData, cIdx) => new TableCell({
+                width: { size: headers[cIdx].width, type: WidthType.PERCENTAGE },
+                borders: {
+                    top: { style: BorderStyle.NONE },
+                    bottom: isLast
+                        ? { style: BorderStyle.SINGLE, size: 12, color: "000000" }
+                        : { style: BorderStyle.NONE },
+                    left: { style: BorderStyle.NONE },
+                    right: { style: BorderStyle.NONE }
+                },
+                margins: { top: 90, bottom: 90, left: 100, right: 100 },
+                children: [
+                    new Paragraph({
+                        alignment: cellData.align,
+                        spacing: { line: 280, before: 0, after: 0 },
+                        children: [
+                            new TextRun({
+                                text: cellData.text,
+                                font: { name: "Times New Roman", eastAsia: "方正仿宋简体" },
+                                size: 24
+                            })
+                        ]
+                    })
+                ]
+            }))
+        }));
+    });
+
+    children.push(new Table({
+        alignment: AlignmentType.CENTER,
+        width: { size: 100, type: WidthType.PERCENTAGE },
+        rows: tableRows
+    }));
+
+    // 5. 一级标题：二、重点政策要点与文件摘要
+    children.push(new Paragraph({
+        alignment: AlignmentType.JUSTIFIED,
+        indent: { firstLine: 480 },
+        spacing: { before: 180, after: 60, line: 360, lineRule: "auto" },
+        children: [
+            new TextRun({
+                text: "二、本周重点政策要点与文件摘要",
+                font: { name: "Times New Roman", eastAsia: "黑体" },
+                size: 24,
+                bold: true,
+                color: "000000"
+            })
+        ]
+    }));
+
+    // 6. 政策要点逐条排版（紧凑清晰：标目标题 + 紧凑正文与链接）
+    policies.forEach((item, idx) => {
+        const title = item.title || '';
+        const dept = item.source || '官方部门';
+        const pubDate = item.pub_date || '近期';
+        const summary = item.summary || title;
+        const url = item.url || '';
+
+        // 6.1 标目标题（小4号 方正仿宋加粗，首行缩进 2 字符）
+        children.push(new Paragraph({
+            alignment: AlignmentType.JUSTIFIED,
+            indent: { firstLine: 480 },
+            spacing: { before: 100, after: 0, line: 360, lineRule: "auto" },
+            children: [
+                new TextRun({
+                    text: `${idx + 1}. 《${title}》（发布机关：${dept}，发布日期：${pubDate}）`,
+                    font: { name: "Times New Roman", eastAsia: "方正仿宋简体" },
+                    size: 24,
+                    bold: true
+                })
+            ]
+        }));
+
+        // 6.2 正文摘要与官方链接（小4号 方正仿宋简体，首行缩进 2 字符，1.5 倍行距）
+        const textRuns = [
+            new TextRun({
+                text: `文件主要内容与核心要点：${summary}`,
+                font: { name: "Times New Roman", eastAsia: "方正仿宋简体" },
+                size: 24
+            })
+        ];
+
+        if (url && url !== '#') {
+            textRuns.push(new TextRun({
+                text: `（官方原文直达：${url}）`,
+                font: { name: "Times New Roman", eastAsia: "方正仿宋简体" },
+                size: 24,
+                color: "004886",
+                underline: {}
+            }));
+        }
+
+        children.push(new Paragraph({
+            alignment: AlignmentType.JUSTIFIED,
+            indent: { firstLine: 480 },
+            spacing: { before: 0, after: 80, line: 360, lineRule: "auto" },
+            children: textRuns
+        }));
+    });
+
+    const doc = new Document({
+        sections: [{
+            properties: {
+                page: {
+                    size: { width: 11906, height: 16838 }, // A4: 210mm x 297mm in dxa
+                    margin: { top: 2098, bottom: 1984, left: 1587, right: 1474 } // 上37mm 下35mm 左28mm 右26mm
+                }
+            },
+            children: children
+        }]
+    });
+
+    const blob = await window.docx.Packer.toBlob(doc);
+    downloadBlobFile(blob, filename);
+}
+
+async function exportWeeklyReportViaDocxJS(reportText, docPeriod, docDate, filename) {
+    const { Document, Paragraph, TextRun, AlignmentType } = window.docx;
+
+    const children = [];
+
+    // 1. 公文大标题：2号 方正小标宋简体 居中加粗
+    children.push(new Paragraph({
+        alignment: AlignmentType.CENTER,
+        spacing: { before: 120, after: 60, line: 360, lineRule: "auto" },
+        children: [
+            new TextRun({
+                text: "四川省生物医药科技创新政策周报",
+                font: { name: "Times New Roman", eastAsia: "方正小标宋简体" },
+                size: 44,
+                bold: true
+            })
+        ]
+    }));
+
+    // 2. 副标题：小4号 楷体 居中
+    children.push(new Paragraph({
+        alignment: AlignmentType.CENTER,
+        spacing: { before: 0, after: 180, line: 360, lineRule: "auto" },
+        children: [
+            new TextRun({
+                text: `（${docPeriod} · ${docDate}）`,
+                font: { name: "Times New Roman", eastAsia: "楷体_GB2312" },
+                size: 24,
+                color: "333333"
+            })
+        ]
+    }));
+
+    // 3. 结构化公文正文解析
+    const lines = reportText.split('\n');
+
+    for (let rawLine of lines) {
+        let line = rawLine.trim();
+        if (!line) continue;
+
+        if (line.startsWith('# ') || line.startsWith('## 四川省') || line.startsWith('# 四川省')) {
+            // 已在顶部生成大标题，略过
+            continue;
+        } else if (line.startsWith('## ') || /^一、|二、|三、|四、|五、|六、/.test(line)) {
+            // 一级标题：小4号 黑体 加粗 首行缩进 2 字符
+            const cleanText = line.replace(/^##\s*/, '');
+            children.push(new Paragraph({
+                alignment: AlignmentType.JUSTIFIED,
+                indent: { firstLine: 480 },
+                spacing: { before: 140, after: 60, line: 360, lineRule: "auto" },
+                children: [
+                    new TextRun({
+                        text: cleanText,
+                        font: { name: "Times New Roman", eastAsia: "黑体" },
+                        size: 24,
+                        bold: true
+                    })
+                ]
+            }));
+        } else if (line.startsWith('### ') || /^（[一二三四五六七八九十]）/.test(line)) {
+            // 二/三级标题：小4号 方正仿宋加粗 首行缩进 2 字符
+            const cleanText = line.replace(/^###\s*/, '');
+            children.push(new Paragraph({
+                alignment: AlignmentType.JUSTIFIED,
+                indent: { firstLine: 480 },
+                spacing: { before: 90, after: 30, line: 360, lineRule: "auto" },
+                children: [
+                    new TextRun({
+                        text: cleanText,
+                        font: { name: "Times New Roman", eastAsia: "方正仿宋简体" },
+                        size: 24,
+                        bold: true
+                    })
+                ]
+            }));
+        } else {
+            // 正文段落或列表条目：小4号 方正仿宋简体 首行缩进 2 字符 1.5倍行距
+            let cleanText = line.replace(/^[\-\*]\s*/, '').replace(/\*\*(.*?)\*\*/g, '$1');
+            cleanText = cleanText.replace(/\[(.*?)\]\((.*?)\)/g, '$1 ($2)');
+
+            children.push(new Paragraph({
+                alignment: AlignmentType.JUSTIFIED,
+                indent: { firstLine: 480 },
+                spacing: { before: 0, after: 60, line: 360, lineRule: "auto" },
+                children: [
+                    new TextRun({
+                        text: cleanText,
+                        font: { name: "Times New Roman", eastAsia: "方正仿宋简体" },
+                        size: 24
+                    })
+                ]
+            }));
+        }
+    }
+
+    const doc = new Document({
+        sections: [{
+            properties: {
+                page: {
+                    size: { width: 11906, height: 16838 },
+                    margin: { top: 2098, bottom: 1984, left: 1587, right: 1474 }
+                }
+            },
+            children: children
+        }]
+    });
+
+    const blob = await window.docx.Packer.toBlob(doc);
+    downloadBlobFile(blob, filename);
+}
+
+// ----------------------------------------------------
+// 备用标准 WordprocessingML XML 引擎
+// ----------------------------------------------------
+
+function exportPoliciesViaWordXML(policies, dateStr, filename) {
+    let tableRowsHtml = '';
+    policies.forEach((item, idx) => {
+        const isLast = (idx === policies.length - 1);
+        tableRowsHtml += `
+            <tr style="mso-yfti-irow:${idx}; ${isLast ? 'mso-yfti-lastrow:yes;' : ''}">
                 <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:center; font-family:'Times New Roman','方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt;">${idx + 1}</td>
-                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:left; font-family:'Times New Roman','方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt; line-height:20pt;">${item.title || ''}</td>
+                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:left; font-family:'Times New Roman','方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt;">${item.title || ''}</td>
                 <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:center; font-family:'Times New Roman','方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt;">${item.source || '官方部门'}</td>
                 <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:center; font-family:'Times New Roman','方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt;">${item.pub_date || '近期'}</td>
             </tr>
@@ -932,23 +1315,19 @@ function handleExportWord() {
         const dept = item.source || '官方部门';
         const pubDate = item.pub_date || '近期';
         const summary = item.summary || title;
-        const url = item.url || '#';
+        const url = item.url || '';
 
-        // 遵循三级标题规范：小4号 方正仿宋加粗 + 方正仿宋正文（英文与数值 Times New Roman），单倍行距，首行缩进 2 字符
         detailsHtml += `
-            <p style="margin:6pt 0 2pt 0; text-indent:2em; font-family:'Times New Roman','方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt; font-weight:bold; line-height:1.5; color:#000000;">
-                ${idx + 1}. 《${title}》。
+            <p style="margin:8pt 0 0 0; text-indent:2em; font-family:'Times New Roman','方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt; font-weight:bold; line-height:1.5; color:#000000;">
+                ${idx + 1}. 《${title}》（发布机关：${dept}，发布日期：${pubDate}）
             </p>
-            <p style="margin:0 0 2pt 0; text-indent:2em; font-family:'Times New Roman','方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt; line-height:1.5; color:#000000; text-align:justify;">
-                该文件由 <strong>${dept}</strong> 于 ${pubDate} 公开发布。<strong>文件摘要与核心要点：</strong>${summary}
-            </p>
-            <p style="margin:0 0 8pt 0; text-indent:2em; font-family:'Times New Roman','方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt; line-height:1.5;">
-                官方原文直达链接：<a href="${url}" target="_blank" style="color:#004886; text-decoration:underline; font-family:'Times New Roman','方正仿宋简体',serif;">${url}</a>
+            <p style="margin:0 0 6pt 0; text-indent:2em; font-family:'Times New Roman','方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt; line-height:1.5; color:#000000; text-align:justify;">
+                文件主要内容与核心要点：${summary}${url && url !== '#' ? ` <span style="color:#004886; text-decoration:underline;">（官方原文直达：${url}）</span>` : ''}
             </p>
         `;
     });
 
-    const wordHtml = `
+    const wordDocHtml = `
         <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
         <head>
             <meta charset='utf-8'>
@@ -968,7 +1347,6 @@ function handleExportWord() {
                     margin: 37mm 26mm 35mm 28mm;
                     mso-header-margin: 35.4pt;
                     mso-footer-margin: 35.4pt;
-                    mso-paper-source: 0;
                 }
                 div.Section1 { page: Section1; }
                 body {
@@ -1015,11 +1393,8 @@ function handleExportWord() {
         <body>
             <div class="Section1">
                 <h1 class="doc-title">医药健康产业集团政策监测信息简报</h1>
-                
                 <p class="lead">为及时研判行业监管动向与政策红利，现将截至 ${dateStr} 本周最新发布的医药产业重点政策及文件摘要汇总如下：</p>
-                
                 <h2 class="h1-title">一、本周重点政策速览清单</h2>
-                
                 <table class="three-line-table">
                     <thead>
                         <tr style="height:26pt;">
@@ -1030,83 +1405,42 @@ function handleExportWord() {
                         </tr>
                     </thead>
                     <tbody>
-                        ${tableRows}
+                        ${tableRowsHtml}
                     </tbody>
                 </table>
-                
                 <h2 class="h1-title">二、本周重点政策要点与文件摘要</h2>
-                
                 ${detailsHtml}
             </div>
         </body>
         </html>
     `;
 
-    // 生成二进制 Blob 并触发浏览器标准保存对话框
-    const blob = new Blob(['\ufeff', wordHtml], { type: 'application/msword;charset=utf-8' });
-    const downloadUrl = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = downloadUrl;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(downloadUrl);
-
-    showToast(`✅ 已弹出保存对话框，正在下载公文简报：${filename}`);
+    const blob = new Blob(['\ufeff', wordDocHtml], { type: 'application/msword;charset=utf-8' });
+    downloadBlobFile(blob, filename.replace('.docx', '.doc'));
 }
 
-// 导出四川省生物医药周报 Word 文档（GB/T 9704-2012 国家标准·1.5倍行距·小4号字·无主送机关）
-function handleExportWeeklyWord() {
-    const timeAnchor = getCurrentTimeAnchor();
-    let reportText = state.latestWeeklyReport;
-    
-    // 如果尚未在本次会话生成周报，使用最新内置的周回顾内参
-    if (!reportText) {
-        reportText = getMockAnalysis('周回顾');
-    }
-
-    const docDate = timeAnchor.fullDateStr;
-    const docPeriod = timeAnchor.periodStr;
-    const dateTag = `${timeAnchor.year}${String(timeAnchor.month).padStart(2, '0')}${String(timeAnchor.date).padStart(2, '0')}`;
-    const filename = `四川省生物医药科技创新政策周报_${dateTag}.doc`;
-
-    // 将 Markdown 转换为符合公文排版规范的 HTML 段落
+function exportWeeklyReportViaWordXML(reportText, docPeriod, docDate, filename) {
     const lines = reportText.split('\n');
     let bodyHtml = '';
 
     for (let rawLine of lines) {
         let line = rawLine.trim();
-        if (!line) continue;
+        if (!line || line.startsWith('# ') || line.startsWith('## 四川省') || line.startsWith('# 四川省')) continue;
 
-        if (line.startsWith('# ')) {
-            const subTitle = line.replace(/^#\s*/, '');
-            if (!subTitle.includes('四川省生物医药')) {
-                bodyHtml += `<p class="body-lead">${subTitle}</p>`;
-            }
-        } else if (line.startsWith('## ')) {
-            // 一级标题：小4号 黑体 加粗 1.5倍行距 首行缩进2字符
+        if (line.startsWith('## ') || /^一、|二、|三、|四、|五、|六、/.test(line)) {
             const h1Text = line.replace(/^##\s*/, '');
             bodyHtml += `<h2 class="h1-title">${h1Text}</h2>`;
-        } else if (line.startsWith('### ')) {
-            // 三级标题：小4号 方正仿宋 加粗 1.5倍行距 首行缩进2字符
+        } else if (line.startsWith('### ') || /^（[一二三四五六七八九十]）/.test(line)) {
             const h3Text = line.replace(/^###\s*/, '');
             bodyHtml += `<p class="h3-title">${h3Text}</p>`;
-        } else if (line.startsWith('- ') || line.startsWith('* ') || /^\d+\.\s/.test(line)) {
-            // 列表项：小4号 方正仿宋 1.5倍行距 首行缩进2字符
-            let itemText = line.replace(/^[\-\*]\s*/, '').replace(/^\d+\.\s*/, (match) => match);
-            itemText = itemText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            itemText = itemText.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" class="doc-link">$1</a>');
-            bodyHtml += `<p class="body-list">${itemText}</p>`;
         } else {
-            // 正文段落：小4号 方正仿宋 1.5倍行距 首行缩进2字符
-            let paraText = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            paraText = paraText.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" class="doc-link">$1</a>');
+            let paraText = line.replace(/^[\-\*]\s*/, '').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            paraText = paraText.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" style="color:#004886;text-decoration:underline;">$1</a>');
             bodyHtml += `<p class="body-para">${paraText}</p>`;
         }
     }
 
-    const wordHtml = `
+    const wordDocHtml = `
         <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
         <head>
             <meta charset='utf-8'>
@@ -1124,9 +1458,6 @@ function handleExportWeeklyWord() {
                 @page Section1 {
                     size: 210mm 297mm;
                     margin: 37mm 26mm 35mm 28mm;
-                    mso-header-margin: 35.4pt;
-                    mso-footer-margin: 35.4pt;
-                    mso-paper-source: 0;
                 }
                 div.Section1 { page: Section1; }
                 body {
@@ -1153,14 +1484,6 @@ function handleExportWeeklyWord() {
                     margin-bottom: 14pt;
                     color: #333333;
                 }
-                p.body-lead {
-                    font-family: 'Times New Roman', '方正仿宋简体', '仿宋_GB2312', '仿宋', serif;
-                    font-size: 12pt;
-                    text-indent: 2em;
-                    margin: 0 0 6pt 0;
-                    line-height: 1.5;
-                    text-align: justify;
-                }
                 h2.h1-title {
                     font-family: 'Times New Roman', '黑体', 'SimHei', sans-serif;
                     font-size: 12pt;
@@ -1186,19 +1509,6 @@ function handleExportWeeklyWord() {
                     line-height: 1.5;
                     text-align: justify;
                 }
-                p.body-list {
-                    font-family: 'Times New Roman', '方正仿宋简体', '仿宋_GB2312', '仿宋', serif;
-                    font-size: 12pt;
-                    text-indent: 2em;
-                    margin: 0 0 2pt 0;
-                    line-height: 1.5;
-                }
-                a.doc-link {
-                    color: #004886;
-                    text-decoration: underline;
-                    font-family: 'Times New Roman', '方正仿宋简体', serif;
-                    font-size: 12pt;
-                }
             </style>
         </head>
         <body>
@@ -1211,7 +1521,11 @@ function handleExportWeeklyWord() {
         </html>
     `;
 
-    const blob = new Blob(['\ufeff', wordHtml], { type: 'application/msword;charset=utf-8' });
+    const blob = new Blob(['\ufeff', wordDocHtml], { type: 'application/msword;charset=utf-8' });
+    downloadBlobFile(blob, filename.replace('.docx', '.doc'));
+}
+
+function downloadBlobFile(blob, filename) {
     const downloadUrl = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = downloadUrl;
@@ -1220,8 +1534,6 @@ function handleExportWeeklyWord() {
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(downloadUrl);
-
-    showToast(`✅ 已成功导出周报 Word：${filename}`);
 }
 
 window.handleExportWeeklyWord = handleExportWeeklyWord;

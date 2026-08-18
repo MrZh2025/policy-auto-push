@@ -288,35 +288,34 @@ class PolicyDocExporter:
         r_h2 = p_h2.add_run("二、本周重点政策要点与文件摘要")
         set_run_font(r_h2, font_type='h1', size_pt=FONT_SIZES['小4号'])
 
-        # 7. 政策要点逐条排版（遵循三级标题规范：小4号 方正仿宋加粗 + 方正仿宋正文，1.5 倍行距，首行缩进 2 字符）
+        # 7. 政策要点逐条排版（遵循规范层级：小4号 标目标题 + 紧凑要点正文，1.5 倍行距，首行缩进 2 字符）
         for idx, item in enumerate(policies, 1):
-            # 三级标题：1. 《政策标题》。（方正仿宋加粗 小4号）
-            p_item = doc.add_paragraph()
-            set_para_spacing(p_item, line_spacing_rule=WD_LINE_SPACING.ONE_POINT_FIVE, space_before_pt=Pt(4), space_after_pt=Pt(1), first_line_indent_pt=Pt(24), align=WD_ALIGN_PARAGRAPH.JUSTIFY)
-            
-            title_text = f"{idx}. 《{item.get('title')}》。"
-            r_ititle = p_item.add_run(title_text)
-            set_run_font(r_ititle, font_type='h3', size_pt=FONT_SIZES['小4号'], bold=True)
-
-            # 内容与要点（方正仿宋简体 小4号，首行缩进 2 字符，1.5 倍行距）
-            summary = item.get("summary", "") or item.get("title")
+            title = item.get('title', '')
             dept = item.get("source", "国家部委")
             date_str = item.get("pub_date", "") or "近期"
-            
+            summary = item.get("summary", "") or title
+            url = item.get("url", "")
+
+            # 条目标题段落（小4号 方正仿宋加粗，首行缩进 2 字符，1.5 倍行距）
+            p_item = doc.add_paragraph()
+            set_para_spacing(p_item, line_spacing_rule=WD_LINE_SPACING.ONE_POINT_FIVE, space_before_pt=Pt(4), space_after_pt=Pt(0), first_line_indent_pt=Pt(24), align=WD_ALIGN_PARAGRAPH.JUSTIFY)
+            r_ititle = p_item.add_run(f"{idx}. 《{title}》（发布机关：{dept}，发布日期：{date_str}）")
+            set_run_font(r_ititle, font_type='h3', size_pt=FONT_SIZES['小4号'], bold=True)
+
+            # 内容与要点正文（小4号 方正仿宋简体，首行缩进 2 字符，1.5 倍行距，附带官方链接）
             p_desc = doc.add_paragraph()
-            set_para_spacing(p_desc, line_spacing_rule=WD_LINE_SPACING.ONE_POINT_FIVE, space_before_pt=Pt(0), space_after_pt=Pt(1), first_line_indent_pt=Pt(24), align=WD_ALIGN_PARAGRAPH.JUSTIFY)
-            r_desc = p_desc.add_run(f"该文件由{dept}于{date_str}公开发布。文件摘要与核心要点：{summary}")
+            set_para_spacing(p_desc, line_spacing_rule=WD_LINE_SPACING.ONE_POINT_FIVE, space_before_pt=Pt(0), space_after_pt=Pt(3), first_line_indent_pt=Pt(24), align=WD_ALIGN_PARAGRAPH.JUSTIFY)
+            r_desc = p_desc.add_run(f"文件主要内容与核心要点：{summary}")
             set_run_font(r_desc, font_type='body', size_pt=FONT_SIZES['小4号'])
 
-            # 官方原文链接（方正仿宋 小4号 / 蓝色下划线）
-            url = item.get("url", "#")
-            p_url = doc.add_paragraph()
-            set_para_spacing(p_url, line_spacing_rule=WD_LINE_SPACING.ONE_POINT_FIVE, space_before_pt=Pt(0), space_after_pt=Pt(4), first_line_indent_pt=Pt(24), align=WD_ALIGN_PARAGRAPH.JUSTIFY)
-            r_ulabel = p_url.add_run("官方原文直达链接：")
-            set_run_font(r_ulabel, font_type='body', size_pt=FONT_SIZES['小4号'])
-            r_u = p_url.add_run(url)
-            set_run_font(r_u, font_type='body', size_pt=FONT_SIZES['小4号'], color_rgb=(0, 72, 134))
-            r_u.font.underline = True
+            if url and url != '#':
+                r_link_label = p_desc.add_run("（官方原文直达：")
+                set_run_font(r_link_label, font_type='body', size_pt=FONT_SIZES['小4号'])
+                r_link = p_desc.add_run(url)
+                set_run_font(r_link, font_type='body', size_pt=FONT_SIZES['小4号'], color_rgb=(0, 72, 134))
+                r_link.font.underline = True
+                r_link_close = p_desc.add_run("）")
+                set_run_font(r_link_close, font_type='body', size_pt=FONT_SIZES['小4号'])
 
         # 8. 奇偶页不同两侧页码（单页居右空一字，双页居左空一字，格式为 — 1 —）
         add_side_page_number(doc)
