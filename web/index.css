@@ -1573,6 +1573,44 @@ body {
     }
 }
 
+/* 官方公文三线表样式 (国家标准 GB/T 9704-2012) */
+.dialog-card table.three-line-table,
+.three-line-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 14px 0;
+    font-size: 13px;
+    line-height: 1.5;
+    background: transparent;
+}
+.dialog-card table.three-line-table th,
+.three-line-table th {
+    border-top: 2px solid var(--text-title);
+    border-bottom: 1px solid var(--text-title);
+    border-left: none;
+    border-right: none;
+    padding: 8px 10px;
+    font-weight: 700;
+    text-align: center;
+    color: var(--text-title);
+    background: var(--bg-inset);
+    letter-spacing: 0.3px;
+}
+.dialog-card table.three-line-table td,
+.three-line-table td {
+    border: none;
+    padding: 7px 10px;
+    color: var(--text-body);
+    vertical-align: middle;
+}
+.dialog-card table.three-line-table tr:last-child td,
+.three-line-table tr:last-child td {
+    border-bottom: 2px solid var(--text-title);
+}
+.dialog-card table.three-line-table tr:hover td {
+    background: var(--hover-bg);
+}
+
 /* 超小屏手机 (<= 380px) */
 @media (max-width: 380px) {
     .nmpa-title-box .main-title {

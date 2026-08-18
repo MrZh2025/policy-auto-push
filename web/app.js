@@ -35,7 +35,12 @@ const state = {
 };
 
 // 预设专属 Prompt
-const SICHUAN_WEEKLY_PROMPT = `周回顾四川省发布的生物医药相关科技创新奖励、补助、资助、扶持政策，重点关注四川省及省级部门、成都市等省内重点城市的官方政策发布、申报通知、资金奖补办法、科技创新平台/项目/企业支持政策。请检索并核验最近一周及仍在有效申报期内的新政策或重要更新，优先引用官方来源；如无新增，也请说明核查范围和未发现新增的依据。起草一则详细状态更新，内容包括：1. 本周要点摘要；2. 新增或更新政策清单，含发布单位、发布日期、适用对象、奖补/资助金额或支持方式、申报期限、官方链接；3. 对生物医药企业/科研机构/园区的影响和机会判断；4. 建议下一步行动；5. 需继续跟踪的不确定事项。输出为中文。`;
+const SICHUAN_WEEKLY_PROMPT = `周回顾四川省发布的生物医药相关科技创新奖励、补助、资助、扶持政策，重点关注四川省及省级部门、成都市等省内重点城市的官方政策发布、申报通知、资金奖补办法、科技创新平台/项目/企业支持政策。请检索并核验最近一周及仍在有效申报期内的新政策或重要更新，优先引用官方来源；如无新增，也请说明核查范围和未发现新增的依据。起草一则详细状态更新，内容必须包含：
+1. 本周要点摘要；
+2. 新增或在期政策清单（请务必输出为 Markdown 表格，包含表头：| 序号 | 政策文件名称 | 发布单位 | 重点支持方式 / 奖补金额 | 申报期限 |，以便系统自动编译生成标准公文三线表）；
+3. 对生物医药企业/科研机构/园区的影响和机会判断；
+4. 建议下一步行动；
+5. 需继续跟踪的不确定事项。输出为中文。`;
 
 // DOM 元素引用
 const el = {
@@ -778,19 +783,11 @@ function getMockAnalysis(prompt) {
 3. **重大科技专项窗口开启**：四川省科技厅启动新一轮重大新药创制专项评审，重点倾斜已进入 II/III 期临床的新药品种。
 
 ### 二、 新增与在期政策清单
-1. **《四川省支持核医疗产业高质量发展若干政策申报指南》**
-   - **发布单位**：四川省发展和改革委员会、经济和信息化厅
-   - **适用对象**：从事医用核素分离纯化、放药研发制造及核医学诊疗示范企事业单位
-   - **支持方式**：按实际固定资产与研发投入 30% 给予资助，最高 2000 万元
-   - **申报期限**：截至 2026年9月15日
-   - **官方链接**：[四川省发展改革委官网](https://fgw.sc.gov.cn/)
-
-2. **《成都市促进生物医药产业建圈强链若干政策实施细则（申报通知）》**
-   - **发布单位**：成都市经济和信息化局、新经济委
-   - **适用对象**：AI制药研发平台、手术机器人研发企业、CDMO中试基地
-   - **支持方式**：关键研发设备购置补贴 20%，最高 500 万元；算力券定向支持
-   - **申报期限**：常态化申报，本批次截至 2026年8月30日
-   - **官方链接**：[成都市经济和信息化局官网](https://cdjx.chengdu.gov.cn/)
+| 序号 | 政策文件名称 | 发布单位 | 重点支持方式 / 奖补金额 | 申报期限 |
+| :---: | :--- | :---: | :--- | :---: |
+| 1 | 《四川省支持核医疗产业高质量发展若干政策申报指南》 | 省发改委、经信厅 | 按固定资产与研发投入30%资助，最高2000万元 | 截至 2026-09-15 |
+| 2 | 《成都市促进生物医药产业建圈强链若干政策实施细则》 | 成都市经信局 | 关键研发设备购置补贴20%（最高500万）+算力券 | 截至 2026-08-30 |
+| 3 | 《四川省2026年度重大新药创制科技专项申报指南》 | 四川省科技厅 | 临床I/II/III期阶梯式资助，最高1500万元 | 截至 2026-09-10 |
 
 ### 三、 对企业/科研机构/园区的影响和机会判断
 - **对研发企业**：直接冲抵临床前大分子筛选与放药早期验证资金压力，缩短产品上市周期；
@@ -854,16 +851,73 @@ function updateMessage(msgId, text, isWeeklyReport = false) {
 
 function parseMarkdownSimple(md) {
     if (!md) return '';
-    let html = md;
-    html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
-    html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
-    html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
-    html = html.replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>');
-    html = html.replace(/^\- (.*$)/gim, '<li>$1</li>');
-    html = html.replace(/\[(.*?)\]\((.*?)\)/gim, '<a href="$2" target="_blank" style="color:var(--nmpa-blue-main);text-decoration:underline;">$1</a>');
-    html = html.replace(/\n\n/gim, '<br><br>');
-    html = html.replace(/\n/gim, '<br>');
-    return html;
+    const lines = md.split('\n');
+    let outHtml = '';
+    let inTable = false;
+    let tableHeaders = [];
+    let tableRows = [];
+
+    function flushTable() {
+        if (!inTable) return;
+        if (tableHeaders.length > 0 || tableRows.length > 0) {
+            let ths = tableHeaders.map(h => `<th>${h}</th>`).join('');
+            let trs = tableRows.map(row => `<tr>${row.map(c => `<td>${c}</td>`).join('')}</tr>`).join('');
+            outHtml += `
+                <table class="three-line-table">
+                    ${tableHeaders.length > 0 ? `<thead><tr>${ths}</tr></thead>` : ''}
+                    <tbody>${trs}</tbody>
+                </table>
+            `;
+        }
+        inTable = false;
+        tableHeaders = [];
+        tableRows = [];
+    }
+
+    for (let i = 0; i < lines.length; i++) {
+        let line = lines[i].trim();
+
+        // 识别 Markdown 表格行
+        if (line.startsWith('|') && line.endsWith('|')) {
+            const cells = line.split('|').slice(1, -1).map(c => c.trim().replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'));
+            // 判断是否是分割线
+            if (cells.every(c => /^:?-+:?$/.test(c))) {
+                continue;
+            }
+            if (!inTable) {
+                inTable = true;
+                tableHeaders = cells;
+            } else {
+                tableRows.push(cells);
+            }
+            continue;
+        } else {
+            flushTable();
+        }
+
+        if (!line) {
+            outHtml += '<br>';
+            continue;
+        }
+
+        if (line.startsWith('### ')) {
+            outHtml += `<h3>${line.replace(/^###\s*/, '')}</h3>`;
+        } else if (line.startsWith('## ')) {
+            outHtml += `<h2>${line.replace(/^##\s*/, '')}</h2>`;
+        } else if (line.startsWith('# ')) {
+            outHtml += `<h1>${line.replace(/^#\s*/, '')}</h1>`;
+        } else if (line.startsWith('- ') || line.startsWith('* ')) {
+            let item = line.replace(/^[\-\*]\s*/, '').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            item = item.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" style="color:var(--nmpa-blue-main);text-decoration:underline;">$1</a>');
+            outHtml += `<li>${item}</li>`;
+        } else {
+            let para = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            para = para.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" style="color:var(--nmpa-blue-main);text-decoration:underline;">$1</a>');
+            outHtml += `<p style="margin:4px 0;">${para}</p>`;
+        }
+    }
+    flushTable();
+    return outHtml;
 }
 
 async function handleScrapeNow() {
@@ -1185,7 +1239,7 @@ async function exportPoliciesViaDocxJS(policies, dateStr, filename) {
 }
 
 async function exportWeeklyReportViaDocxJS(reportText, docPeriod, docDate, filename) {
-    const { Document, Paragraph, TextRun, AlignmentType } = window.docx;
+    const { Document, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, BorderStyle, AlignmentType } = window.docx;
 
     const children = [];
 
@@ -1217,18 +1271,133 @@ async function exportWeeklyReportViaDocxJS(reportText, docPeriod, docDate, filen
         ]
     }));
 
-    // 3. 结构化公文正文解析
+    // 3. 逐行解析正文与三线表格
     const lines = reportText.split('\n');
+    let i = 0;
 
-    for (let rawLine of lines) {
+    while (i < lines.length) {
+        let rawLine = lines[i];
         let line = rawLine.trim();
-        if (!line) continue;
 
-        if (line.startsWith('# ') || line.startsWith('## 四川省') || line.startsWith('# 四川省')) {
-            // 已在顶部生成大标题，略过
+        if (!line) {
+            i++;
             continue;
-        } else if (line.startsWith('## ') || /^一、|二、|三、|四、|五、|六、/.test(line)) {
-            // 一级标题：小4号 黑体 加粗 首行缩进 2 字符
+        }
+
+        // 3.1 识别 Markdown 表格块并转为标准的 Word 原生政务三线表
+        if (line.startsWith('|') && line.endsWith('|')) {
+            const tableLines = [];
+            while (i < lines.length && lines[i].trim().startsWith('|') && lines[i].trim().endsWith('|')) {
+                tableLines.push(lines[i].trim());
+                i++;
+            }
+
+            let headerCells = [];
+            let dataRows = [];
+
+            tableLines.forEach((tLine) => {
+                const cells = tLine.split('|').slice(1, -1).map(c => c.trim().replace(/\*\*(.*?)\*\*/g, '$1'));
+                // 忽略分割行
+                if (cells.every(c => /^:?-+:?$/.test(c))) {
+                    return;
+                }
+                if (headerCells.length === 0) {
+                    headerCells = cells;
+                } else {
+                    dataRows.push(cells);
+                }
+            });
+
+            if (headerCells.length > 0) {
+                const docxTableRows = [];
+                const colCount = headerCells.length;
+                let colWidths = [];
+                if (colCount === 5) {
+                    colWidths = [10, 38, 20, 20, 12];
+                } else if (colCount === 4) {
+                    colWidths = [10, 48, 24, 18];
+                } else {
+                    colWidths = Array(colCount).fill(Math.floor(100 / colCount));
+                }
+
+                // 表头行（小4号 黑体 加粗 居中，顶线 1.5pt = sz:12，栏目线 0.75pt = sz:6，无竖线）
+                docxTableRows.push(new TableRow({
+                    tableHeader: true,
+                    children: headerCells.map((hText, cIdx) => new TableCell({
+                        width: { size: colWidths[cIdx] || 20, type: WidthType.PERCENTAGE },
+                        borders: {
+                            top: { style: BorderStyle.SINGLE, size: 12, color: "000000" },
+                            bottom: { style: BorderStyle.SINGLE, size: 6, color: "000000" },
+                            left: { style: BorderStyle.NONE },
+                            right: { style: BorderStyle.NONE }
+                        },
+                        margins: { top: 100, bottom: 100, left: 100, right: 100 },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                spacing: { line: 260, before: 0, after: 0 },
+                                children: [
+                                    new TextRun({
+                                        text: hText,
+                                        font: { name: "Times New Roman", eastAsia: "黑体" },
+                                        size: 24,
+                                        bold: true
+                                    })
+                                ]
+                            })
+                        ]
+                    }))
+                }));
+
+                // 数据行（小4号 方正仿宋简体，最后一行底线 1.5pt，无竖线）
+                dataRows.forEach((rowCells, rIdx) => {
+                    const isLastRow = (rIdx === dataRows.length - 1);
+                    docxTableRows.push(new TableRow({
+                        children: rowCells.map((cellText, cIdx) => new TableCell({
+                            width: { size: colWidths[cIdx] || 20, type: WidthType.PERCENTAGE },
+                            borders: {
+                                top: { style: BorderStyle.NONE },
+                                bottom: isLastRow
+                                    ? { style: BorderStyle.SINGLE, size: 12, color: "000000" }
+                                    : { style: BorderStyle.NONE },
+                                left: { style: BorderStyle.NONE },
+                                right: { style: BorderStyle.NONE }
+                            },
+                            margins: { top: 80, bottom: 80, left: 100, right: 100 },
+                            children: [
+                                new Paragraph({
+                                    alignment: (cIdx === 0 || cIdx === colCount - 1 || cIdx === 2) ? AlignmentType.CENTER : AlignmentType.LEFT,
+                                    spacing: { line: 280, before: 0, after: 0 },
+                                    children: [
+                                        new TextRun({
+                                            text: cellText,
+                                            font: { name: "Times New Roman", eastAsia: "方正仿宋简体" },
+                                            size: 24
+                                        })
+                                    ]
+                                })
+                            ]
+                        }))
+                    }));
+                });
+
+                children.push(new Table({
+                    alignment: AlignmentType.CENTER,
+                    width: { size: 100, type: WidthType.PERCENTAGE },
+                    rows: docxTableRows
+                }));
+            }
+            continue;
+        }
+
+        // 3.2 略过重复大标题
+        if (line.startsWith('# ') || line.startsWith('## 四川省') || line.startsWith('# 四川省')) {
+            i++;
+            continue;
+        }
+
+        // 3.3 识别一级公文标题（一、二、三...）
+        if (line.startsWith('## ') || /^一、|二、|三、|四、|五、|六、/.test(line)) {
             const cleanText = line.replace(/^##\s*/, '');
             children.push(new Paragraph({
                 alignment: AlignmentType.JUSTIFIED,
@@ -1243,8 +1412,12 @@ async function exportWeeklyReportViaDocxJS(reportText, docPeriod, docDate, filen
                     })
                 ]
             }));
-        } else if (line.startsWith('### ') || /^（[一二三四五六七八九十]）/.test(line)) {
-            // 二/三级标题：小4号 方正仿宋加粗 首行缩进 2 字符
+            i++;
+            continue;
+        }
+
+        // 3.4 识别二/三级标题（### 或（一））
+        if (line.startsWith('### ') || /^（[一二三四五六七八九十]）/.test(line)) {
             const cleanText = line.replace(/^###\s*/, '');
             children.push(new Paragraph({
                 alignment: AlignmentType.JUSTIFIED,
@@ -1259,24 +1432,27 @@ async function exportWeeklyReportViaDocxJS(reportText, docPeriod, docDate, filen
                     })
                 ]
             }));
-        } else {
-            // 正文段落或列表条目：小4号 方正仿宋简体 首行缩进 2 字符 1.5倍行距
-            let cleanText = line.replace(/^[\-\*]\s*/, '').replace(/\*\*(.*?)\*\*/g, '$1');
-            cleanText = cleanText.replace(/\[(.*?)\]\((.*?)\)/g, '$1 ($2)');
-
-            children.push(new Paragraph({
-                alignment: AlignmentType.JUSTIFIED,
-                indent: { firstLine: 480 },
-                spacing: { before: 0, after: 60, line: 360, lineRule: "auto" },
-                children: [
-                    new TextRun({
-                        text: cleanText,
-                        font: { name: "Times New Roman", eastAsia: "方正仿宋简体" },
-                        size: 24
-                    })
-                ]
-            }));
+            i++;
+            continue;
         }
+
+        // 3.5 普通正文或列表项
+        let cleanText = line.replace(/^[\-\*]\s*/, '').replace(/\*\*(.*?)\*\*/g, '$1');
+        cleanText = cleanText.replace(/\[(.*?)\]\((.*?)\)/g, '$1 ($2)');
+
+        children.push(new Paragraph({
+            alignment: AlignmentType.JUSTIFIED,
+            indent: { firstLine: 480 },
+            spacing: { before: 0, after: 60, line: 360, lineRule: "auto" },
+            children: [
+                new TextRun({
+                    text: cleanText,
+                    font: { name: "Times New Roman", eastAsia: "方正仿宋简体" },
+                    size: 24
+                })
+            ]
+        }));
+        i++;
     }
 
     const doc = new Document({
@@ -1335,7 +1511,7 @@ function exportPoliciesViaWordXML(policies, dateStr, filename) {
         <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
         <head>
             <meta charset='utf-8'>
-            <title>医药健康产业集团政策监测信息简报</title>
+            <title>四川生物医药产业集团创新事业部政策信息简报</title>
             <!--[if gte mso 9]>
             <xml>
                 <w:WordDocument>
@@ -1426,10 +1602,51 @@ function exportPoliciesViaWordXML(policies, dateStr, filename) {
 function exportWeeklyReportViaWordXML(reportText, docPeriod, docDate, filename) {
     const lines = reportText.split('\n');
     let bodyHtml = '';
+    let i = 0;
 
-    for (let rawLine of lines) {
-        let line = rawLine.trim();
-        if (!line || line.startsWith('# ') || line.startsWith('## 四川省') || line.startsWith('# 四川省')) continue;
+    while (i < lines.length) {
+        let line = lines[i].trim();
+        if (!line || line.startsWith('# ') || line.startsWith('## 四川省') || line.startsWith('# 四川省')) {
+            i++;
+            continue;
+        }
+
+        // 识别并转换为标准三线表
+        if (line.startsWith('|') && line.endsWith('|')) {
+            let tableHtml = '<table class="three-line-table"><thead><tr style="height:26pt;">';
+            let isHeader = true;
+            let headerCount = 0;
+
+            while (i < lines.length && lines[i].trim().startsWith('|') && lines[i].trim().endsWith('|')) {
+                const cells = lines[i].trim().split('|').slice(1, -1).map(c => c.trim().replace(/\*\*(.*?)\*\*/g, '$1'));
+                if (cells.every(c => /^:?-+:?$/.test(c))) {
+                    isHeader = false;
+                    i++;
+                    continue;
+                }
+                if (isHeader) {
+                    headerCount = cells.length;
+                    cells.forEach(c => {
+                        tableHtml += `<th style="border-top:1.5pt solid black; border-bottom:0.75pt solid black; padding:4pt; text-align:center; font-family:'Times New Roman','黑体','SimHei',sans-serif; font-size:12pt;">${c}</th>`;
+                    });
+                    tableHtml += '</tr></thead><tbody>';
+                    isHeader = false;
+                } else {
+                    tableHtml += '<tr style="height:24pt;">';
+                    cells.forEach((c, cIdx) => {
+                        const align = (cIdx === 0 || cIdx === headerCount - 1 || cIdx === 2) ? 'center' : 'left';
+                        tableHtml += `<td style="border:none; padding:4pt 6pt; text-align:${align}; font-family:'Times New Roman','方正仿宋简体','仿宋',serif; font-size:12pt;">${c}</td>`;
+                    });
+                    tableHtml += '</tr>';
+                }
+                i++;
+            }
+            tableHtml += '</tbody></table>';
+            // 最后一行的底边线
+            tableHtml = tableHtml.replace(/<tr style="height:24pt;">(?![\s\S]*<tr style="height:24pt;">)/, '<tr style="height:24pt; border-bottom:1.5pt solid black;">');
+            bodyHtml += tableHtml;
+            continue;
+        }
 
         if (line.startsWith('## ') || /^一、|二、|三、|四、|五、|六、/.test(line)) {
             const h1Text = line.replace(/^##\s*/, '');
@@ -1442,6 +1659,7 @@ function exportWeeklyReportViaWordXML(reportText, docPeriod, docDate, filename) 
             paraText = paraText.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" style="color:#004886;text-decoration:underline;">$1</a>');
             bodyHtml += `<p class="body-para">${paraText}</p>`;
         }
+        i++;
     }
 
     const wordDocHtml = `
@@ -1512,6 +1730,11 @@ function exportWeeklyReportViaWordXML(reportText, docPeriod, docDate, filename) 
                     margin: 0 0 4pt 0;
                     line-height: 1.5;
                     text-align: justify;
+                }
+                table.three-line-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin: 8pt 0 12pt 0;
                 }
             </style>
         </head>
