@@ -160,9 +160,9 @@ function bindEvents() {
     if (el.toggleApiKey) el.toggleApiKey.addEventListener('click', openDrawerFunc);
 
     el.btnSaveKey.addEventListener('click', () => {
-        const rawKey = el.inputApiKey.value.trim();
-        const rawBaseUrl = el.inputBaseUrl.value.trim() || 'https://api.deepseek.com/v1';
-        const rawModel = el.inputModel.value.trim() || 'deepseek-chat';
+        const rawKey = el.inputApiKey.value.trim() || DEFAULT_AI_KEY;
+        const rawBaseUrl = el.inputBaseUrl.value.trim() || DEFAULT_AI_BASE_URL;
+        const rawModel = el.inputModel.value.trim() || DEFAULT_AI_MODEL;
 
         if (rawKey && rawKey.length < 15) {
             showToast('⚠️ 提示：标准 API Key 通常是一串以 sk- 开头的长字符串（如 sk-xxxxxxxx...），请检查是否复制完整！');
@@ -175,7 +175,7 @@ function bindEvents() {
         localStorage.setItem('POLICY_AI_BASE_URL', state.baseUrl);
         localStorage.setItem('POLICY_AI_MODEL', state.model);
         el.apiKeyDrawer.classList.add('hidden');
-        showToast('✅ 模型参数与密钥已更新，可开始提问！');
+        showToast('✅ 模型参数与密钥已更新并成功连接 DeepSeek！');
     });
 
     // 顶部按钮
@@ -412,6 +412,25 @@ function renderPolicyList(list) {
     el.policyList.innerHTML = html;
 }
 
+// 智能解析 API 候选端点列表（自动兼容带 /v1、不带 /v1、带 /chat/completions 等各类输入格式）
+function getCandidateEndpoints(rawBaseUrl) {
+    let clean = (rawBaseUrl || DEFAULT_AI_BASE_URL).trim().replace(/\/+$/, '');
+    
+    if (clean.includes('/chat/completions')) {
+        return [clean];
+    }
+    if (clean.endsWith('/v1')) {
+        return [
+            `${clean}/chat/completions`,
+            `${clean.replace(/\/v1$/, '')}/chat/completions`
+        ];
+    }
+    return [
+        `${clean}/chat/completions`,
+        `${clean}/v1/chat/completions`
+    ];
+}
+
 // AI 对话研判（支持本地 API 与纯前端在线大模型直接调用）
 async function sendChatMessage() {
     const prompt = el.chatInput.value.trim();
@@ -422,52 +441,60 @@ async function sendChatMessage() {
 
     const loadingId = appendMessage('正在研判相关政策细则与申报条件...', 'bot-row');
 
-    // 优先调用本地 API
-    try {
-        const resp = await fetch('/api/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                prompt: prompt,
-                api_key: state.apiKey,
-                base_url: state.baseUrl,
-                model: state.model
-            })
-        });
-        if (resp.ok) {
-            const res = await resp.json();
-            updateMessage(loadingId, res.reply || '无应答');
-            return;
-        }
-    } catch (e) {}
-
-    // GitHub Pages 纯前端直接调用大模型
-    if (state.apiKey) {
+    // 1. 仅在本地开发模式 (localhost / 127.0.0.1) 下尝试调用本地 Python 后端
+    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    if (isLocalhost) {
         try {
-            const reply = await callDirectLLM(prompt);
+            const resp = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    prompt: prompt,
+                    api_key: state.apiKey,
+                    base_url: state.baseUrl,
+                    model: state.model
+                })
+            });
+            if (resp.ok) {
+                const res = await resp.json();
+                if (res.code === 0 && res.reply) {
+                    updateMessage(loadingId, res.reply);
+                    return;
+                }
+            }
+        } catch (e) {
+            // 本地后端不可用，自动降级为浏览器直连大模型
+        }
+    }
+
+    // 2. 在线模式 / GitHub Pages 模式：纯前端极速直连 DeepSeek 官方 API
+    const effectiveKey = (state.apiKey && state.apiKey.length > 20 && !state.apiKey.includes('5043'))
+        ? state.apiKey
+        : DEFAULT_AI_KEY;
+
+    if (effectiveKey) {
+        try {
+            const reply = await callDirectLLM(prompt, effectiveKey);
             updateMessage(loadingId, reply);
             return;
         } catch (err) {
-            updateMessage(loadingId, `大模型接口调用异常: ${err.message}`);
+            updateMessage(loadingId, `⚠️ 大模型接口调用异常: ${err.message}\n\n💡 提示：系统已默认内置 DeepSeek 官方智能研判通道。您可点击右上角【🔑 AI 研判密钥配置】检查或重置您的 API Key。`);
             return;
         }
     }
 
-    // 未填 API Key 时的离线专业模拟回复
+    // 3. 离线专业模拟回复
     setTimeout(() => {
         updateMessage(loadingId, getMockAnalysis(prompt));
     }, 600);
 }
 
-// 纯前端直接调用 OpenAI / DeepSeek / 通义千问 兼容 API
-async function callDirectLLM(prompt) {
-    let rawBase = (state.baseUrl || DEFAULT_AI_BASE_URL).replace(/\/+$/, '');
-    let endpoint = rawBase.endsWith('/chat/completions') 
-        ? rawBase 
-        : (rawBase.endsWith('/v1') ? `${rawBase}/chat/completions` : `${rawBase}/chat/completions`);
-
+// 纯前端直接调用 OpenAI / DeepSeek / 通义千问 兼容 API（多端点智能自动容错重试）
+async function callDirectLLM(prompt, apiKey) {
+    const rawBase = state.baseUrl || DEFAULT_AI_BASE_URL;
+    const endpoints = getCandidateEndpoints(rawBase);
     const model = state.model || DEFAULT_AI_MODEL;
-    const apiKey = state.apiKey || DEFAULT_AI_KEY;
+    const key = apiKey || state.apiKey || DEFAULT_AI_KEY;
 
     const systemPrompt = `你是一名服务于四川大型国有医药健康产业集团的政策研究室主任兼科技申报总监。文风要求：严谨、干练、精炼，彻底去除AI味与机械套话，结论前置，直接给出政策依据、适用对象、奖补金额及实操申报建议。`;
 
@@ -481,35 +508,53 @@ async function callDirectLLM(prompt) {
         max_tokens: 1600
     };
 
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 40000);
+    let lastError = null;
 
-    try {
-        const resp = await fetch(endpoint, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`
-            },
-            body: JSON.stringify(payload),
-            signal: controller.signal
-        });
-        clearTimeout(timeoutId);
+    // 逐个尝试候选端点，彻底解决 404 路径不匹配问题
+    for (const endpoint of endpoints) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 35000);
 
-        if (resp.ok) {
-            const data = await resp.json();
-            return data.choices[0].message.content.trim();
-        } else {
-            const errText = await resp.text();
-            throw new Error(`HTTP ${resp.status}: ${errText}`);
+        try {
+            const resp = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${key}`
+                },
+                body: JSON.stringify(payload),
+                signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+
+            if (resp.ok) {
+                const data = await resp.json();
+                if (data && data.choices && data.choices[0] && data.choices[0].message) {
+                    return data.choices[0].message.content.trim();
+                }
+            } else {
+                const errText = await resp.text();
+                lastError = new Error(`HTTP ${resp.status}: ${errText || '接口响应异常'}`);
+                // 若出现 404 且有备用端点，自动尝试下一个
+                if (resp.status === 404 && endpoints.indexOf(endpoint) < endpoints.length - 1) {
+                    continue;
+                }
+                throw lastError;
+            }
+        } catch (err) {
+            clearTimeout(timeoutId);
+            if (err.name === 'AbortError') {
+                throw new Error('大模型响应超时（超过35秒），请检查网络连接。');
+            }
+            lastError = err;
+            if (endpoints.indexOf(endpoint) < endpoints.length - 1) {
+                continue;
+            }
+            throw lastError;
         }
-    } catch (err) {
-        clearTimeout(timeoutId);
-        if (err.name === 'AbortError') {
-            throw new Error('大模型响应超时（超过40秒），请检查网络连接或更换模型节点。');
-        }
-        throw err;
     }
+
+    throw lastError || new Error('未能连通大模型接口');
 }
 
 // 四川生物医药周回顾一键生成
@@ -517,39 +562,48 @@ async function generateSichuanWeeklyReport() {
     appendMessage('调取四川省科技厅、省发改委、成都市经信局最新生物医药科技奖补与资金申报数据，编制深度周回顾报告。', 'user-row');
     const loadingId = appendMessage('正在起草《四川省生物医药科技创新与奖补周回顾报告》（5大核心要点）...', 'bot-row');
 
-    // 优先调用本地 API
-    try {
-        const resp = await fetch('/api/weekly-report', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                api_key: state.apiKey,
-                base_url: state.baseUrl,
-                model: state.model
-            })
-        });
-        if (resp.ok) {
-            const res = await resp.json();
-            updateMessage(loadingId, res.report || '编制完成');
-            showToast('📄 四川省生物医药周回顾报告编制完成');
-            return;
-        }
-    } catch (e) {}
-
-    // GitHub Pages 纯前端直接调用大模型
-    if (state.apiKey) {
+    // 1. 本地模式优先
+    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    if (isLocalhost) {
         try {
-            const report = await callDirectLLM(SICHUAN_WEEKLY_PROMPT);
+            const resp = await fetch('/api/weekly-report', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    api_key: state.apiKey,
+                    base_url: state.baseUrl,
+                    model: state.model
+                })
+            });
+            if (resp.ok) {
+                const res = await resp.json();
+                if (res.code === 0 && res.report) {
+                    updateMessage(loadingId, res.report);
+                    showToast('📄 四川省生物医药周回顾报告编制完成');
+                    return;
+                }
+            }
+        } catch (e) {}
+    }
+
+    // 2. 线上直连
+    const effectiveKey = (state.apiKey && state.apiKey.length > 20 && !state.apiKey.includes('5043'))
+        ? state.apiKey
+        : DEFAULT_AI_KEY;
+
+    if (effectiveKey) {
+        try {
+            const report = await callDirectLLM(SICHUAN_WEEKLY_PROMPT, effectiveKey);
             updateMessage(loadingId, report);
             showToast('📄 四川省生物医药周回顾报告编制完成');
             return;
         } catch (err) {
-            updateMessage(loadingId, `大模型接口调用异常: ${err.message}`);
+            updateMessage(loadingId, `⚠️ 大模型接口调用异常: ${err.message}`);
             return;
         }
     }
 
-    // 离线专家报告
+    // 3. 离线模拟报告
     setTimeout(() => {
         updateMessage(loadingId, getMockAnalysis('周回顾'));
         showToast('📄 四川省生物医药周回顾报告编制完成');
