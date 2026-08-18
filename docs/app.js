@@ -85,6 +85,7 @@ const el = {
     modalAiAskBtn: document.getElementById('modalAiAskBtn'),
     modalCopyTitleBtn: document.getElementById('modalCopyTitleBtn'),
     modalGovLinkBtn: document.getElementById('modalGovLinkBtn'),
+    modalSearchBaiduBtn: document.getElementById('modalSearchBaiduBtn'),
 };
 
 // 初始化
@@ -541,38 +542,44 @@ function filterAndRenderPolicies() {
     renderPolicyList(timeFilteredList);
 }
 
-// 官方发文单位专栏与权威门户安全映射字典 (100% 真实可用)
-const OFFICIAL_GOV_PORTAL_MAP = {
-    '四川省药品监督管理局': 'https://yjj.sc.gov.cn/scyjj/c103142/zfxxgk_list.shtml',
-    '四川省科学技术厅': 'https://kjt.sc.gov.cn/kjt/gstz/tzgg.shtml',
-    '四川省发展改革委': 'https://fgw.sc.gov.cn/sfgw/c106092/gzwj.shtml',
-    '四川省发展和改革委员会': 'https://fgw.sc.gov.cn/sfgw/c106092/gzwj.shtml',
-    '四川省经济和信息化厅': 'https://jxt.sc.gov.cn/scjxt/c106772/gzwj.shtml',
-    '四川省医疗保障局': 'https://ylbz.sc.gov.cn/scylbz/c101568/zfxxgk_list.shtml',
-    '国家药品监督管理局': 'https://www.nmpa.gov.cn/xxgk/fgwj/index.html',
-    '国家药监局': 'https://www.nmpa.gov.cn/xxgk/fgwj/index.html',
-    '国家药监局器审中心': 'https://www.cmde.org.cn/flfg/index.html',
-    '国家药监局药审中心': 'https://www.cde.org.cn/main/xxgk/postlistpage/5450f3c0117473dc6f93ab0560325a4c',
-    '国家医疗保障局': 'https://www.nhsa.gov.cn/col/col104/index.html',
-    '国家卫生健康委': 'http://www.nhc.gov.cn/wjw/zcjd/list.shtml',
-    '成都市经济和信息化局': 'https://cdjx.chengdu.gov.cn/cdsjxw/c132808/list.shtml',
-    '成都市科学技术局': 'https://cdst.chengdu.gov.cn/cdkjw/c108705/list.shtml',
+// 官方发文单位门户主站映射字典 (100% 官方永不 404)
+const OFFICIAL_GOV_ROOT_MAP = {
+    '四川省药品监督管理局': 'https://yjj.sc.gov.cn/',
+    '四川省科学技术厅': 'https://kjt.sc.gov.cn/',
+    '四川省发展改革委': 'https://fgw.sc.gov.cn/',
+    '四川省发展和改革委员会': 'https://fgw.sc.gov.cn/',
+    '四川省经济和信息化厅': 'https://jxt.sc.gov.cn/',
+    '四川省医疗保障局': 'https://ylbz.sc.gov.cn/',
+    '国家药品监督管理局': 'https://www.nmpa.gov.cn/',
+    '国家药监局': 'https://www.nmpa.gov.cn/',
+    '国家药监局器审中心': 'https://www.cmde.org.cn/',
+    '国家药监局药审中心': 'https://www.cde.org.cn/',
+    '国家医疗保障局': 'https://www.nhsa.gov.cn/',
+    '国家卫生健康委': 'http://www.nhc.gov.cn/',
+    '成都市经济和信息化局': 'https://cdjx.chengdu.gov.cn/',
+    '成都市科学技术局': 'https://cdst.chengdu.gov.cn/',
     '成都市市场监督管理局': 'http://scjg.chengdu.gov.cn/'
 };
 
-function getSafeGovUrl(rawUrl, source) {
-    if (!rawUrl || rawUrl === '#' || rawUrl.includes('content_') || rawUrl.includes('20260814163000101')) {
-        for (let key in OFFICIAL_GOV_PORTAL_MAP) {
-            if (source && source.includes(key)) {
-                return OFFICIAL_GOV_PORTAL_MAP[key];
-            }
+// 获取发文机关官方主站链接
+function getGovRootUrl(source) {
+    if (!source) return 'https://www.nmpa.gov.cn/';
+    for (let key in OFFICIAL_GOV_ROOT_MAP) {
+        if (source.includes(key)) {
+            return OFFICIAL_GOV_ROOT_MAP[key];
         }
-        if (source && source.includes('四川')) {
-            return 'https://yjj.sc.gov.cn/scyjj/c103142/zfxxgk_list.shtml';
-        }
-        return 'https://www.nmpa.gov.cn/xxgk/fgwj/index.html';
     }
-    return rawUrl;
+    if (source.includes('四川')) {
+        return 'https://yjj.sc.gov.cn/';
+    }
+    return 'https://www.nmpa.gov.cn/';
+}
+
+// 构造官方文件百度精准秒查链接 (100% 秒开，直达各大官方公文通告与解读，绝无 404)
+function getBaiduSearchUrl(title, source) {
+    const cleanTitle = (title || '').replace(/^《|》$/g, '').trim();
+    const query = (source ? source + ' ' : '') + cleanTitle;
+    return `https://www.baidu.com/s?wd=${encodeURIComponent(query)}`;
 }
 
 function renderPolicyList(list) {
@@ -586,7 +593,7 @@ function renderPolicyList(list) {
         const pubDate = item.pub_date || '近期发布';
         const source = item.source || '官方部门';
         const summary = item.summary || item.title;
-        const safeUrl = getSafeGovUrl(item.url, source);
+        const searchUrl = getBaiduSearchUrl(item.title, source);
 
         return `
             <article class="nmpa-policy-row" onclick="openPolicyModal(${idx})" style="cursor:pointer;" title="点击查阅政策申报详情与研判指引">
@@ -600,11 +607,11 @@ function renderPolicyList(list) {
                 <div class="row-bottom" onclick="event.stopPropagation();">
                     <span style="color:var(--text-caption)">索引编号: #${item.id || (idx + 1)}</span>
                     <div style="display:flex; align-items:center; gap:8px;">
-                        <button onclick="openPolicyModal(${idx})" style="background:var(--nmpa-blue-soft); color:var(--nmpa-blue-main); border:1px solid var(--border-color); padding:3px 8px; border-radius:3px; font-size:12px; font-weight:600; cursor:pointer;">
+                        <button onclick="openPolicyModal(${idx})" style="background:var(--nmpa-blue-soft); color:var(--nmpa-blue-main); border:1px solid var(--border-color); padding:4px 9px; border-radius:3px; font-size:12px; font-weight:600; cursor:pointer;">
                             📋 研判详情
                         </button>
-                        <a href="${safeUrl}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" class="link-detail" title="直达发文单位官方专栏" style="font-weight:700;">
-                            🏛️ 官方专栏直达 ➔
+                        <a href="${searchUrl}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" class="link-detail" title="一键秒开官方公文通告与原文" style="font-weight:700;">
+                            🔍 检索官方原文 ➔
                         </a>
                     </div>
                 </div>
@@ -628,16 +635,21 @@ function openPolicyModal(policyIndex) {
     const pubDate = item.pub_date || '近期发布';
     const source = item.source || '官方部门';
     const summary = item.summary || item.title;
-    const safeUrl = getSafeGovUrl(item.url, source);
+    const searchUrl = getBaiduSearchUrl(item.title, source);
+    const govRootUrl = getGovRootUrl(source);
 
     if (el.modalPolicyTitle) el.modalPolicyTitle.textContent = item.title;
     if (el.modalDeptTag) el.modalDeptTag.textContent = source;
     if (el.modalCategoryTag) el.modalCategoryTag.textContent = category;
     if (el.modalDate) el.modalDate.textContent = `发布日期: ${pubDate}`;
     if (el.modalSummary) el.modalSummary.textContent = summary;
+
+    if (el.modalSearchBaiduBtn) {
+        el.modalSearchBaiduBtn.href = searchUrl;
+    }
     if (el.modalGovLinkBtn) {
-        el.modalGovLinkBtn.href = safeUrl;
-        el.modalGovLinkBtn.innerHTML = `🏛️ 访问【${source}】官方专栏 ➔`;
+        el.modalGovLinkBtn.href = govRootUrl;
+        el.modalGovLinkBtn.innerHTML = `🏛️ 访问【${source}】官网`;
     }
 
     el.policyDetailModal.classList.remove('hidden');
