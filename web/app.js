@@ -143,14 +143,22 @@ function bindEvents() {
     if (el.toggleApiKey) el.toggleApiKey.addEventListener('click', openDrawerFunc);
 
     el.btnSaveKey.addEventListener('click', () => {
-        state.apiKey = el.inputApiKey.value.trim();
-        state.baseUrl = el.inputBaseUrl.value.trim();
-        state.model = el.inputModel.value.trim();
+        const rawKey = el.inputApiKey.value.trim();
+        const rawBaseUrl = el.inputBaseUrl.value.trim() || 'https://api.deepseek.com/v1';
+        const rawModel = el.inputModel.value.trim() || 'deepseek-chat';
+
+        if (rawKey && rawKey.length < 15) {
+            showToast('⚠️ 提示：标准 API Key 通常是一串以 sk- 开头的长字符串（如 sk-xxxxxxxx...），请检查是否复制完整！');
+        }
+
+        state.apiKey = rawKey;
+        state.baseUrl = rawBaseUrl;
+        state.model = rawModel;
         localStorage.setItem('POLICY_AI_API_KEY', state.apiKey);
         localStorage.setItem('POLICY_AI_BASE_URL', state.baseUrl);
         localStorage.setItem('POLICY_AI_MODEL', state.model);
         el.apiKeyDrawer.classList.add('hidden');
-        showToast('✅ 模型参数与密钥已更新');
+        showToast('✅ 模型参数与密钥已更新，可开始提问！');
     });
 
     // 顶部按钮
