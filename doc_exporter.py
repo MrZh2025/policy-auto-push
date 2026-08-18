@@ -84,6 +84,25 @@ def set_run_font(run, font_type='body', size_pt=Pt(16), bold=False, italic=False
     rFonts.set(qn('w:eastAsia'), east_asia_font)
     rFonts.set(qn('w:cs'), ascii_font)
 
+def strip_markdown(text: str) -> str:
+    """彻底消除文本中的 Markdown 标记（如 *、**、#、列表符号等）"""
+    if not text:
+        return ""
+    s = str(text)
+    s = re.sub(r'\[(.*?)\]\((.*?)\)', r'\1', s)
+    s = re.sub(r'\*{3}(.*?)\*{3}', r'\1', s)
+    s = re.sub(r'\*{2}(.*?)\*{2}', r'\1', s)
+    s = re.sub(r'\*([^\*\n]+)\*', r'\1', s)
+    s = re.sub(r'_{3}(.*?)_{3}', r'\1', s)
+    s = re.sub(r'_{2}(.*?)_{2}', r'\1', s)
+    s = re.sub(r'_([^_\n]+)_', r'\1', s)
+    s = re.sub(r'^[\s\-\*\+•]+\s*', '', s)
+    s = s.replace('*', '')
+    s = re.sub(r'`([^`]+)`', r'\1', s)
+    s = s.replace('`', '')
+    s = re.sub(r'^#+\s*', '', s)
+    return s.strip()
+
 def set_para_spacing(p, line_spacing_rule=WD_LINE_SPACING.ONE_POINT_FIVE, space_before_pt=Pt(0), space_after_pt=Pt(0), align=WD_ALIGN_PARAGRAPH.JUSTIFY, first_line_indent_pt=Pt(24)):
     """设置段落 1.5 倍行距、首行缩进 2 字符 (小4号字为24pt) 与对齐"""
     p.paragraph_format.line_spacing_rule = line_spacing_rule
@@ -252,9 +271,9 @@ class PolicyDocExporter:
             row_cells = table.rows[idx].cells
             row_data = [
                 str(idx),
-                item.get("title", ""),
-                item.get("source", ""),
-                item.get("pub_date", "") or "近期"
+                strip_markdown(item.get("title", "")),
+                strip_markdown(item.get("source", "")),
+                strip_markdown(item.get("pub_date", "") or "近期")
             ]
             is_last_row = (idx == len(policies))
 
@@ -290,16 +309,16 @@ class PolicyDocExporter:
 
         # 7. 政策要点逐条排版（遵循规范层级：小4号 标目标题 + 紧凑要点正文，1.5 倍行距，首行缩进 2 字符）
         for idx, item in enumerate(policies, 1):
-            title = item.get('title', '')
-            dept = item.get("source", "国家部委")
-            date_str = item.get("pub_date", "") or "近期"
-            summary = item.get("summary", "") or title
+            title = strip_markdown(item.get('title', ''))
+            dept = strip_markdown(item.get("source", "国家部委"))
+            date_str = strip_markdown(item.get("pub_date", "") or "近期")
+            summary = strip_markdown(item.get("summary", "") or title)
             url = item.get("url", "")
 
             # 条目标题段落（小4号 方正仿宋加粗，首行缩进 2 字符，1.5 倍行距）
             p_item = doc.add_paragraph()
             set_para_spacing(p_item, line_spacing_rule=WD_LINE_SPACING.ONE_POINT_FIVE, space_before_pt=Pt(4), space_after_pt=Pt(0), first_line_indent_pt=Pt(24), align=WD_ALIGN_PARAGRAPH.JUSTIFY)
-            r_ititle = p_item.add_run(f"{idx}. 《{title}》（发布机关：{dept}，发布日期：{date_str}）")
+            r_ititle = p_item.add_run(f"{idx}. 《${title}》（发布机关：${dept}，发布日期：${date_str}）".replace('$', ''))
             set_run_font(r_ititle, font_type='h3', size_pt=FONT_SIZES['小4号'], bold=True)
 
             # 内容与要点正文（小4号 方正仿宋简体，首行缩进 2 字符，1.5 倍行距，附带官方链接）

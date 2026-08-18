@@ -381,7 +381,9 @@ function updateStatsDisplay(statsData) {
     const weekTotal = weekPolicies.length;
     const allTotal = state.allPolicies.length;
 
-    el.statsBadge.textContent = `系统已就绪 · 本周新增 ${weekTotal} 篇（近两年政策库累计 ${allTotal} 篇）`;
+    if (el.statsBadge) {
+        el.statsBadge.textContent = `系统已就绪 · 本周新增 ${weekTotal} 篇（近两年政策库累计 ${allTotal} 篇）`;
+    }
 
     // 导航栏第一项：本周全部更新数量
     const countAll = document.getElementById('count-all');
@@ -871,6 +873,29 @@ function handleClearChat() {
     showToast('🗑️ 已成功清除研判消息记录！');
 }
 
+// 彻底消除文本中的 Markdown 标记（如 *、**、#、列表符号等）
+function stripMarkdownMarkers(str) {
+    if (!str) return '';
+    let s = String(str);
+    // 1. 去除 Markdown 链接 [文字](url) -> 文字
+    s = s.replace(/\[(.*?)\]\((.*?)\)/g, '$1');
+    // 2. 去除各种加粗与斜体 ***text***, **text**, *text*, ___text___, __text__, _text_
+    s = s.replace(/\*{3}(.*?)\*{3}/g, '$1');
+    s = s.replace(/\*{2}(.*?)\*{2}/g, '$1');
+    s = s.replace(/\*([^\*\n]+)\*/g, '$1');
+    s = s.replace(/_{3}(.*?)_{3}/g, '$1');
+    s = s.replace(/_{2}(.*?)_{2}/g, '$1');
+    s = s.replace(/_([^_\n]+)_/g, '$1');
+    // 3. 去除行首/词首列表符号如 - , * , + , •
+    s = s.replace(/^[\s\-\*\+•]+\s*/, '');
+    // 4. 彻底消除任何单独残留的 * 字符和 # 字符及反引号
+    s = s.replace(/\*/g, '');
+    s = s.replace(/`([^`]+)`/g, '$1');
+    s = s.replace(/`/g, '');
+    s = s.replace(/^#+\s*/, '');
+    return s.trim();
+}
+
 function parseMarkdownSimple(md) {
     if (!md) return '';
     const lines = md.split('\n');
@@ -1122,7 +1147,7 @@ async function exportPoliciesViaDocxJS(policies, dateStr, filename) {
                     spacing: { line: 260, before: 0, after: 0 },
                     children: [
                         new TextRun({
-                            text: h.text,
+                            text: stripMarkdownMarkers(h.text),
                             font: { name: "Times New Roman", eastAsia: "黑体" },
                             size: 24,
                             bold: true
@@ -1138,9 +1163,9 @@ async function exportPoliciesViaDocxJS(policies, dateStr, filename) {
         const isLast = (idx === policies.length - 1);
         const rowData = [
             { text: String(idx + 1), align: AlignmentType.CENTER },
-            { text: item.title || '', align: AlignmentType.LEFT },
-            { text: item.source || '官方部门', align: AlignmentType.CENTER },
-            { text: item.pub_date || '近期', align: AlignmentType.CENTER }
+            { text: stripMarkdownMarkers(item.title) || '', align: AlignmentType.LEFT },
+            { text: stripMarkdownMarkers(item.source) || '官方部门', align: AlignmentType.CENTER },
+            { text: stripMarkdownMarkers(item.pub_date) || '近期', align: AlignmentType.CENTER }
         ];
 
         tableRows.push(new TableRow({
@@ -1196,10 +1221,10 @@ async function exportPoliciesViaDocxJS(policies, dateStr, filename) {
 
     // 6. 政策要点逐条排版（紧凑清晰：标目标题 + 紧凑正文与链接）
     policies.forEach((item, idx) => {
-        const title = item.title || '';
-        const dept = item.source || '官方部门';
-        const pubDate = item.pub_date || '近期';
-        const summary = item.summary || title;
+        const title = stripMarkdownMarkers(item.title) || '';
+        const dept = stripMarkdownMarkers(item.source) || '官方部门';
+        const pubDate = stripMarkdownMarkers(item.pub_date) || '近期';
+        const summary = stripMarkdownMarkers(item.summary) || title;
         const url = item.url || '';
 
         // 6.1 标目标题（小4号 方正仿宋加粗，首行缩进 2 字符）
@@ -1318,9 +1343,9 @@ async function exportWeeklyReportViaDocxJS(reportText, docPeriod, docDate, filen
             let dataRows = [];
 
             tableLines.forEach((tLine) => {
-                const cells = tLine.split('|').slice(1, -1).map(c => c.trim().replace(/\*\*(.*?)\*\*/g, '$1'));
+                const cells = tLine.split('|').slice(1, -1).map(c => stripMarkdownMarkers(c));
                 // 忽略分割行
-                if (cells.every(c => /^:?-+:?$/.test(c))) {
+                if (cells.every(c => /^:?-+:?$/.test(c) || c === '')) {
                     return;
                 }
                 if (headerCells.length === 0) {
@@ -1360,7 +1385,7 @@ async function exportWeeklyReportViaDocxJS(reportText, docPeriod, docDate, filen
                                 spacing: { line: 260, before: 0, after: 0 },
                                 children: [
                                     new TextRun({
-                                        text: hText,
+                                        text: stripMarkdownMarkers(hText),
                                         font: { name: "Times New Roman", eastAsia: "黑体" },
                                         size: 24,
                                         bold: true
@@ -1392,7 +1417,7 @@ async function exportWeeklyReportViaDocxJS(reportText, docPeriod, docDate, filen
                                     spacing: { line: 280, before: 0, after: 0 },
                                     children: [
                                         new TextRun({
-                                            text: cellText,
+                                            text: stripMarkdownMarkers(cellText),
                                             font: { name: "Times New Roman", eastAsia: "方正仿宋简体" },
                                             size: 24
                                         })
@@ -1420,7 +1445,7 @@ async function exportWeeklyReportViaDocxJS(reportText, docPeriod, docDate, filen
 
         // 3.3 识别一级公文标题（一、二、三...）
         if (line.startsWith('## ') || /^一、|二、|三、|四、|五、|六、/.test(line)) {
-            const cleanText = line.replace(/^##\s*/, '');
+            const cleanText = stripMarkdownMarkers(line.replace(/^##\s*/, ''));
             children.push(new Paragraph({
                 alignment: AlignmentType.JUSTIFIED,
                 indent: { firstLine: 480 },
@@ -1440,7 +1465,7 @@ async function exportWeeklyReportViaDocxJS(reportText, docPeriod, docDate, filen
 
         // 3.4 识别二/三级标题（### 或（一））
         if (line.startsWith('### ') || /^（[一二三四五六七八九十]）/.test(line)) {
-            const cleanText = line.replace(/^###\s*/, '');
+            const cleanText = stripMarkdownMarkers(line.replace(/^###\s*/, ''));
             children.push(new Paragraph({
                 alignment: AlignmentType.JUSTIFIED,
                 indent: { firstLine: 480 },
@@ -1459,8 +1484,7 @@ async function exportWeeklyReportViaDocxJS(reportText, docPeriod, docDate, filen
         }
 
         // 3.5 普通正文或列表项
-        let cleanText = line.replace(/^[\-\*]\s*/, '').replace(/\*\*(.*?)\*\*/g, '$1');
-        cleanText = cleanText.replace(/\[(.*?)\]\((.*?)\)/g, '$1 ($2)');
+        let cleanText = stripMarkdownMarkers(line);
 
         children.push(new Paragraph({
             alignment: AlignmentType.JUSTIFIED,
@@ -1504,19 +1528,19 @@ function exportPoliciesViaWordXML(policies, dateStr, filename) {
         tableRowsHtml += `
             <tr style="mso-yfti-irow:${idx}; ${isLast ? 'mso-yfti-lastrow:yes;' : ''}">
                 <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:center; font-family:'Times New Roman','方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt;">${idx + 1}</td>
-                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:left; font-family:'Times New Roman','方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt;">${item.title || ''}</td>
-                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:center; font-family:'Times New Roman','方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt;">${item.source || '官方部门'}</td>
-                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:center; font-family:'Times New Roman','方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt;">${item.pub_date || '近期'}</td>
+                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:left; font-family:'Times New Roman','方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt;">${stripMarkdownMarkers(item.title) || ''}</td>
+                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:center; font-family:'Times New Roman','方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt;">${stripMarkdownMarkers(item.source) || '官方部门'}</td>
+                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:center; font-family:'Times New Roman','方正仿宋简体','仿宋_GB2312','仿宋',serif; font-size:12pt;">${stripMarkdownMarkers(item.pub_date) || '近期'}</td>
             </tr>
         `;
     });
 
     let detailsHtml = '';
     policies.forEach((item, idx) => {
-        const title = item.title || '';
-        const dept = item.source || '官方部门';
-        const pubDate = item.pub_date || '近期';
-        const summary = item.summary || title;
+        const title = stripMarkdownMarkers(item.title) || '';
+        const dept = stripMarkdownMarkers(item.source) || '官方部门';
+        const pubDate = stripMarkdownMarkers(item.pub_date) || '近期';
+        const summary = stripMarkdownMarkers(item.summary) || title;
         const url = item.url || '';
 
         detailsHtml += `
@@ -1640,8 +1664,8 @@ function exportWeeklyReportViaWordXML(reportText, docPeriod, docDate, filename) 
             let headerCount = 0;
 
             while (i < lines.length && lines[i].trim().startsWith('|') && lines[i].trim().endsWith('|')) {
-                const cells = lines[i].trim().split('|').slice(1, -1).map(c => c.trim().replace(/\*\*(.*?)\*\*/g, '$1'));
-                if (cells.every(c => /^:?-+:?$/.test(c))) {
+                const cells = lines[i].trim().split('|').slice(1, -1).map(c => stripMarkdownMarkers(c));
+                if (cells.every(c => /^:?-+:?$/.test(c) || c === '')) {
                     isHeader = false;
                     i++;
                     continue;
@@ -1671,14 +1695,13 @@ function exportWeeklyReportViaWordXML(reportText, docPeriod, docDate, filename) 
         }
 
         if (line.startsWith('## ') || /^一、|二、|三、|四、|五、|六、/.test(line)) {
-            const h1Text = line.replace(/^##\s*/, '');
+            const h1Text = stripMarkdownMarkers(line.replace(/^##\s*/, ''));
             bodyHtml += `<h2 class="h1-title">${h1Text}</h2>`;
         } else if (line.startsWith('### ') || /^（[一二三四五六七八九十]）/.test(line)) {
-            const h3Text = line.replace(/^###\s*/, '');
+            const h3Text = stripMarkdownMarkers(line.replace(/^###\s*/, ''));
             bodyHtml += `<p class="h3-title">${h3Text}</p>`;
         } else {
-            let paraText = line.replace(/^[\-\*]\s*/, '').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            paraText = paraText.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" style="color:#004886;text-decoration:underline;">$1</a>');
+            let paraText = stripMarkdownMarkers(line);
             bodyHtml += `<p class="body-para">${paraText}</p>`;
         }
         i++;
