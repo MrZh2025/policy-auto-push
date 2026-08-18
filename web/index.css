@@ -777,6 +777,24 @@ body {
     font-size: 16px;
     font-weight: 800;
     color: var(--text-title);
+}
+
+.btn-ai-setup {
+    background-color: var(--nmpa-blue-soft);
+    border: 1px solid var(--border-color);
+    color: var(--nmpa-blue-main);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.btn-ai-setup:hover {
+    background-color: var(--nmpa-blue-main);
+    color: #ffffff;
+}
+
 /* 模型抽屉 */
 .config-drawer {
     background-color: var(--bg-inset);
