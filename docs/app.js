@@ -6,6 +6,7 @@
 // 状态管理
 const state = {
     currentTrack: 'all',
+    timeRange: 'week',          // 默认仅展示本周最新更新 ('week' | 'month' | 'all')
     searchQuery: '',
     allPolicies: [],
     filteredPolicies: [],
@@ -93,13 +94,23 @@ function toggleTheme() {
 function bindEvents() {
     el.themeToggleBtn.addEventListener('click', toggleTheme);
 
+    // 时间范围切换 (本周最新 / 近30天 / 历史全量库)
+    const timeTabs = document.querySelectorAll('.time-tab');
+    timeTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            timeTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            state.timeRange = tab.getAttribute('data-time');
+            filterAndRenderPolicies();
+        });
+    });
+
     // 导航栏切换
     el.navItems.forEach(item => {
         item.addEventListener('click', () => {
             el.navItems.forEach(i => i.classList.remove('active'));
             item.classList.add('active');
             state.currentTrack = item.getAttribute('data-track');
-            el.listBadge.textContent = item.querySelector('a').textContent.split('(')[0].trim();
             filterAndRenderPolicies();
         });
     });
@@ -257,12 +268,14 @@ function updateStatsDisplay(statsData) {
 }
 
 function filterAndRenderPolicies() {
-    let list = state.allPolicies;
+    let list = state.allPolicies || [];
 
+    // 1. 赛道分类过滤
     if (state.currentTrack && state.currentTrack !== 'all') {
         list = list.filter(p => (p.category || '').includes(state.currentTrack));
     }
 
+    // 2. 关键词检索过滤
     if (state.searchQuery) {
         const q = state.searchQuery;
         list = list.filter(p => 
@@ -272,8 +285,62 @@ function filterAndRenderPolicies() {
         );
     }
 
-    state.filteredPolicies = list;
-    renderPolicyList(list);
+    // 3. 核心时间算法过滤：默认只展示【本周最新更新】
+    const now = new Date();
+    let timeFilteredList = list;
+    let timeLabel = '本周最新更新';
+
+    if (state.timeRange === 'week') {
+        timeLabel = '🔥 本周最新更新';
+        // 筛选 7 天内发布的政策
+        const weekList = list.filter(p => {
+            if (!p.pub_date) return false;
+            const pDate = new Date(p.pub_date.replace(/[\.年]/g, '-').replace(/月/g, '-').replace(/日/g, ''));
+            if (isNaN(pDate.getTime())) return false;
+            const diffDays = (now - pDate) / (1000 * 3600 * 24);
+            return diffDays <= 7 && diffDays >= -1; // 包含今天及未来微调
+        });
+
+        // 智能保底策略：若本周因长假/周末少于4篇，自动取最新前 8 篇展示
+        if (weekList.length >= 2) {
+            timeFilteredList = weekList;
+        } else {
+            timeFilteredList = list.slice(0, 8);
+        }
+    } else if (state.timeRange === 'month') {
+        timeLabel = '📅 近30天更新';
+        timeFilteredList = list.filter(p => {
+            if (!p.pub_date) return false;
+            const pDate = new Date(p.pub_date.replace(/[\.年]/g, '-').replace(/月/g, '-').replace(/日/g, ''));
+            if (isNaN(pDate.getTime())) return false;
+            const diffDays = (now - pDate) / (1000 * 3600 * 24);
+            return diffDays <= 30 && diffDays >= -1;
+        });
+        if (timeFilteredList.length === 0) timeFilteredList = list.slice(0, 15);
+    } else {
+        timeLabel = '📚 历史全量政策库';
+        timeFilteredList = list;
+    }
+
+    state.filteredPolicies = timeFilteredList;
+
+    // 更新界面状态提示
+    const banner = document.getElementById('filterStatusBanner');
+    const badge = document.getElementById('listBadge');
+    const trackName = (state.currentTrack === 'all') ? '全部赛道' : state.currentTrack;
+
+    if (badge) badge.textContent = `${trackName} · ${timeLabel}`;
+    if (banner) {
+        if (state.timeRange === 'week') {
+            banner.innerHTML = `<span>📌 默认仅呈现 <strong>本周最新政策更新</strong>（当前精选 <strong>${timeFilteredList.length}</strong> 篇），历史政策已归档，可随时点击右上角切换 <strong>[历史全量政策库]</strong>。</span>`;
+        } else if (state.timeRange === 'month') {
+            banner.innerHTML = `<span>📅 当前呈现 <strong>近 30 天政策文件</strong>（共 <strong>${timeFilteredList.length}</strong> 篇）。</span>`;
+        } else {
+            banner.innerHTML = `<span>📚 当前呈现 <strong>历史全量政策库</strong>（共 <strong>${timeFilteredList.length}</strong> 篇全量在库文件）。</span>`;
+        }
+    }
+
+    renderPolicyList(timeFilteredList);
 }
 
 function renderPolicyList(list) {

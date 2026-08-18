@@ -374,6 +374,53 @@ body {
     gap: 8px;
 }
 
+/* 时间周期分段切换 (本周最新 / 近30天 / 历史全量库) */
+.time-filter-tabs {
+    display: flex;
+    background-color: var(--bg-inset);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 2px;
+    gap: 2px;
+}
+
+.time-tab {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+}
+
+.time-tab:hover {
+    color: var(--nmpa-blue-main);
+}
+
+.time-tab.active {
+    background-color: var(--nmpa-blue-main);
+    color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+/* 过滤状态提示条 */
+.filter-status-banner {
+    background-color: var(--bg-inset);
+    border-left: 3px solid var(--nmpa-blue-main);
+    padding: 6px 12px;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    border-radius: 2px;
+}
+.filter-status-banner strong {
+    color: var(--nmpa-red-gov);
+}
+
 .header-red-bar {
     width: 4px;
     height: 18px;

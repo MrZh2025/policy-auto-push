@@ -18,7 +18,7 @@
             </div>
             <div class="gov-top-links">
                 <span class="gov-status-dot"></span>
-                <span id="statsSummary">系统已就绪 · 累计收录 34 篇政策法规</span>
+                <span id="statsSummary">系统已就绪 · 本周更新已优先置顶</span>
                 <button class="top-theme-btn" id="themeToggleBtn" title="切换亮色/深色模式">
                     <span id="themeIcon">☀️</span> <span id="themeText">政务亮色</span>
                 </button>
@@ -43,7 +43,7 @@
                 </div>
             </div>
 
-            <!-- 右侧顶部显眼操作工具栏 (包含超显眼的 AI 密钥配置) -->
+            <!-- 右侧顶部显眼操作工具栏 -->
             <div class="nmpa-header-actions">
                 <button class="action-btn action-ai" id="btnTopAiConfig" title="配置 DeepSeek / 通义千问 / OpenAI API Key 开启实时 AI 政策专家问答">
                     <span class="btn-i">🔑</span>
@@ -104,12 +104,25 @@
                         <div class="header-left">
                             <span class="header-red-bar"></span>
                             <h2 class="header-title">政策法规与通知公告</h2>
-                            <span class="header-badge" id="listBadge">全部政策</span>
+                            <span class="header-badge" id="listBadge">本周最新更新</span>
                         </div>
+                        
+                        <!-- 时间周期过滤器：默认只看本周更新，以前的归入历史政策库 -->
+                        <div class="time-filter-tabs">
+                            <button class="time-tab active" data-time="week" id="tabTimeWeek">🔥 本周最新更新</button>
+                            <button class="time-tab" data-time="month" id="tabTimeMonth">📅 近30天</button>
+                            <button class="time-tab" data-time="all" id="tabTimeAll">📚 历史全量政策库</button>
+                        </div>
+
                         <div class="header-search">
-                            <input type="text" id="searchInput" placeholder="请输入政策标题、文号、发文机构关键字...">
+                            <input type="text" id="searchInput" placeholder="搜索标题、文号、发文单位...">
                             <button id="searchBtn" class="search-btn">搜索</button>
                         </div>
+                    </div>
+
+                    <!-- 动态状态提示横条 -->
+                    <div class="filter-status-banner" id="filterStatusBanner">
+                        <span>📌 默认仅呈现 <strong>本周最新政策更新</strong>（共 <span id="currentFilteredCount">0</span> 篇），历史政策已归入政策库。</span>
                     </div>
 
                     <!-- 政策法规列表 -->
