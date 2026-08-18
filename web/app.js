@@ -285,37 +285,47 @@ function filterAndRenderPolicies() {
         );
     }
 
-    // 3. 核心时间算法过滤：严格基于当前日期过滤，绝不混入历史年份数据
+    // 3. 核心时间算法过滤：绝对严格按真实系统日期过滤，强制年份与天数双重校验
     const now = new Date();
-    let timeFilteredList = list;
+    const nowYear = now.getFullYear();
+    let timeFilteredList = [];
     let timeLabel = '本周最新更新';
 
     if (state.timeRange === 'week') {
         timeLabel = '🔥 本周最新更新';
-        // 严格筛选当前日期 7 天内发布的政策 (diffDays <= 7 且必须是近期有效数据)
         timeFilteredList = list.filter(p => {
             if (!p.pub_date) return false;
-            // 规范化日期格式 YYYY-MM-DD
-            const cleanDateStr = p.pub_date.replace(/[\.年]/g, '-').replace(/月/g, '-').replace(/日/g, '').trim();
-            const pDate = new Date(cleanDateStr);
-            if (isNaN(pDate.getTime())) return false;
+            // 提取规范 YYYY-MM-DD
+            const m = p.pub_date.match(/(\d{4})[-.\/年](\d{1,2})[-.\/月](\d{1,2})/);
+            if (!m) return false;
+            const pYear = parseInt(m[1], 10);
+            const pMonth = parseInt(m[2], 10) - 1;
+            const pDay = parseInt(m[3], 10);
 
-            // 计算与今天的时间差（天数）
+            // 1. 年份必须与当前年份完全相同，非本年一律直接排除！
+            if (pYear !== nowYear) return false;
+
+            const pDate = new Date(pYear, pMonth, pDay);
             const diffDays = (now.getTime() - pDate.getTime()) / (1000 * 3600 * 24);
-            // 严格限制在近 7 天内，并且年份必须与当前年份相符
-            return diffDays >= -1 && diffDays <= 7;
+
+            // 2. 必须是当前日期 7 天内
+            return diffDays >= -0.5 && diffDays <= 7;
         });
     } else if (state.timeRange === 'month') {
         timeLabel = '📅 近30天更新';
-        // 严格筛选近 30 天内发布的政策
         timeFilteredList = list.filter(p => {
             if (!p.pub_date) return false;
-            const cleanDateStr = p.pub_date.replace(/[\.年]/g, '-').replace(/月/g, '-').replace(/日/g, '').trim();
-            const pDate = new Date(cleanDateStr);
-            if (isNaN(pDate.getTime())) return false;
+            const m = p.pub_date.match(/(\d{4})[-.\/年](\d{1,2})[-.\/月](\d{1,2})/);
+            if (!m) return false;
+            const pYear = parseInt(m[1], 10);
+            const pMonth = parseInt(m[2], 10) - 1;
+            const pDay = parseInt(m[3], 10);
 
+            if (pYear !== nowYear) return false;
+
+            const pDate = new Date(pYear, pMonth, pDay);
             const diffDays = (now.getTime() - pDate.getTime()) / (1000 * 3600 * 24);
-            return diffDays >= -1 && diffDays <= 30;
+            return diffDays >= -0.5 && diffDays <= 30;
         });
     } else {
         timeLabel = '📚 历史全量政策库';
