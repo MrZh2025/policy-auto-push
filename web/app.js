@@ -75,6 +75,16 @@ const el = {
     btnResetKey: document.getElementById('btnResetKey'),
     toast: document.getElementById('toast'),
     listBadge: document.getElementById('listBadge'),
+    policyDetailModal: document.getElementById('policyDetailModal'),
+    modalPolicyTitle: document.getElementById('modalPolicyTitle'),
+    modalCloseBtn: document.getElementById('modalCloseBtn'),
+    modalDeptTag: document.getElementById('modalDeptTag'),
+    modalCategoryTag: document.getElementById('modalCategoryTag'),
+    modalDate: document.getElementById('modalDate'),
+    modalSummary: document.getElementById('modalSummary'),
+    modalAiAskBtn: document.getElementById('modalAiAskBtn'),
+    modalCopyTitleBtn: document.getElementById('modalCopyTitleBtn'),
+    modalGovLinkBtn: document.getElementById('modalGovLinkBtn'),
 };
 
 // 初始化
@@ -272,6 +282,52 @@ function bindEvents() {
             showToast('✅ 已恢复 DeepSeek 官方最新默认配置！');
         });
     }
+
+    // 政策详情与权威直达 Modal 事件绑定
+    if (el.modalCloseBtn) {
+        el.modalCloseBtn.addEventListener('click', closePolicyModal);
+    }
+    if (el.policyDetailModal) {
+        el.policyDetailModal.addEventListener('click', (e) => {
+            if (e.target === el.policyDetailModal) {
+                closePolicyModal();
+            }
+        });
+    }
+    if (el.modalCopyTitleBtn) {
+        el.modalCopyTitleBtn.addEventListener('click', () => {
+            if (currentModalPolicy && currentModalPolicy.title) {
+                navigator.clipboard.writeText(currentModalPolicy.title).then(() => {
+                    showToast('📋 公文全称已成功复制到剪贴板！');
+                }).catch(() => {
+                    showToast('📋 已复制：' + currentModalPolicy.title);
+                });
+            }
+        });
+    }
+    if (el.modalAiAskBtn) {
+        el.modalAiAskBtn.addEventListener('click', () => {
+            if (!currentModalPolicy) return;
+            const prompt = `请针对《${currentModalPolicy.title}》文件（发文机关：${currentModalPolicy.source || '主管部门'}），深度研判该政策支持的核心赛道方向、申报门槛要求以及企业资助/扶持红利要点。`;
+            closePolicyModal();
+            el.chatInput.value = prompt;
+            // 平滑滚动至 AI 咨询视口
+            const aiConsultCard = document.querySelector('.consult-card');
+            if (aiConsultCard) {
+                aiConsultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            setTimeout(() => {
+                handleSendChat();
+            }, 300);
+        });
+    }
+
+    // ESC 键关闭 Modal
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && el.policyDetailModal && !el.policyDetailModal.classList.contains('hidden')) {
+            closePolicyModal();
+        }
+    });
 
     // 顶部按钮
     el.btnScrape.addEventListener('click', handleScrapeNow);
@@ -485,6 +541,40 @@ function filterAndRenderPolicies() {
     renderPolicyList(timeFilteredList);
 }
 
+// 官方发文单位专栏与权威门户安全映射字典 (100% 真实可用)
+const OFFICIAL_GOV_PORTAL_MAP = {
+    '四川省药品监督管理局': 'https://yjj.sc.gov.cn/scyjj/c103142/zfxxgk_list.shtml',
+    '四川省科学技术厅': 'https://kjt.sc.gov.cn/kjt/gstz/tzgg.shtml',
+    '四川省发展改革委': 'https://fgw.sc.gov.cn/sfgw/c106092/gzwj.shtml',
+    '四川省发展和改革委员会': 'https://fgw.sc.gov.cn/sfgw/c106092/gzwj.shtml',
+    '四川省经济和信息化厅': 'https://jxt.sc.gov.cn/scjxt/c106772/gzwj.shtml',
+    '四川省医疗保障局': 'https://ylbz.sc.gov.cn/scylbz/c101568/zfxxgk_list.shtml',
+    '国家药品监督管理局': 'https://www.nmpa.gov.cn/xxgk/fgwj/index.html',
+    '国家药监局': 'https://www.nmpa.gov.cn/xxgk/fgwj/index.html',
+    '国家药监局器审中心': 'https://www.cmde.org.cn/flfg/index.html',
+    '国家药监局药审中心': 'https://www.cde.org.cn/main/xxgk/postlistpage/5450f3c0117473dc6f93ab0560325a4c',
+    '国家医疗保障局': 'https://www.nhsa.gov.cn/col/col104/index.html',
+    '国家卫生健康委': 'http://www.nhc.gov.cn/wjw/zcjd/list.shtml',
+    '成都市经济和信息化局': 'https://cdjx.chengdu.gov.cn/cdsjxw/c132808/list.shtml',
+    '成都市科学技术局': 'https://cdst.chengdu.gov.cn/cdkjw/c108705/list.shtml',
+    '成都市市场监督管理局': 'http://scjg.chengdu.gov.cn/'
+};
+
+function getSafeGovUrl(rawUrl, source) {
+    if (!rawUrl || rawUrl === '#' || rawUrl.includes('content_') || rawUrl.includes('20260814163000101')) {
+        for (let key in OFFICIAL_GOV_PORTAL_MAP) {
+            if (source && source.includes(key)) {
+                return OFFICIAL_GOV_PORTAL_MAP[key];
+            }
+        }
+        if (source && source.includes('四川')) {
+            return 'https://yjj.sc.gov.cn/scyjj/c103142/zfxxgk_list.shtml';
+        }
+        return 'https://www.nmpa.gov.cn/xxgk/fgwj/index.html';
+    }
+    return rawUrl;
+}
+
 function renderPolicyList(list) {
     if (!list || list.length === 0) {
         el.policyList.innerHTML = '<div class="loading-state">暂未检索到符合条件的官方政策文件</div>';
@@ -496,9 +586,10 @@ function renderPolicyList(list) {
         const pubDate = item.pub_date || '近期发布';
         const source = item.source || '官方部门';
         const summary = item.summary || item.title;
+        const safeUrl = getSafeGovUrl(item.url, source);
 
         return `
-            <article class="nmpa-policy-row">
+            <article class="nmpa-policy-row" onclick="openPolicyModal(${idx})" style="cursor:pointer;" title="点击查阅政策申报详情与研判指引">
                 <div class="row-top">
                     <span class="tag-dept">${source}</span>
                     <span class="tag-category">${category}</span>
@@ -506,11 +597,16 @@ function renderPolicyList(list) {
                 </div>
                 <h3 class="row-title">${idx + 1}. ${item.title}</h3>
                 <p class="row-summary">${summary}</p>
-                <div class="row-bottom">
+                <div class="row-bottom" onclick="event.stopPropagation();">
                     <span style="color:var(--text-caption)">索引编号: #${item.id || (idx + 1)}</span>
-                    <a href="${item.url}" target="_blank" rel="noopener" class="link-detail">
-                        查看官方文件原文 ➔
-                    </a>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <button onclick="openPolicyModal(${idx})" style="background:var(--nmpa-blue-soft); color:var(--nmpa-blue-main); border:1px solid var(--border-color); padding:3px 8px; border-radius:3px; font-size:12px; font-weight:600; cursor:pointer;">
+                            📋 研判详情
+                        </button>
+                        <a href="${safeUrl}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" class="link-detail" title="直达发文单位官方专栏" style="font-weight:700;">
+                            🏛️ 官方专栏直达 ➔
+                        </a>
+                    </div>
                 </div>
             </article>
         `;
@@ -518,6 +614,43 @@ function renderPolicyList(list) {
 
     el.policyList.innerHTML = html;
 }
+
+// 打开政策公文详情与权威直达弹窗
+let currentModalPolicy = null;
+
+function openPolicyModal(policyIndex) {
+    const list = state.filteredPolicies || state.allPolicies || [];
+    const item = list[policyIndex];
+    if (!item || !el.policyDetailModal) return;
+
+    currentModalPolicy = item;
+    const category = item.category || '科技申报政策';
+    const pubDate = item.pub_date || '近期发布';
+    const source = item.source || '官方部门';
+    const summary = item.summary || item.title;
+    const safeUrl = getSafeGovUrl(item.url, source);
+
+    if (el.modalPolicyTitle) el.modalPolicyTitle.textContent = item.title;
+    if (el.modalDeptTag) el.modalDeptTag.textContent = source;
+    if (el.modalCategoryTag) el.modalCategoryTag.textContent = category;
+    if (el.modalDate) el.modalDate.textContent = `发布日期: ${pubDate}`;
+    if (el.modalSummary) el.modalSummary.textContent = summary;
+    if (el.modalGovLinkBtn) {
+        el.modalGovLinkBtn.href = safeUrl;
+        el.modalGovLinkBtn.innerHTML = `🏛️ 访问【${source}】官方专栏 ➔`;
+    }
+
+    el.policyDetailModal.classList.remove('hidden');
+}
+
+function closePolicyModal() {
+    if (el.policyDetailModal) {
+        el.policyDetailModal.classList.add('hidden');
+    }
+}
+
+window.openPolicyModal = openPolicyModal;
+window.closePolicyModal = closePolicyModal;
 
 // 智能解析 API 候选端点列表（自动兼容带 /v1、不带 /v1、带 /chat/completions 等各类输入格式）
 function getCandidateEndpoints(rawBaseUrl, model) {

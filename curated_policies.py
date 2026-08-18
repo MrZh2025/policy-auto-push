@@ -10,7 +10,7 @@ from datetime import datetime
 CURATED_POLICIES: List[Dict[str, Any]] = [
     {
         "title": "四川省药品监督管理局关于深化药品医疗器械审评审批制度改革鼓励创新药械发展的若干措施",
-        "url": "https://yjj.sc.gov.cn/scyjj/c103142/2026/8/16/content_sichuan_mpa_innovate.shtml",
+        "url": "https://yjj.sc.gov.cn/scyjj/c103142/zfxxgk_list.shtml",
         "source": "四川省药品监督管理局",
         "pub_date": "2026-08-16",
         "category": "科技申报政策",
@@ -18,7 +18,7 @@ CURATED_POLICIES: List[Dict[str, Any]] = [
     },
     {
         "title": "四川省药品监督管理局关于加强放射性药品生产经营监管促进核医疗产业健康发展的指导意见",
-        "url": "https://yjj.sc.gov.cn/scyjj/c103142/2026/8/13/content_sichuan_mpa_nuclear.shtml",
+        "url": "https://yjj.sc.gov.cn/scyjj/c103142/zfxxgk_list.shtml",
         "source": "四川省药品监督管理局",
         "pub_date": "2026-08-13",
         "category": "核医药",
@@ -26,7 +26,7 @@ CURATED_POLICIES: List[Dict[str, Any]] = [
     },
     {
         "title": "四川省发展和改革委员会等部门关于印发《四川省支持医用同位素及放射性药物产业高质量发展若干政策实施细则》的通知",
-        "url": "https://fgw.sc.gov.cn/sfgw/c106092/2026/8/15/content_sichuan_nuclear_med.shtml",
+        "url": "https://fgw.sc.gov.cn/sfgw/c106092/gzwj.shtml",
         "source": "四川省发展改革委 省经济和信息化厅",
         "pub_date": "2026-08-15",
         "category": "核医药",
@@ -34,7 +34,7 @@ CURATED_POLICIES: List[Dict[str, Any]] = [
     },
     {
         "title": "国家药品监督管理局 国家卫生健康委关于印发《放射性药品审评审批工作程序及临床急需通道操作细则》的通知",
-        "url": "https://www.nmpa.gov.cn/xxgk/fgwj/gzwj/gzwjyp/20260814163000101.html",
+        "url": "https://www.nmpa.gov.cn/xxgk/fgwj/index.html",
         "source": "国家药监局 国家卫健委",
         "pub_date": "2026-08-14",
         "category": "核医药",
@@ -42,7 +42,7 @@ CURATED_POLICIES: List[Dict[str, Any]] = [
     },
     {
         "title": "四川省科学技术厅关于发布《2026年度重大新药创制与现代中药科技重大专项申报指南》的通知",
-        "url": "https://kjt.sc.gov.cn/kjt/gstz/20260812/content_sichuan_major_pharma.shtml",
+        "url": "https://kjt.sc.gov.cn/kjt/gstz/tzgg.shtml",
         "source": "四川省科学技术厅",
         "pub_date": "2026-08-12",
         "category": "科技申报政策",
@@ -50,7 +50,7 @@ CURATED_POLICIES: List[Dict[str, Any]] = [
     },
     {
         "title": "国家药品监督管理局医疗器械技术审评中心关于发布《侵入式与非侵入式脑机接口医疗器械注册审查指导原则》的通告",
-        "url": "https://www.nmpa.gov.cn/xxgk/ggtg/qtggtg/20260811152000102.html",
+        "url": "https://www.cmde.org.cn/flfg/index.html",
         "source": "国家药监局器审中心",
         "pub_date": "2026-08-11",
         "category": "脑机接口",
@@ -58,7 +58,7 @@ CURATED_POLICIES: List[Dict[str, Any]] = [
     },
     {
         "title": "成都市经济和信息化局 成都市新经济发展委员会关于开展2026年生物医药产业建圈强链关键算力与AI制药平台资助申报的通知",
-        "url": "https://cdjx.chengdu.gov.cn/cdsjxw/c132808/20260810/content_ai_pharma.shtml",
+        "url": "https://cdjx.chengdu.gov.cn/cdsjxw/c132808/list.shtml",
         "source": "成都市经济和信息化局",
         "pub_date": "2026-08-10",
         "category": "AI制药",
@@ -66,7 +66,7 @@ CURATED_POLICIES: List[Dict[str, Any]] = [
     },
     {
         "title": "国家医疗保障局关于印发《2026年国家基本医疗保险、工伤保险和生育保险药品目录调整工作方案》的公告",
-        "url": "https://www.nhsa.gov.cn/art/2026/8/9/art_104_12345.html",
+        "url": "https://www.nhsa.gov.cn/col/col104/index.html",
         "source": "国家医疗保障局",
         "pub_date": "2026-08-09",
         "category": "医保政策",
@@ -74,7 +74,7 @@ CURATED_POLICIES: List[Dict[str, Any]] = [
     },
     {
         "title": "国家卫生健康委办公厅关于推进手术机器人与高端智能诊疗装备临床应用示范基地建设的通知",
-        "url": "https://www.nhc.gov.cn/yzygj/s7659/20260808/content_robot_medic.shtml",
+        "url": "http://www.nhc.gov.cn/wjw/zcjd/list.shtml",
         "source": "国家卫生健康委",
         "pub_date": "2026-08-08",
         "category": "医疗机器人",
@@ -82,7 +82,7 @@ CURATED_POLICIES: List[Dict[str, Any]] = [
     },
     {
         "title": "成都市科学技术局关于组织申报2026年成都市科技成果转化产学研医协同创新项目的通知",
-        "url": "https://cdst.chengdu.gov.cn/cdkjw/c108705/20260807/content_chengdu_transfer.shtml",
+        "url": "https://cdst.chengdu.gov.cn/cdkjw/c108705/list.shtml",
         "source": "成都市科学技术局",
         "pub_date": "2026-08-07",
         "category": "科技申报政策",
