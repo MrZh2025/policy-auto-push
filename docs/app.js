@@ -32,7 +32,6 @@ const el = {
     navItems: document.querySelectorAll('.nav-item'),
     btnScrape: document.getElementById('btnScrape'),
     btnExportWord: document.getElementById('btnExportWord'),
-    btnPushWechat: document.getElementById('btnPushWechat'),
     btnGenWeekly: document.getElementById('btnGenWeekly'),
     chatMessages: document.getElementById('chatMessages'),
     chatInput: document.getElementById('chatInput'),
@@ -175,7 +174,6 @@ function bindEvents() {
     // 顶部按钮
     el.btnScrape.addEventListener('click', handleScrapeNow);
     el.btnExportWord.addEventListener('click', handleExportWord);
-    el.btnPushWechat.addEventListener('click', handlePushWechat);
 }
 
 function initApiKeyForm() {
@@ -187,6 +185,27 @@ function initApiKeyForm() {
 function handleSearch() {
     state.searchQuery = el.searchInput.value.trim().toLowerCase();
     filterAndRenderPolicies();
+}
+
+// 判定单条政策是否属于本周更新（严格校验当前系统年份，且发布时间在当前日期 7 天内）
+function isThisWeekPolicy(p) {
+    if (!p || !p.pub_date) return false;
+    const m = p.pub_date.match(/(\d{4})[-.\/年](\d{1,2})[-.\/月](\d{1,2})/);
+    if (!m) return false;
+    const pYear = parseInt(m[1], 10);
+    const pMonth = parseInt(m[2], 10) - 1;
+    const pDay = parseInt(m[3], 10);
+    const now = new Date();
+    const nowYear = now.getFullYear();
+
+    // 1. 年份必须与当前年份完全相同，非本年一律直接排除！
+    if (pYear !== nowYear) return false;
+
+    const pDate = new Date(pYear, pMonth, pDay);
+    const diffDays = (now.getTime() - pDate.getTime()) / (1000 * 3600 * 24);
+
+    // 2. 必须是当前日期 7 天内
+    return diffDays >= -0.5 && diffDays <= 7;
 }
 
 // 统一数据加载（兼顾本地 API 与 GitHub Pages 静态模式）
@@ -245,24 +264,29 @@ async function loadData() {
 }
 
 function updateStatsDisplay(statsData) {
-    const total = state.allPolicies.length;
-    el.statsBadge.textContent = `系统已就绪 · 累计收录 ${total} 篇政策法规`;
+    // 统计本周更新
+    const weekPolicies = state.allPolicies.filter(isThisWeekPolicy);
+    const weekTotal = weekPolicies.length;
+    const allTotal = state.allPolicies.length;
 
+    el.statsBadge.textContent = `系统已就绪 · 本周新增 ${weekTotal} 篇（近两年政策库累计 ${allTotal} 篇）`;
+
+    // 导航栏第一项：本周全部更新数量
     const countAll = document.getElementById('count-all');
-    if (countAll) countAll.textContent = total;
+    if (countAll) countAll.textContent = weekTotal;
 
-    // 统计各大赛道
-    const trackCounts = {};
-    state.allPolicies.forEach(p => {
+    // 统计各大赛道【本周最新更新】数量
+    const trackWeekCounts = {};
+    weekPolicies.forEach(p => {
         const cat = p.category || '科技申报政策';
-        trackCounts[cat] = (trackCounts[cat] || 0) + 1;
+        trackWeekCounts[cat] = (trackWeekCounts[cat] || 0) + 1;
     });
 
     const tracks = ['核医药', '脑机接口', 'AI制药', '医疗机器人', '医保政策', '科技申报政策'];
     tracks.forEach(tr => {
         const badge = document.getElementById(`count-${tr}`);
         if (badge) {
-            badge.textContent = trackCounts[tr] || 0;
+            badge.textContent = trackWeekCounts[tr] || 0;
         }
     });
 }
@@ -293,24 +317,7 @@ function filterAndRenderPolicies() {
 
     if (state.timeRange === 'week') {
         timeLabel = '🔥 本周最新更新';
-        timeFilteredList = list.filter(p => {
-            if (!p.pub_date) return false;
-            // 提取规范 YYYY-MM-DD
-            const m = p.pub_date.match(/(\d{4})[-.\/年](\d{1,2})[-.\/月](\d{1,2})/);
-            if (!m) return false;
-            const pYear = parseInt(m[1], 10);
-            const pMonth = parseInt(m[2], 10) - 1;
-            const pDay = parseInt(m[3], 10);
-
-            // 1. 年份必须与当前年份完全相同，非本年一律直接排除！
-            if (pYear !== nowYear) return false;
-
-            const pDate = new Date(pYear, pMonth, pDay);
-            const diffDays = (now.getTime() - pDate.getTime()) / (1000 * 3600 * 24);
-
-            // 2. 必须是当前日期 7 天内
-            return diffDays >= -0.5 && diffDays <= 7;
-        });
+        timeFilteredList = list.filter(isThisWeekPolicy);
     } else if (state.timeRange === 'month') {
         timeLabel = '📅 近30天更新';
         timeFilteredList = list.filter(p => {
@@ -778,19 +785,6 @@ function handleExportWord() {
     URL.revokeObjectURL(downloadUrl);
 
     showToast(`✅ 已弹出保存对话框，正在下载：${filename}`);
-}
-
-async function handlePushWechat() {
-    showToast('正在向个人微信派发最新医药政策早报...');
-    try {
-        const resp = await fetch('/api/push-wechat', { method: 'POST' });
-        if (resp.ok) {
-            const res = await resp.json();
-            showToast(res.msg || '微信推送完成');
-            return;
-        }
-    } catch (e) {}
-    showToast('💡 提示：微信早报每日 08:30 / 17:30 将由云端自动派发至您的手机微信！');
 }
 
 function showToast(msg) {
