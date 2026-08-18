@@ -1,8 +1,14 @@
 /**
- * 医药健康产业政策监测与申报研判系统 - 前端交互逻辑
+ * 医药健康产业集团政策监测信息系统 - 前端交互逻辑
  * 支持 GitHub Pages 静态无服务器部署与本地动态 API 模式自适应切换
  */
 
+// 默认 DeepSeek 大模型配置
+const DEFAULT_AI_KEY = 'sk-7daca4b5395646c39f282ed7227c047d';
+const DEFAULT_AI_BASE_URL = 'https://api.deepseek.com';
+const DEFAULT_AI_MODEL = 'deepseek-chat';
+
+const storedKey = localStorage.getItem('POLICY_AI_API_KEY');
 // 状态管理
 const state = {
     currentTrack: 'all',
@@ -11,9 +17,10 @@ const state = {
     allPolicies: [],
     filteredPolicies: [],
     theme: localStorage.getItem('POLICY_THEME') || 'light',
-    apiKey: localStorage.getItem('POLICY_AI_API_KEY') || '',
-    baseUrl: localStorage.getItem('POLICY_AI_BASE_URL') || 'https://api.deepseek.com/v1',
-    model: localStorage.getItem('POLICY_AI_MODEL') || 'deepseek-chat',
+    // 如果没有配置或之前配置了无效短key，直接默认使用 DeepSeek 官方配置
+    apiKey: (storedKey && storedKey.length > 20 && !storedKey.includes('5043')) ? storedKey : DEFAULT_AI_KEY,
+    baseUrl: localStorage.getItem('POLICY_AI_BASE_URL') || DEFAULT_AI_BASE_URL,
+    model: localStorage.getItem('POLICY_AI_MODEL') || DEFAULT_AI_MODEL,
 };
 
 // 预设专属 Prompt
@@ -454,8 +461,13 @@ async function sendChatMessage() {
 
 // 纯前端直接调用 OpenAI / DeepSeek / 通义千问 兼容 API
 async function callDirectLLM(prompt) {
-    const baseUrl = (state.baseUrl || 'https://api.deepseek.com/v1').replace(/\/+$/, '');
-    const model = state.model || 'deepseek-chat';
+    let rawBase = (state.baseUrl || DEFAULT_AI_BASE_URL).replace(/\/+$/, '');
+    let endpoint = rawBase.endsWith('/chat/completions') 
+        ? rawBase 
+        : (rawBase.endsWith('/v1') ? `${rawBase}/chat/completions` : `${rawBase}/chat/completions`);
+
+    const model = state.model || DEFAULT_AI_MODEL;
+    const apiKey = state.apiKey || DEFAULT_AI_KEY;
 
     const systemPrompt = `你是一名服务于四川大型国有医药健康产业集团的政策研究室主任兼科技申报总监。文风要求：严谨、干练、精炼，彻底去除AI味与机械套话，结论前置，直接给出政策依据、适用对象、奖补金额及实操申报建议。`;
 
@@ -466,24 +478,37 @@ async function callDirectLLM(prompt) {
             { role: 'user', content: prompt }
         ],
         temperature: 0.3,
-        max_tokens: 1500
+        max_tokens: 1600
     };
 
-    const resp = await fetch(`${baseUrl}/chat/completions`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${state.apiKey}`
-        },
-        body: JSON.stringify(payload)
-    });
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 40000);
 
-    if (resp.ok) {
-        const data = await resp.json();
-        return data.choices[0].message.content.trim();
-    } else {
-        const errText = await resp.text();
-        throw new Error(`HTTP ${resp.status}: ${errText}`);
+    try {
+        const resp = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
+            },
+            body: JSON.stringify(payload),
+            signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+
+        if (resp.ok) {
+            const data = await resp.json();
+            return data.choices[0].message.content.trim();
+        } else {
+            const errText = await resp.text();
+            throw new Error(`HTTP ${resp.status}: ${errText}`);
+        }
+    } catch (err) {
+        clearTimeout(timeoutId);
+        if (err.name === 'AbortError') {
+            throw new Error('大模型响应超时（超过40秒），请检查网络连接或更换模型节点。');
+        }
+        throw err;
     }
 }
 
@@ -638,21 +663,23 @@ async function handleScrapeNow() {
 
 // 纯前端直接生成符合《党政机关公文格式》(GB/T 9704-2012) 标准的 Word 文档并弹出保存对话框
 function handleExportWord() {
-    showToast('📄 正在生成公文 Word 简报并准备下载...');
+    // 严格按用户要求：只导出本周更新的政策和文件摘要
+    const weekPolicies = state.allPolicies.filter(isThisWeekPolicy);
+    const policies = (weekPolicies && weekPolicies.length > 0)
+        ? weekPolicies
+        : (state.filteredPolicies && state.filteredPolicies.length > 0 ? state.filteredPolicies : state.allPolicies.slice(0, 8));
 
-    const policies = (state.filteredPolicies && state.filteredPolicies.length > 0) 
-        ? state.filteredPolicies 
-        : (state.allPolicies && state.allPolicies.length > 0 ? state.allPolicies : []);
-
-    if (policies.length === 0) {
-        showToast('⚠️ 当前暂无政策数据可导出！');
+    if (!policies || policies.length === 0) {
+        showToast('⚠️ 当前本周暂未检索到更新的政策数据可导出！');
         return;
     }
+
+    showToast(`📄 正在为本周 ${policies.length} 篇新政策生成公文 Word 简报...`);
 
     const now = new Date();
     const dateStr = `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日`;
     const fileDateTag = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`;
-    const filename = `医药产业政策每日监测简报_${fileDateTag}.doc`;
+    const filename = `医药健康产业集团政策监测信息周报_${fileDateTag}.doc`;
 
     // 构造符合 GB/T 9704-2012 国家公文格式的 HTML Word 模板
     let tableRows = '';
@@ -660,10 +687,10 @@ function handleExportWord() {
         const isLast = (idx === policies.length - 1);
         tableRows += `
             <tr style="height:28pt;">
-                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:center; font-family:'仿宋','FangSong','仿宋_GB2312',serif; font-size:12pt;">${idx + 1}</td>
-                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:left; font-family:'仿宋','FangSong','仿宋_GB2312',serif; font-size:12pt;">${item.title || ''}</td>
-                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:center; font-family:'仿宋','FangSong','仿宋_GB2312',serif; font-size:12pt;">${item.source || '国家部委'}</td>
-                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:center; font-family:'仿宋','FangSong','仿宋_GB2312',serif; font-size:12pt;">${item.pub_date || '近期'}</td>
+                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:center; font-family:'方正仿宋简体','仿宋','FangSong','仿宋_GB2312',serif; font-size:11pt;">${idx + 1}</td>
+                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:left; font-family:'方正仿宋简体','仿宋','FangSong','仿宋_GB2312',serif; font-size:11pt;">${item.title || ''}</td>
+                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:center; font-family:'方正仿宋简体','仿宋','FangSong','仿宋_GB2312',serif; font-size:11pt;">${item.source || '国家部委'}</td>
+                <td style="border:none; ${isLast ? 'border-bottom:1.5pt solid black;' : ''} padding:4pt 6pt; text-align:center; font-family:'方正仿宋简体','仿宋','FangSong','仿宋_GB2312',serif; font-size:11pt;">${item.pub_date || '近期'}</td>
             </tr>
         `;
     });
@@ -677,13 +704,13 @@ function handleExportWord() {
         const url = item.url || '#';
 
         detailsHtml += `
-            <p style="margin:6pt 0 2pt 0; text-indent:2em; font-family:'仿宋','FangSong','仿宋_GB2312',serif; font-size:16pt; font-weight:bold; line-height:28.5pt;">
-                ${idx + 1}. ${title}。
+            <p style="margin:10pt 0 4pt 0; text-indent:2em; font-family:'方正仿宋简体','仿宋','FangSong','仿宋_GB2312',serif; font-size:16pt; font-weight:bold; line-height:28.5pt; color:#000000;">
+                ${idx + 1}. 《${title}》。
             </p>
-            <p style="margin:0 0 2pt 0; text-indent:2em; font-family:'仿宋','FangSong','仿宋_GB2312',serif; font-size:16pt; line-height:28.5pt;">
-                该文件由${dept}于${pubDate}公开发布。核心内容：${summary}
+            <p style="margin:0 0 4pt 0; text-indent:2em; font-family:'方正仿宋简体','仿宋','FangSong','仿宋_GB2312',serif; font-size:16pt; line-height:28.5pt; color:#000000; text-align:justify;">
+                该文件由 <strong>${dept}</strong> 于 ${pubDate} 公开发布。<strong>文件摘要与核心要点：</strong>${summary}
             </p>
-            <p style="margin:0 0 8pt 0; text-indent:2em; font-family:'仿宋','FangSong','仿宋_GB2312',serif; font-size:16pt; line-height:28.5pt;">
+            <p style="margin:0 0 12pt 0; text-indent:2em; font-family:'方正仿宋简体','仿宋','FangSong','仿宋_GB2312',serif; font-size:15pt; line-height:28.5pt;">
                 官方原文直达链接：<a href="${url}" target="_blank" style="color:#004886; text-decoration:underline;">${url}</a>
             </p>
         `;
@@ -693,7 +720,7 @@ function handleExportWord() {
         <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
         <head>
             <meta charset='utf-8'>
-            <title>医药产业政策每日监测简报</title>
+            <title>医药健康产业集团政策监测信息简报</title>
             <style>
                 @page Section1 {
                     size: 210mm 297mm;
@@ -704,7 +731,7 @@ function handleExportWord() {
                 }
                 div.Section1 { page: Section1; }
                 body {
-                    font-family: '仿宋', 'FangSong', '仿宋_GB2312', 'Times New Roman', serif;
+                    font-family: '方正仿宋简体', '仿宋', 'FangSong', '仿宋_GB2312', 'Times New Roman', serif;
                     font-size: 16pt;
                     line-height: 28.5pt;
                     color: #000000;
@@ -723,12 +750,12 @@ function handleExportWord() {
                     font-size: 16pt;
                     font-weight: bold;
                     text-indent: 2em;
-                    margin-top: 12pt;
+                    margin-top: 14pt;
                     margin-bottom: 6pt;
                     line-height: 28.5pt;
                 }
                 p.lead {
-                    font-family: '仿宋', 'FangSong', '仿宋_GB2312', serif;
+                    font-family: '方正仿宋简体', '仿宋', 'FangSong', '仿宋_GB2312', serif;
                     font-size: 16pt;
                     text-indent: 2em;
                     margin-top: 0;
@@ -745,11 +772,11 @@ function handleExportWord() {
         </head>
         <body>
             <div class="Section1">
-                <h1 class="doc-title">医药产业政策每日监测简报</h1>
+                <h1 class="doc-title">医药健康产业集团政策监测信息简报</h1>
                 
-                <p class="lead">为及时研判行业监管动向与政策红利，现将截至${dateStr}最新发布的医药产业重点政策监测汇总如下：</p>
+                <p class="lead">为及时研判行业监管动向与政策红利，现将截至 ${dateStr} 本周最新发布的医药产业重点政策及文件摘要汇总如下：</p>
                 
-                <h2 class="h1-title">一、重点政策速览清单</h2>
+                <h2 class="h1-title">一、本周重点政策速览清单</h2>
                 
                 <table class="three-line-table">
                     <thead>
@@ -765,7 +792,7 @@ function handleExportWord() {
                     </tbody>
                 </table>
                 
-                <h2 class="h1-title">二、重点政策要点与链接直达</h2>
+                <h2 class="h1-title">二、本周重点政策要点与文件摘要</h2>
                 
                 ${detailsHtml}
             </div>
@@ -784,7 +811,7 @@ function handleExportWord() {
     document.body.removeChild(link);
     URL.revokeObjectURL(downloadUrl);
 
-    showToast(`✅ 已弹出保存对话框，正在下载：${filename}`);
+    showToast(`✅ 已弹出保存对话框，正在下载本周公文简报：${filename}`);
 }
 
 function showToast(msg) {

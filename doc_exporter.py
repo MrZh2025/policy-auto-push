@@ -204,19 +204,19 @@ class PolicyDocExporter:
         # 2. 公文大标题：2号 方正小标宋简体，居中排布，行距 32 磅，末尾不加标点
         p_title = doc.add_paragraph()
         set_para_spacing(p_title, line_spacing_pt=Pt(32), space_before_pt=Pt(0), space_after_pt=Pt(12), first_line_indent_pt=Pt(0), align=WD_ALIGN_PARAGRAPH.CENTER)
-        r_title = p_title.add_run("医药产业政策每日监测简报")
+        r_title = p_title.add_run("医药健康产业集团政策监测信息简报")
         set_run_font(r_title, font_type='title', size_pt=FONT_SIZES['2号'], bold=True)
 
         # 3. 导语段落：3号 方正仿宋简体，首行缩进 2 字符，固定行距 28.5 磅
         p_lead = doc.add_paragraph()
         set_para_spacing(p_lead, line_spacing_pt=Pt(28.5), space_before_pt=Pt(0), space_after_pt=Pt(6), first_line_indent_pt=Pt(32), align=WD_ALIGN_PARAGRAPH.JUSTIFY)
-        r_lead = p_lead.add_run(f"为及时研判行业监管动向与政策红利，现将截至{today_str}最新发布的医药产业重点政策监测汇总如下：")
+        r_lead = p_lead.add_run(f"为及时研判行业监管动向与政策红利，现将截至{today_str}本周最新发布的医药产业重点政策及文件摘要汇总如下：")
         set_run_font(r_lead, font_type='body', size_pt=FONT_SIZES['3号'])
 
         # 4. 一级标题：一、政策速览清单（3号 黑体，首行缩进 2 字符）
         p_h1 = doc.add_paragraph()
         set_para_spacing(p_h1, line_spacing_pt=Pt(28.5), space_before_pt=Pt(6), space_after_pt=Pt(4), first_line_indent_pt=Pt(32), align=WD_ALIGN_PARAGRAPH.JUSTIFY)
-        r_h1 = p_h1.add_run("一、重点政策速览清单")
+        r_h1 = p_h1.add_run("一、本周重点政策速览清单")
         set_run_font(r_h1, font_type='h1', size_pt=FONT_SIZES['3号'])
 
         # 5. 标准公文三线表（顶底线粗 1.5pt，栏目线 0.75pt，无竖线）
@@ -283,10 +283,10 @@ class PolicyDocExporter:
                     set_cell_border(cell, bottom={'val': 'none'}, top={'val': 'none'},
                                           left={'val': 'none'}, right={'val': 'none'})
 
-        # 6. 一级标题：二、政策详细要点与链接直达
+        # 6. 一级标题：二、政策详细要点与文件摘要
         p_h2 = doc.add_paragraph()
         set_para_spacing(p_h2, line_spacing_pt=Pt(28.5), space_before_pt=Pt(12), space_after_pt=Pt(4), first_line_indent_pt=Pt(32), align=WD_ALIGN_PARAGRAPH.JUSTIFY)
-        r_h2 = p_h2.add_run("二、重点政策要点与链接直达")
+        r_h2 = p_h2.add_run("二、本周重点政策要点与文件摘要")
         set_run_font(r_h2, font_type='h1', size_pt=FONT_SIZES['3号'])
 
         # 7. 政策要点逐条排版（遵循三级标题规范：3号 方正仿宋加粗 + 方正仿宋正文，固定行距28.5磅）
@@ -306,7 +306,7 @@ class PolicyDocExporter:
             
             p_desc = doc.add_paragraph()
             set_para_spacing(p_desc, line_spacing_pt=Pt(28.5), space_before_pt=Pt(0), space_after_pt=Pt(2), first_line_indent_pt=Pt(32), align=WD_ALIGN_PARAGRAPH.JUSTIFY)
-            r_desc = p_desc.add_run(f"该文件由{dept}于{date_str}公开发布。核心内容：{summary}")
+            r_desc = p_desc.add_run(f"该文件由{dept}于{date_str}公开发布。文件摘要与核心要点：{summary}")
             set_run_font(r_desc, font_type='body', size_pt=FONT_SIZES['3号'])
 
             # 原文链接（仿宋 3号 / 蓝色下划线）
@@ -323,7 +323,7 @@ class PolicyDocExporter:
         add_side_page_number(doc)
 
         # 9. 保存文件
-        filename = custom_filename or f"医药产业政策每日监测简报_{date_tag}.docx"
+        filename = custom_filename or f"医药健康产业集团政策监测信息简报_{date_tag}.docx"
         saved_paths = []
 
         # 9.1 保存到 Windows 桌面

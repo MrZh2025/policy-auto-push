@@ -71,11 +71,11 @@ ENABLED_SOURCES = {
 }
 
 # ==========================================
-# 3. 智能 AI 摘要与深度解读配置 (可选)
+# 3. 智能 AI 摘要与深度解读配置 (DeepSeek 默认)
 # ==========================================
-AI_SUMMARY_ENABLED = False
-AI_API_KEY = os.getenv("AI_API_KEY", "")
-AI_BASE_URL = os.getenv("AI_BASE_URL", "https://api.deepseek.com/v1")
+AI_SUMMARY_ENABLED = True
+AI_API_KEY = os.getenv("AI_API_KEY", "sk-7daca4b5395646c39f282ed7227c047d")
+AI_BASE_URL = os.getenv("AI_BASE_URL", "https://api.deepseek.com")
 AI_MODEL = os.getenv("AI_MODEL", "deepseek-chat")
 
 # 爬虫通用网络请求配置

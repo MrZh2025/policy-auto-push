@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>国家药品监督管理局政策监测与申报研判系统 - 四川发展·医药集团</title>
-    <link rel="stylesheet" href="index.css?v=20260818v8">
+    <title>医药健康产业集团政策监测信息系统 - 四川发展·医药集团</title>
+    <link rel="stylesheet" href="index.css?v=20260818v9">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700;900&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -37,7 +37,7 @@
                     </div>
                 </div>
                 <div class="nmpa-title-box">
-                    <div class="main-title">医药健康产业政策监测与申报研判系统</div>
+                    <div class="main-title">医药健康产业集团政策监测信息系统</div>
                 </div>
             </div>
 
@@ -160,16 +160,16 @@
                     <div class="config-drawer hidden" id="apiKeyDrawer">
                         <div class="drawer-header">
                             <strong>🔑 AI 政策研判大模型参数配置</strong>
-                            <span style="font-size:11px;color:var(--text-muted)">（支持 DeepSeek / 通义千问 / OpenAI / Kimi）</span>
+                            <span style="font-size:11px;color:var(--text-muted)">（默认直连 DeepSeek，支持通义千问 / OpenAI / Kimi）</span>
                         </div>
                         <div class="drawer-field">
                             <label>API Key（密钥保存在您本地浏览器中，安全私密）：</label>
-                            <input type="password" id="inputApiKey" placeholder="sk-xxxxxxxxxxxxxxxx">
+                            <input type="password" id="inputApiKey" placeholder="sk-7daca4b5395646c39f282ed7227c047d">
                         </div>
                         <div class="drawer-row">
                             <div style="flex:1.2">
                                 <label style="font-size:11px;color:var(--text-muted)">接口地址 (Base URL):</label>
-                                <input type="text" id="inputBaseUrl" placeholder="https://api.deepseek.com/v1">
+                                <input type="text" id="inputBaseUrl" placeholder="https://api.deepseek.com">
                             </div>
                             <div style="flex:0.8">
                                 <label style="font-size:11px;color:var(--text-muted)">模型名称:</label>
@@ -192,7 +192,7 @@
                         <div class="dialog-row bot-row">
                             <div class="dialog-card">
                                 <div class="dialog-author">政策研究室工作台</div>
-                                本系统已对接国家药监局、国家医保局及四川省局官方政策库。您可以直接咨询核医药、脑机接口、AI制药、医疗机器人、医保集采或科技资金申报等具体问题，或点击上方按钮生成 <strong>《四川省生物医药周回顾报告》</strong>。
+                                本系统已对接国家药监局、国家医保局、四川省药监局及省科技厅官方政策库，默认接入 DeepSeek 智能分析。您可以直接咨询核医药、脑机接口、AI制药、医疗机器人、医保集采或科技资金申报等具体问题，或点击上方按钮生成 <strong>《四川省生物医药周回顾报告》</strong>。
                             </div>
                         </div>
                     </div>
@@ -225,6 +225,6 @@
     <!-- 弹窗通知 -->
     <div id="toast" class="nmpa-toast hidden"></div>
 
-    <script src="app.js?v=20260818v6"></script>
+    <script src="app.js?v=20260818v9"></script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   医药健康产业政策监测与申报研判系统
+   医药健康产业集团政策监测信息系统
    设计参照：国家药品监督管理局 (NMPA) 官方门户网站视觉规范
    ========================================================================== */
 
@@ -578,6 +578,33 @@ body {
     color: var(--text-muted);
     line-height: 1.55;
     margin-bottom: 8px;
+    max-height: 4.65em; /* 默认约 3 行 */
+    overflow-y: hidden;
+    padding-right: 4px;
+    transition: max-height 0.25s ease, background-color 0.2s ease, padding 0.2s ease;
+    border-radius: 4px;
+}
+
+/* 鼠标放上去时，平滑展开至约 7 行高度并开启滚轮滑动，方便直接阅览全文 */
+.nmpa-policy-row:hover .row-summary,
+.row-summary:hover {
+    max-height: 11em;
+    overflow-y: auto;
+    background-color: var(--bg-inset);
+    padding: 6px 8px;
+    color: var(--text-body);
+}
+
+/* 极简精致滚动条 */
+.row-summary::-webkit-scrollbar {
+    width: 4px;
+}
+.row-summary::-webkit-scrollbar-track {
+    background: transparent;
+}
+.row-summary::-webkit-scrollbar-thumb {
+    background-color: var(--nmpa-blue-main);
+    border-radius: 2px;
 }
 
 .row-bottom {

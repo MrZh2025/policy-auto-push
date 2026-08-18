@@ -167,10 +167,31 @@ class PolicyWebHandler(http.server.SimpleHTTPRequestHandler):
             db = PolicyDatabase()
             with db._get_connection() as conn:
                 cursor = conn.cursor()
-                cursor.execute("SELECT * FROM policies ORDER BY id DESC LIMIT 12")
-                policies = [dict(r) for r in cursor.fetchall()]
-            paths = PolicyDocExporter.export(policies)
-            self._json_response({"code": 0, "paths": paths, "msg": "Word 公文简报已成功保存到您的桌面！"})
+                cursor.execute("SELECT * FROM policies ORDER BY pub_date DESC, id DESC LIMIT 100")
+                all_policies = [dict(r) for r in cursor.fetchall()]
+            
+            # 严格筛选本周政策
+            now = datetime.now()
+            now_year = now.year
+            week_policies = []
+            for p in all_policies:
+                d_str = p.get("pub_date", "")
+                if not d_str:
+                    continue
+                m = re.search(r"(\d{4})[-.\/年](\d{1,2})[-.\/月](\d{1,2})", d_str)
+                if not m:
+                    continue
+                p_year = int(m.group(1))
+                if p_year != now_year:
+                    continue
+                p_date = datetime(p_year, int(m.group(2)), int(m.group(3)))
+                diff = (now - p_date).days
+                if -1 <= diff <= 7:
+                    week_policies.append(p)
+
+            export_list = week_policies if week_policies else all_policies[:8]
+            paths = PolicyDocExporter.export(export_list)
+            self._json_response({"code": 0, "paths": paths, "count": len(export_list), "msg": f"已将本周 {len(export_list)} 篇政策公文简报成功保存到桌面！"})
         except Exception as e:
             self._json_response({"code": -1, "msg": str(e)}, status=500)
 
@@ -205,7 +226,7 @@ def start_server():
     server_address = ("", PORT)
     with ThreadingHTTPServer(server_address, PolicyWebHandler) as httpd:
         safe_log("=" * 60)
-        safe_log(f"🚀 医药产业政策大屏 Web 服务已启动！")
+        safe_log(f"🚀 医药健康产业集团政策监测信息系统 Web 服务已启动！")
         safe_log(f"👉 本地访问地址: http://127.0.0.1:{PORT}")
         safe_log("=" * 60)
         
