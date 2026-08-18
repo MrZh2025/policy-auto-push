@@ -701,69 +701,153 @@ body {
     gap: 18px;
 }
 
-/* 四川红头专题卡片 */
+/* ========================================================= */
+/* 板块一：四川省专项内参（NMPA 权威政务红头专题风）           */
+/* ========================================================= */
 .special-sichuan-box {
-    border-top: 4px solid var(--nmpa-red-gov);
+    background: linear-gradient(180deg, #fffbfb 0%, #ffffff 100%);
+    border: 1.5px solid #fecaca;
+    border-top: 5px solid #c5161d;
+    border-radius: 4px;
+    box-shadow: 0 3px 12px rgba(197, 22, 29, 0.08);
+    position: relative;
+    padding: 18px 20px;
+}
+[data-theme="dark"] .special-sichuan-box {
+    background: linear-gradient(180deg, #2a1517 0%, #1a202c 100%);
+    border-color: #5c1d24;
+    border-top-color: #e53e3e;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
 }
 
 .special-badge {
-    display: inline-block;
-    background-color: var(--nmpa-red-gov);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background-color: #c5161d;
     color: #ffffff;
     font-size: 11.5px;
     font-weight: 700;
-    padding: 2px 8px;
+    padding: 3px 9px;
     border-radius: 2px;
     margin-bottom: 8px;
     letter-spacing: 0.5px;
+    box-shadow: 0 1px 3px rgba(197, 22, 29, 0.35);
 }
 
 .special-card-title {
     font-family: "Microsoft YaHei", "微软雅黑", sans-serif;
     font-size: 17px;
     font-weight: 800;
-    color: var(--text-title);
+    color: #881318;
     margin-bottom: 6px;
+    letter-spacing: 0.3px;
+}
+[data-theme="dark"] .special-card-title {
+    color: #feb2b2;
 }
 
 .special-card-desc {
     font-size: 13px;
-    color: var(--text-muted);
-    line-height: 1.55;
-    margin-bottom: 12px;
+    color: #4a5568;
+    line-height: 1.6;
+    margin-bottom: 14px;
+}
+[data-theme="dark"] .special-card-desc {
+    color: #a0aec0;
+}
+
+.weekly-btn-group {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
 }
 
 .btn-generate-report {
-    width: 100%;
+    flex: 1;
     background: linear-gradient(135deg, #c5161d 0%, #9e0f15 100%);
     color: #ffffff;
     border: none;
     font-size: 13.5px;
     font-weight: 700;
-    padding: 10px 16px;
+    padding: 10px 14px;
     border-radius: 3px;
     cursor: pointer;
-    box-shadow: 0 2px 6px rgba(197, 22, 29, 0.25);
+    box-shadow: 0 2px 6px rgba(197, 22, 29, 0.28);
     transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
 }
 .btn-generate-report:hover {
     background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
-    box-shadow: 0 3px 8px rgba(197, 22, 29, 0.35);
+    box-shadow: 0 3px 10px rgba(197, 22, 29, 0.4);
+    transform: translateY(-1px);
 }
 
-/* 研判咨询台 */
+.btn-export-weekly-doc {
+    background-color: #ffffff;
+    color: #c5161d;
+    border: 1.5px solid #c5161d;
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 0 14px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+}
+.btn-export-weekly-doc:hover {
+    background-color: #c5161d;
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(197, 22, 29, 0.25);
+    transform: translateY(-1px);
+}
+[data-theme="dark"] .btn-export-weekly-doc {
+    background-color: #1a202c;
+    color: #feb2b2;
+    border-color: #e53e3e;
+}
+[data-theme="dark"] .btn-export-weekly-doc:hover {
+    background-color: #e53e3e;
+    color: #ffffff;
+}
+
+/* ========================================================= */
+/* 板块二：AI·政策研判与申报咨询（NMPA 经典科技深蓝服务平台风） */
+/* ========================================================= */
 .consult-box {
     display: flex;
     flex-direction: column;
+    background: linear-gradient(180deg, #f0f7fd 0%, #ffffff 100%);
+    border: 1.5px solid #bee3f8;
+    border-top: 5px solid #004886;
+    border-radius: 4px;
+    box-shadow: 0 3px 14px rgba(0, 72, 134, 0.09);
+    position: relative;
+    padding: 18px 20px;
+}
+[data-theme="dark"] .consult-box {
+    background: linear-gradient(180deg, #132438 0%, #1a202c 100%);
+    border-color: #2b4c7e;
+    border-top-color: #3182ce;
+    box-shadow: 0 3px 14px rgba(0, 0, 0, 0.4);
 }
 
 .consult-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 10px;
-    border-bottom: 2px solid var(--border-light);
+    padding-bottom: 12px;
+    border-bottom: 1.5px solid #dbeafe;
     margin-bottom: 12px;
+}
+[data-theme="dark"] .consult-top {
+    border-bottom-color: #2b4c7e;
 }
 
 .consult-title-area {
@@ -774,9 +858,13 @@ body {
 
 .consult-title-area h4 {
     font-family: "Microsoft YaHei", "微软雅黑", sans-serif;
-    font-size: 16px;
+    font-size: 16.5px;
     font-weight: 800;
-    color: var(--text-title);
+    color: #004886;
+    margin: 0;
+}
+[data-theme="dark"] .consult-title-area h4 {
+    color: #90cdf4;
 }
 
 .consult-actions {
@@ -786,23 +874,29 @@ body {
 }
 
 .btn-clear-chat {
-    background-color: var(--bg-inset);
-    border: 1px solid var(--border-color);
-    color: var(--text-muted);
+    background-color: #ffffff;
+    border: 1px solid #bfdbfe;
+    color: #1e40af;
     font-size: 12px;
     font-weight: 600;
-    padding: 4px 8px;
+    padding: 4px 9px;
     border-radius: 3px;
     cursor: pointer;
     transition: all 0.15s ease;
     display: inline-flex;
     align-items: center;
     gap: 3px;
+    box-shadow: 0 1px 2px rgba(0, 72, 134, 0.05);
 }
 .btn-clear-chat:hover {
     background-color: #fee2e2;
     border-color: #fca5a5;
     color: #b91c1c;
+}
+[data-theme="dark"] .btn-clear-chat {
+    background-color: #1a202c;
+    border-color: #2b4c7e;
+    color: #90cdf4;
 }
 [data-theme="dark"] .btn-clear-chat:hover {
     background-color: #7f1d1d;
@@ -811,29 +905,40 @@ body {
 }
 
 .btn-ai-setup {
-    background-color: var(--nmpa-blue-soft);
-    border: 1px solid var(--border-color);
-    color: var(--nmpa-blue-main);
+    background: linear-gradient(135deg, #004886 0%, #003366 100%);
+    border: none;
+    color: #ffffff;
     font-size: 12px;
     font-weight: 600;
-    padding: 4px 10px;
+    padding: 5px 12px;
     border-radius: 3px;
     cursor: pointer;
     transition: all 0.15s ease;
+    box-shadow: 0 1px 3px rgba(0, 72, 134, 0.25);
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
 }
 .btn-ai-setup:hover {
-    background-color: var(--nmpa-blue-main);
-    color: #ffffff;
+    background: linear-gradient(135deg, #00569e 0%, #004886 100%);
+    box-shadow: 0 2px 6px rgba(0, 72, 134, 0.35);
+}
+[data-theme="dark"] .btn-ai-setup {
+    background: linear-gradient(135deg, #2b6cb0 0%, #1a365d 100%);
 }
 
 /* 模型抽屉 */
 .config-drawer {
-    background-color: var(--bg-inset);
-    border: 1px solid var(--border-color);
+    background-color: #ffffff;
+    border: 1px solid #bfdbfe;
     border-radius: 4px;
     padding: 12px;
     margin-bottom: 14px;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 2px 8px rgba(0, 72, 134, 0.06);
+}
+[data-theme="dark"] .config-drawer {
+    background-color: #1a202c;
+    border-color: #2b4c7e;
 }
 .config-drawer.hidden { display: none; }
 
@@ -928,21 +1033,32 @@ body {
 }
 
 .tag-chip {
-    background-color: var(--bg-subtle);
-    border: 1px solid var(--border-color);
-    color: var(--text-body);
+    background-color: #ffffff;
+    border: 1px solid #bfdbfe;
+    color: #004886;
     font-size: 12px;
-    font-weight: 500;
+    font-weight: 600;
     padding: 4px 10px;
     border-radius: 3px;
     cursor: pointer;
     transition: all 0.15s ease;
+    box-shadow: 0 1px 2px rgba(0, 72, 134, 0.04);
 }
 
 .tag-chip:hover {
-    border-color: var(--nmpa-blue-main);
-    color: var(--nmpa-blue-main);
-    background-color: var(--nmpa-blue-soft);
+    border-color: #004886;
+    color: #ffffff;
+    background-color: #004886;
+    transform: translateY(-1px);
+}
+[data-theme="dark"] .tag-chip {
+    background-color: #1a202c;
+    border-color: #2b4c7e;
+    color: #90cdf4;
+}
+[data-theme="dark"] .tag-chip:hover {
+    background-color: #3182ce;
+    color: #ffffff;
 }
 
 /* 研判对话区 */
@@ -954,15 +1070,21 @@ body {
     gap: 10px;
     padding: 6px 2px;
     margin-bottom: 10px;
-    border-bottom: 1px solid var(--border-light);
+    border-bottom: 1.5px solid #dbeafe;
+}
+[data-theme="dark"] .consult-dialog-viewport {
+    border-bottom-color: #2b4c7e;
 }
 
 .consult-dialog-viewport::-webkit-scrollbar {
     width: 5px;
 }
 .consult-dialog-viewport::-webkit-scrollbar-thumb {
-    background-color: var(--border-color);
+    background-color: #bfdbfe;
     border-radius: 3px;
+}
+[data-theme="dark"] .consult-dialog-viewport::-webkit-scrollbar-thumb {
+    background-color: #2b4c7e;
 }
 
 .dialog-row {
@@ -981,28 +1103,45 @@ body {
 }
 
 .dialog-row.bot-row .dialog-card {
-    background-color: var(--bg-subtle);
-    border: 1px solid var(--border-color);
+    background-color: #ffffff;
+    border: 1px solid #bfdbfe;
+    border-left: 3.5px solid #004886;
     color: var(--text-title);
+    box-shadow: 0 1px 4px rgba(0, 72, 134, 0.05);
+}
+[data-theme="dark"] .dialog-row.bot-row .dialog-card {
+    background-color: #1a202c;
+    border-color: #2b4c7e;
+    border-left-color: #3182ce;
 }
 
 .dialog-row.user-row .dialog-card {
-    background-color: var(--nmpa-blue-main);
+    background: linear-gradient(135deg, #004886 0%, #003366 100%);
     color: #ffffff;
+    box-shadow: 0 1px 4px rgba(0, 72, 134, 0.15);
 }
 
 .dialog-author {
     font-size: 11.5px;
     font-weight: 700;
-    color: var(--nmpa-red-gov);
+    color: #004886;
     margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+[data-theme="dark"] .dialog-author {
+    color: #90cdf4;
 }
 
 .dialog-card h2, .dialog-card h3 {
     font-size: 14px;
     font-weight: 700;
-    color: var(--nmpa-blue-main);
+    color: #004886;
     margin: 8px 0 4px;
+}
+[data-theme="dark"] .dialog-card h2, [data-theme="dark"] .dialog-card h3 {
+    color: #90cdf4;
 }
 
 .dialog-card ul, .dialog-card ol {
@@ -1019,24 +1158,29 @@ body {
 
 .consult-input-area textarea {
     flex: 1;
-    background-color: var(--bg-subtle);
-    border: 1px solid var(--border-color);
+    background-color: #ffffff;
+    border: 1.5px solid #bfdbfe;
     border-radius: 3px;
     color: var(--text-title);
-    padding: 6px 10px;
+    padding: 7px 10px;
     font-size: 12.5px;
     font-family: inherit;
     resize: none;
     outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+[data-theme="dark"] .consult-input-area textarea {
+    background-color: #1a202c;
+    border-color: #2b4c7e;
 }
 
 .consult-input-area textarea:focus {
-    border-color: var(--nmpa-blue-main);
-    background-color: var(--bg-card);
+    border-color: #004886;
+    box-shadow: 0 0 0 2px rgba(0, 72, 134, 0.15);
 }
 
 .btn-send-msg {
-    background-color: var(--nmpa-blue-main);
+    background: linear-gradient(135deg, #004886 0%, #003366 100%);
     color: #ffffff;
     border: none;
     padding: 6px 14px;
