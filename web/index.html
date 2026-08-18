@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>医药产业政策自动化监控与智能分析平台</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="app-header">
+        <div class="header-container">
+            <div class="logo-area">
+                <div class="logo-icon">🧬</div>
+                <div class="logo-text">
+                    <h1>医药产业政策智能监测平台</h1>
+                    <span class="sub-text">四川发展 · 医药集团政策研究中心</span>
+                </div>
+            </div>
+            
+            <div class="header-actions">
+                <div class="status-badge" id="statsBadge">
+                    <span class="pulse-dot"></span>
+                    <span id="statsSummary">系统已就绪 · 累计收录 48 篇政策</span>
+                </div>
+                <button class="btn btn-secondary" id="btnScrape" title="触发全网最新政策采集">
+                    <span class="icon">🔄</span> 立即采集
+                </button>
+                <button class="btn btn-primary" id="btnExportWord" title="导出符合GB/T 9704-2012标准的Word简报到桌面">
+                    <span class="icon">📄</span> 导出公文Word
+                </button>
+                <button class="btn btn-success" id="btnPushWechat" title="推送到个人微信">
+                    <span class="icon">📱</span> 推送微信
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主体容器 -->
+    <main class="main-container">
+        <!-- 核心赛道统计指标条 -->
+        <section class="tracks-bar">
+            <div class="track-card active" data-track="all">
+                <div class="track-icon">🌐</div>
+                <div class="track-info">
+                    <div class="track-title">全部政策</div>
+                    <div class="track-count" id="count-all">--</div>
+                </div>
+            </div>
+            <div class="track-card" data-track="核医药">
+                <div class="track-icon">⚛️</div>
+                <div class="track-info">
+                    <div class="track-title">核医药</div>
+                    <div class="track-count" id="count-核医药">--</div>
+                </div>
+            </div>
+            <div class="track-card" data-track="脑机接口">
+                <div class="track-icon">🧠</div>
+                <div class="track-info">
+                    <div class="track-title">脑机接口</div>
+                    <div class="track-count" id="count-脑机接口">--</div>
+                </div>
+            </div>
+            <div class="track-card" data-track="AI制药">
+                <div class="track-icon">🧬</div>
+                <div class="track-info">
+                    <div class="track-title">AI制药</div>
+                    <div class="track-count" id="count-AI制药">--</div>
+                </div>
+            </div>
+            <div class="track-card" data-track="医疗机器人">
+                <div class="track-icon">🤖</div>
+                <div class="track-info">
+                    <div class="track-title">医疗机器人</div>
+                    <div class="track-count" id="count-医疗机器人">--</div>
+                </div>
+            </div>
+            <div class="track-card" data-track="医保政策">
+                <div class="track-icon">💳</div>
+                <div class="track-info">
+                    <div class="track-title">医保政策</div>
+                    <div class="track-count" id="count-医保政策">--</div>
+                </div>
+            </div>
+            <div class="track-card" data-track="科技申报政策">
+                <div class="track-icon">📑</div>
+                <div class="track-info">
+                    <div class="track-title">科技申报</div>
+                    <div class="track-count" id="count-科技申报政策">--</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 核心内容双栏布局 -->
+        <div class="content-grid">
+            <!-- 左侧：每日最新政策大屏 -->
+            <section class="left-panel">
+                <div class="panel-header">
+                    <div class="panel-title-wrap">
+                        <h2>📋 每日最新政策速览</h2>
+                        <span class="badge" id="listBadge">最新发布</span>
+                    </div>
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="搜索政策标题、发文机构、关键词...">
+                        <button id="searchBtn">🔍</button>
+                    </div>
+                </div>
+
+                <!-- 政策卡片列表容器 -->
+                <div class="policy-list" id="policyList">
+                    <div class="loading-spinner">正在加载最新政策数据...</div>
+                </div>
+            </section>
+
+            <!-- 右侧：AI 政策专家智库 & 四川省生物医药周回顾专区 -->
+            <section class="right-panel">
+                <!-- 四川生物医药专项周回顾板块 -->
+                <div class="sichuan-box">
+                    <div class="sichuan-header">
+                        <div class="sichuan-title">
+                            <span class="star-icon">✨</span>
+                            <h3>四川省生物医药科技创新与奖补周回顾</h3>
+                        </div>
+                        <button class="btn-sm btn-accent" id="btnGenWeekly">
+                            ⚡ 一键生成本周回顾报告
+                        </button>
+                    </div>
+                    <p class="sichuan-desc">
+                        聚焦四川省科技厅、发改委、成都市经信局关于生物医药科技奖励、研发补助、创新平台及资金奖补最新动态。
+                    </p>
+                </div>
+
+                <!-- AI 专家问答交互工作台 -->
+                <div class="ai-chat-card">
+                    <div class="chat-header">
+                        <div class="bot-info">
+                            <div class="bot-avatar">🤖</div>
+                            <div>
+                                <h4>AI 医药政策智能助理</h4>
+                                <span class="online-tag">● 在线解读</span>
+                            </div>
+                        </div>
+                        <button class="btn-link" id="toggleApiKey">⚙️ 密钥配置</button>
+                    </div>
+
+                    <!-- API 密钥折叠配置栏 -->
+                    <div class="api-key-drawer hidden" id="apiKeyDrawer">
+                        <div class="drawer-row">
+                            <label>API Key (支持 DeepSeek / OpenAI / 通义千问):</label>
+                            <input type="password" id="inputApiKey" placeholder="sk-xxxxxxxxxxxxxxxx">
+                        </div>
+                        <div class="drawer-row-flex">
+                            <input type="text" id="inputBaseUrl" placeholder="https://api.deepseek.com/v1">
+                            <input type="text" id="inputModel" placeholder="deepseek-chat">
+                            <button class="btn btn-sm btn-primary" id="btnSaveKey">保存</button>
+                        </div>
+                    </div>
+
+                    <!-- 快捷 Prompt 胶囊 -->
+                    <div class="prompt-pills">
+                        <span class="pill-chip" data-prompt="请分析当前国家药监局对核药与放射性药物审评审批的最新支持政策。">⚛️ 核药审评政策</span>
+                        <span class="pill-chip" data-prompt="成都市对生物医药和医疗机器人有哪些具体的资金奖补措施？">🤖 成都奖补细则</span>
+                        <span class="pill-chip" data-prompt="最新一轮国家医保目录调整和支付方式对创新药有何影响？">💳 医保准入影响</span>
+                        <span class="pill-chip" data-prompt="请帮我起草一份脑机接口科技创新专项申报书的政策契合点与研究背景。">🧠 脑机申报提炼</span>
+                    </div>
+
+                    <!-- 聊天消息气泡区 -->
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message-bubble bot">
+                            <div class="bubble-content">
+                                您好！我是您的 <strong>医药产业政策与科技申报智能助理</strong>。您可以向我咨询核医药、脑机接口、AI制药、医疗机器人、医保集采以及四川省/成都市最新的科技奖补申报政策，也可以点击上方按钮一键生成 <strong>《四川省生物医药周回顾报告》</strong>！
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 输入框区域 -->
+                    <div class="chat-input-box">
+                        <textarea id="chatInput" placeholder="输入您的政策疑问，按 Enter 快速发送..." rows="2"></textarea>
+                        <button id="btnSendChat" class="btn btn-primary">发送</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- 弹窗通知组件 -->
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
