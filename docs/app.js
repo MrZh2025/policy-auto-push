@@ -594,21 +594,56 @@ async function sendChatMessage() {
     }, 600);
 }
 
-// 纯前端直接调用 OpenAI / DeepSeek / 通义千问 兼容 API（多端点智能自动容错重试）
+// 获取当前动态时间基准描述
+function getCurrentTimeAnchor() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth() + 1;
+    const date = now.getDate();
+    const weekNumber = Math.ceil(date / 7);
+    return {
+        year,
+        month,
+        date,
+        weekNumber,
+        fullDateStr: `${year}年${month}月${date}日`,
+        periodStr: `${year}年${month}月第${weekNumber}周`
+    };
+}
+
+// 纯前端直接调用 OpenAI / DeepSeek / 通义千问 兼容 API（多端点智能自动容错重试 + 强时间锚点注入）
 async function callDirectLLM(prompt, apiKey) {
     const rawBase = state.baseUrl || DEFAULT_AI_BASE_URL;
     const model = state.model || DEFAULT_AI_MODEL;
     const endpoints = getCandidateEndpoints(rawBase, model);
     const key = apiKey || state.apiKey || DEFAULT_AI_KEY;
+    const timeAnchor = getCurrentTimeAnchor();
 
-    const systemPrompt = `你是一名服务于四川大型国有医药健康产业集团的政策研究室主任兼科技申报总监。文风要求：严谨、干练、精炼，彻底去除AI味与机械套话，结论前置，直接给出政策依据、适用对象、奖补金额及实操申报建议。`;
+    const systemPrompt = `你是一名服务于四川省医药健康产业集团的政策研究室主任兼科技申报总监。
+【重要时间基准】：当前系统真实时间为 ${timeAnchor.fullDateStr}（即【${timeAnchor.periodStr}】）。
+【硬性规定】：
+1. 涉及所有政策周报标题、研判周期、申报时效必须严格以当前真实时间（${timeAnchor.year}年${timeAnchor.month}月）为准，严禁出现过期的 2024 年、2025 年等历史年份！
+2. 文风要求：严谨、干练、精炼，彻底去除 AI 味与机械套话，结论前置，直接给出政策依据、适用对象、奖补金额及实操申报建议。`;
+
+    // 动态提取最新的官方政策监测数据作为上下文
+    let contextStr = '';
+    if (state.allPolicies && state.allPolicies.length > 0) {
+        const recentList = state.allPolicies.slice(0, 8);
+        contextStr = `【当前监测到的最新官方政策数据参考（${timeAnchor.fullDateStr}）】：\n` + 
+            recentList.map((p, idx) => `${idx + 1}. [${p.source}] 《${p.title}》（发布日期：${p.pub_date || '近期'}）- 链接: ${p.url}`).join('\n');
+    }
+
+    const messages = [
+        { role: 'system', content: systemPrompt }
+    ];
+    if (contextStr) {
+        messages.push({ role: 'user', content: contextStr });
+    }
+    messages.push({ role: 'user', content: prompt });
 
     const payload = {
         model: model,
-        messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: prompt }
-        ],
+        messages: messages,
         temperature: 0.3,
         max_tokens: 1600
     };
@@ -664,8 +699,19 @@ async function callDirectLLM(prompt, apiKey) {
 
 // 四川生物医药周回顾一键生成
 async function generateSichuanWeeklyReport() {
-    appendMessage('调取四川省科技厅、省发改委、成都市经信局最新生物医药科技奖补与资金申报数据，编制深度周回顾报告。', 'user-row');
-    const loadingId = appendMessage('正在起草《四川省生物医药科技创新与奖补周回顾报告》（5大核心要点）...', 'bot-row');
+    const timeAnchor = getCurrentTimeAnchor();
+    appendMessage(`调取四川省科技厅、省发改委、成都市经信局最新生物医药科技奖补与资金申报数据，编制【${timeAnchor.periodStr}】深度周回顾报告。`, 'user-row');
+    const loadingId = appendMessage(`正在起草《四川省生物医药科技创新政策周报（${timeAnchor.periodStr}）》（5大核心要点）...`, 'bot-row');
+
+    const dynamicWeeklyPrompt = `【重要时间锚点】：当前系统真实时间为 ${timeAnchor.fullDateStr}（${timeAnchor.periodStr}）。
+请严格以【${timeAnchor.year}年${timeAnchor.month}月】为时间基准，起草编制《四川省生物医药科技创新政策周报（${timeAnchor.periodStr}）》，周回顾四川省及成都市发布的生物医药相关科技创新奖励、补助、资助、扶持政策与申报通知。严禁使用过期的 2024 年、2025 年等历史时间。
+内容必须包含：
+1. 本周要点摘要；
+2. 新增或更新政策清单，含发布单位、发布日期、适用对象、奖补/资助金额或支持方式、申报期限、官方链接；
+3. 对生物医药企业/科研机构/园区的影响和机会判断；
+4. 建议下一步行动；
+5. 需继续跟踪的不确定事项。
+输出为干练、精炼的中文公文内参风格。`;
 
     // 1. 本地模式优先
     const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
@@ -675,6 +721,7 @@ async function generateSichuanWeeklyReport() {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
+                    prompt: dynamicWeeklyPrompt,
                     api_key: state.apiKey,
                     base_url: state.baseUrl,
                     model: state.model
@@ -684,7 +731,7 @@ async function generateSichuanWeeklyReport() {
                 const res = await resp.json();
                 if (res.code === 0 && res.report) {
                     updateMessage(loadingId, res.report);
-                    showToast('📄 四川省生物医药周回顾报告编制完成');
+                    showToast(`📄 四川省生物医药周回顾报告（${timeAnchor.periodStr}）编制完成`);
                     return;
                 }
             }
@@ -698,9 +745,9 @@ async function generateSichuanWeeklyReport() {
 
     if (effectiveKey) {
         try {
-            const report = await callDirectLLM(SICHUAN_WEEKLY_PROMPT, effectiveKey);
+            const report = await callDirectLLM(dynamicWeeklyPrompt, effectiveKey);
             updateMessage(loadingId, report);
-            showToast('📄 四川省生物医药周回顾报告编制完成');
+            showToast(`📄 四川省生物医药周回顾报告（${timeAnchor.periodStr}）编制完成`);
             return;
         } catch (err) {
             updateMessage(loadingId, `⚠️ 大模型接口调用异常: ${err.message}`);
@@ -711,7 +758,7 @@ async function generateSichuanWeeklyReport() {
     // 3. 离线模拟报告
     setTimeout(() => {
         updateMessage(loadingId, getMockAnalysis('周回顾'));
-        showToast('📄 四川省生物医药周回顾报告编制完成');
+        showToast(`📄 四川省生物医药周回顾报告（${timeAnchor.periodStr}）编制完成`);
     }, 800);
 }
 
