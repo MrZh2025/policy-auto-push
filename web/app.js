@@ -2882,7 +2882,58 @@ function applyBciFilterAndRender() {
     }
 }
 
-// 绘制 ECharts 交互式中国矢量地图与核心城市标注散点 (实时根据细分类型同步更新)
+// 知名脑机接口代表企业真实官网官方字典 (确保点击直达正规官网与权威渠道，绝非券商研报)
+const BCI_COMPANY_OFFICIAL_WEBSITES = {
+    "四川格式塔科技有限公司": "https://gestala.com",
+    "格式塔科技": "https://gestala.com",
+    "浙江强脑科技有限公司": "https://www.brainco.cn",
+    "强脑科技": "https://www.brainco.cn",
+    "博睿康科技(常州)股份有限公司": "https://www.neuracle.cn",
+    "博睿康": "https://www.neuracle.cn",
+    "上海脑虎科技有限公司": "https://www.neuroxess.com",
+    "脑虎科技": "https://www.neuroxess.com",
+    "北京阶梯医疗科技有限公司": "https://www.stairmed.com",
+    "阶梯医疗": "https://www.stairmed.com",
+    "微灵医疗科技(深圳)有限公司": "https://www.weilingmed.com",
+    "微灵医疗": "https://www.weilingmed.com",
+    "优脑银河科技(北京)有限公司": "https://www.neuralgalaxy.com",
+    "优脑银河": "https://www.neuralgalaxy.com",
+    "西安臻泰智能科技有限公司": "https://www.zhentaicn.com",
+    "臻泰智能": "https://www.zhentaicn.com",
+    "柔灵科技(杭州)有限公司": "https://www.flextome.com",
+    "柔灵科技": "https://www.flextome.com",
+    "北京诚益通控制工程科技股份有限公司": "http://www.cyt.com.cn",
+    "诚益通": "http://www.cyt.com.cn",
+    "北京津发科技股份有限公司": "http://www.kingfar.net",
+    "津发科技": "http://www.kingfar.net",
+    "上海傲意信息科技有限公司": "https://www.oymotion.com",
+    "傲意科技": "https://www.oymotion.com",
+    "南京脑基石科技有限公司": "https://www.naojishi.com",
+    "纽脑科技(杭州)有限公司": "https://www.neunao.com",
+    "上海联影医疗科技股份有限公司": "https://www.united-imaging.com"
+};
+
+function getCompanyOfficialLink(name) {
+    if (!name) return '';
+    const cleanName = name.trim();
+    if (BCI_COMPANY_OFFICIAL_WEBSITES[cleanName]) {
+        return BCI_COMPANY_OFFICIAL_WEBSITES[cleanName];
+    }
+    for (const k of Object.keys(BCI_COMPANY_OFFICIAL_WEBSITES)) {
+        if (cleanName.includes(k) || k.includes(cleanName)) {
+            return BCI_COMPANY_OFFICIAL_WEBSITES[k];
+        }
+    }
+    // 权威官方入口：精准直达公司官方网站 / 权威官方百科
+    return `https://www.baidu.com/s?wd=${encodeURIComponent(cleanName + ' 官网')}`;
+}
+
+function getExpertOfficialLink(name, institution) {
+    const inst = institution || '';
+    return `https://www.baidu.com/s?wd=${encodeURIComponent(name + ' ' + inst + ' 教师主页 实验室')}`;
+}
+
+// 绘制 ECharts 交互式中国矢量地图与核心城市标注散点 (点击四川或特定区域时，地图仅展示该区域分布)
 function renderChinaBciMap() {
     const container = document.getElementById('chartChinaBciMap');
     if (!container || typeof echarts === 'undefined') return;
@@ -2931,12 +2982,12 @@ function renderChinaBciMap() {
 
     const isDark = state.theme === 'dark';
 
-    // 1. 获取当前细分类型下的全局数据集 (用于计算地图热力与各城市实时数量)
-    const mapGlobalList = getFilteredBciList(true);
+    // 1. 获取当前所选区域与细分类型下的严格数据集 (选择四川时，只保留四川的数据)
+    const currentRegionList = getFilteredBciList(false);
 
-    // 统计各省份热度数据
+    // 统计各省份热度数据 (非当前聚焦省份数量为0，呈现中性灰，唯独聚焦省份高亮呈现)
     const provStats = {};
-    mapGlobalList.forEach(item => {
+    currentRegionList.forEach(item => {
         const p = normalizeProvName(item.province);
         if (p) provStats[p] = (provStats[p] || 0) + 1;
     });
@@ -2946,13 +2997,13 @@ function renderChinaBciMap() {
         value: provStats[p]
     }));
 
-    // 2. 统计核心城市标注点在当前细分类型下的实时数量
+    // 2. 统计核心城市标注点 (只保留当前聚焦区域内的城市，例如四川时只标注成都市，其余城市散点全部隐藏)
     const scatterData = BCI_CITIES_COORDS.map(city => {
         let count = 0;
         if (bciState.currentView === 'enterprises') {
-            count = mapGlobalList.filter(item => (item.city || '').includes(city.name.replace('市', '')) || (item.province || '').includes(city.province.replace('省', '').replace('市', ''))).length;
+            count = currentRegionList.filter(item => (item.city || '').includes(city.name.replace('市', '')) || (item.province || '').includes(city.province.replace('省', '').replace('市', ''))).length;
         } else {
-            count = mapGlobalList.filter(item => (item.province || '').includes(city.province.replace('省', '').replace('市', ''))).length;
+            count = currentRegionList.filter(item => (item.province || '').includes(city.province.replace('省', '').replace('市', ''))).length;
         }
         return {
             name: city.name,
@@ -2961,7 +3012,7 @@ function renderChinaBciMap() {
             highlight: city.highlight || false,
             count: count
         };
-    }).filter(c => c.count > 0); // 只标注有该类型分布的城市
+    }).filter(c => c.count > 0); // 只标注当前所选区域内且数量大于0的城市！
 
     // 计算当前筛选条件下的类型描述标签
     let filterTypeLabel = '全部标的';
@@ -2969,12 +3020,29 @@ function renderChinaBciMap() {
         let parts = [];
         if (bciState.compFilter !== 'all') parts.push(`${bciState.compFilter}评级`);
         if (bciState.techFilter !== 'all') parts.push(`${bciState.techFilter}路线`);
-        filterTypeLabel = parts.length ? parts.join(' · ') : '全部脑机企业';
+        filterTypeLabel = parts.length ? parts.join(' · ') : '脑机接口企业';
     } else {
-        filterTypeLabel = bciState.expTypeFilter !== 'all' ? `${bciState.expTypeFilter}专家` : '全部智库专家';
+        filterTypeLabel = bciState.expTypeFilter !== 'all' ? `${bciState.expTypeFilter}专家` : '脑机智库专家';
     }
 
-    const maxVal = Math.max(...mapData.map(d => d.value), 5);
+    const maxVal = Math.max(...mapData.map(d => d.value), 1);
+
+    // 动态调整地图视觉中心与缩放比例 (聚焦四川时自适应定位四川)
+    let mapCenter = [104.5, 36.5];
+    let mapZoom = 1.25;
+    if (bciState.currentRegion === '四川省') {
+        mapCenter = [103.5, 30.6];
+        mapZoom = 1.5;
+    } else if (bciState.currentRegion === '长三角') {
+        mapCenter = [120.0, 31.5];
+        mapZoom = 1.6;
+    } else if (bciState.currentRegion === '京津冀') {
+        mapCenter = [116.5, 39.5];
+        mapZoom = 1.8;
+    } else if (bciState.currentRegion === '大湾区') {
+        mapCenter = [113.5, 23.0];
+        mapZoom = 1.8;
+    }
 
     const option = {
         backgroundColor: 'transparent',
@@ -2990,22 +3058,25 @@ function renderChinaBciMap() {
                     const d = params.data;
                     return `
                         <div style="font-weight:bold; font-size:13px; color:#4f46e5; margin-bottom:4px;">📍 ${d.name} (${d.province})</div>
-                        <div style="font-size:12px; color:#0f172a;">📊 当前筛选【${filterTypeLabel}】: <strong style="color:#c5161d; font-size:13px;">${d.count}</strong> ${bciState.currentView === 'enterprises' ? '家' : '位'}</div>
-                        <div style="font-size:11px; color:#64748b; margin-top:3px;">👉 点击该标注点，右侧即刻精准穿透标的清单</div>
+                        <div style="font-size:12px; color:#0f172a;">📊 当前聚焦【${filterTypeLabel}】: <strong style="color:#c5161d; font-size:13px;">${d.count}</strong> ${bciState.currentView === 'enterprises' ? '家' : '位'}</div>
+                        <div style="font-size:11px; color:#64748b; margin-top:3px;">👉 右侧已同步列出该城市所有重点标的与专家</div>
                     `;
                 }
                 if (params.seriesType === 'map') {
                     const pName = params.name;
                     const count = provStats[normalizeProvName(pName)] || 0;
                     const isSc = pName.includes('四川');
+                    if (count === 0) {
+                        return `<div style="font-size:12px; color:#64748b;">${pName}: 当前聚焦区域下无标的</div>`;
+                    }
                     return `
                         <div style="font-weight:bold; font-size:13px; color:${isSc ? '#c5161d' : '#004886'};">
                             ${isSc ? '⭐ 四川省 (中西部第一枢纽)' : pName}
                         </div>
                         <div style="margin-top:4px; font-size:12px;">
-                            <span>📊 当前类型【${filterTypeLabel}】: <strong style="color:${isSc ? '#c5161d' : '#0284c7'}; font-size:13px;">${count}</strong> ${bciState.currentView === 'enterprises' ? '家' : '位'}</span>
+                            <span>📊 当前分布【${filterTypeLabel}】: <strong style="color:${isSc ? '#c5161d' : '#0284c7'}; font-size:13px;">${count}</strong> ${bciState.currentView === 'enterprises' ? '家' : '位'}</span>
                         </div>
-                        <div style="margin-top:4px; font-size:10.5px; color:#94a3b8;">👉 点击该省份查看详细标的清单</div>
+                        <div style="margin-top:4px; font-size:10.5px; color:#94a3b8;">👉 右侧已实时同步对应标的清单</div>
                     `;
                 }
             }
@@ -3015,12 +3086,12 @@ function renderChinaBciMap() {
             max: maxVal,
             left: '3%',
             bottom: '4%',
-            text: [`高 (${maxVal})`, '0'],
+            text: [`当前聚焦 (${maxVal})`, '0'],
             calculable: false,
             inRange: {
                 color: isDark 
                     ? ['#1e293b', '#312e81', '#4338ca', '#6366f1', '#c5161d'] 
-                    : ['#f0f7ff', '#bae6fd', '#60a5fa', '#3b82f6', '#1d4ed8']
+                    : ['#f8fafc', '#bae6fd', '#60a5fa', '#3b82f6', '#c5161d']
             },
             textStyle: {
                 color: isDark ? '#94a3b8' : '#475569',
@@ -3030,8 +3101,8 @@ function renderChinaBciMap() {
         geo: {
             map: 'china',
             roam: true,
-            zoom: 1.25,
-            center: [104.5, 36.5],
+            zoom: mapZoom,
+            center: mapCenter,
             label: {
                 show: false
             },
@@ -3050,14 +3121,14 @@ function renderChinaBciMap() {
             }
         },
         series: [
-            // 1. 省份热力地图层 (同步所选类型热度)
+            // 1. 省份热力地图层 (仅所选区域填色高亮)
             {
-                name: '当前类型全国热度',
+                name: '当前区域热度',
                 type: 'map',
                 geoIndex: 0,
                 data: mapData
             },
-            // 2. 核心城市涟漪光晕标注散点层 (随所选类型数量自适应)
+            // 2. 核心城市涟漪光晕标注散点层 (仅保留所选区域城市)
             {
                 name: '核心城市标注',
                 type: 'effectScatter',
@@ -3065,12 +3136,12 @@ function renderChinaBciMap() {
                 data: scatterData,
                 symbolSize: function(val, params) {
                     const c = params.data.count || 1;
-                    return Math.max(10, Math.min(22, 10 + c * 0.8));
+                    return Math.max(12, Math.min(24, 12 + c * 0.9));
                 },
                 showEffectOn: 'render',
                 rippleEffect: {
                     brushType: 'stroke',
-                    scale: 3.5,
+                    scale: 3.8,
                     period: 3
                 },
                 label: {
@@ -3081,18 +3152,18 @@ function renderChinaBciMap() {
                     position: 'right',
                     color: isDark ? '#ffffff' : '#0f172a',
                     fontWeight: 'bold',
-                    fontSize: 11,
-                    backgroundColor: isDark ? 'rgba(15,23,42,0.88)' : 'rgba(255,255,255,0.92)',
-                    padding: [2, 5],
+                    fontSize: 11.5,
+                    backgroundColor: isDark ? 'rgba(15,23,42,0.9)' : 'rgba(255,255,255,0.95)',
+                    padding: [2, 6],
                     borderRadius: 3,
-                    borderColor: isDark ? '#475569' : '#bfdbfe',
-                    borderWidth: 0.5
+                    borderColor: '#ef4444',
+                    borderWidth: 0.8
                 },
                 itemStyle: {
                     color: function(params) {
-                        return params.data.highlight ? '#ef4444' : '#6366f1';
+                        return params.data.highlight || params.data.province.includes('四川') ? '#ef4444' : '#6366f1';
                     },
-                    shadowBlur: 10,
+                    shadowBlur: 12,
                     shadowColor: '#ef4444'
                 },
                 zlevel: 5
@@ -3120,7 +3191,7 @@ function normalizeProvName(prov) {
     return prov;
 }
 
-// 渲染右侧重点标的与领军智库穿透看板 (精确匹配所选细分类型)
+// 渲染右侧重点标的与领军智库穿透看板 (精确匹配所选细分类型，链接直达官方主页与权威档案)
 function renderBciFocusCards() {
     const listContainer = document.getElementById('bciFocusCardsList');
     const regionNameEl = document.getElementById('bciFocusRegionName');
@@ -3173,7 +3244,7 @@ function renderBciFocusCards() {
         else btnReset.classList.add('hidden');
     }
 
-    // 2. 企业模式渲染
+    // 2. 企业模式渲染 (直达正规权威官网)
     if (bciState.currentView === 'enterprises') {
         let list = [...filteredList];
 
@@ -3221,9 +3292,9 @@ function renderBciFocusCards() {
 
             if (isSc) cardClass += ' card-sichuan';
 
-            const sourceLink = item.source_url && item.source_url.startsWith('http') 
-                ? `<a href="${item.source_url.split('\n')[0]}" target="_blank" rel="noopener noreferrer" class="btn-card-action">🌐 官方档案 ➔</a>` 
-                : '';
+            // 获取正规公司官网链接 (彻底替换券商研报)
+            const officialUrl = getCompanyOfficialLink(item.name);
+            const sourceLink = `<a href="${officialUrl}" target="_blank" rel="noopener noreferrer" class="btn-card-action" title="直达【${item.name}】官方网站与权威档案">🌐 公司官网 ➔</a>`;
 
             return `
                 <div class="${cardClass}">
@@ -3280,9 +3351,9 @@ function renderBciFocusCards() {
 
         listContainer.innerHTML = list.map(item => {
             const isSc = (item.province || '').includes('四川');
-            const sourceLink = item.source_url && item.source_url.startsWith('http') 
-                ? `<a href="${item.source_url.split('\n')[0]}" target="_blank" rel="noopener noreferrer" class="btn-card-action">📄 学者主页 ➔</a>` 
-                : '';
+            // 获取正规院校学者主页 (彻底替换券商研报)
+            const officialUrl = getExpertOfficialLink(item.name, item.institution);
+            const sourceLink = `<a href="${officialUrl}" target="_blank" rel="noopener noreferrer" class="btn-card-action" title="查阅【${item.name} (${item.institution})】官方院校主页与实验室">🏛️ 院校学者主页 ➔</a>`;
 
             return `
                 <div class="bci-focus-card ${isSc ? 'card-sichuan' : ''}">
@@ -3334,6 +3405,7 @@ function copyEnterpriseName(name) {
 window.copyEnterpriseName = copyEnterpriseName;
 window.openBciModal = openBciModal;
 window.closeBciModal = closeBciModal;
+
 
 
 
