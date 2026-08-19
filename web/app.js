@@ -1141,8 +1141,25 @@ async function loadData() {
 function updateStatsDisplay(statsData) {
     const allTotal = state.allPolicies.length;
 
-    // 统计各大赛道【现行有效在库政策】数量
-    const trackCounts = {
+    // 判定政策是否属于【近期更新】（2026年最新发布或距今180天以内更新）
+    function isRecentPolicy(p) {
+        if (!p || !p.pub_date) return false;
+        const m = p.pub_date.match(/(\d{4})[-.\/年](\d{1,2})[-.\/月](\d{1,2})/);
+        if (!m) return false;
+        const pYear = parseInt(m[1], 10);
+        const pMonth = parseInt(m[2], 10) - 1;
+        const pDay = parseInt(m[3], 10);
+        const pDate = new Date(pYear, pMonth, pDay);
+        const now = new Date();
+        
+        // 当年度发布的政策，或者距今 180 天以内的最新政策均属于近期更新
+        if (pYear >= now.getFullYear()) return true;
+        const diffDays = (now.getTime() - pDate.getTime()) / (1000 * 3600 * 24);
+        return diffDays >= -1 && diffDays <= 180;
+    }
+
+    // 统计各大赛道【近期更新】政策数量
+    const recentTrackCounts = {
         '核医药': 0,
         '脑机接口': 0,
         'AI制药': 0,
@@ -1151,42 +1168,75 @@ function updateStatsDisplay(statsData) {
         '科技申报政策': 0,
         '医保政策': 0
     };
+
+    // 统计各大赛道【全量在库】政策数量
+    const totalTrackCounts = {
+        '核医药': 0,
+        '脑机接口': 0,
+        'AI制药': 0,
+        '医疗机器人': 0,
+        '合成生物': 0,
+        '科技申报政策': 0,
+        '医保政策': 0
+    };
+
     state.allPolicies.forEach(p => {
-        const cat = p.category || '科技申报政策';
-        if (trackCounts.hasOwnProperty(cat)) {
-            trackCounts[cat]++;
+        let cat = p.category || '科技申报政策';
+        // 标准化赛道映射
+        if (cat.includes('核') || cat.includes('放药') || cat.includes('同位素')) cat = '核医药';
+        else if (cat.includes('脑机')) cat = '脑机接口';
+        else if (cat.includes('AI') || cat.includes('算法') || cat.includes('大模型')) cat = 'AI制药';
+        else if (cat.includes('机器人') || cat.includes('智能器械')) cat = '医疗机器人';
+        else if (cat.includes('合成生物')) cat = '合成生物';
+        else if (cat.includes('医保')) cat = '医保政策';
+        else cat = '科技申报政策';
+
+        if (totalTrackCounts.hasOwnProperty(cat)) {
+            totalTrackCounts[cat]++;
         } else {
-            trackCounts['科技申报政策'] = (trackCounts['科技申报政策'] || 0) + 1;
+            totalTrackCounts['科技申报政策']++;
+        }
+
+        if (isRecentPolicy(p)) {
+            if (recentTrackCounts.hasOwnProperty(cat)) {
+                recentTrackCounts[cat]++;
+            } else {
+                recentTrackCounts['科技申报政策']++;
+            }
         }
     });
 
-    // 5 大重点产业赛道总和 (严格保证产业下拉菜单内子项之和 100% 严丝合缝)
-    const industryTotal = 
-        trackCounts['核医药'] + 
-        trackCounts['脑机接口'] + 
-        trackCounts['AI制药'] + 
-        trackCounts['医疗机器人'] + 
-        trackCounts['合成生物'];
+    // 5 大重点产业赛道近期更新总和 (严格保证产业下拉菜单内子项之和 100% 严丝合缝)
+    const recentIndustryTotal = 
+        recentTrackCounts['核医药'] + 
+        recentTrackCounts['脑机接口'] + 
+        recentTrackCounts['AI制药'] + 
+        recentTrackCounts['医疗机器人'] + 
+        recentTrackCounts['合成生物'];
+
+    const totalRecentAll = Object.values(recentTrackCounts).reduce((a, b) => a + b, 0);
 
     if (el.statsBadge) {
-        el.statsBadge.textContent = `系统已就绪 · 全库收录 ${allTotal} 篇现行有效支持政策（重点产业 ${industryTotal} 篇 · 科技申报等 ${allTotal - industryTotal} 篇）`;
+        el.statsBadge.textContent = `系统已就绪 · 全库收录 ${allTotal} 篇在期政策（近期重点赛道更新 ${recentIndustryTotal} 篇 · 全网近期更新 ${totalRecentAll} 篇）`;
     }
 
-    // 重点产业赛道下拉菜单项：【全景赛道总览 (全部)】严格等于 5 大产业赛道子项之和！
+    // 重点产业赛道下拉菜单项：【全景赛道总览 (全部)】体现 5 大赛道近期更新总数！
     const countAll = document.getElementById('count-all');
     if (countAll) {
-        countAll.textContent = industryTotal;
-        if (industryTotal === 0) countAll.classList.add('badge-zero');
+        countAll.textContent = recentIndustryTotal;
+        countAll.title = `近期重点赛道更新 ${recentIndustryTotal} 篇`;
+        if (recentIndustryTotal === 0) countAll.classList.add('badge-zero');
         else countAll.classList.remove('badge-zero');
     }
 
-    // 逐一更新各赛道徽标
+    // 逐一更新各赛道徽标（严格体现近期更新数值）
     const tracks = ['核医药', '脑机接口', 'AI制药', '医疗机器人', '合成生物', '医保政策', '科技申报政策'];
     tracks.forEach(tr => {
         const badge = document.getElementById(`count-${tr}`);
         if (badge) {
-            const cnt = trackCounts[tr] || 0;
+            const cnt = recentTrackCounts[tr] || 0;
             badge.textContent = cnt;
+            badge.title = `近期更新 ${cnt} 篇（全库共 ${totalTrackCounts[tr] || 0} 篇）`;
             if (cnt === 0) {
                 badge.classList.add('badge-zero');
             } else {
