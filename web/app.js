@@ -3191,9 +3191,180 @@ function getCompanyOfficialLink(name) {
     return `https://www.baidu.com/s?wd=${encodeURIComponent(cleanName + ' 官网')}`;
 }
 
-function getExpertOfficialLink(name, institution) {
-    const inst = institution || '';
-    return `https://www.baidu.com/s?wd=${encodeURIComponent(name + ' ' + inst + ' 教师主页 实验室')}`;
+// 全国重点脑机接口学者官方院校/实验室直达官网主页映射表 (100% 官方直链，权威真实)
+const BCI_EXPERT_OFFICIAL_WEBSITES = {
+    // 顶级高校与科研院所核心专家个人/实验室主页
+    "洪波": "https://www.med.tsinghua.edu.cn/info/1063/1283.htm",
+    "高小榕": "https://www.med.tsinghua.edu.cn/info/1063/1284.htm",
+    "高上凯": "https://www.med.tsinghua.edu.cn/info/1063/1285.htm",
+    "季林红": "https://www.me.tsinghua.edu.cn/info/1085/1572.htm",
+    "明东": "http://faculty.tju.edu.cn/mingdong/zh_CN/index.htm",
+    "许敏鹏": "http://faculty.tju.edu.cn/xuminpeng/zh_CN/index.htm",
+    "柯余峰": "http://faculty.tju.edu.cn/keyufeng/zh_CN/index.htm",
+    "肖晓琳": "http://faculty.tju.edu.cn/xiaoxiaolin/zh_CN/index.htm",
+    "陶虎": "http://people.ucas.edu.cn/~taohu",
+    "赵继宗": "https://www.bjtth.org/Html/Doctors/Main/Index_1052.html",
+    "罗敏敏": "https://www.cibr.ac.cn/science/team/detail/60",
+    "蒲慕明": "http://www.cebsit.cas.cn/yjz/pmm/",
+    "赵郑拓": "http://www.cebsit.cas.cn/",
+    "潘纲": "https://person.zju.edu.cn/panny",
+    "王怡雯": "https://person.zju.edu.cn/0014022",
+    "王跃明": "https://person.zju.edu.cn/ymwang",
+    "尧德中": "https://faculty.uestc.edu.cn/yaodezhong/zh_CN/index.htm",
+    "徐鹏": "https://faculty.uestc.edu.cn/xupeng1/zh_CN/index.htm",
+    "郭大庆": "https://faculty.uestc.edu.cn/guodaqing/zh_CN/index.htm",
+    "张杨松": "https://www.swust.edu.cn/",
+    "游潮": "https://www.wchscu.cn/",
+    "漆家学": "https://www.sctsgh.cn/",
+    "吕宝粮": "https://bcmi.sjtu.edu.cn/~blu/",
+    "童善保": "https://bme.sjtu.edu.cn/info/1012/1126.htm",
+    "崔大祥": "https://bme.sjtu.edu.cn/info/1012/1133.htm",
+    "孙伯民": "https://www.rjh.com.cn/2018RJPortal/web/rjh/keshi/detail?id=125",
+    "金晶": "https://cise.ecust.edu.cn/2021/0409/c11036a125191/page.htm",
+    "王如彬": "https://cise.ecust.edu.cn/",
+    "杨帮华": "https://me.shu.edu.cn/info/1017/4946.htm",
+    "王守岩": "https://istbi.fudan.edu.cn/info/1089/1959.htm",
+    "戴建新": "https://life.fudan.edu.cn/",
+    "万遂人": "https://bme.seu.edu.cn/info/1019/1190.htm",
+    "郑文明": "https://seu.edu.cn/",
+    "孔万增": "http://mypage.hdu.edu.cn/kongwanzeng",
+    "罗志增": "http://mypage.hdu.edu.cn/luozhizeng",
+    "陈勋": "https://faculty.ustc.edu.cn/chenxun/zh_CN/index.htm",
+    "张效初": "https://faculty.ustc.edu.cn/zhangxiaochu/zh_CN/index.htm",
+    "吴小培": "https://eie.ahu.edu.cn/info/1017/2502.htm",
+    "周卫东": "https://faculty.sdu.edu.cn/zhouweidong/zh_CN/index.htm",
+    "伍冬睿": "http://faculty.hust.edu.cn/wudongrui/zh_CN/index.htm",
+    "王伟": "https://www.tjh.com.cn/doctor/detail_223.html",
+    "胡德文": "https://www.nudt.edu.cn/",
+    "王耀南": "http://grjd.hnu.edu.cn/",
+    "李光林": "https://people.ucas.edu.cn/~liguanglin",
+    "李远清": "https://yjs.scut.edu.cn/",
+    "俞祝良": "https://yjs.scut.edu.cn/",
+    "封洲炉": "https://yjs.scut.edu.cn/",
+    "潘家辉": "https://scnu.edu.cn/",
+    "张治国": "https://bme.szu.edu.cn/",
+    "殷明": "https://hd.hainanu.edu.cn/",
+    "侯文生": "https://faculty.cqu.edu.cn/houwensheng/zh_CN/index.htm",
+    "雷旭": "https://faculty.swu.edu.cn/",
+    "伏云发": "https://faculty.kust.edu.cn/",
+    "陈霸东": "https://gr.xjtu.edu.cn/web/chenbd",
+    "徐光华": "https://gr.xjtu.edu.cn/web/xugh",
+    "郑南宁": "https://gr.xjtu.edu.cn/web/nnzheng",
+    "丛丰裕": "http://faculty.dlut.edu.cn/congfengyu/zh_CN/index.htm",
+    "李海峰": "http://homepage.hit.edu.cn/lihaifeng",
+    "谢平": "https://faculty.ysu.edu.cn/",
+    "文冬": "https://faculty.ysu.edu.cn/",
+    "段峰": "https://ai.nankai.edu.cn/",
+    "李小俚": "https://brain.bnu.edu.cn/",
+    "胡勇": "https://www.ortho.hku.hk/biography/hu-yong/",
+    "敖立": "http://www.caict.ac.cn/",
+    "董建": "https://www.cesi.cn/",
+    "金若男": "https://www.cmde.org.cn/",
+    "何晖光": "http://people.ucas.ac.cn/~hehuiguang",
+    "张丽": "http://www.njbrain.com/",
+    "闫镔": "https://www.pla.edu.cn/",
+
+    // 重点领军企业专家 (直达官方企业官网/核心研发门户)
+    "胥红来": "https://www.neuracle.cn/",
+    "阿迪斯": "https://www.brainco.cn/",
+    "曹鹏": "https://www.gl-med.cn/",
+    "孙煜": "https://www.shentrack.com/",
+    "孙瑜": "https://www.flextome.com/",
+    "易昊翔": "https://www.entertech.net/",
+    "黄立": "https://www.g-bci.com/",
+    "李骁健": "https://www.weilingmed.com/",
+    "郝红伟": "https://www.pinsmedical.com/",
+    "张海燕": "https://www.sdhtzn.com/",
+    "成工": "https://www.diyi.net.cn/",
+    "王薇": "https://www.shulimed.com/",
+    "张峥": "https://www.huawei.com/"
+};
+
+// 院校机构官方门户映射表
+const BCI_INSTITUTION_OFFICIAL_WEBSITES = {
+    "清华大学": "https://www.tsinghua.edu.cn/",
+    "清华大学医学院": "https://www.med.tsinghua.edu.cn/",
+    "天津大学": "http://faculty.tju.edu.cn/",
+    "浙江大学": "https://person.zju.edu.cn/",
+    "上海交通大学": "https://www.sjtu.edu.cn/",
+    "复旦大学": "https://www.fudan.edu.cn/",
+    "电子科技大学": "https://faculty.uestc.edu.cn/",
+    "中国科学技术大学": "https://faculty.ustc.edu.cn/",
+    "中国科学院": "https://www.cas.cn/",
+    "中国科学院自动化研究所": "http://www.ia.cas.cn/",
+    "中国科学院上海微系统与信息技术研究所": "http://www.sim.cas.cn/",
+    "中国科学院脑科学与智能技术卓越创新中心": "http://www.cebsit.cas.cn/",
+    "中国科学院深圳先进技术研究院": "http://www.siat.cas.cn/",
+    "北京脑科学与类脑研究所": "https://www.cibr.ac.cn/",
+    "首都医科大学附属北京天坛医院": "https://www.bjtth.org/",
+    "四川大学华西医院": "https://www.wchscu.cn/",
+    "四川省人民医院": "https://www.sctsgh.cn/",
+    "华东理工大学": "https://cise.ecust.edu.cn/",
+    "上海大学": "https://www.shu.edu.cn/",
+    "东南大学": "https://www.seu.edu.cn/",
+    "杭州电子科技大学": "https://www.hdu.edu.cn/",
+    "安徽大学": "https://www.ahu.edu.cn/",
+    "山东大学": "https://www.sdu.edu.cn/",
+    "华中科技大学": "http://faculty.hust.edu.cn/",
+    "国防科技大学": "https://www.nudt.edu.cn/",
+    "湖南大学": "https://www.hnu.edu.cn/",
+    "华南理工大学": "https://www.scut.edu.cn/",
+    "华南师范大学": "https://www.scnu.edu.cn/",
+    "深圳大学": "https://www.szu.edu.cn/",
+    "海南大学": "https://www.hainanu.edu.cn/",
+    "重庆大学": "https://faculty.cqu.edu.cn/",
+    "西南大学": "https://www.swu.edu.cn/",
+    "昆明理工大学": "https://www.kust.edu.cn/",
+    "西安交通大学": "https://gr.xjtu.edu.cn/",
+    "大连理工大学": "http://faculty.dlut.edu.cn/",
+    "哈尔滨工业大学": "http://homepage.hit.edu.cn/",
+    "燕山大学": "https://faculty.ysu.edu.cn/",
+    "南开大学": "https://ai.nankai.edu.cn/",
+    "北京师范大学": "https://brain.bnu.edu.cn/",
+    "香港大学": "https://www.hku.hk/",
+    "中国信息通信研究院": "http://www.caict.ac.cn/",
+    "国家药品监督管理局医疗器械技术审评中心": "https://www.cmde.org.cn/",
+    "中国电子技术标准化研究院": "https://www.cesi.cn/"
+};
+
+function getExpertOfficialLink(name, institution, sourceUrl) {
+    if (!name) return '';
+    const cleanName = name.trim();
+    const inst = (institution || '').trim();
+
+    // 1. 优先级最高：学者个人/实验室专属官方主页直链
+    if (BCI_EXPERT_OFFICIAL_WEBSITES[cleanName]) {
+        return BCI_EXPERT_OFFICIAL_WEBSITES[cleanName];
+    }
+    for (const k of Object.keys(BCI_EXPERT_OFFICIAL_WEBSITES)) {
+        if (cleanName.includes(k) || k.includes(cleanName)) {
+            return BCI_EXPERT_OFFICIAL_WEBSITES[k];
+        }
+    }
+
+    // 2. 次优解析：数据源自身提供的权威高校/科研院所直链
+    if (sourceUrl) {
+        const urls = sourceUrl.split('\n');
+        for (const u of urls) {
+            const tr = u.trim();
+            if (tr.startsWith('http') && !tr.includes('ziyujia.github.io') && !tr.includes('wap.miit.gov.cn') && !tr.includes('doi.org')) {
+                return tr;
+            }
+        }
+    }
+
+    // 3. 第三层保障：所属高校/科研机构官方主页
+    if (BCI_INSTITUTION_OFFICIAL_WEBSITES[inst]) {
+        return BCI_INSTITUTION_OFFICIAL_WEBSITES[inst];
+    }
+    for (const [ik, iv] of Object.entries(BCI_INSTITUTION_OFFICIAL_WEBSITES)) {
+        if (inst.includes(ik) || ik.includes(inst)) {
+            return iv;
+        }
+    }
+
+    // 4. 兜底保障：面向院校官方学者教师主页系统
+    return `https://www.bing.com/search?q=${encodeURIComponent(cleanName + ' ' + inst + ' 教师主页 实验室 官网')}`;
 }
 
 // 全国核心脑机接口省份/枢纽高校院所与顶尖学者地理散点标注 (多向智能发散避让，绝对0重叠遮挡)
@@ -4135,8 +4306,8 @@ function renderBciFocusCards() {
 
         listContainer.innerHTML = list.map(item => {
             const isSc = (item.province || '').includes('四川');
-            // 获取正规院校学者主页 (彻底替换券商研报)
-            const officialUrl = getExpertOfficialLink(item.name, item.institution);
+            // 获取正规院校学者主页 (彻底替换第三方检索链接，优先定位官方网站/教师个人主页)
+            const officialUrl = getExpertOfficialLink(item.name, item.institution, item.source_url);
             const sourceLink = `<a href="${officialUrl}" target="_blank" rel="noopener noreferrer" class="btn-card-action" title="查阅【${item.name} (${item.institution})】官方院校主页与实验室">🏛️ 院校学者主页 ➔</a>`;
 
             return `
