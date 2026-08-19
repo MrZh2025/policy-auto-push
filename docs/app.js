@@ -1022,7 +1022,20 @@ function handleSearch() {
     filterAndRenderPolicies();
 }
 
-// 判定单条政策是否属于本周更新（严格校验当前系统年份，且发布时间在当前日期 7 天内）
+// 获取给定日期所在周的标准自然周边界（周一 00:00:00 至 周日 23:59:59）
+function getNaturalWeekBounds(targetDate = new Date()) {
+    const d = new Date(targetDate);
+    const dayOfWeek = d.getDay(); // 0 是周日, 1~6 是周一到周六
+    // 计算距离本周一的天数偏移
+    const diffToMon = (dayOfWeek === 0 ? -6 : 1) - dayOfWeek;
+
+    const monday = new Date(d.getFullYear(), d.getMonth(), d.getDate() + diffToMon, 0, 0, 0, 0);
+    const sunday = new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + 6, 23, 59, 59, 999);
+
+    return { monday, sunday };
+}
+
+// 判定单条政策是否属于当前严格自然周（本周一 00:00 至 本周日 23:59）
 function isThisWeekPolicy(p) {
     if (!p || !p.pub_date) return false;
     const m = p.pub_date.match(/(\d{4})[-.\/年](\d{1,2})[-.\/月](\d{1,2})/);
@@ -1030,17 +1043,12 @@ function isThisWeekPolicy(p) {
     const pYear = parseInt(m[1], 10);
     const pMonth = parseInt(m[2], 10) - 1;
     const pDay = parseInt(m[3], 10);
+
     const now = new Date();
-    const nowYear = now.getFullYear();
+    const { monday, sunday } = getNaturalWeekBounds(now);
 
-    // 1. 年份必须与当前年份完全相同，非本年一律直接排除！
-    if (pYear !== nowYear) return false;
-
-    const pDate = new Date(pYear, pMonth, pDay);
-    const diffDays = (now.getTime() - pDate.getTime()) / (1000 * 3600 * 24);
-
-    // 2. 必须是当前日期 7 天内
-    return diffDays >= -0.5 && diffDays <= 7;
+    const pDate = new Date(pYear, pMonth, pDay, 12, 0, 0);
+    return pDate >= monday && pDate <= sunday;
 }
 
 // 前端强力指纹去重机制 (清洗标题与发布日期，确保同一天、同名政策绝对 0 重复)
@@ -1131,7 +1139,7 @@ async function loadData() {
 }
 
 function updateStatsDisplay(statsData) {
-    // 统计本周更新与总数
+    // 统计本周自然周更新与总数
     const weekPolicies = state.allPolicies.filter(isThisWeekPolicy);
     const weekTotal = weekPolicies.length;
     const allTotal = state.allPolicies.length;
@@ -1164,7 +1172,7 @@ function updateStatsDisplay(statsData) {
         trackWeekCounts['合成生物'];
 
     if (el.statsBadge) {
-        el.statsBadge.textContent = `系统已就绪 · 本周新增 ${weekTotal} 篇（重点产业赛道 ${industryWeekTotal} 篇 · 科技与申报 ${weekTotal - industryWeekTotal} 篇）`;
+        el.statsBadge.textContent = `系统已就绪 · 本周新增 ${weekTotal} 篇（重点产业 ${industryWeekTotal} 篇 · 科技申报等 ${weekTotal - industryWeekTotal} 篇）`;
     }
 
     // 重点产业赛道下拉菜单项：【全景赛道总览 (全部)】必须严格等于 5 大产业赛道子项之和！
@@ -1209,7 +1217,7 @@ function filterAndRenderPolicies() {
         );
     }
 
-    // 3. 核心时间算法过滤：绝对严格按真实系统日期过滤，强制年份与天数双重校验
+    // 3. 核心时间算法过滤：严格按照 ISO-8601 标准自然周（周一至周日）
     const now = new Date();
     const nowYear = now.getFullYear();
     let timeFilteredList = [];
@@ -1242,7 +1250,7 @@ function filterAndRenderPolicies() {
             const m = p.pub_date.match(/(\d{4})/);
             if (!m) return true;
             const pYear = parseInt(m[1], 10);
-            return pYear >= (nowYear - 1); // 严格保留近两年
+            return pYear >= (nowYear - 1);
         });
     }
 
@@ -1260,11 +1268,15 @@ function filterAndRenderPolicies() {
             bciLink = ` <button onclick="openBciModal()" style="background:#4f46e5;color:#fff;border:none;border-radius:3px;padding:2px 8px;font-size:11px;font-weight:700;cursor:pointer;margin-left:6px;">🧠 查看全国脑机企业(173家)与专家(85位)智库大屏 ➔</button>`;
         }
 
+        const { monday, sunday } = getNaturalWeekBounds(now);
+        const monStr = `${monday.getMonth() + 1}月${monday.getDate()}日`;
+        const sunStr = `${sunday.getMonth() + 1}月${sunday.getDate()}日`;
+
         if (state.timeRange === 'week') {
             if (timeFilteredList.length > 0) {
-                banner.innerHTML = `<span>📌 严格按当前日期筛选：<strong>本周共有 ${timeFilteredList.length} 篇最新政策更新</strong>，其余在期政策可点击 <strong>[近两年政策库]</strong> 查阅。${bciLink}</span>`;
+                banner.innerHTML = `<span>📌 严格按当前自然周（<strong>${monStr} 至 ${sunStr}</strong>）筛选：<strong>本周共有 ${timeFilteredList.length} 篇最新政策更新</strong>，其余在期政策可点击 <strong>[近两年政策库]</strong> 查阅。${bciLink}</span>`;
             } else {
-                banner.innerHTML = `<span>📌 严格按当前日期筛选：<strong>本周暂未监测到新增官方政策发布</strong>，您可以点击 <strong>[近两年政策库]</strong> 查阅以往在库文件。${bciLink}</span>`;
+                banner.innerHTML = `<span>📌 严格按当前自然周（<strong>${monStr} 至 ${sunStr}</strong>）筛选：<strong>本周暂未监测到新增官方政策发布</strong>，您可以点击 <strong>[近两年政策库]</strong> 查阅以往在库文件。${bciLink}</span>`;
             }
         } else if (state.timeRange === 'month') {
             banner.innerHTML = `<span>📅 严格按当前日期筛选：<strong>近 30 天共有 ${timeFilteredList.length} 篇政策文件</strong>。${bciLink}</span>`;
