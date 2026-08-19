@@ -2847,7 +2847,7 @@ body {
     color: #fca5a5;
 }
 
-/* 四川省专属：右侧旁边顶尖智库与高校学者精美卡片区 (垂直竖排，0遮挡地图) */
+/* 顶尖智库与高校学者专区 (根据用户选择动态调整，横向排布滚动展示) */
 .sc-side-talents-wrapper {
     background: linear-gradient(135deg, rgba(197, 22, 29, 0.05) 0%, var(--bg-card) 100%);
     border-bottom: 1px dashed rgba(197, 22, 29, 0.3);
@@ -2858,10 +2858,20 @@ body {
     animation: fadeInDown 0.2s ease;
 }
 
-.sc-side-cards-column {
+.sc-side-cards-row {
     display: flex;
-    flex-direction: column;
-    gap: 6px;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+}
+.sc-side-cards-row::-webkit-scrollbar {
+    height: 4px;
+}
+.sc-side-cards-row::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 2px;
 }
 
 .sc-side-talent-card {
@@ -2869,10 +2879,13 @@ body {
     border: 1px solid var(--border-color);
     border-left: 3.5px solid #c5161d;
     border-radius: 4px;
-    padding: 6px 10px;
+    padding: 7px 11px;
     display: flex;
     align-items: center;
     gap: 8px;
+    min-width: 250px;
+    max-width: 300px;
+    flex-shrink: 0;
     cursor: pointer;
     transition: all 0.15s ease;
 }
@@ -2881,6 +2894,16 @@ body {
     border-color: #c5161d;
     transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba(197, 22, 29, 0.15);
+}
+
+.sc-empty-talent-card {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    padding: 8px 12px;
+    background: var(--bg-subtle);
+    border-radius: 4px;
+    border: 1px dashed var(--border-color);
+    width: 100%;
 }
 
 .sc-card-avatar {

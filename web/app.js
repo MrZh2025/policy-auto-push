@@ -3016,6 +3016,7 @@ function closeBciModal() {
 
 function applyBciFilterAndRender() {
     updateBciFilterBadges();
+    renderDynamicTalentsBanner();
     renderBciFocusCards();
     if (chartChinaMapInstance) {
         renderChinaBciMap();
@@ -3073,6 +3074,91 @@ function getExpertOfficialLink(name, institution) {
     return `https://www.baidu.com/s?wd=${encodeURIComponent(name + ' ' + inst + ' 教师主页 实验室')}`;
 }
 
+// 全国核心脑机接口省份/枢纽高校院所与顶尖学者地理散点标注
+const BCI_NATIONAL_HUBS = [
+    {
+        name: '北京',
+        value: [116.4074, 39.9042, 28],
+        province: '北京市',
+        hubLabel: '🏛️ 清华/天坛 · 洪波/高小榕/赵继宗',
+        experts: '洪波(清华)、高小榕(清华)、赵继宗(天坛院士)、罗敏敏(北脑所)',
+        desc: '微创植入NEO脑机系统 · 国际脑机接口大会最高学术策源地',
+        highlight: true
+    },
+    {
+        name: '上海',
+        value: [121.4737, 31.2304, 22],
+        province: '上海市',
+        hubLabel: '🏛️ 中科院微系统所 · 陶虎/蒲慕明/脑虎',
+        experts: '陶虎(微系统所/脑虎科技)、蒲慕明(中科院院士)、孙伯民(瑞金医院)',
+        desc: '高通量蚕丝蛋白柔性电极 · 灵长类认知与闭环神经调控',
+        highlight: true
+    },
+    {
+        name: '浙江',
+        value: [120.1551, 30.2741, 16],
+        province: '浙江省',
+        hubLabel: '🏛️ 浙江大学 · 潘纲/郑筱祥/强脑科技',
+        experts: '潘纲(浙大计算机)、郑筱祥(生仪)、韩璧丞(BrainCo)',
+        desc: '双脑智能、智能仿生手脑控神经假肢 · 脑机独角兽集聚',
+        highlight: true
+    },
+    {
+        name: '四川',
+        value: [104.0665, 30.5723, 11],
+        province: '四川省',
+        hubLabel: '🏛️ 电子科大/华西 · 尧德中/徐鹏/格式塔',
+        experts: '尧德中(院士/电子科大)、徐鹏(教授/电子科大)、张杨松(西南科大)',
+        desc: '超声全脑读写平台(格式塔科技5.7亿投资) · 脑信息学与类脑智能',
+        highlight: true
+    },
+    {
+        name: '天津',
+        value: [117.2008, 39.0842, 8],
+        province: '天津市',
+        hubLabel: '🏛️ 天津大学 · 明东/神工系列',
+        experts: '明东 (天津大学副校长/国家杰青)',
+        desc: '“神工”人工神经康复机器人系统 · 脑机接口芯片“脑语者”',
+        highlight: true
+    },
+    {
+        name: '广东',
+        value: [113.2644, 23.1291, 14],
+        province: '广东省',
+        hubLabel: '🏛️ 深圳先进院 · 李骁健/微灵医疗',
+        experts: '李骁健(先进院研究员)、李光林(外骨骼专家)',
+        desc: '医疗级全植入式脑机接口 · 运动神经假肢康复',
+        highlight: true
+    },
+    {
+        name: '江苏',
+        value: [118.7969, 32.0603, 9],
+        province: '江苏省',
+        hubLabel: '🏛️ 东南大学/博睿康 · 医疗器械龙头',
+        experts: '博睿康产学研转化团队 · 东南大学学习科学中心',
+        desc: '国内脑电采集系统龙头 · 首张侵入式脑机医疗器械三类证冲刺',
+        highlight: false
+    },
+    {
+        name: '陕西',
+        value: [108.9398, 34.3416, 7],
+        province: '陕西省',
+        hubLabel: '🏛️ 西安交大/臻泰智能 · 脑控外骨骼',
+        experts: '西安交通大学脑控机器人团队 · 王洁',
+        desc: '偏瘫脑控外骨骼康复机器人 · 西部脑健康智慧医疗',
+        highlight: false
+    },
+    {
+        name: '湖北',
+        value: [114.3054, 30.5928, 5],
+        province: '湖北省',
+        hubLabel: '🏛️ 华中科技大学 · 伍冬睿/脑机智能',
+        experts: '伍冬睿 (华中科技大学教授/IEEE Fellow)',
+        desc: '脑机接口主动抗噪算法 · 脑机智能人机混合增强',
+        highlight: false
+    }
+];
+
 // 四川省专属放大下钻：高校院所、顶尖学者与核心产业基地地理坐标配置
 const SICHUAN_DETAILED_NODES = [
     {
@@ -3080,6 +3166,7 @@ const SICHUAN_DETAILED_NODES = [
         value: [103.9314, 30.7490, 2],
         province: '四川省',
         type: 'univ',
+        hubLabel: '🏛️ 电子科技大学 · 尧德中(院士)/徐鹏(教授)',
         experts: '尧德中 (院士/教授) · 徐鹏 (教授/博导)',
         desc: '前沿类脑人工智能创新中心 · 孵化成都芯脑科技',
         highlight: true
@@ -3089,6 +3176,7 @@ const SICHUAN_DETAILED_NODES = [
         value: [104.0620, 30.6420, 1],
         province: '四川省',
         type: 'hospital',
+        hubLabel: '🏥 华西医院 · 神经临床中心/脑调控',
         experts: '华西脑电与神经调控医工团队',
         desc: '神经电生理、重大神经疾病临床评估与脑控康复中试',
         highlight: true
@@ -3098,7 +3186,8 @@ const SICHUAN_DETAILED_NODES = [
         value: [104.0300, 30.4800, 11],
         province: '四川省',
         type: 'industry',
-        experts: '格式塔科技 (Gestala 独角兽)',
+        hubLabel: '🏢 格式塔科技 (Gestala 独角兽)',
+        experts: '格式塔科技 (国内稀缺超声全脑读写)',
         desc: '国内稀缺超声全脑读写平台 · 半年获5.7亿元顶级资本投资',
         highlight: true
     },
@@ -3107,11 +3196,89 @@ const SICHUAN_DETAILED_NODES = [
         value: [104.6980, 31.5350, 1],
         province: '四川省',
         type: 'univ',
+        hubLabel: '🏛️ 西南科技大学 · 张杨松(副教授)',
         experts: '张杨松 (副教授)',
         desc: '脑机接口模式识别、脑电特征提取与智能控制实验室',
         highlight: false
     }
 ];
+
+// 动态横向排布渲染区域顶尖智库与高校学者专区 (根据用户选择的省份/区域实时联动，0写死，横向排布)
+function renderDynamicTalentsBanner() {
+    const section = document.getElementById('scSideTalentsSection');
+    const titleEl = document.getElementById('sideTalentsTitle');
+    const badgeEl = document.getElementById('sideTalentsBadge');
+    const rowEl = document.getElementById('sideTalentsCardsRow');
+    if (!section || !rowEl) return;
+
+    const currentReg = bciState.currentRegion || 'all';
+    let targetExperts = [];
+    let regionLabel = '全国';
+
+    if (currentReg === 'all') {
+        regionLabel = '全国重点';
+        // 全国视图下精选代表性高校领军学者
+        targetExperts = bciExpertsData.filter(e => 
+            (e.institution && (e.institution.includes('清华') || e.institution.includes('微系统') || e.institution.includes('浙江大学') || e.institution.includes('电子科技') || e.institution.includes('天津大学') || e.institution.includes('天坛') || e.institution.includes('华西')))
+        );
+        if (targetExperts.length === 0) targetExperts = bciExpertsData.slice(0, 6);
+    } else if (currentReg === '长三角') {
+        regionLabel = '长三角地区';
+        targetExperts = bciExpertsData.filter(e => ['上海', '江苏', '浙江', '安徽'].some(p => (e.province || '').includes(p)));
+    } else if (currentReg === '京津冀') {
+        regionLabel = '京津冀地区';
+        targetExperts = bciExpertsData.filter(e => ['北京', '天津', '河北'].some(p => (e.province || '').includes(p)));
+    } else if (currentReg === '大湾区') {
+        regionLabel = '粤港澳大湾区';
+        targetExperts = bciExpertsData.filter(e => (e.province || '').includes('广东'));
+    } else {
+        const clean = currentReg.replace('省', '').replace('市', '');
+        regionLabel = currentReg;
+        targetExperts = bciExpertsData.filter(e => (e.province || '').includes(clean));
+    }
+
+    if (titleEl) {
+        titleEl.textContent = `${regionLabel} 脑机顶尖智库与高校学者 (横向动态联动)`;
+    }
+    if (badgeEl) {
+        badgeEl.textContent = `${targetExperts.length} 位领军学者`;
+    }
+
+    if (targetExperts.length === 0) {
+        rowEl.innerHTML = `
+            <div class="sc-empty-talent-card">
+                <span>💡 <strong>${regionLabel}</strong> 区域脑机前沿项目正在加快研发转化中，已为您联动国家级跨区域协同智库。</span>
+            </div>
+        `;
+        return;
+    }
+
+    rowEl.innerHTML = targetExperts.map(exp => {
+        let avatar = '👨‍🔬';
+        if ((exp.expert_type || '').includes('学术') || (exp.expert_type || '').includes('院士')) avatar = '👨‍🏫';
+        else if ((exp.expert_type || '').includes('产业')) avatar = '🏭';
+        else if ((exp.expert_type || '').includes('临床')) avatar = '🏥';
+
+        const roleTag = exp.expert_type || '领军学者';
+        const inst = exp.institution || '高校院所';
+        const dir = exp.direction || '前沿脑机接口算法与神经调控';
+        const assoc = exp.associated_enterprise ? ` · 关联${exp.associated_enterprise}` : '';
+
+        return `
+            <div class="sc-side-talent-card" onclick="focusTalentInList('${exp.name}')" title="点击在列表中定位【${exp.name}】">
+                <div class="sc-card-avatar">${avatar}</div>
+                <div class="sc-card-body">
+                    <div class="sc-name-line">
+                        <strong>${exp.name}</strong>
+                        <span class="sc-role-tag">${roleTag}</span>
+                        <span class="sc-univ-tag">🏛️ ${inst}</span>
+                    </div>
+                    <div class="sc-desc-line" title="${dir}${assoc}">${dir}${assoc}</div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
 
 // 确保中国矢量地图 100% 注册成功 (离线首选，Fetch兜底)
 async function ensureChinaMapRegistered() {
@@ -3146,7 +3313,7 @@ async function ensureChinaMapRegistered() {
     return false;
 }
 
-// 绘制 ECharts 交互式中国矢量地图与核心城市标注散点 (支持四川省单独放大下钻与高校学者标注)
+// 绘制 ECharts 交互式中国矢量地图与核心城市标注散点 (支持四川省单独放大下钻与高校学者精准标注)
 async function renderChinaBciMap() {
     const container = document.getElementById('chartChinaBciMap');
     if (!container || typeof echarts === 'undefined') return;
@@ -3232,21 +3399,25 @@ async function renderChinaBciMap() {
         // 四川省专属模式：精准标注高校、华西医院与独角兽生物城
         scatterData = SICHUAN_DETAILED_NODES;
     } else {
-        scatterData = BCI_CITIES_COORDS.map(city => {
+        // 全国视图模式：精选全国核心高校院所与学者枢纽
+        scatterData = BCI_NATIONAL_HUBS.map(hub => {
             let count = 0;
             if (bciState.currentView === 'enterprises') {
-                count = currentRegionList.filter(item => (item.city || '').includes(city.name.replace('市', '')) || (item.province || '').includes(city.province.replace('省', '').replace('市', ''))).length;
+                count = currentRegionList.filter(item => (item.province || '').includes(hub.province.replace('省', '').replace('市', ''))).length;
             } else {
-                count = currentRegionList.filter(item => (item.province || '').includes(city.province.replace('省', '').replace('市', ''))).length;
+                count = currentRegionList.filter(item => (item.province || '').includes(hub.province.replace('省', '').replace('市', ''))).length;
             }
             return {
-                name: city.name,
-                value: [city.coords[0], city.coords[1], count],
-                province: city.province,
-                highlight: city.highlight || false,
+                name: hub.name,
+                value: [hub.value[0], hub.value[1], Math.max(count, 1)],
+                province: hub.province,
+                hubLabel: hub.hubLabel,
+                experts: hub.experts,
+                desc: hub.desc,
+                highlight: hub.highlight || false,
                 count: count
             };
-        }).filter(c => c.count > 0);
+        });
     }
 
     // 计算当前筛选条件下的类型描述标签
@@ -3291,12 +3462,12 @@ async function renderChinaBciMap() {
             formatter: function(params) {
                 if (params.seriesType === 'effectScatter') {
                     const d = params.data;
-                    if (isSichuanMode && d.experts) {
+                    if (d.experts) {
                         return `
-                            <div style="font-weight:bold; font-size:13.5px; color:#c5161d; margin-bottom:4px;">🏛️ ${d.name}</div>
-                            <div style="font-size:12px; color:#0f172a; font-weight:700;">👨‍🏫 领军学者/团队: <span style="color:#4f46e5;">${d.experts}</span></div>
-                            <div style="font-size:11.5px; color:#64748b; margin-top:2px;">🔬 研究与转化方向: ${d.desc}</div>
-                            <div style="font-size:10.5px; color:#c5161d; margin-top:4px;">👉 右侧看板已同步列出该机构相关详细档案</div>
+                            <div style="font-weight:bold; font-size:13.5px; color:#c5161d; margin-bottom:4px;">🏛️ ${d.name} (${d.province})</div>
+                            <div style="font-size:12px; color:#0f172a; font-weight:700;">👨‍🏫 领军高校/学者: <span style="color:#4f46e5;">${d.experts}</span></div>
+                            <div style="font-size:11.5px; color:#64748b; margin-top:2px;">🔬 方向与代表标的: ${d.desc || '前沿脑机接口核心技术研发'}</div>
+                            <div style="font-size:10.5px; color:#c5161d; margin-top:4px;">👉 右侧看板已同步联动该区域学者与标的</div>
                         `;
                     }
                     return `
@@ -3371,31 +3542,50 @@ async function renderChinaBciMap() {
                 geoIndex: 0,
                 data: mapData
             },
-            // 2. 核心城市 / 高校标注散点层 (纯净科技发光脉冲亮点，0 文字重叠遮挡)
+            // 2. 核心城市 / 高校智库标注散点层 (清晰标注高校与学者，绝不堆叠遮挡)
             {
                 name: '标注散点',
                 type: 'effectScatter',
                 coordinateSystem: 'geo',
                 data: scatterData,
                 symbolSize: function(val, params) {
-                    if (isSichuanMode) return 18;
+                    if (isSichuanMode) return 15;
                     const c = params.data.count || 1;
-                    return Math.max(14, Math.min(26, 14 + c * 0.9));
+                    return Math.max(13, Math.min(22, 13 + c * 0.5));
                 },
                 showEffectOn: 'render',
                 rippleEffect: {
                     brushType: 'stroke',
-                    scale: 4.8,
+                    scale: 3.5,
                     period: 2.8
                 },
-                // 彻底关闭地图表面文字标签，杜绝多标签重叠遮挡！详细信息全部在右侧看板竖排展示
+                // 开启精致胶囊标注，标注高校与学者，错落排布！
                 label: {
-                    show: false
+                    show: true,
+                    formatter: function(params) {
+                        if (params.data.hubLabel) {
+                            return params.data.hubLabel;
+                        }
+                        return `${params.name}`;
+                    },
+                    position: 'top',
+                    distance: 6,
+                    color: isDark ? '#ffffff' : '#0f172a',
+                    fontWeight: 'bold',
+                    fontSize: 10.5,
+                    backgroundColor: isDark ? 'rgba(15, 23, 42, 0.90)' : 'rgba(255, 255, 255, 0.92)',
+                    borderColor: isDark ? '#6366f1' : '#c5161d',
+                    borderWidth: 1,
+                    borderRadius: 4,
+                    padding: [2, 6],
+                    shadowBlur: 6,
+                    shadowColor: 'rgba(0,0,0,0.18)'
                 },
                 emphasis: {
                     scale: true,
                     label: {
-                        show: false
+                        show: true,
+                        fontSize: 11
                     }
                 },
                 itemStyle: {
@@ -3405,7 +3595,7 @@ async function renderChinaBciMap() {
                         }
                         return '#6366f1';
                     },
-                    shadowBlur: 16,
+                    shadowBlur: 14,
                     shadowColor: 'rgba(239, 68, 68, 0.75)'
                 },
                 zlevel: 5
