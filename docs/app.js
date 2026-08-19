@@ -3022,11 +3022,56 @@ const SICHUAN_DETAILED_NODES = [
     }
 ];
 
+// 确保中国矢量地图 100% 注册成功 (离线首选，Fetch兜底)
+async function ensureChinaMapRegistered() {
+    if (typeof echarts === 'undefined') return false;
+    try {
+        if (echarts.getMap && echarts.getMap('china')) return true;
+    } catch (e) {}
+
+    // 1. 优先使用全局离线 window.CHINA_GEO_JSON (无跨域、秒级注册)
+    if (typeof window !== 'undefined' && window.CHINA_GEO_JSON) {
+        echarts.registerMap('china', window.CHINA_GEO_JSON);
+        return true;
+    }
+
+    // 2. 其次使用已缓存的 chinaGeoJsonData
+    if (chinaGeoJsonData) {
+        echarts.registerMap('china', chinaGeoJsonData);
+        return true;
+    }
+
+    // 3. 异步 fetch 兜底
+    try {
+        const resp = await fetch('./data/china_map.json');
+        if (resp.ok) {
+            chinaGeoJsonData = await resp.json();
+            echarts.registerMap('china', chinaGeoJsonData);
+            return true;
+        }
+    } catch (e) {
+        console.warn('Fetch china_map.json 失败:', e);
+    }
+    return false;
+}
+
 // 绘制 ECharts 交互式中国矢量地图与核心城市标注散点 (支持四川省单独放大下钻与高校学者标注)
-function renderChinaBciMap() {
+async function renderChinaBciMap() {
     const container = document.getElementById('chartChinaBciMap');
-    const scFloatingCard = document.getElementById('scTalentFloatingCard');
     if (!container || typeof echarts === 'undefined') return;
+
+    // 确保地图已注册
+    const isMapReady = await ensureChinaMapRegistered();
+    if (!isMapReady) {
+        container.innerHTML = '<div class="map-loading-hint">⚠️ 中国矢量地图加载中，请稍候...</div>';
+        return;
+    }
+
+    // 容器若未渲染尺寸则延迟重试
+    if (container.clientWidth === 0 || container.clientHeight === 0) {
+        setTimeout(renderChinaBciMap, 80);
+        return;
+    }
 
     if (!chartChinaMapInstance) {
         chartChinaMapInstance = echarts.init(container);
@@ -3068,16 +3113,12 @@ function renderChinaBciMap() {
                 }
             }
         });
+    } else {
+        chartChinaMapInstance.resize();
     }
 
     const isDark = state.theme === 'dark';
     const isSichuanMode = (bciState.currentRegion === '四川省');
-
-    // 联动控制四川智库领军学者浮动卡片显隐
-    if (scFloatingCard) {
-        if (isSichuanMode) scFloatingCard.classList.remove('hidden');
-        else scFloatingCard.classList.add('hidden');
-    }
 
     // 1. 获取当前所选区域与细分类型下的严格数据集
     const currentRegionList = getFilteredBciList(false);
