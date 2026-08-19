@@ -41,34 +41,11 @@
                     <div class="main-title">四川生物医药产业集团创新事业部政策信息系统</div>
                 </div>
             </div>
-
-            <!-- 右侧顶部显眼操作工具栏 -->
-            <div class="nmpa-header-actions">
-                <button class="action-btn action-bci-map" id="btnOpenBciMap" title="打开全国脑机接口企业投资标的库(173家)与专家智库地图(85位)">
-                    <span class="btn-i">🧠</span>
-                    <span>脑机产业地图</span>
-                </button>
-                <button class="action-btn action-analytics" id="btnOpenAnalytics" title="打开系统访问热度、地域分布与时段趋势可视化大屏">
-                    <span class="btn-i">📊</span>
-                    <span>访问统计大屏</span>
-                </button>
-                <button class="action-btn action-ai" id="btnTopAiConfig" title="配置 DeepSeek / 通义千问 / OpenAI API Key 开启实时 AI 政策专家问答">
-                    <span class="btn-i">🔑</span>
-                    <span>AI 研判密钥配置</span>
-                </button>
-                <button class="action-btn action-primary" id="btnExportWord" title="导出符合GB/T 9704-2012国家公文标准的Word简报到桌面">
-                    <span class="btn-i">📄</span>
-                    <span>导出公文Word</span>
-                </button>
-                <button class="action-btn" id="btnScrape" title="触发全网最新政策检索">
-                    <span class="btn-i">🔄</span>
-                    <span>检索更新</span>
-                </button>
-            </div>
+            <!-- 头部右侧保持政务官网清爽大方，功能全量收拢在下方主导航栏 -->
         </div>
     </header>
 
-    <!-- NMPA 经典政务主导航栏 (带下拉子菜单 · 五大赛道大菜单深度聚合) -->
+    <!-- NMPA 经典政务主导航栏 (带下拉子菜单 · 五大赛道与工具深度聚合) -->
     <nav class="nmpa-navbar">
         <div class="nmpa-nav-wrap">
             <ul class="nav-menu">
@@ -199,18 +176,43 @@
                                 <span class="dropdown-tag-live">实时打点</span>
                             </div>
                         </a>
-                        <a href="javascript:void(0)" class="dropdown-item" onclick="handleExportWord()">
-                            <span class="dropdown-item-icon">📄</span>
-                            <span class="dropdown-item-title">导出国家标准公文Word简报</span>
+                    </div>
+                </li>
+
+                <!-- 6. AI 政策智囊 -->
+                <li class="nav-item nav-item-dropdown" id="navAiDropdown">
+                    <a href="javascript:void(0)" class="dropdown-trigger">
+                        <span>🤖 AI 政策智囊</span>
+                        <span class="nav-arrow-icon">▼</span>
+                    </a>
+                    <div class="nmpa-dropdown-menu">
+                        <a href="javascript:void(0)" class="dropdown-item" id="navAiDirect">
+                            <span class="dropdown-item-icon">💬</span>
+                            <span class="dropdown-item-title">直达 AI 政策智能专家助手</span>
+                        </a>
+                        <a href="javascript:void(0)" class="dropdown-item" id="navAiConfigDirect">
+                            <span class="dropdown-item-icon">🔑</span>
+                            <span class="dropdown-item-title">配置 AI 研判模型密钥 (API Key)</span>
                         </a>
                     </div>
                 </li>
 
-                <!-- 6. AI 政策研判助手 -->
-                <li class="nav-item nav-item-ai" id="navAiDirect">
-                    <a href="javascript:void(0)" title="直达右侧 AI 政策智能专家助手">
-                        <span>🤖 AI 政策智囊</span>
+                <!-- 7. 系统工具 -->
+                <li class="nav-item nav-item-dropdown" id="navToolsDropdown">
+                    <a href="javascript:void(0)" class="dropdown-trigger">
+                        <span>⚙️ 导出与工具</span>
+                        <span class="nav-arrow-icon">▼</span>
                     </a>
+                    <div class="nmpa-dropdown-menu">
+                        <a href="javascript:void(0)" class="dropdown-item" id="navExportWordDirect">
+                            <span class="dropdown-item-icon">📄</span>
+                            <span class="dropdown-item-title">导出国家标准公文Word简报</span>
+                        </a>
+                        <a href="javascript:void(0)" class="dropdown-item" id="navScrapeDirect">
+                            <span class="dropdown-item-icon">🔄</span>
+                            <span class="dropdown-item-title">触发全网最新政策检索更新</span>
+                        </a>
+                    </div>
                 </li>
             </ul>
         </div>

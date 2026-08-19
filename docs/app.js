@@ -435,9 +435,37 @@ function bindEvents() {
         }
     });
 
-    // 顶部按钮
-    el.btnScrape.addEventListener('click', handleScrapeNow);
-    el.btnExportWord.addEventListener('click', handleExportWord);
+    // 导航栏与工具操作按钮绑定
+    if (el.btnScrape) el.btnScrape.addEventListener('click', handleScrapeNow);
+    if (el.btnExportWord) el.btnExportWord.addEventListener('click', handleExportWord);
+
+    const navExportWordDirect = document.getElementById('navExportWordDirect');
+    if (navExportWordDirect) navExportWordDirect.addEventListener('click', handleExportWord);
+
+    const navScrapeDirect = document.getElementById('navScrapeDirect');
+    if (navScrapeDirect) navScrapeDirect.addEventListener('click', handleScrapeNow);
+
+    const navAiDirect = document.getElementById('navAiDirect');
+    if (navAiDirect) {
+        navAiDirect.addEventListener('click', () => {
+            const aiConsultCard = document.querySelector('.consult-card');
+            if (aiConsultCard) {
+                aiConsultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                if (el.chatInput) el.chatInput.focus();
+            }
+        });
+    }
+
+    const navAiConfigDirect = document.getElementById('navAiConfigDirect');
+    if (navAiConfigDirect) {
+        navAiConfigDirect.addEventListener('click', () => {
+            if (el.apiKeyDrawer) {
+                el.apiKeyDrawer.classList.remove('hidden');
+                el.apiKeyDrawer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                if (el.inputApiKey) el.inputApiKey.focus();
+            }
+        });
+    }
 
     // 顶部访问大屏入口与弹窗关闭绑定
     if (el.btnOpenAnalytics) {
