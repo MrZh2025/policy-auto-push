@@ -68,30 +68,149 @@
         </div>
     </header>
 
-    <!-- NMPA 经典政务深蓝导航栏 (Primary Nav Bar) -->
+    <!-- NMPA 经典政务主导航栏 (带下拉子菜单 · 五大赛道大菜单深度聚合) -->
     <nav class="nmpa-navbar">
         <div class="nmpa-nav-wrap">
             <ul class="nav-menu">
-                <li class="nav-item active" data-track="all">
-                    <a href="javascript:void(0)">本周全部政策 (<span id="count-all">0</span>)</a>
+                <!-- 1. 首页 (带房屋图标) -->
+                <li class="nav-item nav-item-home active" data-track="all" id="navHome">
+                    <a href="javascript:void(0)" title="返回首页查看全部最新政策">
+                        <span class="nav-icon-home">🏠</span>
+                        <span>首 页</span>
+                    </a>
                 </li>
-                <li class="nav-item" data-track="核医药">
-                    <a href="javascript:void(0)">⚛️ 核医药与放药 (<span id="count-核医药">0</span>)</a>
+
+                <!-- 2. 重点产业赛道 (五大赛道深度整合下拉大菜单) -->
+                <li class="nav-item nav-item-dropdown" id="navTrackDropdown">
+                    <a href="javascript:void(0)" class="dropdown-trigger">
+                        <span>🧬 重点产业赛道</span>
+                        <span class="nav-arrow-icon">▼</span>
+                    </a>
+                    <!-- 下拉子菜单选项 -->
+                    <div class="nmpa-dropdown-menu">
+                        <a href="javascript:void(0)" class="dropdown-item" data-track="核医药">
+                            <span class="dropdown-item-icon">⚛️</span>
+                            <div class="dropdown-item-text">
+                                <span class="dropdown-item-title">核医药与放射性药物</span>
+                                <span class="dropdown-item-badge" id="count-核医药">0</span>
+                            </div>
+                        </a>
+                        <a href="javascript:void(0)" class="dropdown-item" data-track="脑机接口">
+                            <span class="dropdown-item-icon">🧠</span>
+                            <div class="dropdown-item-text">
+                                <span class="dropdown-item-title">脑机接口与神经工程</span>
+                                <span class="dropdown-item-badge" id="count-脑机接口">0</span>
+                            </div>
+                        </a>
+                        <a href="javascript:void(0)" class="dropdown-item" data-track="AI制药">
+                            <span class="dropdown-item-icon">🧬</span>
+                            <div class="dropdown-item-text">
+                                <span class="dropdown-item-title">AI制药与前沿算法</span>
+                                <span class="dropdown-item-badge" id="count-AI制药">0</span>
+                            </div>
+                        </a>
+                        <a href="javascript:void(0)" class="dropdown-item" data-track="医疗机器人">
+                            <span class="dropdown-item-icon">🤖</span>
+                            <div class="dropdown-item-text">
+                                <span class="dropdown-item-title">医疗机器人与智能器械</span>
+                                <span class="dropdown-item-badge" id="count-医疗机器人">0</span>
+                            </div>
+                        </a>
+                        <a href="javascript:void(0)" class="dropdown-item" data-track="合成生物">
+                            <span class="dropdown-item-icon">🧪</span>
+                            <div class="dropdown-item-text">
+                                <span class="dropdown-item-title">合成生物与先进制造</span>
+                                <span class="dropdown-item-badge" id="count-合成生物">0</span>
+                            </div>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="javascript:void(0)" class="dropdown-item dropdown-item-all" data-track="all">
+                            <span class="dropdown-item-icon">🌐</span>
+                            <div class="dropdown-item-text">
+                                <span class="dropdown-item-title">全景赛道总览 (全部)</span>
+                                <span class="dropdown-item-badge" id="count-all">0</span>
+                            </div>
+                        </a>
+                    </div>
                 </li>
-                <li class="nav-item" data-track="脑机接口">
-                    <a href="javascript:void(0)">🧠 脑机接口 (<span id="count-脑机接口">0</span>)</a>
+
+                <!-- 3. 科技创新与申报通知 -->
+                <li class="nav-item nav-item-dropdown" data-track="科技申报政策" id="navTechDropdown">
+                    <a href="javascript:void(0)" class="dropdown-trigger">
+                        <span>📑 科技申报与奖补</span>
+                        <span class="nav-arrow-icon">▼</span>
+                    </a>
+                    <div class="nmpa-dropdown-menu">
+                        <a href="javascript:void(0)" class="dropdown-item" data-track="科技申报政策" data-sub="平台资金">
+                            <span class="dropdown-item-icon">🏆</span>
+                            <span class="dropdown-item-title">科技厅重大专项与创新平台</span>
+                        </a>
+                        <a href="javascript:void(0)" class="dropdown-item" data-track="科技申报政策" data-sub="经信技改">
+                            <span class="dropdown-item-icon">💰</span>
+                            <span class="dropdown-item-title">经信厅工业发展与技改资金</span>
+                        </a>
+                        <a href="javascript:void(0)" class="dropdown-item" data-track="科技申报政策" data-sub="发改产业">
+                            <span class="dropdown-item-icon">🏛️</span>
+                            <span class="dropdown-item-title">发改委产业基金与重大工程</span>
+                        </a>
+                    </div>
                 </li>
-                <li class="nav-item" data-track="AI制药">
-                    <a href="javascript:void(0)">🧬 AI制药与算法 (<span id="count-AI制药">0</span>)</a>
+
+                <!-- 4. 医保政策与集采支付 -->
+                <li class="nav-item nav-item-dropdown" data-track="医保政策" id="navMedDropdown">
+                    <a href="javascript:void(0)" class="dropdown-trigger">
+                        <span>💳 医保准入与集采</span>
+                        <span class="nav-arrow-icon">▼</span>
+                    </a>
+                    <div class="nmpa-dropdown-menu">
+                        <a href="javascript:void(0)" class="dropdown-item" data-track="医保政策" data-sub="集采">
+                            <span class="dropdown-item-icon">💊</span>
+                            <span class="dropdown-item-title">国家/省级药品集中带量采购</span>
+                        </a>
+                        <a href="javascript:void(0)" class="dropdown-item" data-track="医保政策" data-sub="双通道">
+                            <span class="dropdown-item-icon">🏥</span>
+                            <span class="dropdown-item-title">创新药挂网与双通道支付</span>
+                        </a>
+                        <a href="javascript:void(0)" class="dropdown-item" data-track="医保政策" data-sub="DRG">
+                            <span class="dropdown-item-icon">🩺</span>
+                            <span class="dropdown-item-title">医保DRG/DIP支付方式改革</span>
+                        </a>
+                    </div>
                 </li>
-                <li class="nav-item" data-track="医疗机器人">
-                    <a href="javascript:void(0)">🤖 医疗机器人与器械 (<span id="count-医疗机器人">0</span>)</a>
+
+                <!-- 5. 产业智库与决策大屏 -->
+                <li class="nav-item nav-item-dropdown" id="navMapsDropdown">
+                    <a href="javascript:void(0)" class="dropdown-trigger">
+                        <span>🗺️ 产业智库与大屏</span>
+                        <span class="nav-arrow-icon">▼</span>
+                    </a>
+                    <div class="nmpa-dropdown-menu">
+                        <a href="javascript:void(0)" class="dropdown-item" onclick="openBciModal()">
+                            <span class="dropdown-item-icon">🧠</span>
+                            <div class="dropdown-item-text">
+                                <span class="dropdown-item-title">全国脑机接口企业与专家地图</span>
+                                <span class="dropdown-tag-hot">173家企业 / 85位专家</span>
+                            </div>
+                        </a>
+                        <a href="javascript:void(0)" class="dropdown-item" onclick="openVisitorAnalyticsModal()">
+                            <span class="dropdown-item-icon">📊</span>
+                            <div class="dropdown-item-text">
+                                <span class="dropdown-item-title">访问态势与地域可视化大屏</span>
+                                <span class="dropdown-tag-live">实时打点</span>
+                            </div>
+                        </a>
+                        <a href="javascript:void(0)" class="dropdown-item" onclick="handleExportWord()">
+                            <span class="dropdown-item-icon">📄</span>
+                            <span class="dropdown-item-title">导出国家标准公文Word简报</span>
+                        </a>
+                    </div>
                 </li>
-                <li class="nav-item" data-track="医保政策">
-                    <a href="javascript:void(0)">💳 医保集采与支付 (<span id="count-医保政策">0</span>)</a>
-                </li>
-                <li class="nav-item" data-track="科技申报政策">
-                    <a href="javascript:void(0)">📑 科技创新与资金申报 (<span id="count-科技申报政策">0</span>)</a>
+
+                <!-- 6. AI 政策研判助手 -->
+                <li class="nav-item nav-item-ai" id="navAiDirect">
+                    <a href="javascript:void(0)" title="直达右侧 AI 政策智能专家助手">
+                        <span>🤖 AI 政策智囊</span>
+                    </a>
                 </li>
             </ul>
         </div>

@@ -348,11 +348,13 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   5. NMPA 经典政务深蓝主导航栏 (Navbar) (经典药监蓝 #004886 + 金色高亮下划线)
+   5. NMPA 经典政务主导航栏 (Navbar) (对标国家药监局官网悬停展开下拉子菜单)
    -------------------------------------------------------------------------- */
 .nmpa-navbar {
     background-color: var(--nmpa-blue-main);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 3px 8px rgba(0, 40, 80, 0.18);
+    position: relative;
+    z-index: 1000;
 }
 
 .nmpa-nav-wrap {
@@ -364,32 +366,239 @@ body {
 .nav-menu {
     list-style: none;
     display: flex;
-    overflow-x: auto;
+    align-items: stretch;
+    margin: 0;
+    padding: 0;
+    position: relative;
 }
 
-.nav-item a {
-    display: block;
+.nav-item {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+}
+
+.nav-item > a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
     color: #ffffff;
     text-decoration: none;
-    font-size: 14.5px;
-    font-weight: 600;
-    padding: 13px 18px;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 0 18px;
+    height: 48px;
     white-space: nowrap;
-    border-bottom: 3px solid transparent;
-    transition: all 0.2s ease;
+    transition: background-color 0.15s ease, color 0.15s ease;
     letter-spacing: 0.3px;
+    border-top: 3px solid transparent;
 }
 
-.nav-item:hover a {
-    background-color: rgba(255, 255, 255, 0.12);
-    border-bottom-color: var(--nmpa-gold);
+/* 首页项特殊加深底色 */
+.nav-item-home > a {
+    background-color: rgba(0, 0, 0, 0.15);
+    padding: 0 22px;
 }
 
-.nav-item.active a {
+.nav-icon-home {
+    font-size: 16px;
+    line-height: 1;
+}
+
+.nav-arrow-icon {
+    font-size: 9px;
+    opacity: 0.75;
+    transition: transform 0.2s ease;
+    margin-left: 2px;
+}
+
+/* 悬停 (Hover) 状态 - 对标 NMPA 官网经典活力暖橙黄底色 */
+.nav-item:hover > a,
+.nav-item.dropdown-open > a {
+    background-color: #d97706 !important;
+    color: #ffffff !important;
+}
+
+.nav-item:hover .nav-arrow-icon {
+    transform: rotate(180deg);
+}
+
+/* 选中激活状态 (Active) */
+.nav-item.active:not(:hover) > a {
     background-color: var(--nmpa-blue-dark);
-    border-bottom-color: var(--nmpa-gold);
+    border-top-color: var(--nmpa-gold);
     color: #ffffff;
 }
+
+/* 下拉子菜单容器 (Dropdown Submenu) */
+.nmpa-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 255px;
+    background-color: #ffffff;
+    border: 1px solid #bfdbfe;
+    border-top: 3px solid #d97706;
+    border-radius: 0 0 6px 6px;
+    box-shadow: 0 14px 30px rgba(0, 30, 60, 0.2), 0 4px 10px rgba(0, 0, 0, 0.06);
+    padding: 6px 0;
+    z-index: 10000;
+    animation: nmpaDropdownSlide 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 顶部隐形安全垫，避免鼠标快速滑过时断触 */
+.nmpa-dropdown-menu::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 0;
+    right: 0;
+    height: 8px;
+    background: transparent;
+}
+
+@keyframes nmpaDropdownSlide {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 鼠标悬停菜单项或下拉面板时显示 */
+.nav-item:hover .nmpa-dropdown-menu,
+.nav-item.dropdown-open .nmpa-dropdown-menu {
+    display: block;
+}
+
+/* 下拉菜单项 */
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    color: var(--nmpa-blue-main) !important;
+    text-decoration: none !important;
+    font-size: 13.5px;
+    font-weight: 700;
+    transition: all 0.15s ease;
+    border-left: 3px solid transparent;
+    cursor: pointer;
+    background: transparent;
+}
+
+.dropdown-item:hover {
+    background-color: #f0f7fd !important;
+    color: #d97706 !important;
+    border-left-color: #d97706 !important;
+    padding-left: 22px;
+}
+
+.dropdown-item.active {
+    background-color: #eff6ff !important;
+    color: var(--nmpa-blue-main) !important;
+    border-left-color: var(--nmpa-blue-main) !important;
+}
+
+.dropdown-item-icon {
+    font-size: 15px;
+    flex-shrink: 0;
+    width: 20px;
+    text-align: center;
+}
+
+.dropdown-item-text {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.dropdown-item-title {
+    white-space: nowrap;
+}
+
+.dropdown-item-badge {
+    background: #e0f2fe;
+    color: #0369a1;
+    border: 1px solid #bae6fd;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 1px 7px;
+    border-radius: 10px;
+    font-family: var(--font-mono);
+}
+
+.dropdown-tag-hot {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 3px;
+    white-space: nowrap;
+}
+
+.dropdown-tag-live {
+    background: #ecfdf5;
+    color: #059669;
+    border: 1px solid #a7f3d0;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 3px;
+    white-space: nowrap;
+}
+
+.dropdown-divider {
+    height: 1px;
+    background-color: #e2e8f0;
+    margin: 5px 12px;
+}
+
+/* AI 专席菜单项微调 */
+.nav-item-ai > a {
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.35) 0%, rgba(59, 130, 246, 0.25) 100%);
+    font-weight: 700;
+}
+.nav-item-ai:hover > a {
+    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%) !important;
+}
+
+/* 暗色主题下拉菜单适配 */
+[data-theme="dark"] .nmpa-dropdown-menu {
+    background-color: #1e293b;
+    border-color: #334155;
+    border-top-color: #f59e0b;
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
+}
+
+[data-theme="dark"] .dropdown-item {
+    color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .dropdown-item:hover {
+    background-color: #334155 !important;
+    color: #f59e0b !important;
+    border-left-color: #f59e0b !important;
+}
+
+[data-theme="dark"] .dropdown-divider {
+    background-color: #334155;
+}
+
+[data-theme="dark"] .dropdown-item-badge {
+    background: rgba(3, 105, 161, 0.3);
+    color: #38bdf8;
+    border-color: rgba(56, 189, 248, 0.3);
+}
+
 
 /* --------------------------------------------------------------------------
    6. 主体网格布局

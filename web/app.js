@@ -194,13 +194,68 @@ function bindEvents() {
         });
     });
 
-    // 导航栏切换
-    el.navItems.forEach(item => {
-        item.addEventListener('click', () => {
-            el.navItems.forEach(i => i.classList.remove('active'));
-            item.classList.add('active');
-            state.currentTrack = item.getAttribute('data-track');
+    // 导航栏与下拉子菜单事件绑定
+    const navItems = document.querySelectorAll('.nav-item');
+    const dropdownItems = document.querySelectorAll('.dropdown-item');
+
+    // 首页点击
+    const navHome = document.getElementById('navHome');
+    if (navHome) {
+        navHome.addEventListener('click', () => {
+            navItems.forEach(i => i.classList.remove('active'));
+            dropdownItems.forEach(d => d.classList.remove('active'));
+            navHome.classList.add('active');
+            state.currentTrack = 'all';
             filterAndRenderPolicies();
+        });
+    }
+
+    // 下拉子菜单项点击
+    dropdownItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const track = item.getAttribute('data-track');
+            if (track) {
+                dropdownItems.forEach(d => d.classList.remove('active'));
+                navItems.forEach(i => i.classList.remove('active'));
+                
+                item.classList.add('active');
+                const parentNavItem = item.closest('.nav-item');
+                if (parentNavItem) parentNavItem.classList.add('active');
+                
+                state.currentTrack = track;
+                filterAndRenderPolicies();
+                
+                // 平滑滚动至主列表
+                const mainSec = document.querySelector('.nmpa-left-col');
+                if (mainSec) mainSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+
+    // 导航项主菜单点击
+    navItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+            if (item.classList.contains('nav-item-dropdown')) {
+                if (window.innerWidth <= 768) {
+                    item.classList.toggle('dropdown-open');
+                }
+                return;
+            }
+            if (item.id === 'navAiDirect') {
+                const aiConsultCard = document.querySelector('.consult-card');
+                if (aiConsultCard) {
+                    aiConsultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    if (el.chatInput) el.chatInput.focus();
+                }
+                return;
+            }
+            const track = item.getAttribute('data-track');
+            if (track) {
+                navItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                state.currentTrack = track;
+                filterAndRenderPolicies();
+            }
         });
     });
 
@@ -1031,7 +1086,7 @@ function updateStatsDisplay(statsData) {
         trackWeekCounts[cat] = (trackWeekCounts[cat] || 0) + 1;
     });
 
-    const tracks = ['核医药', '脑机接口', 'AI制药', '医疗机器人', '医保政策', '科技申报政策'];
+    const tracks = ['核医药', '脑机接口', 'AI制药', '医疗机器人', '合成生物', '医保政策', '科技申报政策'];
     tracks.forEach(tr => {
         const badge = document.getElementById(`count-${tr}`);
         if (badge) {
