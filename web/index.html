@@ -725,25 +725,55 @@
                     </div>
 
                     <!-- 过滤栏: 评级/技术/专家类型 + 搜索框 -->
-                    <div class="bci-toolbar-row">
-                        <!-- 评级过滤 (企业模式) -->
-                        <div class="bci-filter-chips" id="bciCompChips">
-                            <button class="chip-filter active" data-comp="all">全部评级</button>
-                            <button class="chip-filter chip-high" data-comp="高">⭐ 高竞争力/稀缺</button>
-                            <button class="chip-filter chip-mid" data-comp="中高">🔥 中高价值</button>
-                            <button class="chip-filter" data-comp="观察">👀 持续观察</button>
+                    <div class="bci-toolbar-wrapper">
+                        <!-- 企业模式工具栏 (评级 + 技术路线) -->
+                        <div class="bci-filter-section" id="bciEntFilterSection">
+                            <!-- 1. 评级维度 -->
+                            <div class="bci-filter-line">
+                                <span class="bci-filter-sublabel">🏆 研判评级:</span>
+                                <div class="bci-filter-chips" id="bciCompChips">
+                                    <button class="chip-filter active" data-comp="all">全部评级 (<span id="cnt-comp-all">173</span>)</button>
+                                    <button class="chip-filter chip-high" data-comp="高">⭐ 高竞争力/稀缺 (<span id="cnt-comp-high">42</span>)</button>
+                                    <button class="chip-filter chip-mid" data-comp="中高">🔥 中高价值 (<span id="cnt-comp-mid">98</span>)</button>
+                                    <button class="chip-filter" data-comp="观察">👀 持续观察 (<span id="cnt-comp-obs">33</span>)</button>
+                                </div>
+                            </div>
+                            <!-- 2. 技术路线维度 -->
+                            <div class="bci-filter-line">
+                                <span class="bci-filter-sublabel">⚡ 技术路径:</span>
+                                <div class="bci-filter-chips" id="bciTechChips">
+                                    <button class="chip-filter active" data-tech="all">全部路线 (<span id="cnt-tech-all">173</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-tech="超声">超声脑机 (<span id="cnt-tech-超声">18</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-tech="侵入">侵入/半侵入 (<span id="cnt-tech-侵入">36</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-tech="非侵入">非侵入/脑电 (<span id="cnt-tech-非侵入">82</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-tech="光学">光学成像 (<span id="cnt-tech-光学">16</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-tech="闭环">闭环调控 (<span id="cnt-tech-闭环">14</span>)</button>
+                                </div>
+                            </div>
                         </div>
-                        <!-- 专家类型过滤 (专家模式，默认隐藏) -->
-                        <div class="bci-filter-chips hidden" id="bciExpTypeChips">
-                            <button class="chip-filter active" data-exptype="all">全部类型</button>
-                            <button class="chip-filter" data-exptype="学术/产业">学术/产业转化</button>
-                            <button class="chip-filter" data-exptype="学术">前沿学术</button>
-                            <button class="chip-filter" data-exptype="产业">产业领军</button>
-                            <button class="chip-filter" data-exptype="标准">药监审评与标准</button>
+
+                        <!-- 专家模式工具栏 (专家分类) -->
+                        <div class="bci-filter-section hidden" id="bciExpFilterSection">
+                            <div class="bci-filter-line">
+                                <span class="bci-filter-sublabel">🎓 专家分类:</span>
+                                <div class="bci-filter-chips" id="bciExpTypeChips">
+                                    <button class="chip-filter active" data-exptype="all">全部类型 (<span id="cnt-exp-all">85</span>)</button>
+                                    <button class="chip-filter" data-exptype="学术/产业">学术/产业转化 (<span id="cnt-exp-trans">21</span>)</button>
+                                    <button class="chip-filter" data-exptype="学术">前沿学术 (<span id="cnt-exp-acad">30</span>)</button>
+                                    <button class="chip-filter" data-exptype="产业">产业领军 (<span id="cnt-exp-ind">12</span>)</button>
+                                    <button class="chip-filter" data-exptype="标准">药监审评与标准 (<span id="cnt-exp-std">16</span>)</button>
+                                    <button class="chip-filter" data-exptype="临床">临床试验 (<span id="cnt-exp-clin">6</span>)</button>
+                                </div>
+                            </div>
                         </div>
-                        <!-- 即时搜索框 -->
-                        <div class="bci-search-input-wrap">
-                            <input type="text" id="bciSearchInput" placeholder="输入企业/专家/技术/产品/投资人检索...">
+
+                        <!-- 即时搜索栏 -->
+                        <div class="bci-search-row">
+                            <div class="bci-search-input-wrap">
+                                <span class="bci-search-icon">🔍</span>
+                                <input type="text" id="bciSearchInput" placeholder="输入企业/专家/技术/产品/投资人检索...">
+                                <button class="btn-clear-search hidden" id="btnClearBciSearch" title="清空搜索">×</button>
+                            </div>
                         </div>
                     </div>
 
