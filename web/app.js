@@ -3090,31 +3090,59 @@ function getExpertOfficialLink(name, institution) {
     return `https://www.baidu.com/s?wd=${encodeURIComponent(name + ' ' + inst + ' 教师主页 实验室')}`;
 }
 
-// 全国核心脑机接口省份/枢纽高校院所与顶尖学者地理散点标注
+// 全国核心脑机接口省份/枢纽高校院所与顶尖学者地理散点标注 (多向智能发散避让，绝对0重叠遮挡)
 const BCI_NATIONAL_HUBS = [
     {
         name: '北京',
         value: [116.4074, 39.9042, 28],
         province: '北京市',
-        hubLabel: '🏛️ 清华/天坛 · 洪波/高小榕/赵继宗',
+        hubLabel: '🏛️ 清华/天坛 · 洪波/赵继宗',
+        labelPos: 'top',
+        labelDist: 10,
         experts: '洪波(清华)、高小榕(清华)、赵继宗(天坛院士)、罗敏敏(北脑所)',
         desc: '微创植入NEO脑机系统 · 国际脑机接口大会最高学术策源地',
+        highlight: true
+    },
+    {
+        name: '天津',
+        value: [117.2008, 39.0842, 8],
+        province: '天津市',
+        hubLabel: '🏛️ 天津大学 · 明东',
+        labelPos: 'right',
+        labelDist: 10,
+        experts: '明东 (天津大学副校长/国家杰青)',
+        desc: '“神工”人工神经康复机器人系统 · 脑机接口芯片“脑语者”',
         highlight: true
     },
     {
         name: '上海',
         value: [121.4737, 31.2304, 22],
         province: '上海市',
-        hubLabel: '🏛️ 中科院微系统所 · 陶虎/蒲慕明/脑虎',
+        hubLabel: '🏛️ 微系统所/脑虎 · 陶虎',
+        labelPos: 'right',
+        labelDist: 10,
         experts: '陶虎(微系统所/脑虎科技)、蒲慕明(中科院院士)、孙伯民(瑞金医院)',
         desc: '高通量蚕丝蛋白柔性电极 · 灵长类认知与闭环神经调控',
         highlight: true
     },
     {
+        name: '江苏',
+        value: [118.7969, 32.0603, 9],
+        province: '江苏省',
+        hubLabel: '🏛️ 东南大学 · 博睿康',
+        labelPos: 'top',
+        labelDist: 10,
+        experts: '博睿康产学研转化团队 · 东南大学学习科学中心',
+        desc: '国内脑电采集系统龙头 · 首张侵入式脑机医疗器械三类证冲刺',
+        highlight: false
+    },
+    {
         name: '浙江',
         value: [120.1551, 30.2741, 16],
         province: '浙江省',
-        hubLabel: '🏛️ 浙江大学 · 潘纲/郑筱祥/强脑科技',
+        hubLabel: '🏛️ 浙江大学/强脑 · 潘纲',
+        labelPos: 'bottom',
+        labelDist: 10,
         experts: '潘纲(浙大计算机)、郑筱祥(生仪)、韩璧丞(BrainCo)',
         desc: '双脑智能、智能仿生手脑控神经假肢 · 脑机独角兽集聚',
         highlight: true
@@ -3123,43 +3151,20 @@ const BCI_NATIONAL_HUBS = [
         name: '四川',
         value: [104.0665, 30.5723, 11],
         province: '四川省',
-        hubLabel: '🏛️ 电子科大/华西 · 尧德中/徐鹏/格式塔',
+        hubLabel: '⭐ 电子科大/格式塔 · 尧德中',
+        labelPos: 'left',
+        labelDist: 10,
         experts: '尧德中(院士/电子科大)、徐鹏(教授/电子科大)、张杨松(西南科大)',
         desc: '超声全脑读写平台(格式塔科技5.7亿投资) · 脑信息学与类脑智能',
         highlight: true
     },
     {
-        name: '天津',
-        value: [117.2008, 39.0842, 8],
-        province: '天津市',
-        hubLabel: '🏛️ 天津大学 · 明东/神工系列',
-        experts: '明东 (天津大学副校长/国家杰青)',
-        desc: '“神工”人工神经康复机器人系统 · 脑机接口芯片“脑语者”',
-        highlight: true
-    },
-    {
-        name: '广东',
-        value: [113.2644, 23.1291, 14],
-        province: '广东省',
-        hubLabel: '🏛️ 深圳先进院 · 李骁健/微灵医疗',
-        experts: '李骁健(先进院研究员)、李光林(外骨骼专家)',
-        desc: '医疗级全植入式脑机接口 · 运动神经假肢康复',
-        highlight: true
-    },
-    {
-        name: '江苏',
-        value: [118.7969, 32.0603, 9],
-        province: '江苏省',
-        hubLabel: '🏛️ 东南大学/博睿康 · 医疗器械龙头',
-        experts: '博睿康产学研转化团队 · 东南大学学习科学中心',
-        desc: '国内脑电采集系统龙头 · 首张侵入式脑机医疗器械三类证冲刺',
-        highlight: false
-    },
-    {
         name: '陕西',
         value: [108.9398, 34.3416, 7],
         province: '陕西省',
-        hubLabel: '🏛️ 西安交大/臻泰智能 · 脑控外骨骼',
+        hubLabel: '🏛️ 西安交大 · 臻泰智能',
+        labelPos: 'top',
+        labelDist: 10,
         experts: '西安交通大学脑控机器人团队 · 王洁',
         desc: '偏瘫脑控外骨骼康复机器人 · 西部脑健康智慧医疗',
         highlight: false
@@ -3168,10 +3173,23 @@ const BCI_NATIONAL_HUBS = [
         name: '湖北',
         value: [114.3054, 30.5928, 5],
         province: '湖北省',
-        hubLabel: '🏛️ 华中科技大学 · 伍冬睿/脑机智能',
+        hubLabel: '🏛️ 华中科技大 · 伍冬睿',
+        labelPos: 'bottom',
+        labelDist: 10,
         experts: '伍冬睿 (华中科技大学教授/IEEE Fellow)',
         desc: '脑机接口主动抗噪算法 · 脑机智能人机混合增强',
         highlight: false
+    },
+    {
+        name: '广东',
+        value: [113.2644, 23.1291, 14],
+        province: '广东省',
+        hubLabel: '🏛️ 深圳先进院 · 李骁健',
+        labelPos: 'bottom',
+        labelDist: 10,
+        experts: '李骁健(先进院研究员)、李光林(外骨骼专家)',
+        desc: '医疗级全植入式脑机接口 · 运动神经假肢康复',
+        highlight: true
     }
 ];
 
@@ -3466,7 +3484,7 @@ async function renderChinaBciMap() {
             }
         ];
     } else {
-        // 全国视图模式：精选全国核心高校院所与学者枢纽
+        // 全国视图模式：精选全国核心高校院所与学者枢纽 (多向智能发散避让，0重叠)
         scatterData = BCI_NATIONAL_HUBS.map(hub => {
             let count = 0;
             if (bciState.currentView === 'enterprises') {
@@ -3479,10 +3497,30 @@ async function renderChinaBciMap() {
                 value: [hub.value[0], hub.value[1], Math.max(count, 1)],
                 province: hub.province,
                 hubLabel: hub.hubLabel,
+                labelPos: hub.labelPos || 'top',
+                labelDist: hub.labelDist || 10,
                 experts: hub.experts,
                 desc: hub.desc,
                 highlight: hub.highlight || false,
-                count: count
+                count: count,
+                label: {
+                    show: true,
+                    position: hub.labelPos || 'top',
+                    distance: hub.labelDist || 10,
+                    formatter: function(params) {
+                        return params.data.hubLabel || params.name;
+                    },
+                    color: isDark ? '#ffffff' : '#0f172a',
+                    fontWeight: 'bold',
+                    fontSize: 10,
+                    backgroundColor: isDark ? 'rgba(15, 23, 42, 0.92)' : 'rgba(255, 255, 255, 0.95)',
+                    borderColor: hub.highlight ? '#c5161d' : '#4f46e5',
+                    borderWidth: 1,
+                    borderRadius: 3,
+                    padding: [2, 5],
+                    shadowBlur: 6,
+                    shadowColor: 'rgba(0,0,0,0.15)'
+                }
             };
         });
     }
