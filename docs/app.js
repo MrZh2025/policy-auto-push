@@ -24,7 +24,7 @@ if (!rawStoredBase || !rawStoredBase.startsWith('http') || rawStoredBase.include
 // 状态管理
 const state = {
     currentTrack: 'all',
-    timeRange: 'week',          // 默认仅展示本周最新更新 ('week' | 'month' | 'all')
+    timeRange: 'all',           // 默认呈现全量现行在期政策库 ('all' | 'month' | 'week')
     searchQuery: '',
     allPolicies: [],
     filteredPolicies: [],
@@ -1139,13 +1139,10 @@ async function loadData() {
 }
 
 function updateStatsDisplay(statsData) {
-    // 统计本周自然周更新与总数
-    const weekPolicies = state.allPolicies.filter(isThisWeekPolicy);
-    const weekTotal = weekPolicies.length;
     const allTotal = state.allPolicies.length;
 
-    // 统计各大赛道【本周最新更新】数量
-    const trackWeekCounts = {
+    // 统计各大赛道【现行有效在库政策】数量
+    const trackCounts = {
         '核医药': 0,
         '脑机接口': 0,
         'AI制药': 0,
@@ -1154,32 +1151,32 @@ function updateStatsDisplay(statsData) {
         '科技申报政策': 0,
         '医保政策': 0
     };
-    weekPolicies.forEach(p => {
+    state.allPolicies.forEach(p => {
         const cat = p.category || '科技申报政策';
-        if (trackWeekCounts.hasOwnProperty(cat)) {
-            trackWeekCounts[cat]++;
+        if (trackCounts.hasOwnProperty(cat)) {
+            trackCounts[cat]++;
         } else {
-            trackWeekCounts['科技申报政策'] = (trackWeekCounts['科技申报政策'] || 0) + 1;
+            trackCounts['科技申报政策'] = (trackCounts['科技申报政策'] || 0) + 1;
         }
     });
 
     // 5 大重点产业赛道总和 (严格保证产业下拉菜单内子项之和 100% 严丝合缝)
-    const industryWeekTotal = 
-        trackWeekCounts['核医药'] + 
-        trackWeekCounts['脑机接口'] + 
-        trackWeekCounts['AI制药'] + 
-        trackWeekCounts['医疗机器人'] + 
-        trackWeekCounts['合成生物'];
+    const industryTotal = 
+        trackCounts['核医药'] + 
+        trackCounts['脑机接口'] + 
+        trackCounts['AI制药'] + 
+        trackCounts['医疗机器人'] + 
+        trackCounts['合成生物'];
 
     if (el.statsBadge) {
-        el.statsBadge.textContent = `系统已就绪 · 本周新增 ${weekTotal} 篇（重点产业 ${industryWeekTotal} 篇 · 科技申报等 ${weekTotal - industryWeekTotal} 篇）`;
+        el.statsBadge.textContent = `系统已就绪 · 全库收录 ${allTotal} 篇现行有效支持政策（重点产业 ${industryTotal} 篇 · 科技申报等 ${allTotal - industryTotal} 篇）`;
     }
 
-    // 重点产业赛道下拉菜单项：【全景赛道总览 (全部)】必须严格等于 5 大产业赛道子项之和！
+    // 重点产业赛道下拉菜单项：【全景赛道总览 (全部)】严格等于 5 大产业赛道子项之和！
     const countAll = document.getElementById('count-all');
     if (countAll) {
-        countAll.textContent = industryWeekTotal;
-        if (industryWeekTotal === 0) countAll.classList.add('badge-zero');
+        countAll.textContent = industryTotal;
+        if (industryTotal === 0) countAll.classList.add('badge-zero');
         else countAll.classList.remove('badge-zero');
     }
 
@@ -1188,9 +1185,9 @@ function updateStatsDisplay(statsData) {
     tracks.forEach(tr => {
         const badge = document.getElementById(`count-${tr}`);
         if (badge) {
-            const wCnt = trackWeekCounts[tr] || 0;
-            badge.textContent = wCnt;
-            if (wCnt === 0) {
+            const cnt = trackCounts[tr] || 0;
+            badge.textContent = cnt;
+            if (cnt === 0) {
                 badge.classList.add('badge-zero');
             } else {
                 badge.classList.remove('badge-zero');
@@ -1212,22 +1209,23 @@ function filterAndRenderPolicies() {
         const q = state.searchQuery;
         list = list.filter(p => 
             (p.title || '').toLowerCase().includes(q) || 
+            (p.doc_number || '').toLowerCase().includes(q) || 
             (p.summary || '').toLowerCase().includes(q) || 
             (p.source || '').toLowerCase().includes(q)
         );
     }
 
-    // 3. 核心时间算法过滤：严格按照 ISO-8601 标准自然周（周一至周日）
+    // 3. 核心时间算法过滤
     const now = new Date();
     const nowYear = now.getFullYear();
     let timeFilteredList = [];
-    let timeLabel = '本周最新更新';
+    let timeLabel = '现行在期政策库';
 
     if (state.timeRange === 'week') {
-        timeLabel = '🔥 本周最新更新';
+        timeLabel = '🔥 本周最新监测';
         timeFilteredList = list.filter(isThisWeekPolicy);
     } else if (state.timeRange === 'month') {
-        timeLabel = '📅 近30天更新';
+        timeLabel = '📅 近期发布与修订';
         timeFilteredList = list.filter(p => {
             if (!p.pub_date) return false;
             const m = p.pub_date.match(/(\d{4})[-.\/年](\d{1,2})[-.\/月](\d{1,2})/);
@@ -1236,22 +1234,14 @@ function filterAndRenderPolicies() {
             const pMonth = parseInt(m[2], 10) - 1;
             const pDay = parseInt(m[3], 10);
 
-            if (pYear !== nowYear) return false;
-
             const pDate = new Date(pYear, pMonth, pDay);
             const diffDays = (now.getTime() - pDate.getTime()) / (1000 * 3600 * 24);
-            return diffDays >= -0.5 && diffDays <= 30;
+            return diffDays >= -0.5 && diffDays <= 365; // 近一年内
         });
     } else {
-        timeLabel = '📚 近两年政策库';
-        // 严格过滤：仅展示近两年的政策（如 2025、2026 年）
-        timeFilteredList = list.filter(p => {
-            if (!p.pub_date) return true;
-            const m = p.pub_date.match(/(\d{4})/);
-            if (!m) return true;
-            const pYear = parseInt(m[1], 10);
-            return pYear >= (nowYear - 1);
-        });
+        timeLabel = '📚 现行在期政策库 (全量)';
+        // 呈现全量在期有效政策
+        timeFilteredList = list;
     }
 
     state.filteredPolicies = timeFilteredList;
@@ -1268,20 +1258,16 @@ function filterAndRenderPolicies() {
             bciLink = ` <button onclick="openBciModal()" style="background:#4f46e5;color:#fff;border:none;border-radius:3px;padding:2px 8px;font-size:11px;font-weight:700;cursor:pointer;margin-left:6px;">🧠 查看全国脑机企业(173家)与专家(85位)智库大屏 ➔</button>`;
         }
 
-        const { monday, sunday } = getNaturalWeekBounds(now);
-        const monStr = `${monday.getMonth() + 1}月${monday.getDate()}日`;
-        const sunStr = `${sunday.getMonth() + 1}月${sunday.getDate()}日`;
-
-        if (state.timeRange === 'week') {
+        if (state.timeRange === 'all') {
+            banner.innerHTML = `<span>📌 <strong>政策库保真溯源</strong>：当前呈现 <strong>${timeFilteredList.length}</strong> 篇国家及四川省现行有效医药支持政策（公文标题、文号、发文日期 100% 与官网一致）。${bciLink}</span>`;
+        } else if (state.timeRange === 'week') {
             if (timeFilteredList.length > 0) {
-                banner.innerHTML = `<span>📌 严格按当前自然周（<strong>${monStr} 至 ${sunStr}</strong>）筛选：<strong>本周共有 ${timeFilteredList.length} 篇最新政策更新</strong>，其余在期政策可点击 <strong>[近两年政策库]</strong> 查阅。${bciLink}</span>`;
+                banner.innerHTML = `<span>🔥 本周最新监测到 <strong>${timeFilteredList.length}</strong> 篇政策更新，其余在期政策可点击 <strong>[现行在期政策库]</strong> 查阅。${bciLink}</span>`;
             } else {
-                banner.innerHTML = `<span>📌 严格按当前自然周（<strong>${monStr} 至 ${sunStr}</strong>）筛选：<strong>本周暂未监测到新增官方政策发布</strong>，您可以点击 <strong>[近两年政策库]</strong> 查阅以往在库文件。${bciLink}</span>`;
+                banner.innerHTML = `<span>💡 本周暂无新增发文，您可以点击 <strong>[现行在期政策库]</strong> 查阅在库全部现行有效文件。${bciLink}</span>`;
             }
-        } else if (state.timeRange === 'month') {
-            banner.innerHTML = `<span>📅 严格按当前日期筛选：<strong>近 30 天共有 ${timeFilteredList.length} 篇政策文件</strong>。${bciLink}</span>`;
         } else {
-            banner.innerHTML = `<span>📚 当前呈现 <strong>近两年政策库</strong>（共收录 <strong>${timeFilteredList.length}</strong> 篇近两年有效政策，超期陈旧文件已自动淘汰清理）。${bciLink}</span>`;
+            banner.innerHTML = `<span>📅 近期共发布/修订 <strong>${timeFilteredList.length}</strong> 篇支持政策文件。${bciLink}</span>`;
         }
     }
 
