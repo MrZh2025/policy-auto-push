@@ -214,6 +214,7 @@ function bindEvents() {
     dropdownItems.forEach(item => {
         item.addEventListener('click', () => {
             const track = item.getAttribute('data-track');
+            const sub = item.getAttribute('data-sub');
             if (track) {
                 dropdownItems.forEach(d => d.classList.remove('active'));
                 navItems.forEach(i => i.classList.remove('active'));
@@ -223,6 +224,7 @@ function bindEvents() {
                 if (parentNavItem) parentNavItem.classList.add('active');
                 
                 state.currentTrack = track;
+                state.currentSubTrack = (sub && sub !== 'all') ? sub : null;
                 filterAndRenderPolicies();
                 
                 // 平滑滚动至主列表
@@ -1180,6 +1182,25 @@ function updateStatsDisplay(statsData) {
         '医保政策': 0
     };
 
+    // 统计子分类【近期更新】政策数量
+    const recentSubCounts = {
+        'tech-平台资金': 0,
+        'tech-经信技改': 0,
+        'tech-发改产业': 0,
+        'med-集采': 0,
+        'med-双通道': 0,
+        'med-DRG': 0
+    };
+
+    const totalSubCounts = {
+        'tech-平台资金': 0,
+        'tech-经信技改': 0,
+        'tech-发改产业': 0,
+        'med-集采': 0,
+        'med-双通道': 0,
+        'med-DRG': 0
+    };
+
     state.allPolicies.forEach(p => {
         let cat = p.category || '科技申报政策';
         // 标准化赛道映射
@@ -1197,11 +1218,42 @@ function updateStatsDisplay(statsData) {
             totalTrackCounts['科技申报政策']++;
         }
 
-        if (isRecentPolicy(p)) {
+        const isRecent = isRecentPolicy(p);
+        if (isRecent) {
             if (recentTrackCounts.hasOwnProperty(cat)) {
                 recentTrackCounts[cat]++;
             } else {
                 recentTrackCounts['科技申报政策']++;
+            }
+        }
+
+        // 子分类维度精准匹配统计
+        const pText = ((p.title || '') + ' ' + (p.summary || '') + ' ' + (p.source || '')).toLowerCase();
+        if (cat === '科技申报政策') {
+            if (pText.includes('科技') || pText.includes('平台') || pText.includes('专项') || pText.includes('新药') || pText.includes('研发') || pText.includes('重点实验室')) {
+                totalSubCounts['tech-平台资金']++;
+                if (isRecent) recentSubCounts['tech-平台资金']++;
+            }
+            if (pText.includes('经信') || pText.includes('工业') || pText.includes('技改') || pText.includes('制造') || pText.includes('设备更新') || pText.includes('智能化') || pText.includes('制造业')) {
+                totalSubCounts['tech-经信技改']++;
+                if (isRecent) recentSubCounts['tech-经信技改']++;
+            }
+            if (pText.includes('发改') || pText.includes('产业') || pText.includes('规划') || pText.includes('十五五') || pText.includes('工程') || pText.includes('行动方案') || pText.includes('重大工程')) {
+                totalSubCounts['tech-发改产业']++;
+                if (isRecent) recentSubCounts['tech-发改产业']++;
+            }
+        } else if (cat === '医保政策') {
+            if (pText.includes('集采') || pText.includes('带量') || pText.includes('采购') || pText.includes('招标') || pText.includes('中选')) {
+                totalSubCounts['med-集采']++;
+                if (isRecent) recentSubCounts['med-集采']++;
+            }
+            if (pText.includes('双通道') || pText.includes('挂网') || pText.includes('目录') || pText.includes('零售') || pText.includes('保障') || pText.includes('谈判') || pText.includes('医保药品')) {
+                totalSubCounts['med-双通道']++;
+                if (isRecent) recentSubCounts['med-双通道']++;
+            }
+            if (pText.includes('drg') || pText.includes('dip') || pText.includes('支付') || pText.includes('价格') || pText.includes('诊疗') || pText.includes('服务') || pText.includes('立项') || pText.includes('改革')) {
+                totalSubCounts['med-DRG']++;
+                if (isRecent) recentSubCounts['med-DRG']++;
             }
         }
     });
@@ -1229,7 +1281,7 @@ function updateStatsDisplay(statsData) {
         else countAll.classList.remove('badge-zero');
     }
 
-    // 逐一更新各赛道徽标（严格体现近期更新数值）
+    // 逐一更新各主赛道徽标（严格体现近期更新数值）
     const tracks = ['核医药', '脑机接口', 'AI制药', '医疗机器人', '合成生物', '医保政策', '科技申报政策'];
     tracks.forEach(tr => {
         const badge = document.getElementById(`count-${tr}`);
@@ -1244,14 +1296,67 @@ function updateStatsDisplay(statsData) {
             }
         }
     });
+
+    // 逐一更新子分类赛道徽标（科技申报与医保集采子菜单）
+    const subKeys = [
+        'tech-平台资金', 'tech-经信技改', 'tech-发改产业',
+        'med-集采', 'med-双通道', 'med-DRG'
+    ];
+    subKeys.forEach(k => {
+        const badge = document.getElementById(`count-${k}`);
+        if (badge) {
+            const cnt = recentSubCounts[k] || 0;
+            badge.textContent = cnt;
+            badge.title = `近期更新 ${cnt} 篇（全库共 ${totalSubCounts[k] || 0} 篇）`;
+            if (cnt === 0) {
+                badge.classList.add('badge-zero');
+            } else {
+                badge.classList.remove('badge-zero');
+            }
+        }
+    });
 }
 
 function filterAndRenderPolicies() {
     let list = state.allPolicies || [];
 
-    // 1. 赛道分类过滤
+    // 1. 赛道分类与子赛道过滤
     if (state.currentTrack && state.currentTrack !== 'all') {
         list = list.filter(p => (p.category || '').includes(state.currentTrack));
+        if (state.currentSubTrack) {
+            const sub = state.currentSubTrack;
+            if (sub === '平台资金') {
+                list = list.filter(p => {
+                    const txt = ((p.title || '') + ' ' + (p.summary || '') + ' ' + (p.source || '')).toLowerCase();
+                    return txt.includes('科技') || txt.includes('平台') || txt.includes('专项') || txt.includes('新药') || txt.includes('研发') || txt.includes('重点实验室');
+                });
+            } else if (sub === '经信技改') {
+                list = list.filter(p => {
+                    const txt = ((p.title || '') + ' ' + (p.summary || '') + ' ' + (p.source || '')).toLowerCase();
+                    return txt.includes('经信') || txt.includes('工业') || txt.includes('技改') || txt.includes('制造') || txt.includes('设备更新') || txt.includes('智能化') || txt.includes('制造业');
+                });
+            } else if (sub === '发改产业') {
+                list = list.filter(p => {
+                    const txt = ((p.title || '') + ' ' + (p.summary || '') + ' ' + (p.source || '')).toLowerCase();
+                    return txt.includes('发改') || txt.includes('产业') || txt.includes('规划') || txt.includes('十五五') || txt.includes('工程') || txt.includes('行动方案') || txt.includes('重大工程');
+                });
+            } else if (sub === '集采') {
+                list = list.filter(p => {
+                    const txt = ((p.title || '') + ' ' + (p.summary || '')).toLowerCase();
+                    return txt.includes('集采') || txt.includes('带量') || txt.includes('采购') || txt.includes('招标') || txt.includes('中选');
+                });
+            } else if (sub === '双通道') {
+                list = list.filter(p => {
+                    const txt = ((p.title || '') + ' ' + (p.summary || '')).toLowerCase();
+                    return txt.includes('双通道') || txt.includes('挂网') || txt.includes('目录') || txt.includes('零售') || txt.includes('保障') || txt.includes('谈判') || txt.includes('医保药品');
+                });
+            } else if (sub === 'DRG') {
+                list = list.filter(p => {
+                    const txt = ((p.title || '') + ' ' + (p.summary || '')).toLowerCase();
+                    return txt.includes('drg') || txt.includes('dip') || txt.includes('支付') || txt.includes('价格') || txt.includes('诊疗') || txt.includes('服务') || txt.includes('立项') || txt.includes('改革');
+                });
+            }
+        }
     }
 
     // 2. 关键词检索过滤
@@ -1290,7 +1395,6 @@ function filterAndRenderPolicies() {
         });
     } else {
         timeLabel = '📚 现行在期政策库 (全量)';
-        // 呈现全量在期有效政策
         timeFilteredList = list;
     }
 
@@ -1299,7 +1403,10 @@ function filterAndRenderPolicies() {
     // 更新界面状态提示
     const banner = document.getElementById('filterStatusBanner');
     const badge = document.getElementById('listBadge');
-    const trackName = (state.currentTrack === 'all') ? '全部赛道' : state.currentTrack;
+    let trackName = (state.currentTrack === 'all') ? '全部赛道' : state.currentTrack;
+    if (state.currentSubTrack) {
+        trackName += ` · ${state.currentSubTrack}`;
+    }
 
     if (badge) badge.textContent = `${trackName} · ${timeLabel}`;
     if (banner) {
