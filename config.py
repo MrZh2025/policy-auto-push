@@ -58,16 +58,18 @@ KEYWORDS = [
     "药品", "医疗", "医保", "药监", "中药", "生物医药", "器械", "医疗器械",
     "集采", "集中带量采购", "仿制药", "创新药", "医保目录", "支付方式", "DRG", "DIP",
     "医院", "卫健", "公立医院", "临床", "制药", "四川", "成渝", "产业基金",
-    "中医药", "处方药", "罕见病", "国企改革", "医药工业"
+    "中医药", "处方药", "罕见病", "国企改革", "医药工业",
+    "同位素", "放射性", "核药", "核医疗", "脑机接口", "神经调控",
+    "AI制药", "人工智能", "计算生物", "手术机器人", "医疗机器人", "智能康复",
+    "重大新药创制", "科技专项", "科技创新", "研发补助", "资金申报"
 ]
 
 # 监控源开关配置
 ENABLED_SOURCES = {
-    "gov_china": True,      # 中国政府网与各部委政策库
-    "nhsa": True,           # 国家医疗保障局 (NHSA)
-    "nmpa": True,           # 国家药品监督管理局 (NMPA)
-    "nhc": True,            # 国家卫生健康委员会 (NHC)
-    "sichuan_gov": True,    # 四川省药监与医保局
+    "gov_china": True,      # 中国政府网与各部委政策库 (国家政策与6大赛道)
+    "nhsa": True,           # 国家药品监督管理局与医疗保障局 (NMPA/NHSA)
+    "nmpa": True,           # 四川省药品监督管理局 (Sichuan NMPA)
+    "sichuan_gov": True,    # 四川省科技创新与生物医药奖补专栏
 }
 
 # ==========================================
@@ -79,7 +81,7 @@ AI_BASE_URL = os.getenv("AI_BASE_URL", "https://api.deepseek.com")
 AI_MODEL = os.getenv("AI_MODEL", "deepseek-chat")
 
 # 爬虫通用网络请求配置
-REQUEST_TIMEOUT = 10
+REQUEST_TIMEOUT = 12
 USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
     "AppleWebKit/537.36 (KHTML, like Gecko) "

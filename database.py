@@ -88,6 +88,14 @@ class PolicyDatabase:
         if not title or not url:
             return False
 
+        # 严格过滤 URL：必须为完整的 http/https 协议，且不能是仅有根域名的首页占位符
+        if not (url.startswith("http://") or url.startswith("https://")):
+            return False
+        # 去掉结尾斜杠后判断是否只是根域名（如 https://yjj.sc.gov.cn 或 https://yjj.sc.gov.cn/）
+        clean_u = url.rstrip("/")
+        if clean_u.count("/") <= 2:  # 只有协议后的双斜杠，没有路径
+            return False
+
         pub_date = policy.get("pub_date", "")
         # 严格过滤：仅允许近两年的政策入库（如 2025、2026 年）
         if pub_date:
@@ -121,6 +129,43 @@ class PolicyDatabase:
         except Exception as e:
             logger.error(f"保存政策数据失败: {e}")
             return False
+
+    def clean_invalid_urls(self) -> int:
+        """
+        自动清洗数据库中所有指向首页根域名或已知失效占位符及非医药强相关数据的脏数据
+        """
+        try:
+            with self._get_connection() as conn:
+                cursor = conn.cursor()
+                # 删除仅有根域名（如 https://yjj.sc.gov.cn/）或无具体页面的 URL
+                cursor.execute("""
+                    DELETE FROM policies 
+                    WHERE url = 'https://yjj.sc.gov.cn/'
+                       OR url = 'https://fgw.sc.gov.cn/'
+                       OR url = 'https://www.nmpa.gov.cn/'
+                       OR url = 'https://kjt.sc.gov.cn/'
+                       OR url = 'https://www.cmde.org.cn/'
+                       OR url = 'https://cdjx.chengdu.gov.cn/'
+                       OR url = 'https://www.nhsa.gov.cn/'
+                       OR url = 'http://www.nhc.gov.cn/'
+                       OR url = 'https://cdst.chengdu.gov.cn/'
+                       OR url LIKE '%.gov.cn/'
+                       OR url LIKE '%.gov.cn'
+                       OR url LIKE '%list.shtml'
+                       OR title LIKE '%林业草原%'
+                       OR title LIKE '%节能降碳%'
+                       OR title LIKE '%交通运输%'
+                       OR title LIKE '%海洋经济%'
+                       OR title LIKE '%殡葬%'
+                """)
+                deleted_count = cursor.rowcount
+                conn.commit()
+                if deleted_count > 0:
+                    logger.info(f"[脏数据治理] 已清理 {deleted_count} 条无效/非医药占位政策记录")
+                return deleted_count
+        except Exception as e:
+            logger.error(f"清洗无效 URL 失败: {e}")
+            return 0
 
     def clean_expired_policies(self, max_years: int = 2) -> int:
         """

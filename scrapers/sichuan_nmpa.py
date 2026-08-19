@@ -1,5 +1,5 @@
 """
-四川省药品监督管理局 (yjj.sc.gov.cn) 官方专栏抓取器
+四川省药品监督管理局 (yjj.sc.gov.cn) 及省域药监专栏抓取器
 监控范围：
 1. 政策法规、规范性文件、通知公告
 2. 药品与医疗器械审评审批改革、创新药械早期介入辅导
@@ -8,6 +8,7 @@
 from bs4 import BeautifulSoup
 from typing import List, Dict, Any
 import logging
+from concurrent.futures import ThreadPoolExecutor
 from scrapers.base import BaseScraper
 import config
 
@@ -15,70 +16,83 @@ logger = logging.getLogger(__name__)
 
 class SichuanNmpaScraper(BaseScraper):
     name = "sichuan_nmpa"
-    source_name = "四川省药品监督管理局"
+    source_name = "四川省药品监督管理局与药监专栏"
 
     API_URL = "https://sousuo.www.gov.cn/search-gov/data"
 
-    def scrape(self) -> List[Dict[str, Any]]:
-        results = []
+    def _fetch_single_query(self, query_str: str, default_source: str) -> List[Dict[str, Any]]:
         headers = {
             "User-Agent": config.USER_AGENT,
             "Referer": "https://sousuo.www.gov.cn/",
             "Accept": "application/json, text/plain, */*"
         }
+        params = {
+            "t": "zhengce_bmwj",
+            "q": query_str,
+            "timetype": "timeFolder",
+            "sort": "pubtime",
+            "sortType": "1",
+            "page": 1,
+            "n": 15
+        }
+        items = []
+        try:
+            resp = self.session.get(self.API_URL, params=params, headers=headers, timeout=config.REQUEST_TIMEOUT)
+            if resp.status_code == 200:
+                data = resp.json() or {}
+                list_vo = data.get("searchVO", {}).get("listVO", []) or []
+                for item in list_vo:
+                    raw_title = item.get("title", "")
+                    title = self.clean_text(BeautifulSoup(raw_title, "html.parser").get_text())
+                    url = item.get("url", "")
+                    pub_time = item.get("pubtimeStr", "") or item.get("pubtime", "")
+                    pub_date = self.extract_date(pub_time) or self.extract_date(url)
+                    dept = item.get("puborg", "") or default_source
+                    raw_summary = item.get("summary", "")
+                    summary = self.clean_text(BeautifulSoup(raw_summary, "html.parser").get_text()) if raw_summary else f"【{dept}】{title}"
 
-        # 针对四川省药品监督管理局的精准查询
+                    if not title or not url or not (url.startswith("http://") or url.startswith("https://")):
+                        continue
+
+                    if not self.filter_by_keywords(title, summary):
+                        continue
+
+                    category = self._classify_track(title, summary)
+                    items.append({
+                        "title": title,
+                        "url": url,
+                        "source": dept,
+                        "pub_date": pub_date,
+                        "category": category,
+                        "summary": summary[:200]
+                    })
+        except Exception as e:
+            logger.warning(f"[{self.source_name}] 请求 [{query_str}] 异常: {e}")
+        return items
+
+    def scrape(self) -> List[Dict[str, Any]]:
         queries = [
-            ("四川省药品监督管理局 政策 法规 通知 药品", "四川省药品监督管理局"),
-            ("四川省药监局 医疗器械 创新 审评", "四川省药品监督管理局"),
-            ("四川省 药品监管 放射性 院内制剂", "四川省药品监督管理局"),
+            ("四川 药品监管 政策 法规", "四川省药品监督管理部门"),
+            ("四川 医疗器械 审评 创新", "四川省药品监督管理部门"),
+            ("国家药监局 放射性 院内制剂 调剂", "国家药品监督管理局"),
+            ("四川 生物医药 工业 规划", "四川省相关部门"),
         ]
 
-        for query_str, default_source in queries:
-            params = {
-                "t": "zhengce",
-                "q": query_str,
-                "timetype": "timeFolder",
-                "sort": "pubtime",
-                "sortType": "1",
-                "page": "1",
-                "n": "12"
-            }
-            try:
-                resp = self.session.get(self.API_URL, params=params, headers=headers, timeout=8)
-                if resp.status_code == 200:
-                    data = resp.json() or {}
-                    search_vo = data.get("searchVO") or {}
-                    list_vo = search_vo.get("listVO") or []
-                    for item in list_vo:
-                        raw_title = item.get("title", "")
-                        soup_t = BeautifulSoup(raw_title, "html.parser")
-                        title = self.clean_text(soup_t.get_text())
+        all_results = []
+        with ThreadPoolExecutor(max_workers=4) as executor:
+            futures = [executor.submit(self._fetch_single_query, q, src) for q, src in queries]
+            for f in futures:
+                all_results.extend(f.result())
 
-                        url = item.get("url", "")
-                        pub_time = item.get("pubtimeStr", "") or item.get("pubtime", "")
-                        pub_date = self.extract_date(pub_time) or self.extract_date(url)
-                        dept = item.get("puborg", "") or default_source
-                        summary = self.clean_text(BeautifulSoup(item.get("summary", ""), "html.parser").get_text())
+        unique = {}
+        for r in all_results:
+            key = (r["title"], r["url"])
+            if key not in unique:
+                unique[key] = r
 
-                        if not title or not url:
-                            continue
-
-                        category = self._classify_track(title, summary)
-
-                        results.append({
-                            "title": title,
-                            "url": url,
-                            "source": "四川省药品监督管理局",
-                            "pub_date": pub_date,
-                            "category": category,
-                            "summary": summary[:220] if summary else f"【四川省药品监督管理局】发布关于《{title}》的官方监管与申报指导文件。"
-                        })
-            except Exception as e:
-                logger.warning(f"[{self.source_name}] 请求 [{query_str}] 异常: {e}")
-
-        logger.info(f"[{self.source_name}] 采集完成，获取四川省药监局政策 {len(results)} 条")
-        return results
+        res_list = list(unique.values())
+        logger.info(f"[{self.source_name}] 采集完成，获取药监重点政策 {len(res_list)} 条")
+        return res_list
 
     def _classify_track(self, title: str, summary: str) -> str:
         text = f"{title} {summary}".lower()

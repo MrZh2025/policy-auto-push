@@ -38,6 +38,9 @@ def run_pipeline(force_push: bool = False):
 
     db = PolicyDatabase()
 
+    # 自动执行无效/根域名占位 URL 治理
+    db.clean_invalid_urls()
+
     # 自动执行历史政策库治理：只保留近两年（2025-2026）的有效政策，淘汰超期陈旧数据
     db.clean_expired_policies(max_years=2)
 
