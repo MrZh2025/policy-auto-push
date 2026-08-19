@@ -2351,8 +2351,6 @@ function exportPoliciesViaWordXML(policies, dateStr, filename) {
                     font-family: 'Times New Roman', '方正仿宋简体', '仿宋_GB2312', '仿宋', 'FangSong', serif;
                     font-size: 12pt;
                     line-height: 1.5;
-                    color: #000000;
-                    text-align: justify;
                 }
                 h1.doc-title {
                     font-family: 'Times New Roman', '方正小标宋简体', '小标宋', '宋体', 'SimSun', serif;
@@ -2417,197 +2415,39 @@ function exportPoliciesViaWordXML(policies, dateStr, filename) {
     downloadBlobFile(blob, filename.replace('.docx', '.doc'));
 }
 
-function exportWeeklyReportViaWordXML(reportText, docPeriod, docDate, filename) {
-    const lines = reportText.split('\n');
-    let bodyHtml = '';
-    let i = 0;
-
-    while (i < lines.length) {
-        let line = lines[i].trim();
-        if (!line || line.startsWith('# ') || line.startsWith('## 四川省') || line.startsWith('# 四川省')) {
-            i++;
-            continue;
-        }
-
-        // 识别并转换为标准三线表
-        if (line.startsWith('|') && line.endsWith('|')) {
-            let tableHtml = '<table class="three-line-table"><thead><tr style="height:26pt;">';
-            let isHeader = true;
-            let headerCount = 0;
-
-            while (i < lines.length && lines[i].trim().startsWith('|') && lines[i].trim().endsWith('|')) {
-                const cells = lines[i].trim().split('|').slice(1, -1).map(c => stripMarkdownMarkers(c));
-                if (cells.every(c => /^:?-+:?$/.test(c) || c === '')) {
-                    isHeader = false;
-                    i++;
-                    continue;
-                }
-                if (isHeader) {
-                    headerCount = cells.length;
-                    cells.forEach(c => {
-                        tableHtml += `<th style="border-top:1.5pt solid black; border-bottom:0.75pt solid black; padding:4pt; text-align:center; font-family:'Times New Roman','黑体','SimHei',sans-serif; font-size:12pt;">${c}</th>`;
-                    });
-                    tableHtml += '</tr></thead><tbody>';
-                    isHeader = false;
-                } else {
-                    tableHtml += '<tr style="height:24pt;">';
-                    cells.forEach((c, cIdx) => {
-                        const align = (cIdx === 0 || cIdx === headerCount - 1 || cIdx === 2) ? 'center' : 'left';
-                        tableHtml += `<td style="border:none; padding:4pt 6pt; text-align:${align}; font-family:'Times New Roman','方正仿宋简体','仿宋',serif; font-size:12pt;">${c}</td>`;
-                    });
-                    tableHtml += '</tr>';
-                }
-                i++;
-            }
-            tableHtml += '</tbody></table>';
-            // 最后一行的底边线
-            tableHtml = tableHtml.replace(/<tr style="height:24pt;">(?![\s\S]*<tr style="height:24pt;">)/, '<tr style="height:24pt; border-bottom:1.5pt solid black;">');
-            bodyHtml += tableHtml;
-            continue;
-        }
-
-        if (line.startsWith('## ') || /^一、|二、|三、|四、|五、|六、/.test(line)) {
-            const h1Text = stripMarkdownMarkers(line.replace(/^##\s*/, ''));
-            bodyHtml += `<h2 class="h1-title">${h1Text}</h2>`;
-        } else if (line.startsWith('### ') || /^（[一二三四五六七八九十]）/.test(line)) {
-            const h3Text = stripMarkdownMarkers(line.replace(/^###\s*/, ''));
-            bodyHtml += `<p class="h3-title">${h3Text}</p>`;
-        } else {
-            let paraText = stripMarkdownMarkers(line);
-            bodyHtml += `<p class="body-para">${paraText}</p>`;
-        }
-        i++;
-    }
-
-    const wordDocHtml = `
-        <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
-        <head>
-            <meta charset='utf-8'>
-            <title>四川省生物医药科技创新政策周报</title>
-            <!--[if gte mso 9]>
-            <xml>
-                <w:WordDocument>
-                    <w:View>Print</w:View>
-                    <w:Zoom>100</w:Zoom>
-                    <w:DoNotOptimizeForBrowser/>
-                </w:WordDocument>
-            </xml>
-            <![endif]-->
-            <style>
-                @page Section1 {
-                    size: 210mm 297mm;
-                    margin: 37mm 26mm 35mm 28mm;
-                }
-                div.Section1 { page: Section1; }
-                body {
-                    font-family: 'Times New Roman', '方正仿宋简体', '仿宋_GB2312', '仿宋', 'FangSong', serif;
-                    font-size: 12pt;
-                    line-height: 1.5;
-                    color: #000000;
-                    text-align: justify;
-                }
-                h1.doc-title {
-                    font-family: 'Times New Roman', '方正小标宋简体', '小标宋', '宋体', 'SimSun', serif;
-                    font-size: 22pt;
-                    font-weight: bold;
-                    text-align: center;
-                    margin-top: 6pt;
-                    margin-bottom: 4pt;
-                    line-height: 1.3;
-                }
-                p.doc-subtitle {
-                    font-family: 'Times New Roman', '方正楷体简体', '楷体_GB2312', '楷体', serif;
-                    font-size: 14pt;
-                    text-align: center;
-                    margin-top: 0;
-                    margin-bottom: 14pt;
-                    color: #333333;
-                }
-                h2.h1-title {
-                    font-family: 'Times New Roman', '黑体', 'SimHei', sans-serif;
-                    font-size: 12pt;
-                    font-weight: bold;
-                    text-indent: 2em;
-                    margin-top: 10pt;
-                    margin-bottom: 4pt;
-                    line-height: 1.5;
-                }
-                p.h3-title {
-                    font-family: 'Times New Roman', '方正仿宋简体', '仿宋_GB2312', '仿宋', serif;
-                    font-size: 12pt;
-                    font-weight: bold;
-                    text-indent: 2em;
-                    margin: 6pt 0 2pt 0;
-                    line-height: 1.5;
-                }
-                p.body-para {
-                    font-family: 'Times New Roman', '方正仿宋简体', '仿宋_GB2312', '仿宋', serif;
-                    font-size: 12pt;
-                    text-indent: 2em;
-                    margin: 0 0 4pt 0;
-                    line-height: 1.5;
-                    text-align: justify;
-                }
-                table.three-line-table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    margin: 8pt 0 12pt 0;
-                }
-            </style>
-        </head>
-        <body>
-            <div class="Section1">
-                <h1 class="doc-title">四川省生物医药科技创新政策周报</h1>
-                <p class="doc-subtitle">（${docPeriod} · ${docDate}）</p>
-                ${bodyHtml}
-            </div>
-        </body>
-        </html>
-    `;
-
-    const blob = new Blob(['\ufeff', wordDocHtml], { type: 'application/msword;charset=utf-8' });
-    downloadBlobFile(blob, filename.replace('.docx', '.doc'));
-}
-
-function downloadBlobFile(blob, filename) {
-    const downloadUrl = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = downloadUrl;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(downloadUrl);
-}
-
-window.handleExportWeeklyWord = handleExportWeeklyWord;
-window.handleClearChat = handleClearChat;
-
-function showToast(msg) {
-    el.toast.textContent = msg;
-    el.toast.classList.remove('hidden');
-    setTimeout(() => {
-        el.toast.classList.add('hidden');
-    }, 4000);
-}
-
 // ==========================================
-// 🧠 脑机接口产业智库与企业投资地图模块 (BCI Map Engine)
+// 🧠 脑机接口产业智库与企业投资决策地图引擎 (China Geo Map & Focus Panel)
 // ==========================================
 
 let bciEnterprisesData = [];
 let bciExpertsData = [];
-let bciActiveTab = 'enterprises';
-let bciFilterProvince = 'all';
-let bciFilterTech = 'all';
-let bciFilterExpertType = 'all';
-let bciFilterExpertProv = 'all';
-let bciSearchQuery = '';
-let chartBciProvInstance = null;
-let chartBciTechInstance = null;
+let chinaGeoJsonData = null;
+let chartChinaMapInstance = null;
+
+let bciState = {
+    currentRegion: 'all',
+    currentView: 'enterprises', // 'enterprises' | 'experts'
+    compFilter: 'all',          // 'all', '高', '中高', '观察'
+    expTypeFilter: 'all',       // 'all', '学术/产业', '学术', '产业', '标准'
+    searchQuery: ''
+};
+
+// 核心城市地理坐标与标注点配置
+const BCI_CITIES_COORDS = [
+    { name: '成都市', value: [104.066541, 30.572269, 11], province: '四川省', highlight: true, note: '四川中西部第一·11家标的·5.7亿超声融资' },
+    { name: '北京市', value: [116.405285, 39.904989, 20], province: '北京市', note: '20家企业·26位领军专家' },
+    { name: '上海市', value: [121.472644, 31.231706, 26], province: '上海市', note: '26家企业·10位专家' },
+    { name: '杭州市', value: [120.153576, 30.287459, 27], province: '浙江省', note: '27家企业·9位专家' },
+    { name: '深圳市', value: [114.057868, 22.543099, 20], province: '广东省', note: '20家企业·7位专家' },
+    { name: '南京市', value: [118.767413, 32.041544, 32], province: '江苏省', note: '32家企业·3位专家' },
+    { name: '天津市', value: [117.190182, 39.125596, 7], province: '天津市', note: '7家企业·5位专家' },
+    { name: '武汉市', value: [114.298572, 30.584355, 6], province: '湖北省', note: '6家企业·2位专家' },
+    { name: '西安市', value: [108.948024, 34.263161, 2], province: '陕西省', note: '2家企业·3位专家' },
+    { name: '合肥市', value: [117.283042, 31.86119, 3], province: '安徽省', note: '3家企业·3位专家' }
+];
 
 async function initBciMap() {
-    bindBciFilterPills();
+    bindBciEvents();
     await loadBciData();
 }
 
@@ -2617,9 +2457,7 @@ async function loadBciData() {
         const resp = await fetch('/api/bci-enterprises');
         if (resp.ok) {
             const res = await resp.json();
-            if (res.data && Array.isArray(res.data)) {
-                bciEnterprisesData = res.data;
-            }
+            if (res.data && Array.isArray(res.data)) bciEnterprisesData = res.data;
         }
     } catch (e) {}
 
@@ -2638,9 +2476,7 @@ async function loadBciData() {
         const resp = await fetch('/api/bci-experts');
         if (resp.ok) {
             const res = await resp.json();
-            if (res.data && Array.isArray(res.data)) {
-                bciExpertsData = res.data;
-            }
+            if (res.data && Array.isArray(res.data)) bciExpertsData = res.data;
         }
     } catch (e) {}
 
@@ -2654,441 +2490,587 @@ async function loadBciData() {
         } catch (e) {}
     }
 
-    // 更新 Badge 数量
-    const entCount = bciEnterprisesData.length || 173;
-    const expCount = bciExpertsData.length || 85;
-    const entBadge = document.getElementById('bciEntCountBadge');
-    const expBadge = document.getElementById('bciExpCountBadge');
-    if (entBadge) entBadge.textContent = entCount;
-    if (expBadge) expBadge.textContent = expCount;
+    // 3. 加载中国地图 GeoJSON
+    try {
+        const resp = await fetch('./data/china_map.json');
+        if (resp.ok) {
+            chinaGeoJsonData = await resp.json();
+            if (typeof echarts !== 'undefined' && chinaGeoJsonData) {
+                echarts.registerMap('china', chinaGeoJsonData);
+            }
+        }
+    } catch (e) {
+        console.warn('中国地图数据加载异常', e);
+    }
+
+    updateBciKpiBar();
+    renderBciFocusCards();
 }
 
-function bindBciFilterPills() {
-    // 省份胶囊
-    if (el.bciProvincePills) {
-        el.bciProvincePills.addEventListener('click', (e) => {
-            const btn = e.target.closest('.pill-btn');
+function updateBciKpiBar() {
+    const totalEnt = bciEnterprisesData.length || 173;
+    const totalExp = bciExpertsData.length || 85;
+    const scEnt = bciEnterprisesData.filter(i => (i.province || '').includes('四川')).length || 11;
+
+    const elTotalEnt = document.getElementById('bciKpiTotalEnt');
+    const elTotalExp = document.getElementById('bciKpiTotalExp');
+    const elScEnt = document.getElementById('bciKpiScEnt');
+
+    if (elTotalEnt) elTotalEnt.innerHTML = `${totalEnt} <small>家</small>`;
+    if (elTotalExp) elTotalExp.innerHTML = `${totalExp} <small>位</small>`;
+    if (elScEnt) elScEnt.innerHTML = `${scEnt} <small>家 (成都)</small>`;
+}
+
+function bindBciEvents() {
+    // 1. 区域快捷导航
+    const regionNav = document.getElementById('bciRegionQuickNav');
+    if (regionNav) {
+        regionNav.addEventListener('click', (e) => {
+            const btn = e.target.closest('.bci-nav-btn');
             if (!btn) return;
-            el.bciProvincePills.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+            regionNav.querySelectorAll('.bci-nav-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            bciFilterProvince = btn.getAttribute('data-prov') || 'all';
-            applyBciFilters();
+            const region = btn.getAttribute('data-region') || 'all';
+            bciState.currentRegion = region;
+            applyBciFilterAndRender();
         });
     }
 
-    // 技术路径胶囊
-    if (el.bciTechPills) {
-        el.bciTechPills.addEventListener('click', (e) => {
-            const btn = e.target.closest('.pill-btn');
-            if (!btn) return;
-            el.bciTechPills.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            bciFilterTech = btn.getAttribute('data-tech') || 'all';
-            applyBciFilters();
+    // 2. 模式切换 (重点企业 / 领军智库)
+    const btnSwitchEnt = document.getElementById('btnSwitchEntView');
+    const btnSwitchExp = document.getElementById('btnSwitchExpView');
+    const compChips = document.getElementById('bciCompChips');
+    const expChips = document.getElementById('bciExpTypeChips');
+
+    if (btnSwitchEnt && btnSwitchExp) {
+        btnSwitchEnt.addEventListener('click', () => {
+            btnSwitchEnt.classList.add('active');
+            btnSwitchExp.classList.remove('active');
+            bciState.currentView = 'enterprises';
+            if (compChips) compChips.classList.remove('hidden');
+            if (expChips) expChips.classList.add('hidden');
+            renderBciFocusCards();
+        });
+
+        btnSwitchExp.addEventListener('click', () => {
+            btnSwitchExp.classList.add('active');
+            btnSwitchEnt.classList.remove('active');
+            bciState.currentView = 'experts';
+            if (compChips) compChips.classList.add('hidden');
+            if (expChips) expChips.classList.remove('hidden');
+            renderBciFocusCards();
         });
     }
 
-    // 专家类型与四川专家胶囊
-    if (el.bciExpertTypePills) {
-        el.bciExpertTypePills.addEventListener('click', (e) => {
-            const btn = e.target.closest('.pill-btn');
-            if (!btn) return;
-            el.bciExpertTypePills.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            bciFilterExpertType = btn.getAttribute('data-exptype') || 'all';
-            bciFilterExpertProv = btn.getAttribute('data-expprov') || 'all';
-            applyBciFilters();
+    // 3. 评级筛选胶囊 (企业)
+    if (compChips) {
+        compChips.addEventListener('click', (e) => {
+            const chip = e.target.closest('.chip-filter');
+            if (!chip) return;
+            compChips.querySelectorAll('.chip-filter').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            bciState.compFilter = chip.getAttribute('data-comp') || 'all';
+            renderBciFocusCards();
+        });
+    }
+
+    // 4. 专家类型筛选胶囊
+    if (expChips) {
+        expChips.addEventListener('click', (e) => {
+            const chip = e.target.closest('.chip-filter');
+            if (!chip) return;
+            expChips.querySelectorAll('.chip-filter').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            bciState.expTypeFilter = chip.getAttribute('data-exptype') || 'all';
+            renderBciFocusCards();
+        });
+    }
+
+    // 5. 搜索框
+    const searchInput = document.getElementById('bciSearchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', () => {
+            bciState.searchQuery = searchInput.value.trim().toLowerCase();
+            renderBciFocusCards();
+        });
+    }
+
+    // 6. 重置聚焦为全国
+    const btnResetFocus = document.getElementById('btnResetBciFocus');
+    if (btnResetFocus) {
+        btnResetFocus.addEventListener('click', () => {
+            bciState.currentRegion = 'all';
+            if (regionNav) {
+                regionNav.querySelectorAll('.bci-nav-btn').forEach(b => b.classList.remove('active'));
+                const allBtn = regionNav.querySelector('[data-region="all"]');
+                if (allBtn) allBtn.classList.add('active');
+            }
+            applyBciFilterAndRender();
+        });
+    }
+
+    // 7. 关闭与打开按钮
+    const btnOpenBci = document.getElementById('btnOpenBciMap');
+    const btnCloseBci = document.getElementById('modalBciCloseBtn');
+    if (btnOpenBci) btnOpenBci.addEventListener('click', openBciModal);
+    if (btnCloseBci) btnCloseBci.addEventListener('click', closeBciModal);
+
+    const bciModal = document.getElementById('bciMapModal');
+    if (bciModal) {
+        bciModal.addEventListener('click', (e) => {
+            if (e.target === bciModal) closeBciModal();
         });
     }
 }
 
 function openBciModal() {
-    if (!el.bciMapModal) return;
-    el.bciMapModal.classList.remove('hidden');
-    applyBciFilters();
-    if (bciActiveTab === 'charts') {
-        setTimeout(() => {
-            renderBciCharts();
-            resizeBciCharts();
-        }, 150);
-    }
+    const modal = document.getElementById('bciMapModal');
+    if (!modal) return;
+    modal.classList.remove('hidden');
+    renderBciFocusCards();
+    setTimeout(() => {
+        renderChinaBciMap();
+    }, 120);
 }
 
 function closeBciModal() {
-    if (el.bciMapModal) {
-        el.bciMapModal.classList.add('hidden');
+    const modal = document.getElementById('bciMapModal');
+    if (modal) modal.classList.add('hidden');
+}
+
+function applyBciFilterAndRender() {
+    renderBciFocusCards();
+    if (chartChinaMapInstance) {
+        renderChinaBciMap();
     }
 }
 
-function switchBciTab(tabName) {
-    bciActiveTab = tabName;
-    const tabs = [
-        { id: 'enterprises', btn: el.tabBciEnterprises, content: el.bciContentEnterprises },
-        { id: 'experts', btn: el.tabBciExperts, content: el.bciContentExperts },
-        { id: 'charts', btn: el.tabBciCharts, content: el.bciContentCharts }
-    ];
+// 绘制 ECharts 交互式中国矢量地图与核心城市标注散点
+function renderChinaBciMap() {
+    const container = document.getElementById('chartChinaBciMap');
+    if (!container || typeof echarts === 'undefined') return;
 
-    tabs.forEach(t => {
-        if (t.id === tabName) {
-            if (t.btn) t.btn.classList.add('active');
-            if (t.content) {
-                t.content.style.display = 'flex';
-                t.content.classList.add('active');
+    if (!chartChinaMapInstance) {
+        chartChinaMapInstance = echarts.init(container);
+        
+        // 绑定地图点击穿透事件
+        chartChinaMapInstance.on('click', function(params) {
+            let selectedProv = '';
+            if (params.seriesType === 'effectScatter') {
+                selectedProv = params.data.province || params.name;
+            } else if (params.seriesType === 'map') {
+                selectedProv = params.name;
             }
-        } else {
-            if (t.btn) t.btn.classList.remove('active');
-            if (t.content) {
-                t.content.style.display = 'none';
-                t.content.classList.remove('active');
+
+            if (selectedProv) {
+                // 规范化省份名称
+                if (selectedProv === '四川' || selectedProv.includes('四川')) selectedProv = '四川省';
+                else if (selectedProv === '北京' || selectedProv.includes('北京')) selectedProv = '北京市';
+                else if (selectedProv === '上海' || selectedProv.includes('上海')) selectedProv = '上海市';
+                else if (selectedProv === '浙江' || selectedProv.includes('浙江')) selectedProv = '浙江省';
+                else if (selectedProv === '江苏' || selectedProv.includes('江苏')) selectedProv = '江苏省';
+                else if (selectedProv === '广东' || selectedProv.includes('广东')) selectedProv = '广东省';
+                else if (selectedProv === '天津' || selectedProv.includes('天津')) selectedProv = '天津市';
+                else if (selectedProv === '湖北' || selectedProv.includes('湖北')) selectedProv = '湖北省';
+                else if (selectedProv === '陕西' || selectedProv.includes('陕西')) selectedProv = '陕西省';
+                else if (selectedProv === '安徽' || selectedProv.includes('安徽')) selectedProv = '安徽省';
+                else if (selectedProv === '山东' || selectedProv.includes('山东')) selectedProv = '山东省';
+
+                bciState.currentRegion = selectedProv;
+                renderBciFocusCards();
+
+                // 同步快捷按钮高亮
+                const regionNav = document.getElementById('bciRegionQuickNav');
+                if (regionNav) {
+                    regionNav.querySelectorAll('.bci-nav-btn').forEach(b => b.classList.remove('active'));
+                    if (selectedProv === '四川省') {
+                        const scBtn = regionNav.querySelector('[data-region="四川省"]');
+                        if (scBtn) scBtn.classList.add('active');
+                    }
+                }
             }
-        }
-    });
-
-    if (tabName === 'charts') {
-        setTimeout(() => {
-            renderBciCharts();
-            resizeBciCharts();
-        }, 100);
-    } else {
-        applyBciFilters();
-    }
-}
-
-function applyBciFilters() {
-    if (bciActiveTab === 'enterprises') {
-        let list = [...bciEnterprisesData];
-
-        // 省份过滤
-        if (bciFilterProvince !== 'all') {
-            list = list.filter(item => (item.province || '').includes(bciFilterProvince));
-        }
-
-        // 技术路线过滤
-        if (bciFilterTech !== 'all') {
-            list = list.filter(item => (item.tech_route || '').includes(bciFilterTech) || (item.product_intro || '').includes(bciFilterTech));
-        }
-
-        // 搜索词过滤
-        if (bciSearchQuery) {
-            list = list.filter(item => {
-                const combined = `${item.name} ${item.tech_route} ${item.product_intro} ${item.financing} ${item.city} ${item.competitiveness}`.toLowerCase();
-                return combined.includes(bciSearchQuery);
-            });
-        }
-
-        // 排序：四川省企业始终置顶
-        list.sort((a, b) => {
-            const isScA = (a.province || '').includes('四川');
-            const isScB = (b.province || '').includes('四川');
-            if (isScA && !isScB) return -1;
-            if (!isScA && isScB) return 1;
-            return (a.id || 0) - (b.id || 0);
         });
-
-        renderBciEnterprises(list);
-    } else if (bciActiveTab === 'experts') {
-        let list = [...bciExpertsData];
-
-        // 专家类型过滤
-        if (bciFilterExpertType !== 'all') {
-            list = list.filter(item => (item.expert_type || '').includes(bciFilterExpertType));
-        }
-
-        // 四川专家专属过滤
-        if (bciFilterExpertProv !== 'all') {
-            list = list.filter(item => (item.province || '').includes(bciFilterExpertProv));
-        }
-
-        // 搜索词过滤
-        if (bciSearchQuery) {
-            list = list.filter(item => {
-                const combined = `${item.name} ${item.direction} ${item.institution} ${item.associated_enterprise} ${item.paper}`.toLowerCase();
-                return combined.includes(bciSearchQuery);
-            });
-        }
-
-        // 排序：四川省专家置顶
-        list.sort((a, b) => {
-            const isScA = (a.province || '').includes('四川');
-            const isScB = (b.province || '').includes('四川');
-            if (isScA && !isScB) return -1;
-            if (!isScA && isScB) return 1;
-            return (a.id || 0) - (b.id || 0);
-        });
-
-        renderBciExperts(list);
     }
-}
-
-function renderBciEnterprises(list) {
-    if (!el.bciEnterpriseList) return;
-
-    if (!list || list.length === 0) {
-        el.bciEnterpriseList.innerHTML = `
-            <div style="grid-column: 1 / -1; text-align: center; padding: 40px 0; color: var(--text-muted);">
-                <div style="font-size: 32px; margin-bottom: 8px;">🔍</div>
-                <div>未找到符合筛选条件的脑机接口企业标的</div>
-            </div>
-        `;
-        return;
-    }
-
-    el.bciEnterpriseList.innerHTML = list.map(item => {
-        const isSc = (item.province || '').includes('四川');
-        const comp = item.competitiveness || '';
-        let compClass = 'comp-mid';
-        let compBadge = '中等潜力';
-        if (comp.includes('高') && !comp.includes('中高')) {
-            compClass = 'comp-high';
-            compBadge = '⭐ 高竞争力';
-        } else if (comp.includes('中高')) {
-            compClass = 'comp-high';
-            compBadge = '🔥 中高价值';
-        } else if (comp.includes('观察')) {
-            compClass = 'comp-obs';
-            compBadge = '👀 持续观察';
-        }
-
-        const sourceLink = item.source_url && item.source_url.startsWith('http') 
-            ? `<a href="${item.source_url.split('\n')[0]}" target="_blank" rel="noopener noreferrer" class="btn-ent-action">🌐 查阅公开档案 ➔</a>` 
-            : '';
-
-        return `
-            <div class="bci-ent-card ${isSc ? 'is-sichuan' : ''}">
-                <div class="ent-card-header">
-                    <div class="ent-card-title">
-                        ${isSc ? '<span style="color:#c5161d; font-size:12px; font-weight:800;">[四川重点]</span>' : ''}
-                        <span>${item.name}</span>
-                    </div>
-                    <span class="badge-comp ${compClass}">${compBadge}</span>
-                </div>
-
-                <div class="ent-badges">
-                    <span class="badge-tech">⚡ ${item.tech_route || '脑机接口'}</span>
-                    <span class="badge-loc">📍 ${item.province || ''} · ${item.city || ''}</span>
-                    ${item.stage ? `<span class="badge-loc" style="background:#e0f2fe; color:#0369a1; border-color:#bae6fd;">🔬 ${item.stage}</span>` : ''}
-                </div>
-
-                <div class="ent-card-body">
-                    <div class="ent-row-item">
-                        <span class="ent-row-label">💡 核心产品:</span>
-                        <span class="ent-row-val">${item.product_intro || '前沿脑机设备与算法研发'}</span>
-                    </div>
-                    <div class="ent-row-item">
-                        <span class="ent-row-label">💰 融资进展:</span>
-                        <span class="ent-row-val highlight-fin">${item.financing || '融资未公开/自筹'}</span>
-                    </div>
-                    <div class="ent-row-item">
-                        <span class="ent-row-label">📊 研判要点:</span>
-                        <span class="ent-row-val" style="color:var(--text-title);">${comp || '待进一步尽调'}</span>
-                    </div>
-                </div>
-
-                <div class="ent-card-footer">
-                    <button class="btn-ent-action" onclick="copyEnterpriseName('${item.name}')">📋 复制公司名</button>
-                    ${sourceLink}
-                </div>
-            </div>
-        `;
-    }).join('');
-}
-
-function renderBciExperts(list) {
-    if (!el.bciExpertList) return;
-
-    if (!list || list.length === 0) {
-        el.bciExpertList.innerHTML = `
-            <div style="grid-column: 1 / -1; text-align: center; padding: 40px 0; color: var(--text-muted);">
-                <div style="font-size: 32px; margin-bottom: 8px;">🎓</div>
-                <div>未找到符合筛选条件的脑机接口专家</div>
-            </div>
-        `;
-        return;
-    }
-
-    el.bciExpertList.innerHTML = list.map(item => {
-        const isSc = (item.province || '').includes('四川');
-        const sourceLink = item.source_url && item.source_url.startsWith('http') 
-            ? `<a href="${item.source_url.split('\n')[0]}" target="_blank" rel="noopener noreferrer" class="btn-ent-action">📄 学者主页 ➔</a>` 
-            : '';
-
-        return `
-            <div class="bci-exp-card ${isSc ? 'is-sichuan' : ''}">
-                <div class="exp-card-header">
-                    <div>
-                        <div class="exp-name">
-                            ${isSc ? '<span style="color:#c5161d; font-size:12px; font-weight:800;">[四川专家]</span>' : ''}
-                            <span>${item.name}</span>
-                        </div>
-                        <div class="exp-institution">🏛️ ${item.institution || '高校院所'} · 📍 ${item.province || ''}</div>
-                    </div>
-                    <span class="badge-exp-type">🎓 ${item.expert_type || '学术研发'}</span>
-                </div>
-
-                <div class="ent-card-body">
-                    <div class="ent-row-item">
-                        <span class="ent-row-label">🔬 研究方向:</span>
-                        <span class="ent-row-val" style="font-weight:600; color:var(--text-title);">${item.direction || '脑机交互与神经工程'}</span>
-                    </div>
-                    ${item.associated_enterprise && item.associated_enterprise !== '无公开直接关联企业' ? `
-                    <div class="ent-row-item">
-                        <span class="ent-row-label">🏭 关联企业:</span>
-                        <span class="ent-row-val" style="color:#4f46e5; font-weight:700;">${item.associated_enterprise}</span>
-                    </div>` : ''}
-                    ${item.paper && !item.paper.includes('待进一步') ? `
-                    <div class="exp-paper-box">
-                        📜 <strong>代表作:</strong> ${item.paper}
-                    </div>` : ''}
-                </div>
-
-                <div class="ent-card-footer">
-                    <button class="btn-ent-action" onclick="copyEnterpriseName('${item.name} (${item.institution})')">📋 复制专家档案</button>
-                    ${sourceLink}
-                </div>
-            </div>
-        `;
-    }).join('');
-}
-
-function renderBciCharts() {
-    if (typeof echarts === 'undefined') return;
 
     const isDark = state.theme === 'dark';
-    const textColor = isDark ? '#cbd5e1' : '#475569';
-    const gridColor = isDark ? '#1e293b' : '#f1f5f9';
 
-    // 1. 省市分布双柱图 (企业数 vs 专家数)
-    if (el.chartBciProvinceDist) {
-        if (!chartBciProvInstance) {
-            chartBciProvInstance = echarts.init(el.chartBciProvinceDist);
-        }
+    // 统计各省份热度数据
+    const provStats = {};
+    bciEnterprisesData.forEach(item => {
+        const p = normalizeProvName(item.province);
+        if (p) provStats[p] = (provStats[p] || 0) + 1;
+    });
 
-        const provinces = ['江苏省', '浙江省', '上海市', '北京市', '广东省', '四川省', '天津市', '湖北省', '山东省', '陕西省', '安徽省'];
-        const entCounts = [32, 27, 26, 20, 20, 11, 7, 6, 4, 2, 3];
-        const expCounts = [3, 9, 10, 26, 7, 3, 5, 2, 2, 3, 3];
+    const mapData = Object.keys(provStats).map(p => ({
+        name: p,
+        value: provStats[p]
+    }));
 
-        const option1 = {
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: { type: 'shadow' },
-                backgroundColor: isDark ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.95)',
-                borderColor: isDark ? '#334155' : '#e2e8f0',
-                textStyle: { color: isDark ? '#f8fafc' : '#0f172a', fontSize: 12 }
-            },
-            legend: {
-                data: ['企业标的数量', '智库专家数量'],
-                top: 0,
-                textStyle: { color: textColor, fontSize: 11.5 }
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                top: '32px',
-                containLabel: true
-            },
-            xAxis: {
-                type: 'category',
-                data: provinces.map(p => p.replace('省', '').replace('市', '')),
-                axisLabel: {
-                    color: (value) => value === '四川' ? '#c5161d' : textColor,
-                    fontWeight: (value) => value === '四川' ? 'bold' : 'normal',
-                    fontSize: 11
-                },
-                axisLine: { lineStyle: { color: isDark ? '#475569' : '#cbd5e1' } }
-            },
-            yAxis: {
-                type: 'value',
-                splitLine: { lineStyle: { color: gridColor } },
-                axisLabel: { color: textColor, fontSize: 11 }
-            },
-            series: [
-                {
-                    name: '企业标的数量',
-                    type: 'bar',
-                    barWidth: '35%',
-                    itemStyle: {
-                        color: (params) => params.name === '四川' ? '#c5161d' : '#0284c7',
-                        borderRadius: [3, 3, 0, 0]
-                    },
-                    data: entCounts
-                },
-                {
-                    name: '智库专家数量',
-                    type: 'bar',
-                    barWidth: '35%',
-                    itemStyle: {
-                        color: '#8b5cf6',
-                        borderRadius: [3, 3, 0, 0]
-                    },
-                    data: expCounts
+    const option = {
+        backgroundColor: 'transparent',
+        tooltip: {
+            trigger: 'item',
+            backgroundColor: isDark ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.96)',
+            borderColor: '#6366f1',
+            borderWidth: 1.5,
+            padding: [8, 12],
+            textStyle: { color: isDark ? '#f8fafc' : '#0f172a', fontSize: 12 },
+            formatter: function(params) {
+                if (params.seriesType === 'effectScatter') {
+                    const d = params.data;
+                    return `
+                        <div style="font-weight:bold; font-size:13px; color:#4f46e5; margin-bottom:4px;">📍 ${d.name} (${d.province})</div>
+                        <div style="font-size:11.5px; color:#c5161d; font-weight:700;">★ 核心优势: ${d.note}</div>
+                        <div style="font-size:11px; color:#64748b; margin-top:3px;">👉 点击该标注点，右侧即刻精准穿透标的</div>
+                    `;
                 }
-            ]
-        };
-
-        chartBciProvInstance.setOption(option1);
-    }
-
-    // 2. 核心技术路线分布玫瑰图
-    if (el.chartBciTechPie) {
-        if (!chartBciTechInstance) {
-            chartBciTechInstance = echarts.init(el.chartBciTechPie);
-        }
-
-        const techData = [
-            { name: '非侵入式/脑电监测与康复', value: 82 },
-            { name: '侵入式/半侵入电极路线', value: 36 },
-            { name: '超声脑机接口 (全脑读写)', value: 18 },
-            { name: '光学成像 (fNIRS近红外)', value: 16 },
-            { name: '闭环光遗传与神经调控', value: 14 },
-            { name: '消费级算法与芯片硬件', value: 7 }
-        ];
-
-        const option2 = {
-            tooltip: {
-                trigger: 'item',
-                formatter: '{b}: <strong>{c} 家</strong> ({d}%)',
-                backgroundColor: isDark ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.95)',
-                borderColor: isDark ? '#334155' : '#e2e8f0',
-                textStyle: { color: isDark ? '#f8fafc' : '#0f172a', fontSize: 11.5 }
-            },
-            legend: {
-                orient: 'vertical',
-                left: 'left',
-                top: 'center',
-                itemWidth: 9,
-                itemHeight: 9,
-                textStyle: { color: textColor, fontSize: 10.5 }
-            },
-            color: ['#004886', '#0284c7', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899'],
-            series: [
-                {
-                    name: '技术路线',
-                    type: 'pie',
-                    radius: ['28%', '70%'],
-                    center: ['66%', '50%'],
-                    roseType: 'radius',
-                    itemStyle: {
-                        borderRadius: 4,
-                        borderColor: isDark ? '#142030' : '#ffffff',
-                        borderWidth: 2
-                    },
-                    label: { show: false },
-                    emphasis: {
-                        label: { show: true, fontSize: 11, fontWeight: 'bold' }
-                    },
-                    data: techData
+                if (params.seriesType === 'map') {
+                    const pName = params.name;
+                    const entNum = bciEnterprisesData.filter(i => (i.province || '').includes(pName.substring(0, 2))).length;
+                    const expNum = bciExpertsData.filter(i => (i.province || '').includes(pName.substring(0, 2))).length;
+                    const isSc = pName.includes('四川');
+                    return `
+                        <div style="font-weight:bold; font-size:13px; color:${isSc ? '#c5161d' : '#004886'};">
+                            ${isSc ? '⭐ 四川省 (中西部第一枢纽)' : pName}
+                        </div>
+                        <div style="margin-top:4px; font-size:12px; display:flex; gap:12px;">
+                            <span>🏢 核心企业: <strong style="color:#0284c7;">${entNum}</strong> 家</span>
+                            <span>👨‍🔬 智库专家: <strong style="color:#8b5cf6;">${expNum}</strong> 位</span>
+                        </div>
+                        ${isSc ? '<div style="margin-top:4px; font-size:11px; color:#c5161d; font-weight:bold;">🏆 重点标的: 格式塔(5.7亿融资)、电子科大/芯脑科技、四川新源</div>' : ''}
+                        <div style="margin-top:4px; font-size:10.5px; color:#94a3b8;">👉 点击该省份查看详细标的清单</div>
+                    `;
                 }
-            ]
-        };
+            }
+        },
+        visualMap: {
+            min: 0,
+            max: 35,
+            left: '3%',
+            bottom: '4%',
+            text: ['高 (30+)', '低 (1)'],
+            calculable: false,
+            inRange: {
+                color: isDark 
+                    ? ['#1e293b', '#312e81', '#4338ca', '#6366f1', '#c5161d'] 
+                    : ['#f0f7ff', '#bae6fd', '#60a5fa', '#3b82f6', '#1d4ed8']
+            },
+            textStyle: {
+                color: isDark ? '#94a3b8' : '#475569',
+                fontSize: 10.5
+            }
+        },
+        geo: {
+            map: 'china',
+            roam: true,
+            zoom: 1.25,
+            center: [104.5, 36.5],
+            label: {
+                show: false
+            },
+            itemStyle: {
+                areaColor: isDark ? '#1e293b' : '#f8fafc',
+                borderColor: isDark ? '#334155' : '#cbd5e1',
+                borderWidth: 0.8
+            },
+            emphasis: {
+                label: { show: false },
+                itemStyle: {
+                    areaColor: '#f59e0b',
+                    borderColor: '#d97706',
+                    borderWidth: 1.5
+                }
+            }
+        },
+        series: [
+            // 1. 省份热力地图层
+            {
+                name: '全国脑机产业热度',
+                type: 'map',
+                geoIndex: 0,
+                data: mapData
+            },
+            // 2. 核心城市涟漪光晕标注散点层
+            {
+                name: '核心产业极城市',
+                type: 'effectScatter',
+                coordinateSystem: 'geo',
+                data: BCI_CITIES_COORDS,
+                symbolSize: function(val, params) {
+                    return params.data.highlight ? 18 : 12;
+                },
+                showEffectOn: 'render',
+                rippleEffect: {
+                    brushType: 'stroke',
+                    scale: 3.8,
+                    period: 3
+                },
+                label: {
+                    show: true,
+                    formatter: '{b}',
+                    position: 'right',
+                    color: isDark ? '#ffffff' : '#0f172a',
+                    fontWeight: 'bold',
+                    fontSize: 11.5,
+                    backgroundColor: isDark ? 'rgba(15,23,42,0.85)' : 'rgba(255,255,255,0.88)',
+                    padding: [2, 5],
+                    borderRadius: 3,
+                    borderColor: isDark ? '#475569' : '#bfdbfe',
+                    borderWidth: 0.5
+                },
+                itemStyle: {
+                    color: function(params) {
+                        return params.data.highlight ? '#ef4444' : '#6366f1';
+                    },
+                    shadowBlur: 10,
+                    shadowColor: '#ef4444'
+                },
+                zlevel: 5
+            }
+        ]
+    };
 
-        chartBciTechInstance.setOption(option2);
-    }
+    chartChinaMapInstance.setOption(option);
+    chartChinaMapInstance.resize();
 }
 
-function resizeBciCharts() {
-    if (chartBciProvInstance) chartBciProvInstance.resize();
-    if (chartBciTechInstance) chartBciTechInstance.resize();
+function normalizeProvName(prov) {
+    if (!prov) return '';
+    if (prov.includes('四川')) return '四川省';
+    if (prov.includes('江苏')) return '江苏省';
+    if (prov.includes('浙江')) return '浙江省';
+    if (prov.includes('上海')) return '上海市';
+    if (prov.includes('北京')) return '北京市';
+    if (prov.includes('广东')) return '广东省';
+    if (prov.includes('天津')) return '天津市';
+    if (prov.includes('湖北')) return '湖北省';
+    if (prov.includes('陕西')) return '陕西省';
+    if (prov.includes('山东')) return '山东省';
+    if (prov.includes('安徽')) return '安徽省';
+    return prov;
+}
+
+// 渲染右侧重点标的与领军智库穿透看板
+function renderBciFocusCards() {
+    const listContainer = document.getElementById('bciFocusCardsList');
+    const focusBanner = document.getElementById('bciCurrentFocusBanner');
+    const regionNameEl = document.getElementById('bciFocusRegionName');
+    const entCountEl = document.getElementById('bciFocusEntCount');
+    const expCountEl = document.getElementById('bciFocusExpCount');
+    const btnReset = document.getElementById('btnResetBciFocus');
+    const viewEntBadge = document.getElementById('bciViewEntBadge');
+    const viewExpBadge = document.getElementById('bciViewExpBadge');
+
+    if (!listContainer) return;
+
+    // 1. 区域过滤判定
+    let filteredEnts = [...bciEnterprisesData];
+    let filteredExps = [...bciExpertsData];
+
+    let regionLabel = '全国全域';
+    if (bciState.currentRegion !== 'all') {
+        if (bciState.currentRegion === '长三角') {
+            regionLabel = '长三角地区 (沪苏浙皖)';
+            filteredEnts = filteredEnts.filter(i => ['上海', '江苏', '浙江', '安徽'].some(p => (i.province || '').includes(p)));
+            filteredExps = filteredExps.filter(i => ['上海', '江苏', '浙江', '安徽'].some(p => (i.province || '').includes(p)));
+        } else if (bciState.currentRegion === '京津冀') {
+            regionLabel = '京津冀协同发展区';
+            filteredEnts = filteredEnts.filter(i => ['北京', '天津', '河北'].some(p => (i.province || '').includes(p)));
+            filteredExps = filteredExps.filter(i => ['北京', '天津', '河北'].some(p => (i.province || '').includes(p)));
+        } else if (bciState.currentRegion === '大湾区') {
+            regionLabel = '粤港澳大湾区 (广东)';
+            filteredEnts = filteredEnts.filter(i => (i.province || '').includes('广东'));
+            filteredExps = filteredExps.filter(i => (i.province || '').includes('广东'));
+        } else {
+            const cleanProv = bciState.currentRegion.replace('省', '').replace('市', '');
+            regionLabel = bciState.currentRegion;
+            filteredEnts = filteredEnts.filter(i => (i.province || '').includes(cleanProv));
+            filteredExps = filteredExps.filter(i => (i.province || '').includes(cleanProv));
+        }
+    }
+
+    // 更新聚焦状态文字
+    if (regionNameEl) regionNameEl.textContent = regionLabel;
+    if (entCountEl) entCountEl.textContent = filteredEnts.length;
+    if (expCountEl) expCountEl.textContent = filteredExps.length;
+    if (viewEntBadge) viewEntBadge.textContent = filteredEnts.length;
+    if (viewExpBadge) viewExpBadge.textContent = filteredExps.length;
+
+    if (btnReset) {
+        if (bciState.currentRegion !== 'all') btnReset.classList.remove('hidden');
+        else btnReset.classList.add('hidden');
+    }
+
+    // 2. 企业模式渲染
+    if (bciState.currentView === 'enterprises') {
+        let list = [...filteredEnts];
+
+        // 评级过滤
+        if (bciState.compFilter !== 'all') {
+            list = list.filter(i => (i.competitiveness || '').includes(bciState.compFilter));
+        }
+
+        // 搜索词过滤
+        if (bciState.searchQuery) {
+            const q = bciState.searchQuery;
+            list = list.filter(item => {
+                const text = `${item.name} ${item.tech_route} ${item.product_intro} ${item.financing} ${item.city} ${item.competitiveness}`.toLowerCase();
+                return text.includes(q);
+            });
+        }
+
+        // 排序规则：四川企业置顶，高竞争力企业优先
+        list.sort((a, b) => {
+            const isScA = (a.province || '').includes('四川');
+            const isScB = (b.province || '').includes('四川');
+            if (isScA && !isScB) return -1;
+            if (!isScA && isScB) return 1;
+
+            const isHighA = (a.competitiveness || '').includes('高');
+            const isHighB = (b.competitiveness || '').includes('高');
+            if (isHighA && !isHighB) return -1;
+            if (!isHighA && isHighB) return 1;
+
+            return (a.id || 0) - (b.id || 0);
+        });
+
+        if (list.length === 0) {
+            listContainer.innerHTML = `
+                <div style="text-align: center; padding: 40px 0; color: var(--text-muted);">
+                    <div style="font-size: 32px; margin-bottom: 8px;">🔍</div>
+                    <div>当前区域/筛选条件下暂无脑机企业标的</div>
+                </div>
+            `;
+            return;
+        }
+
+        listContainer.innerHTML = list.map((item, index) => {
+            const isSc = (item.province || '').includes('四川');
+            const comp = item.competitiveness || '待评估';
+            let compBadgeClass = 'badge-comp comp-mid';
+            let compBadgeText = '🔥 中高价值';
+            let cardClass = 'bci-focus-card';
+
+            if (comp.includes('高') && !comp.includes('中高')) {
+                compBadgeClass = 'badge-comp comp-high';
+                compBadgeText = '⭐ 高竞争力/稀缺';
+                cardClass += ' card-high';
+            } else if (comp.includes('观察')) {
+                compBadgeClass = 'badge-comp comp-obs';
+                compBadgeText = '👀 持续观察';
+            }
+
+            if (isSc) cardClass += ' card-sichuan';
+
+            const sourceLink = item.source_url && item.source_url.startsWith('http') 
+                ? `<a href="${item.source_url.split('\n')[0]}" target="_blank" rel="noopener noreferrer" class="btn-card-action">🌐 官方档案 ➔</a>` 
+                : '';
+
+            return `
+                <div class="${cardClass}">
+                    <div class="card-top-row">
+                        <div class="card-title">
+                            ${isSc ? '<span style="color:#c5161d; font-size:12px; font-weight:800;">[四川重点]</span>' : ''}
+                            <span>${item.name}</span>
+                        </div>
+                        <div class="card-badges">
+                            <span class="${compBadgeClass}">${compBadgeText}</span>
+                            <span class="badge-tech">⚡ ${item.tech_route || '脑机接口'}</span>
+                            <span class="badge-loc">📍 ${item.city || item.province}</span>
+                        </div>
+                    </div>
+
+                    <div class="card-main-desc">
+                        <strong>💡 核心看点:</strong> ${item.product_intro || '前沿脑机设备与算法研发'}
+                    </div>
+
+                    <div class="card-meta-row">
+                        <span>💰 融资: <strong class="card-fin-highlight">${item.financing || '未公开/自筹'}</strong></span>
+                        <span>🔬 阶段: <strong>${item.stage || '临床前/研发中'}</strong></span>
+                        <div>
+                            <button class="btn-card-action" onclick="copyEnterpriseName('${item.name}')">📋 复制</button>
+                            ${sourceLink}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+    } else if (bciState.currentView === 'experts') {
+        let list = [...filteredExps];
+
+        // 专家类型过滤
+        if (bciState.expTypeFilter !== 'all') {
+            list = list.filter(i => (i.expert_type || '').includes(bciState.expTypeFilter));
+        }
+
+        // 搜索词过滤
+        if (bciState.searchQuery) {
+            const q = bciState.searchQuery;
+            list = list.filter(item => {
+                const text = `${item.name} ${item.direction} ${item.institution} ${item.associated_enterprise} ${item.paper}`.toLowerCase();
+                return text.includes(q);
+            });
+        }
+
+        // 排序：四川专家置顶
+        list.sort((a, b) => {
+            const isScA = (a.province || '').includes('四川');
+            const isScB = (b.province || '').includes('四川');
+            if (isScA && !isScB) return -1;
+            if (!isScA && isScB) return 1;
+            return (a.id || 0) - (b.id || 0);
+        });
+
+        if (list.length === 0) {
+            listContainer.innerHTML = `
+                <div style="text-align: center; padding: 40px 0; color: var(--text-muted);">
+                    <div style="font-size: 32px; margin-bottom: 8px;">🎓</div>
+                    <div>当前区域/筛选条件下暂无智库学者</div>
+                </div>
+            `;
+            return;
+        }
+
+        listContainer.innerHTML = list.map(item => {
+            const isSc = (item.province || '').includes('四川');
+            const sourceLink = item.source_url && item.source_url.startsWith('http') 
+                ? `<a href="${item.source_url.split('\n')[0]}" target="_blank" rel="noopener noreferrer" class="btn-card-action">📄 学者主页 ➔</a>` 
+                : '';
+
+            return `
+                <div class="bci-focus-card ${isSc ? 'card-sichuan' : ''}">
+                    <div class="card-top-row">
+                        <div class="card-title">
+                            ${isSc ? '<span style="color:#c5161d; font-size:12px; font-weight:800;">[四川专家]</span>' : ''}
+                            <span>${item.name}</span>
+                            <small style="font-size:11.5px; color:var(--text-muted);">(${item.institution || '高校院所'} · 📍 ${item.province || ''})</small>
+                        </div>
+                        <span class="badge-exp-type">🎓 ${item.expert_type || '学术研发'}</span>
+                    </div>
+
+                    <div class="card-main-desc">
+                        <strong>🔬 研究方向:</strong> ${item.direction || '脑机交互与神经工程'}
+                        ${item.associated_enterprise && item.associated_enterprise !== '无公开直接关联企业' ? `
+                        <div style="margin-top:2px; color:#4f46e5; font-size:11.5px;">🏭 关联企业: <strong>${item.associated_enterprise}</strong></div>` : ''}
+                    </div>
+
+                    ${item.paper && !item.paper.includes('待进一步') ? `
+                    <div style="font-size:10.5px; color:var(--text-muted); font-style:italic; background:var(--bg-card); padding:3px 6px; border-radius:3px; border:1px dashed var(--border-light);">
+                        📜 代表顶刊: ${item.paper}
+                    </div>` : ''}
+
+                    <div class="card-meta-row" style="margin-top:2px;">
+                        <span>🏛️ 单位: <strong>${item.institution || '科研院校'}</strong></span>
+                        <div>
+                            <button class="btn-card-action" onclick="copyEnterpriseName('${item.name} (${item.institution})')">📋 复制学者档案</button>
+                            ${sourceLink}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
 }
 
 function copyEnterpriseName(name) {
@@ -3106,5 +3088,5 @@ function copyEnterpriseName(name) {
 window.copyEnterpriseName = copyEnterpriseName;
 window.openBciModal = openBciModal;
 window.closeBciModal = closeBciModal;
-window.switchBciTab = switchBciTab;
+
 
