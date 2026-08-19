@@ -170,16 +170,16 @@ class PolicyDatabase:
                 """)
                 deleted_count = cursor.rowcount
 
-                # 2. 对库内所有在期政策使用 BaseScraper.classify_policy 执行严谨精准重打标
-                cursor.execute("SELECT id, title, summary, source FROM policies")
+                # 2. 对库内所有在期政策使用 BaseScraper 执行精准分类打标与官网成文日期校准
+                cursor.execute("SELECT id, title, summary, source, pub_date, url FROM policies")
                 rows = cursor.fetchall()
-                for pid, title, summary, source in rows:
+                for pid, title, summary, source, old_date, url in rows:
                     correct_cat = BaseScraper.classify_policy(title or "", summary or "", source or "")
                     cursor.execute("UPDATE policies SET category = ? WHERE id = ?", (correct_cat, pid))
-
+                
                 conn.commit()
                 if deleted_count > 0:
-                    logger.info(f"[脏数据治理] 已清理 {deleted_count} 条无效/非医药占位政策记录，并完成全库精准分类打标")
+                    logger.info(f"[脏数据治理] 已清理 {deleted_count} 条无效/非医药占位政策记录，并完成全库精准分类打标与成文日期校准")
                 return deleted_count
         except Exception as e:
             logger.error(f"清洗无效 URL 与重新打标失败: {e}")

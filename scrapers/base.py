@@ -177,6 +177,62 @@ class BaseScraper(ABC):
             return f"{match_short.group(1)}-{int(match_short.group(2)):02d}"
         return ""
 
+    @staticmethod
+    def extract_official_written_date(html_or_text: str) -> Optional[str]:
+        """
+        从政策详情页 HTML 或全文中精准提取官网【成文日期】（公文签署发文日）
+        权威优先级：成文日期 > 印发日期 > 签署落款日期 > 发文日期
+        """
+        if not html_or_text:
+            return None
+            
+        # 1. 优先从三线表/元数据结构化表格中提取成文日期
+        soup = BeautifulSoup(html_or_text, "html.parser")
+        for tr in soup.find_all("tr"):
+            tr_text = tr.get_text(separator=" ", strip=True)
+            m = re.search(r"成文日期[：:\s]*([0-9]{4}[年\-/.][0-9]{1,2}[年\-/.][0-9]{1,2}[日]?)", tr_text)
+            if m:
+                raw_d = m.group(1)
+                parts = [p for p in re.split(r"[年\-/.日]", raw_d) if p]
+                if len(parts) >= 3:
+                    return f"{int(parts[0]):04d}-{int(parts[1]):02d}-{int(parts[2]):02d}"
+
+        # 2. 全文正则提取【成文日期】
+        full_text = soup.get_text()
+        m_cw = re.search(r"成文日期[：:\s]*([0-9]{4}[年\-/.][0-9]{1,2}[年\-/.][0-9]{1,2}[日]?)", full_text)
+        if m_cw:
+            raw_d = m_cw.group(1)
+            parts = [p for p in re.split(r"[年\-/.日]", raw_d) if p]
+            if len(parts) >= 3:
+                return f"{int(parts[0]):04d}-{int(parts[1]):02d}-{int(parts[2]):02d}"
+
+        # 3. 提取【印发日期】
+        m_yf = re.search(r"印发日期[：:\s]*([0-9]{4}[年\-/.][0-9]{1,2}[年\-/.][0-9]{1,2}[日]?)", full_text)
+        if m_yf:
+            raw_d = m_yf.group(1)
+            parts = [p for p in re.split(r"[年\-/.日]", raw_d) if p]
+            if len(parts) >= 3:
+                return f"{int(parts[0]):04d}-{int(parts[1]):02d}-{int(parts[2]):02d}"
+
+        # 4. 提取【发文日期】
+        m_fw = re.search(r"发文日期[：:\s]*([0-9]{4}[年\-/.][0-9]{1,2}[年\-/.][0-9]{1,2}[日]?)", full_text)
+        if m_fw:
+            raw_d = m_fw.group(1)
+            parts = [p for p in re.split(r"[年\-/.日]", raw_d) if p]
+            if len(parts) >= 3:
+                return f"{int(parts[0]):04d}-{int(parts[1]):02d}-{int(parts[2]):02d}"
+
+        # 5. 提取正文末尾公文落款签署日期 (如 "2026年1月30日")
+        tail_text = full_text[-800:]
+        m_tail = re.search(r"([12][0-9]{3}年[0-9]{1,2}月[0-9]{1,2}日)", tail_text)
+        if m_tail:
+            raw_d = m_tail.group(1)
+            parts = [p for p in re.split(r"[年\-/.日]", raw_d) if p]
+            if len(parts) >= 3:
+                return f"{int(parts[0]):04d}-{int(parts[1]):02d}-{int(parts[2]):02d}"
+
+        return None
+
     @abstractmethod
     def scrape(self) -> List[Dict[str, Any]]:
         pass
