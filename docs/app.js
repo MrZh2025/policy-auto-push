@@ -2933,9 +2933,50 @@ function getExpertOfficialLink(name, institution) {
     return `https://www.baidu.com/s?wd=${encodeURIComponent(name + ' ' + inst + ' 教师主页 实验室')}`;
 }
 
-// 绘制 ECharts 交互式中国矢量地图与核心城市标注散点 (点击四川或特定区域时，地图仅展示该区域分布)
+// 四川省专属放大下钻：高校院所、顶尖学者与核心产业基地地理坐标配置
+const SICHUAN_DETAILED_NODES = [
+    {
+        name: '电子科技大学 (清水河校区)',
+        value: [103.9314, 30.7490, 2],
+        province: '四川省',
+        type: 'univ',
+        experts: '尧德中 (院士/教授) · 徐鹏 (教授/博导)',
+        desc: '前沿类脑人工智能创新中心 · 孵化成都芯脑科技',
+        highlight: true
+    },
+    {
+        name: '四川大学华西医院 (神经临床中心)',
+        value: [104.0620, 30.6420, 1],
+        province: '四川省',
+        type: 'hospital',
+        experts: '华西脑电与神经调控医工团队',
+        desc: '神经电生理、重大神经疾病临床评估与脑控康复中试',
+        highlight: true
+    },
+    {
+        name: '成都高新·天府国际生物城',
+        value: [104.0300, 30.4800, 11],
+        province: '四川省',
+        type: 'industry',
+        experts: '格式塔科技 (Gestala 独角兽)',
+        desc: '国内稀缺超声全脑读写平台 · 半年获5.7亿元顶级资本投资',
+        highlight: true
+    },
+    {
+        name: '西南科技大学 (绵阳校区)',
+        value: [104.6980, 31.5350, 1],
+        province: '四川省',
+        type: 'univ',
+        experts: '张杨松 (副教授)',
+        desc: '脑机接口模式识别、脑电特征提取与智能控制实验室',
+        highlight: false
+    }
+];
+
+// 绘制 ECharts 交互式中国矢量地图与核心城市标注散点 (支持四川省单独放大下钻与高校学者标注)
 function renderChinaBciMap() {
     const container = document.getElementById('chartChinaBciMap');
+    const scFloatingCard = document.getElementById('scTalentFloatingCard');
     if (!container || typeof echarts === 'undefined') return;
 
     if (!chartChinaMapInstance) {
@@ -2981,11 +3022,18 @@ function renderChinaBciMap() {
     }
 
     const isDark = state.theme === 'dark';
+    const isSichuanMode = (bciState.currentRegion === '四川省');
 
-    // 1. 获取当前所选区域与细分类型下的严格数据集 (选择四川时，只保留四川的数据)
+    // 联动控制四川智库领军学者浮动卡片显隐
+    if (scFloatingCard) {
+        if (isSichuanMode) scFloatingCard.classList.remove('hidden');
+        else scFloatingCard.classList.add('hidden');
+    }
+
+    // 1. 获取当前所选区域与细分类型下的严格数据集
     const currentRegionList = getFilteredBciList(false);
 
-    // 统计各省份热度数据 (非当前聚焦省份数量为0，呈现中性灰，唯独聚焦省份高亮呈现)
+    // 统计各省份热度数据
     const provStats = {};
     currentRegionList.forEach(item => {
         const p = normalizeProvName(item.province);
@@ -2997,22 +3045,28 @@ function renderChinaBciMap() {
         value: provStats[p]
     }));
 
-    // 2. 统计核心城市标注点 (只保留当前聚焦区域内的城市，例如四川时只标注成都市，其余城市散点全部隐藏)
-    const scatterData = BCI_CITIES_COORDS.map(city => {
-        let count = 0;
-        if (bciState.currentView === 'enterprises') {
-            count = currentRegionList.filter(item => (item.city || '').includes(city.name.replace('市', '')) || (item.province || '').includes(city.province.replace('省', '').replace('市', ''))).length;
-        } else {
-            count = currentRegionList.filter(item => (item.province || '').includes(city.province.replace('省', '').replace('市', ''))).length;
-        }
-        return {
-            name: city.name,
-            value: [city.coords[0], city.coords[1], count],
-            province: city.province,
-            highlight: city.highlight || false,
-            count: count
-        };
-    }).filter(c => c.count > 0); // 只标注当前所选区域内且数量大于0的城市！
+    // 2. 统计核心城市/高校标注散点
+    let scatterData = [];
+    if (isSichuanMode) {
+        // 四川省专属模式：精准标注高校、华西医院与独角兽生物城
+        scatterData = SICHUAN_DETAILED_NODES;
+    } else {
+        scatterData = BCI_CITIES_COORDS.map(city => {
+            let count = 0;
+            if (bciState.currentView === 'enterprises') {
+                count = currentRegionList.filter(item => (item.city || '').includes(city.name.replace('市', '')) || (item.province || '').includes(city.province.replace('省', '').replace('市', ''))).length;
+            } else {
+                count = currentRegionList.filter(item => (item.province || '').includes(city.province.replace('省', '').replace('市', ''))).length;
+            }
+            return {
+                name: city.name,
+                value: [city.coords[0], city.coords[1], count],
+                province: city.province,
+                highlight: city.highlight || false,
+                count: count
+            };
+        }).filter(c => c.count > 0);
+    }
 
     // 计算当前筛选条件下的类型描述标签
     let filterTypeLabel = '全部标的';
@@ -3027,12 +3081,12 @@ function renderChinaBciMap() {
 
     const maxVal = Math.max(...mapData.map(d => d.value), 1);
 
-    // 动态调整地图视觉中心与缩放比例 (聚焦四川时自适应定位四川)
+    // 动态调整地图视觉中心与缩放比例 (点击四川时，单独放大下钻四川省)
     let mapCenter = [104.5, 36.5];
     let mapZoom = 1.25;
-    if (bciState.currentRegion === '四川省') {
-        mapCenter = [103.5, 30.6];
-        mapZoom = 1.5;
+    if (isSichuanMode) {
+        mapCenter = [103.8, 30.7];
+        mapZoom = 3.6; // 高清放大四川省全景！
     } else if (bciState.currentRegion === '长三角') {
         mapCenter = [120.0, 31.5];
         mapZoom = 1.6;
@@ -3056,6 +3110,14 @@ function renderChinaBciMap() {
             formatter: function(params) {
                 if (params.seriesType === 'effectScatter') {
                     const d = params.data;
+                    if (isSichuanMode && d.experts) {
+                        return `
+                            <div style="font-weight:bold; font-size:13.5px; color:#c5161d; margin-bottom:4px;">🏛️ ${d.name}</div>
+                            <div style="font-size:12px; color:#0f172a; font-weight:700;">👨‍🏫 领军学者/团队: <span style="color:#4f46e5;">${d.experts}</span></div>
+                            <div style="font-size:11.5px; color:#64748b; margin-top:2px;">🔬 研究与转化方向: ${d.desc}</div>
+                            <div style="font-size:10.5px; color:#c5161d; margin-top:4px;">👉 右侧看板已同步列出该机构相关详细档案</div>
+                        `;
+                    }
                     return `
                         <div style="font-weight:bold; font-size:13px; color:#4f46e5; margin-bottom:4px;">📍 ${d.name} (${d.province})</div>
                         <div style="font-size:12px; color:#0f172a;">📊 当前聚焦【${filterTypeLabel}】: <strong style="color:#c5161d; font-size:13px;">${d.count}</strong> ${bciState.currentView === 'enterprises' ? '家' : '位'}</div>
@@ -3071,7 +3133,7 @@ function renderChinaBciMap() {
                     }
                     return `
                         <div style="font-weight:bold; font-size:13px; color:${isSc ? '#c5161d' : '#004886'};">
-                            ${isSc ? '⭐ 四川省 (中西部第一枢纽)' : pName}
+                            ${isSc ? '⭐ 四川省 (中西部第一脑机枢纽 · 点击已放大下钻)' : pName}
                         </div>
                         <div style="margin-top:4px; font-size:12px;">
                             <span>📊 当前分布【${filterTypeLabel}】: <strong style="color:${isSc ? '#c5161d' : '#0284c7'}; font-size:13px;">${count}</strong> ${bciState.currentView === 'enterprises' ? '家' : '位'}</span>
@@ -3128,13 +3190,14 @@ function renderChinaBciMap() {
                 geoIndex: 0,
                 data: mapData
             },
-            // 2. 核心城市涟漪光晕标注散点层 (仅保留所选区域城市)
+            // 2. 核心城市 / 高校标注散点层
             {
-                name: '核心城市标注',
+                name: '标注散点',
                 type: 'effectScatter',
                 coordinateSystem: 'geo',
                 data: scatterData,
                 symbolSize: function(val, params) {
+                    if (isSichuanMode) return 16;
                     const c = params.data.count || 1;
                     return Math.max(12, Math.min(24, 12 + c * 0.9));
                 },
@@ -3147,21 +3210,25 @@ function renderChinaBciMap() {
                 label: {
                     show: true,
                     formatter: function(params) {
+                        if (isSichuanMode && params.data.experts) {
+                            return `${params.name}\n[${params.data.experts}]`;
+                        }
                         return `${params.name} (${params.data.count})`;
                     },
                     position: 'right',
                     color: isDark ? '#ffffff' : '#0f172a',
                     fontWeight: 'bold',
-                    fontSize: 11.5,
-                    backgroundColor: isDark ? 'rgba(15,23,42,0.9)' : 'rgba(255,255,255,0.95)',
-                    padding: [2, 6],
+                    fontSize: 11,
+                    lineHeight: 14,
+                    backgroundColor: isDark ? 'rgba(15,23,42,0.92)' : 'rgba(255,255,255,0.95)',
+                    padding: [3, 6],
                     borderRadius: 3,
                     borderColor: '#ef4444',
                     borderWidth: 0.8
                 },
                 itemStyle: {
                     color: function(params) {
-                        return params.data.highlight || params.data.province.includes('四川') ? '#ef4444' : '#6366f1';
+                        return params.data.highlight || (params.data.province && params.data.province.includes('四川')) ? '#ef4444' : '#6366f1';
                     },
                     shadowBlur: 12,
                     shadowColor: '#ef4444'
@@ -3174,6 +3241,53 @@ function renderChinaBciMap() {
     chartChinaMapInstance.setOption(option, true);
     chartChinaMapInstance.resize();
 }
+
+// 聚焦选中四川某位学者并在右侧看板高亮
+function focusTalentInList(talentName) {
+    bciState.currentView = 'experts';
+    const btnSwitchExp = document.getElementById('btnSwitchExpView');
+    const btnSwitchEnt = document.getElementById('btnSwitchEntView');
+    const entFilterSec = document.getElementById('bciEntFilterSection');
+    const expFilterSec = document.getElementById('bciExpFilterSection');
+
+    if (btnSwitchExp && btnSwitchEnt) {
+        btnSwitchExp.classList.add('active');
+        btnSwitchEnt.classList.remove('active');
+        if (entFilterSec) entFilterSec.classList.add('hidden');
+        if (expFilterSec) expFilterSec.classList.remove('hidden');
+    }
+
+    const searchInput = document.getElementById('bciSearchInput');
+    if (searchInput) {
+        searchInput.value = talentName;
+        bciState.searchQuery = talentName.toLowerCase();
+    }
+
+    applyBciFilterAndRender();
+    showToast(`👨‍🏫 已定位四川领军学者【${talentName}】详细档案！`);
+}
+
+// 一键恢复全国大地图视图
+function resetToChinaView() {
+    bciState.currentRegion = 'all';
+    bciState.searchQuery = '';
+    const searchInput = document.getElementById('bciSearchInput');
+    if (searchInput) searchInput.value = '';
+
+    const regionNav = document.getElementById('bciRegionQuickNav');
+    if (regionNav) {
+        regionNav.querySelectorAll('.bci-nav-btn').forEach(b => b.classList.remove('active'));
+        const allBtn = regionNav.querySelector('[data-region="all"]');
+        if (allBtn) allBtn.classList.add('active');
+    }
+
+    applyBciFilterAndRender();
+    showToast('🌐 已恢复全国大地图总览！');
+}
+
+window.focusTalentInList = focusTalentInList;
+window.resetToChinaView = resetToChinaView;
+
 
 function normalizeProvName(prov) {
     if (!prov) return '';

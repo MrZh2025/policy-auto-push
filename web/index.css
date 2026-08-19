@@ -2733,11 +2733,187 @@ body {
     border-color: #991b1b;
 }
 
+.bci-map-wrapper-relative {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
 .bci-china-map-container {
     flex: 1;
     width: 100%;
     min-height: 430px;
     position: relative;
+}
+
+/* 四川省专属放大下钻智库学者浮窗 */
+.sc-talent-floating-card {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(10px);
+    border: 1.5px solid #c5161d;
+    border-radius: 6px;
+    padding: 10px 14px;
+    box-shadow: 0 8px 24px rgba(197, 22, 29, 0.15), 0 2px 6px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 10;
+    animation: slideUpFade 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-theme="dark"] .sc-talent-floating-card {
+    background: rgba(15, 23, 42, 0.94);
+    border-color: #ef4444;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+@keyframes slideUpFade {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.sc-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px dashed rgba(197, 22, 29, 0.25);
+    padding-bottom: 6px;
+}
+
+.sc-card-title {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #c5161d;
+    font-size: 13px;
+}
+
+.sc-badge-count {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 1px 7px;
+    border-radius: 10px;
+}
+[data-theme="dark"] .sc-badge-count {
+    background: #450a0a;
+    border-color: #991b1b;
+    color: #fca5a5;
+}
+
+.sc-talent-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.sc-talent-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 6px 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.sc-talent-item:hover {
+    border-color: #c5161d;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(197, 22, 29, 0.15);
+}
+
+.sc-avatar-box {
+    font-size: 22px;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fef2f2;
+    border-radius: 50%;
+    border: 1px solid #fecaca;
+    flex-shrink: 0;
+}
+[data-theme="dark"] .sc-avatar-box {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+.sc-talent-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    overflow: hidden;
+}
+
+.sc-t-name {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--text-title);
+    flex-wrap: wrap;
+}
+.sc-t-name strong {
+    color: #c5161d;
+    font-size: 12.5px;
+}
+
+.sc-t-tag {
+    background: #eef2ff;
+    color: #4338ca;
+    font-size: 9.5px;
+    padding: 0 3px;
+    border-radius: 2px;
+    font-weight: 600;
+}
+
+.sc-t-univ {
+    font-size: 10px;
+    color: var(--text-muted);
+}
+
+.sc-t-desc {
+    font-size: 10px;
+    color: var(--text-body);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sc-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 10.5px;
+    color: var(--text-muted);
+    padding-top: 4px;
+    border-top: 1px dashed var(--border-light);
+}
+
+.btn-back-china {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--nmpa-blue-main);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+.btn-back-china:hover {
+    background: var(--nmpa-blue-main);
+    color: #ffffff;
 }
 
 .map-loading-hint {

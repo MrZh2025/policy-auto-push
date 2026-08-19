@@ -710,8 +710,63 @@
                         </div>
                     </div>
                     <!-- ECharts 中国地图主容器 -->
-                    <div id="chartChinaBciMap" class="bci-china-map-container">
-                        <div class="map-loading-hint">正在加载中国矢量地理图层与标注点...</div>
+                    <div class="bci-map-wrapper-relative">
+                        <div id="chartChinaBciMap" class="bci-china-map-container">
+                            <div class="map-loading-hint">正在加载中国矢量地理图层与标注点...</div>
+                        </div>
+                        
+                        <!-- 四川省专属放大下钻：领军学者头像与高校机构浮窗 (切换到四川时自动高亮浮现) -->
+                        <div class="sc-talent-floating-card hidden" id="scTalentFloatingCard">
+                            <div class="sc-card-header">
+                                <div class="sc-card-title">
+                                    <span class="sc-flag">⭐</span>
+                                    <strong>四川省脑机顶尖智库与高校坐标</strong>
+                                </div>
+                                <span class="sc-badge-count" id="scTotalTalentBadge">3 位领军学者 · 11 家重点标的</span>
+                            </div>
+                            <div class="sc-talent-list">
+                                <!-- 尧德中 院士 -->
+                                <div class="sc-talent-item" onclick="focusTalentInList('尧德中')">
+                                    <div class="sc-avatar-box">👨‍🏫</div>
+                                    <div class="sc-talent-info">
+                                        <div class="sc-t-name">
+                                            <strong>尧德中</strong>
+                                            <span class="sc-t-tag">院士 / 教授</span>
+                                            <span class="sc-t-univ">🏛️ 电子科技大学</span>
+                                        </div>
+                                        <div class="sc-t-desc">脑信息学、脑器交互、脑电/磁共振融合 · 孵化成都前沿类脑创新中心</div>
+                                    </div>
+                                </div>
+                                <!-- 徐鹏 教授 -->
+                                <div class="sc-talent-item" onclick="focusTalentInList('徐鹏')">
+                                    <div class="sc-avatar-box">👨‍🔬</div>
+                                    <div class="sc-talent-info">
+                                        <div class="sc-t-name">
+                                            <strong>徐鹏</strong>
+                                            <span class="sc-t-tag">教授 / 博导</span>
+                                            <span class="sc-t-univ">🏛️ 电子科技大学</span>
+                                        </div>
+                                        <div class="sc-t-desc">脑电信号处理、孤独症辅助诊疗 · 关联成都芯脑科技</div>
+                                    </div>
+                                </div>
+                                <!-- 张杨松 副教授 -->
+                                <div class="sc-talent-item" onclick="focusTalentInList('张杨松')">
+                                    <div class="sc-avatar-box">👨‍🎓</div>
+                                    <div class="sc-talent-info">
+                                        <div class="sc-t-name">
+                                            <strong>张杨松</strong>
+                                            <span class="sc-t-tag">副教授</span>
+                                            <span class="sc-t-univ">🏛️ 西南科技大学(绵阳)</span>
+                                        </div>
+                                        <div class="sc-t-desc">脑机接口模式识别、脑电特征提取与智能控制</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sc-card-footer">
+                                <span class="sc-hint-text">💡 地图已放大定位四川各高校与科研转化中心</span>
+                                <button class="btn-back-china" onclick="resetToChinaView()">🔄 恢复全国大地图</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
