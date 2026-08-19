@@ -1332,25 +1332,27 @@ function renderPolicyList(list) {
         const pubDate = item.pub_date || '近期发布';
         const source = item.source || '官方部门';
         const summary = item.summary || item.title;
-        const govRootUrl = getGovRootUrl(source);
+        // 优先使用具体的官方原文直达链接，其次降级到发文主管机关门户
+        const officialDocUrl = item.url || getGovRootUrl(source);
+        const searchVerifyUrl = `https://www.baidu.com/s?wd=${encodeURIComponent(item.title + ' 官方通知')}`;
 
         return `
             <article class="nmpa-policy-row" onclick="openPolicyModal(${idx})" style="cursor:pointer;" title="点击查阅政策申报详情与研判指引">
                 <div class="row-top">
-                    <span class="tag-dept">${source}</span>
+                    <span class="tag-dept">🏛️ ${source}</span>
                     <span class="tag-category">${category}</span>
                     <span class="row-date">发布日期: ${pubDate}</span>
                 </div>
                 <h3 class="row-title">${idx + 1}. ${item.title}</h3>
                 <p class="row-summary">${summary}</p>
                 <div class="row-bottom" onclick="event.stopPropagation();">
-                    <span style="color:var(--text-caption)">索引编号: #${item.id || (idx + 1)}</span>
+                    <span style="color:var(--text-caption)">索引编号: #${item.id || (idx + 1)} · 权威保真</span>
                     <div style="display:flex; align-items:center; gap:8px;">
-                        <button onclick="openPolicyModal(${idx})" style="background:var(--nmpa-blue-soft); color:var(--nmpa-blue-main); border:1px solid var(--border-color); padding:4px 9px; border-radius:3px; font-size:12px; font-weight:600; cursor:pointer;">
+                        <button onclick="openPolicyModal(${idx})" style="background:var(--nmpa-blue-soft); color:var(--nmpa-blue-main); border:1px solid var(--border-color); padding:4px 10px; border-radius:3px; font-size:12px; font-weight:700; cursor:pointer;">
                             📋 研判详情
                         </button>
-                        <a href="${govRootUrl}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" class="link-detail" title="直达发文主管机关官方网站" style="font-weight:700;">
-                            🏛️ 查看官方文件 ➔
+                        <a href="${officialDocUrl}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" class="link-detail" title="直达发文主管机关官方公文专栏" style="font-weight:700; background:var(--nmpa-blue-main); color:#ffffff !important; padding:4px 11px; border-radius:3px; text-decoration:none; display:inline-flex; align-items:center; gap:4px;">
+                            🔗 查看官方原文 ➔
                         </a>
                     </div>
                 </div>
@@ -1374,17 +1376,19 @@ function openPolicyModal(policyIndex) {
     const pubDate = item.pub_date || '近期发布';
     const source = item.source || '官方部门';
     const summary = item.summary || item.title;
+    const officialDocUrl = item.url || getGovRootUrl(source);
     const govRootUrl = getGovRootUrl(source);
+    const searchVerifyUrl = `https://www.baidu.com/s?wd=${encodeURIComponent(item.title + ' 官方发布 申报')}`;
 
     if (el.modalPolicyTitle) el.modalPolicyTitle.textContent = item.title;
-    if (el.modalDeptTag) el.modalDeptTag.textContent = source;
+    if (el.modalDeptTag) el.modalDeptTag.textContent = `🏛️ ${source}`;
     if (el.modalCategoryTag) el.modalCategoryTag.textContent = category;
     if (el.modalDate) el.modalDate.textContent = `发布日期: ${pubDate}`;
     if (el.modalSummary) el.modalSummary.textContent = summary;
 
     if (el.modalGovLinkBtn) {
-        el.modalGovLinkBtn.href = govRootUrl;
-        el.modalGovLinkBtn.innerHTML = `🏛️ 访问【${source}】官方网站 ➔`;
+        el.modalGovLinkBtn.href = officialDocUrl;
+        el.modalGovLinkBtn.innerHTML = `🔗 直达【${source}】官方原文专栏 ➔`;
     }
 
     el.policyDetailModal.classList.remove('hidden');
