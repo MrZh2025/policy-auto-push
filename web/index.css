@@ -527,11 +527,19 @@ body {
     background: #e0f2fe;
     color: #0369a1;
     border: 1px solid #bae6fd;
-    font-size: 11px;
-    font-weight: 800;
+    font-size: 11.5px;
+    font-weight: 700;
     padding: 1px 7px;
     border-radius: 10px;
-    font-family: var(--font-mono);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif !important;
+    font-variant-numeric: normal !important;
+    letter-spacing: 0;
+    line-height: 1.2;
+}
+.dropdown-item-badge.badge-zero {
+    background: #f1f5f9;
+    color: #94a3b8;
+    border-color: #e2e8f0;
 }
 
 .dropdown-tag-hot {
@@ -2839,34 +2847,32 @@ body {
     color: #fca5a5;
 }
 
-.sc-side-cards-row {
+/* 四川省专属：右侧旁边顶尖智库与高校学者精美卡片区 (垂直竖排，0遮挡地图) */
+.sc-side-talents-wrapper {
+    background: linear-gradient(135deg, rgba(197, 22, 29, 0.05) 0%, var(--bg-card) 100%);
+    border-bottom: 1px dashed rgba(197, 22, 29, 0.3);
+    padding: 8px 12px;
     display: flex;
-    gap: 8px;
-    overflow-x: auto;
-    padding-bottom: 3px;
-    scrollbar-width: thin;
-    -webkit-overflow-scrolling: touch;
+    flex-direction: column;
+    gap: 6px;
+    animation: fadeInDown 0.2s ease;
 }
-.sc-side-cards-row::-webkit-scrollbar {
-    height: 3px;
-}
-.sc-side-cards-row::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 2px;
+
+.sc-side-cards-column {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
 .sc-side-talent-card {
     background: var(--bg-subtle);
     border: 1px solid var(--border-color);
-    border-left: 3px solid #c5161d;
+    border-left: 3.5px solid #c5161d;
     border-radius: 4px;
     padding: 6px 10px;
     display: flex;
     align-items: center;
     gap: 8px;
-    min-width: 260px;
-    max-width: 320px;
-    flex-shrink: 0;
     cursor: pointer;
     transition: all 0.15s ease;
 }
@@ -2899,41 +2905,87 @@ body {
     flex-direction: column;
     gap: 2px;
     overflow: hidden;
+    flex: 1;
 }
 
 .sc-name-line {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
     font-size: 12px;
     color: var(--text-title);
     flex-wrap: wrap;
 }
 .sc-name-line strong {
     color: #c5161d;
-    font-size: 12.5px;
+    font-size: 13px;
 }
 
 .sc-role-tag {
     background: #eef2ff;
     color: #4338ca;
-    font-size: 9.5px;
-    padding: 0 3px;
+    font-size: 10px;
+    padding: 1px 4px;
     border-radius: 2px;
     font-weight: 600;
 }
 
 .sc-univ-tag {
-    font-size: 10px;
+    font-size: 10.5px;
     color: var(--text-muted);
+    font-weight: 600;
 }
 
 .sc-desc-line {
-    font-size: 10px;
+    font-size: 11px;
     color: var(--text-body);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    line-height: 1.35;
+}
+
+/* 全景图大屏最底部高品质政务科技装饰条板块 */
+.bci-screen-footer-bar {
+    background: linear-gradient(90deg, #091729 0%, #0f2744 50%, #091729 100%);
+    border-top: 1.5px solid #1e3a8a;
+    padding: 7px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11.5px;
+    color: #93c5fd;
+    letter-spacing: 0.2px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.footer-bar-left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.footer-live-indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 6px #10b981;
+    display: inline-block;
+    animation: livePulse 2s infinite ease-in-out;
+}
+
+.footer-source-text {
+    color: #cbd5e1;
+    font-size: 11px;
+}
+
+.footer-center-tag {
+    color: #facc15;
+    font-weight: 700;
+    font-size: 11.5px;
+}
+
+.footer-version-tag {
+    color: #94a3b8;
+    font-size: 11px;
 }
 
 .map-loading-hint {

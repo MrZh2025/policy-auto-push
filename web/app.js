@@ -1142,7 +1142,11 @@ function updateStatsDisplay(statsData) {
 
     // 导航栏第一项：本周全部更新数量
     const countAll = document.getElementById('count-all');
-    if (countAll) countAll.textContent = weekTotal;
+    if (countAll) {
+        countAll.textContent = weekTotal;
+        if (weekTotal === 0) countAll.classList.add('badge-zero');
+        else countAll.classList.remove('badge-zero');
+    }
 
     // 统计各大赛道【本周最新更新】数量
     const trackWeekCounts = {};
@@ -1155,7 +1159,13 @@ function updateStatsDisplay(statsData) {
     tracks.forEach(tr => {
         const badge = document.getElementById(`count-${tr}`);
         if (badge) {
-            badge.textContent = trackWeekCounts[tr] || 0;
+            const wCnt = trackWeekCounts[tr] || 0;
+            badge.textContent = wCnt;
+            if (wCnt === 0) {
+                badge.classList.add('badge-zero');
+            } else {
+                badge.classList.remove('badge-zero');
+            }
         }
     });
 }
@@ -3340,48 +3350,42 @@ async function renderChinaBciMap() {
                 geoIndex: 0,
                 data: mapData
             },
-            // 2. 核心城市 / 高校标注散点层
+            // 2. 核心城市 / 高校标注散点层 (纯净科技发光脉冲亮点，0 文字重叠遮挡)
             {
                 name: '标注散点',
                 type: 'effectScatter',
                 coordinateSystem: 'geo',
                 data: scatterData,
                 symbolSize: function(val, params) {
-                    if (isSichuanMode) return 16;
+                    if (isSichuanMode) return 18;
                     const c = params.data.count || 1;
-                    return Math.max(12, Math.min(24, 12 + c * 0.9));
+                    return Math.max(14, Math.min(26, 14 + c * 0.9));
                 },
                 showEffectOn: 'render',
                 rippleEffect: {
                     brushType: 'stroke',
-                    scale: 3.8,
-                    period: 3
+                    scale: 4.8,
+                    period: 2.8
                 },
+                // 彻底关闭地图表面文字标签，杜绝多标签重叠遮挡！详细信息全部在右侧看板竖排展示
                 label: {
-                    show: true,
-                    formatter: function(params) {
-                        if (isSichuanMode && params.data.experts) {
-                            return `${params.name}\n[${params.data.experts}]`;
-                        }
-                        return `${params.name} (${params.data.count})`;
-                    },
-                    position: 'right',
-                    color: isDark ? '#ffffff' : '#0f172a',
-                    fontWeight: 'bold',
-                    fontSize: 11,
-                    lineHeight: 14,
-                    backgroundColor: isDark ? 'rgba(15,23,42,0.92)' : 'rgba(255,255,255,0.95)',
-                    padding: [3, 6],
-                    borderRadius: 3,
-                    borderColor: '#ef4444',
-                    borderWidth: 0.8
+                    show: false
+                },
+                emphasis: {
+                    scale: true,
+                    label: {
+                        show: false
+                    }
                 },
                 itemStyle: {
                     color: function(params) {
-                        return params.data.highlight || (params.data.province && params.data.province.includes('四川')) ? '#ef4444' : '#6366f1';
+                        if (params.data.highlight || (params.data.province && params.data.province.includes('四川'))) {
+                            return '#ef4444';
+                        }
+                        return '#6366f1';
                     },
-                    shadowBlur: 12,
-                    shadowColor: '#ef4444'
+                    shadowBlur: 16,
+                    shadowColor: 'rgba(239, 68, 68, 0.75)'
                 },
                 zlevel: 5
             }
