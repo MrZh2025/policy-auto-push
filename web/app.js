@@ -2551,85 +2551,36 @@ function updateBciKpiBar() {
     if (elScEnt) elScEnt.innerHTML = `${scEnt} <small>家 (成都)</small>`;
 }
 
-// 动态计算并更新所有细分类型的数字徽标 (随当前聚焦区域动态联动)
-function updateBciFilterBadges() {
-    // 区域基础池
-    let entBase = [...bciEnterprisesData];
-    let expBase = [...bciExpertsData];
+// 1. 企业评级标准化互斥归类 (高 / 中高 / 中 / 观察 四分法，100%覆盖互斥)
+function getCompCategory(comp) {
+    if (!comp) return '观察';
+    const c = String(comp).trim();
+    if (c.startsWith('高：') || (c.includes('高') && !c.includes('中高'))) return '高';
+    if (c.startsWith('中高：') || c.includes('中高')) return '中高';
+    if (c.startsWith('中：') || (c.includes('中') && !c.includes('中高'))) return '中';
+    if (c.startsWith('观察：') || c.includes('观察')) return '观察';
+    return '中';
+}
 
-    if (bciState.currentRegion !== 'all') {
-        if (bciState.currentRegion === '长三角') {
-            entBase = entBase.filter(i => ['上海', '江苏', '浙江', '安徽'].some(p => (i.province || '').includes(p)));
-            expBase = expBase.filter(i => ['上海', '江苏', '浙江', '安徽'].some(p => (i.province || '').includes(p)));
-        } else if (bciState.currentRegion === '京津冀') {
-            entBase = entBase.filter(i => ['北京', '天津', '河北'].some(p => (i.province || '').includes(p)));
-            expBase = expBase.filter(i => ['北京', '天津', '河北'].some(p => (i.province || '').includes(p)));
-        } else if (bciState.currentRegion === '大湾区') {
-            entBase = entBase.filter(i => (i.province || '').includes('广东'));
-            expBase = expBase.filter(i => (i.province || '').includes('广东'));
-        } else {
-            const clean = bciState.currentRegion.replace('省', '').replace('市', '');
-            entBase = entBase.filter(i => (i.province || '').includes(clean));
-            expBase = expBase.filter(i => (i.province || '').includes(clean));
-        }
-    }
+// 2. 企业技术路径标准化互斥归类 (非侵入 / 侵入 / 闭环 / 光学 / 超声 五分法，100%覆盖互斥)
+function getTechCategory(tech, intro) {
+    const t = ((tech || '') + ' ' + (intro || '')).toLowerCase();
+    if (t.includes('超声')) return '超声';
+    if (t.includes('光') || t.includes('fnirs') || t.includes('脑磁')) return '光学';
+    if ((t.includes('侵入') && !t.includes('非侵入')) || t.includes('植入') || t.includes('半侵入') || t.includes('介入') || t.includes('脑脊接口')) return '侵入';
+    if (t.includes('闭环') || t.includes('调控') || t.includes('刺激')) return '闭环';
+    return '非侵入';
+}
 
-    // 1. 企业评级数字统计
-    const cAll = entBase.length;
-    const cHigh = entBase.filter(i => (i.competitiveness || '').includes('高') && !(i.competitiveness || '').includes('中高')).length;
-    const cMid = entBase.filter(i => (i.competitiveness || '').includes('中高')).length;
-    const cObs = entBase.filter(i => (i.competitiveness || '').includes('观察')).length;
-
-    const elCAll = document.getElementById('cnt-comp-all');
-    const elCHigh = document.getElementById('cnt-comp-high');
-    const elCMid = document.getElementById('cnt-comp-mid');
-    const elCObs = document.getElementById('cnt-comp-obs');
-    if (elCAll) elCAll.textContent = cAll;
-    if (elCHigh) elCHigh.textContent = cHigh;
-    if (elCMid) elCMid.textContent = cMid;
-    if (elCObs) elCObs.textContent = cObs;
-
-    // 2. 企业技术路径数字统计
-    const tAll = entBase.length;
-    const tUltra = entBase.filter(i => (i.tech_route || '').includes('超声') || (i.product_intro || '').includes('超声')).length;
-    const tInvas = entBase.filter(i => (i.tech_route || '').includes('侵入')).length;
-    const tNonInvas = entBase.filter(i => (i.tech_route || '').includes('非侵入') || (i.tech_route || '').includes('脑电')).length;
-    const tOpt = entBase.filter(i => (i.tech_route || '').includes('光') || (i.tech_route || '').includes('fNIRS')).length;
-    const tClose = entBase.filter(i => (i.tech_route || '').includes('闭环') || (i.tech_route || '').includes('调控')).length;
-
-    const elTAll = document.getElementById('cnt-tech-all');
-    const elTUltra = document.getElementById('cnt-tech-超声');
-    const elTInvas = document.getElementById('cnt-tech-侵入');
-    const elTNonInvas = document.getElementById('cnt-tech-非侵入');
-    const elTOpt = document.getElementById('cnt-tech-光学');
-    const elTClose = document.getElementById('cnt-tech-闭环');
-    if (elTAll) elTAll.textContent = tAll;
-    if (elTUltra) elTUltra.textContent = tUltra;
-    if (elTInvas) elTInvas.textContent = tInvas;
-    if (elTNonInvas) elTNonInvas.textContent = tNonInvas;
-    if (elTOpt) elTOpt.textContent = tOpt;
-    if (elTClose) elTClose.textContent = tClose;
-
-    // 3. 专家类型数字统计
-    const eAll = expBase.length;
-    const eTrans = expBase.filter(i => (i.expert_type || '').includes('学术/产业') || (i.expert_type || '').includes('转化')).length;
-    const eAcad = expBase.filter(i => (i.expert_type || '').includes('学术') && !(i.expert_type || '').includes('学术/产业')).length;
-    const eInd = expBase.filter(i => (i.expert_type || '').includes('产业') && !(i.expert_type || '').includes('学术/产业')).length;
-    const eStd = expBase.filter(i => (i.expert_type || '').includes('标准') || (i.expert_type || '').includes('审评')).length;
-    const eClin = expBase.filter(i => (i.expert_type || '').includes('临床')).length;
-
-    const elEAll = document.getElementById('cnt-exp-all');
-    const elETrans = document.getElementById('cnt-exp-trans');
-    const elEAcad = document.getElementById('cnt-exp-acad');
-    const elEInd = document.getElementById('cnt-exp-ind');
-    const elEStd = document.getElementById('cnt-exp-std');
-    const elEClin = document.getElementById('cnt-exp-clin');
-    if (elEAll) elEAll.textContent = eAll;
-    if (elETrans) elETrans.textContent = eTrans;
-    if (elEAcad) elEAcad.textContent = eAcad;
-    if (elEInd) elEInd.textContent = eInd;
-    if (elEStd) elEStd.textContent = eStd;
-    if (elEClin) elEClin.textContent = eClin;
+// 3. 智库专家类型标准化互斥归类 (前沿学术 / 学术产业转化 / 产业领军 / 标准监管 / 临床试验 五分法，100%覆盖互斥)
+function getExpCategory(t) {
+    if (!t) return '前沿学术';
+    const s = String(t).trim();
+    if (s.includes('转化') || (s.includes('产业') && s.includes('学术'))) return '学术/产业';
+    if (s.includes('产业') && !s.includes('学术')) return '产业领军';
+    if (s.includes('审评') || s.includes('标准') || s.includes('监管') || s.includes('政策') || s.includes('战略')) return '标准';
+    if (s.includes('临床')) return '临床';
+    return '前沿学术';
 }
 
 // 统一数据筛选器 (支持为列表筛选或为地图全局筛选)
@@ -2637,7 +2588,7 @@ function getFilteredBciList(forMapGlobal = false) {
     if (bciState.currentView === 'enterprises') {
         let list = [...bciEnterprisesData];
 
-        // 区域筛选 (地图全局热力时若不需要限制单一省份，则保留全国以便展示该细分类型在全国的分布)
+        // 区域筛选
         if (!forMapGlobal && bciState.currentRegion !== 'all') {
             if (bciState.currentRegion === '长三角') {
                 list = list.filter(i => ['上海', '江苏', '浙江', '安徽'].some(p => (i.province || '').includes(p)));
@@ -2651,27 +2602,14 @@ function getFilteredBciList(forMapGlobal = false) {
             }
         }
 
-        // 评级筛选
+        // 评级筛选 (精确互斥)
         if (bciState.compFilter !== 'all') {
-            if (bciState.compFilter === '高') {
-                list = list.filter(i => (i.competitiveness || '').includes('高') && !(i.competitiveness || '').includes('中高'));
-            } else {
-                list = list.filter(i => (i.competitiveness || '').includes(bciState.compFilter));
-            }
+            list = list.filter(i => getCompCategory(i.competitiveness) === bciState.compFilter);
         }
 
-        // 技术路线筛选
+        // 技术路线筛选 (精确互斥)
         if (bciState.techFilter !== 'all') {
-            const tf = bciState.techFilter;
-            list = list.filter(i => {
-                const combined = `${i.tech_route || ''} ${i.product_intro || ''}`;
-                if (tf === '超声') return combined.includes('超声');
-                if (tf === '侵入') return combined.includes('侵入');
-                if (tf === '非侵入') return combined.includes('非侵入') || combined.includes('脑电');
-                if (tf === '光学') return combined.includes('光') || combined.includes('fNIRS');
-                if (tf === '闭环') return combined.includes('闭环') || combined.includes('调控');
-                return combined.includes(tf);
-            });
+            list = list.filter(i => getTechCategory(i.tech_route, i.product_intro) === bciState.techFilter);
         }
 
         // 关键词搜索
@@ -2701,18 +2639,9 @@ function getFilteredBciList(forMapGlobal = false) {
             }
         }
 
-        // 专家类型筛选
+        // 专家类型筛选 (精确互斥)
         if (bciState.expTypeFilter !== 'all') {
-            const et = bciState.expTypeFilter;
-            list = list.filter(i => {
-                const type = i.expert_type || '';
-                if (et === '学术/产业') return type.includes('学术/产业') || type.includes('转化');
-                if (et === '学术') return type.includes('学术') && !type.includes('学术/产业');
-                if (et === '产业') return type.includes('产业') && !type.includes('学术/产业');
-                if (et === '标准') return type.includes('标准') || type.includes('审评');
-                if (et === '临床') return type.includes('临床');
-                return type.includes(et);
-            });
+            list = list.filter(i => getExpCategory(i.expert_type) === bciState.expTypeFilter);
         }
 
         // 关键词搜索
@@ -2725,6 +2654,100 @@ function getFilteredBciList(forMapGlobal = false) {
         }
 
         return list;
+    }
+}
+
+// 动态更新各细分类型徽标数字 (确保任何区域下各子项相加与总数100%完全一致！)
+function updateBciFilterBadges() {
+    let regionEntList = [...bciEnterprisesData];
+    let regionExpList = [...bciExpertsData];
+
+    if (bciState.currentRegion !== 'all') {
+        if (bciState.currentRegion === '长三角') {
+            regionEntList = regionEntList.filter(i => ['上海', '江苏', '浙江', '安徽'].some(p => (i.province || '').includes(p)));
+            regionExpList = regionExpList.filter(i => ['上海', '江苏', '浙江', '安徽'].some(p => (i.province || '').includes(p)));
+        } else if (bciState.currentRegion === '京津冀') {
+            regionEntList = regionEntList.filter(i => ['北京', '天津', '河北'].some(p => (i.province || '').includes(p)));
+            regionExpList = regionExpList.filter(i => ['北京', '天津', '河北'].some(p => (i.province || '').includes(p)));
+        } else if (bciState.currentRegion === '大湾区') {
+            regionEntList = regionEntList.filter(i => (i.province || '').includes('广东'));
+            regionExpList = regionExpList.filter(i => (i.province || '').includes('广东'));
+        } else {
+            const clean = bciState.currentRegion.replace('省', '').replace('市', '');
+            regionEntList = regionEntList.filter(i => (i.province || '').includes(clean));
+            regionExpList = regionExpList.filter(i => (i.province || '').includes(clean));
+        }
+    }
+
+    const setElText = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = val;
+    };
+
+    // 1. 评级徽标数字 (高 + 中高 + 中 + 观察 = 全部评级)
+    const cntCompAll = regionEntList.length;
+    const cntCompHigh = regionEntList.filter(i => getCompCategory(i.competitiveness) === '高').length;
+    const cntCompMid = regionEntList.filter(i => getCompCategory(i.competitiveness) === '中高').length;
+    const cntCompNorm = regionEntList.filter(i => getCompCategory(i.competitiveness) === '中').length;
+    const cntCompObs = regionEntList.filter(i => getCompCategory(i.competitiveness) === '观察').length;
+
+    setElText('cnt-comp-all', cntCompAll);
+    setElText('cnt-comp-high', cntCompHigh);
+    setElText('cnt-comp-mid', cntCompMid);
+    setElText('cnt-comp-norm', cntCompNorm);
+    setElText('cnt-comp-obs', cntCompObs);
+
+    // 2. 技术路线徽标数字 (非侵入 + 侵入 + 闭环 + 光学 + 超声 = 全部路线)
+    const cntTechAll = regionEntList.length;
+    const cntTechNon = regionEntList.filter(i => getTechCategory(i.tech_route, i.product_intro) === '非侵入').length;
+    const cntTechInv = regionEntList.filter(i => getTechCategory(i.tech_route, i.product_intro) === '侵入').length;
+    const cntTechClose = regionEntList.filter(i => getTechCategory(i.tech_route, i.product_intro) === '闭环').length;
+    const cntTechOpt = regionEntList.filter(i => getTechCategory(i.tech_route, i.product_intro) === '光学').length;
+    const cntTechUltra = regionEntList.filter(i => getTechCategory(i.tech_route, i.product_intro) === '超声').length;
+
+    setElText('cnt-tech-all', cntTechAll);
+    setElText('cnt-tech-非侵入', cntTechNon);
+    setElText('cnt-tech-侵入', cntTechInv);
+    setElText('cnt-tech-闭环', cntTechClose);
+    setElText('cnt-tech-光学', cntTechOpt);
+    setElText('cnt-tech-超声', cntTechUltra);
+
+    // 3. 专家分类徽标数字 (前沿学术 + 学术产业转化 + 产业领军 + 药监标准 + 临床试验 = 全部类型)
+    const cntExpAll = regionExpList.length;
+    const cntExpAcad = regionExpList.filter(i => getExpCategory(i.expert_type) === '前沿学术').length;
+    const cntExpTrans = regionExpList.filter(i => getExpCategory(i.expert_type) === '学术/产业').length;
+    const cntExpInd = regionExpList.filter(i => getExpCategory(i.expert_type) === '产业领军').length;
+    const cntExpStd = regionExpList.filter(i => getExpCategory(i.expert_type) === '标准').length;
+    const cntExpClin = regionExpList.filter(i => getExpCategory(i.expert_type) === '临床').length;
+
+    setElText('cnt-exp-all', cntExpAll);
+    setElText('cnt-exp-acad', cntExpAcad);
+    setElText('cnt-exp-trans', cntExpTrans);
+    setElText('cnt-exp-ind', cntExpInd);
+    setElText('cnt-exp-std', cntExpStd);
+    setElText('cnt-exp-clin', cntExpClin);
+
+    // 4. 模式切换工具栏互斥显隐 (重点企业 vs 领军智库)
+    const entFilterSec = document.getElementById('bciEntFilterSection');
+    const expFilterSec = document.getElementById('bciExpFilterSection');
+    if (entFilterSec && expFilterSec) {
+        if (bciState.currentView === 'enterprises') {
+            entFilterSec.classList.remove('hidden');
+            expFilterSec.classList.add('hidden');
+        } else {
+            entFilterSec.classList.add('hidden');
+            expFilterSec.classList.remove('hidden');
+        }
+    }
+
+    // 5. 联动控制右侧看板上方四川顶尖学者置顶专区
+    const scSideTalentsSec = document.getElementById('scSideTalentsSection');
+    if (scSideTalentsSec) {
+        if (bciState.currentRegion === '四川省') {
+            scSideTalentsSec.classList.remove('hidden');
+        } else {
+            scSideTalentsSec.classList.add('hidden');
+        }
     }
 }
 
@@ -2746,16 +2769,12 @@ function bindBciEvents() {
     // 2. 模式切换 (重点企业 / 领军智库)
     const btnSwitchEnt = document.getElementById('btnSwitchEntView');
     const btnSwitchExp = document.getElementById('btnSwitchExpView');
-    const entFilterSec = document.getElementById('bciEntFilterSection');
-    const expFilterSec = document.getElementById('bciExpFilterSection');
 
     if (btnSwitchEnt && btnSwitchExp) {
         btnSwitchEnt.addEventListener('click', () => {
             btnSwitchEnt.classList.add('active');
             btnSwitchExp.classList.remove('active');
             bciState.currentView = 'enterprises';
-            if (entFilterSec) entFilterSec.classList.remove('hidden');
-            if (expFilterSec) expFilterSec.classList.add('hidden');
             applyBciFilterAndRender();
         });
 
@@ -2763,8 +2782,6 @@ function bindBciEvents() {
             btnSwitchExp.classList.add('active');
             btnSwitchEnt.classList.remove('active');
             bciState.currentView = 'experts';
-            if (entFilterSec) entFilterSec.classList.add('hidden');
-            if (expFilterSec) expFilterSec.classList.remove('hidden');
             applyBciFilterAndRender();
         });
     }
@@ -2850,6 +2867,12 @@ function bindBciEvents() {
     if (btnOpenBci) btnOpenBci.addEventListener('click', openBciModal);
     if (btnCloseBci) btnCloseBci.addEventListener('click', closeBciModal);
 
+    // 9. 全屏展示切换按钮
+    const btnFullscreen = document.getElementById('btnToggleBciFullscreen');
+    if (btnFullscreen) {
+        btnFullscreen.addEventListener('click', toggleBciFullscreen);
+    }
+
     const bciModal = document.getElementById('bciMapModal');
     if (bciModal) {
         bciModal.addEventListener('click', (e) => {
@@ -2858,12 +2881,38 @@ function bindBciEvents() {
     }
 }
 
+// 切换全屏沉浸大屏模式
+function toggleBciFullscreen() {
+    const card = document.querySelector('.bci-modal-card');
+    const icon = document.getElementById('fullscreenIcon');
+    const text = document.getElementById('fullscreenText');
+    if (!card) return;
+
+    const isFull = card.classList.toggle('is-fullscreen');
+    if (icon && text) {
+        if (isFull) {
+            icon.textContent = '🗗';
+            text.textContent = '还原窗口';
+            showToast('⛶ 已切换为全屏沉浸大屏模式');
+        } else {
+            icon.textContent = '⛶';
+            text.textContent = '全屏展示';
+            showToast('🗗 已恢复普通窗口模式');
+        }
+    }
+
+    if (chartChinaMapInstance) {
+        setTimeout(() => {
+            chartChinaMapInstance.resize();
+        }, 120);
+    }
+}
+
 function openBciModal() {
     const modal = document.getElementById('bciMapModal');
     if (!modal) return;
     modal.classList.remove('hidden');
-    updateBciFilterBadges();
-    renderBciFocusCards();
+    applyBciFilterAndRender();
     setTimeout(() => {
         renderChinaBciMap();
     }, 120);
@@ -3390,16 +3439,19 @@ function renderBciFocusCards() {
 
         listContainer.innerHTML = list.map((item, index) => {
             const isSc = (item.province || '').includes('四川');
-            const comp = item.competitiveness || '待评估';
+            const compCat = getCompCategory(item.competitiveness);
             let compBadgeClass = 'badge-comp comp-mid';
             let compBadgeText = '🔥 中高价值';
             let cardClass = 'bci-focus-card';
 
-            if (comp.includes('高') && !comp.includes('中高')) {
+            if (compCat === '高') {
                 compBadgeClass = 'badge-comp comp-high';
                 compBadgeText = '⭐ 高竞争力/稀缺';
                 cardClass += ' card-high';
-            } else if (comp.includes('观察')) {
+            } else if (compCat === '中') {
+                compBadgeClass = 'badge-comp comp-norm';
+                compBadgeText = '💎 中等稳健';
+            } else if (compCat === '观察') {
                 compBadgeClass = 'badge-comp comp-obs';
                 compBadgeText = '👀 持续观察';
             }

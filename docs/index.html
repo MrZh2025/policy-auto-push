@@ -11,18 +11,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700;900&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- 顶部政务红蓝权威辅助条 -->
+    <!-- 顶部政务红蓝权威辅助条 (干净政务风范) -->
     <div class="top-gov-bar">
         <div class="gov-container">
             <div class="gov-date" id="currentDateStr">
                 📅 2026年8月18日 星期二 · 官方政策实时监测中
-            </div>
-            <div class="gov-top-stats" id="topVisitorInfo" style="cursor:pointer;" title="点击打开访问热度与地域大屏">
-                <span class="live-dot-pulse"></span>
-                <span id="topLocationText">📍 接入地: 识别中...</span>
-                <span class="top-stat-divider">|</span>
-                <span id="topStatsSummary">👥 访问量: 0 PV · 0 访客</span>
-                <span class="top-open-badge">📊 查看大屏 ➔</span>
             </div>
         </div>
     </div>
@@ -664,7 +657,15 @@
                     <div class="bci-badge-sichuan" title="四川省在全国脑机接口企业分布中位列全国第6、中西部第1">
                         ⭐ 四川重点: 11家标的 (中西部第一)
                     </div>
-                    <button class="modal-close-btn" id="modalBciCloseBtn" title="关闭大屏">×</button>
+                    <!-- 全屏展示切换按钮 -->
+                    <button class="bci-action-header-btn btn-fullscreen" id="btnToggleBciFullscreen" title="切换全屏沉浸大屏模式">
+                        <span id="fullscreenIcon">⛶</span>
+                        <span id="fullscreenText">全屏展示</span>
+                    </button>
+                    <!-- 返回系统主页按钮 -->
+                    <button class="bci-action-header-btn btn-back-system" id="modalBciCloseBtn" title="返回系统主页">
+                        <span>⬅️ 返回系统</span>
+                    </button>
                 </div>
             </div>
 
@@ -694,7 +695,7 @@
 
             <!-- 主体双栏联动交互区 (左侧交互中国地图 + 右侧重点标的穿透看板) -->
             <div class="bci-main-grid-layout">
-                <!-- 左侧: 交互式中国地图及地理标注 -->
+                <!-- 左侧: 交互式中国地图及地理标注 (纯净大地图，无任何浮层遮挡) -->
                 <div class="bci-map-panel">
                     <div class="bci-panel-header">
                         <div class="bci-panel-title-wrap">
@@ -709,68 +710,15 @@
                             <button class="bci-nav-btn" data-region="大湾区">粤港澳</button>
                         </div>
                     </div>
-                    <!-- ECharts 中国地图主容器 -->
+                    <!-- ECharts 中国地图主容器 (全屏视野清晰展现) -->
                     <div class="bci-map-wrapper-relative">
                         <div id="chartChinaBciMap" class="bci-china-map-container">
                             <div class="map-loading-hint">正在加载中国矢量地理图层与标注点...</div>
                         </div>
-                        
-                        <!-- 四川省专属放大下钻：领军学者头像与高校机构浮窗 (切换到四川时自动高亮浮现) -->
-                        <div class="sc-talent-floating-card hidden" id="scTalentFloatingCard">
-                            <div class="sc-card-header">
-                                <div class="sc-card-title">
-                                    <span class="sc-flag">⭐</span>
-                                    <strong>四川省脑机顶尖智库与高校坐标</strong>
-                                </div>
-                                <span class="sc-badge-count" id="scTotalTalentBadge">3 位领军学者 · 11 家重点标的</span>
-                            </div>
-                            <div class="sc-talent-list">
-                                <!-- 尧德中 院士 -->
-                                <div class="sc-talent-item" onclick="focusTalentInList('尧德中')">
-                                    <div class="sc-avatar-box">👨‍🏫</div>
-                                    <div class="sc-talent-info">
-                                        <div class="sc-t-name">
-                                            <strong>尧德中</strong>
-                                            <span class="sc-t-tag">院士 / 教授</span>
-                                            <span class="sc-t-univ">🏛️ 电子科技大学</span>
-                                        </div>
-                                        <div class="sc-t-desc">脑信息学、脑器交互、脑电/磁共振融合 · 孵化成都前沿类脑创新中心</div>
-                                    </div>
-                                </div>
-                                <!-- 徐鹏 教授 -->
-                                <div class="sc-talent-item" onclick="focusTalentInList('徐鹏')">
-                                    <div class="sc-avatar-box">👨‍🔬</div>
-                                    <div class="sc-talent-info">
-                                        <div class="sc-t-name">
-                                            <strong>徐鹏</strong>
-                                            <span class="sc-t-tag">教授 / 博导</span>
-                                            <span class="sc-t-univ">🏛️ 电子科技大学</span>
-                                        </div>
-                                        <div class="sc-t-desc">脑电信号处理、孤独症辅助诊疗 · 关联成都芯脑科技</div>
-                                    </div>
-                                </div>
-                                <!-- 张杨松 副教授 -->
-                                <div class="sc-talent-item" onclick="focusTalentInList('张杨松')">
-                                    <div class="sc-avatar-box">👨‍🎓</div>
-                                    <div class="sc-talent-info">
-                                        <div class="sc-t-name">
-                                            <strong>张杨松</strong>
-                                            <span class="sc-t-tag">副教授</span>
-                                            <span class="sc-t-univ">🏛️ 西南科技大学(绵阳)</span>
-                                        </div>
-                                        <div class="sc-t-desc">脑机接口模式识别、脑电特征提取与智能控制</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="sc-card-footer">
-                                <span class="sc-hint-text">💡 地图已放大定位四川各高校与科研转化中心</span>
-                                <button class="btn-back-china" onclick="resetToChinaView()">🔄 恢复全国大地图</button>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
-                <!-- 右侧: 重点标的与领军智库速查看板 -->
+                <!-- 右侧: 重点标的与领军智库速查看板 (学者与高校在右侧列表旁边优雅呈现) -->
                 <div class="bci-detail-panel">
                     <div class="bci-panel-header" style="flex-wrap: wrap; gap: 8px;">
                         <div class="bci-current-focus-status" id="bciCurrentFocusBanner">
@@ -788,30 +736,80 @@
                         </div>
                     </div>
 
+                    <!-- 四川专属：顶尖智库与高校领军学者置顶专区 (选择四川时在右侧看板上方优雅展开，不遮挡地图) -->
+                    <div class="sc-side-talents-wrapper hidden" id="scSideTalentsSection">
+                        <div class="sc-side-header">
+                            <div class="sc-side-title">
+                                <span>⭐</span>
+                                <strong>四川省脑机顶尖智库与高校领军学者</strong>
+                            </div>
+                            <span class="sc-side-badge">3 位顶尖领军学者</span>
+                        </div>
+                        <div class="sc-side-cards-row">
+                            <!-- 尧德中 院士 -->
+                            <div class="sc-side-talent-card" onclick="focusTalentInList('尧德中')">
+                                <div class="sc-card-avatar">👨‍🏫</div>
+                                <div class="sc-card-body">
+                                    <div class="sc-name-line">
+                                        <strong>尧德中</strong>
+                                        <span class="sc-role-tag">院士 / 教授</span>
+                                        <span class="sc-univ-tag">🏛️ 电子科技大学</span>
+                                    </div>
+                                    <div class="sc-desc-line">脑信息学、脑器交互、脑电/磁共振融合 · 孵化成都前沿类脑创新中心</div>
+                                </div>
+                            </div>
+                            <!-- 徐鹏 教授 -->
+                            <div class="sc-side-talent-card" onclick="focusTalentInList('徐鹏')">
+                                <div class="sc-card-avatar">👨‍🔬</div>
+                                <div class="sc-card-body">
+                                    <div class="sc-name-line">
+                                        <strong>徐鹏</strong>
+                                        <span class="sc-role-tag">教授 / 博导</span>
+                                        <span class="sc-univ-tag">🏛️ 电子科技大学</span>
+                                    </div>
+                                    <div class="sc-desc-line">脑电信号处理、孤独症辅助诊疗 · 关联成都芯脑科技</div>
+                                </div>
+                            </div>
+                            <!-- 张杨松 副教授 -->
+                            <div class="sc-side-talent-card" onclick="focusTalentInList('张杨松')">
+                                <div class="sc-card-avatar">👨‍🎓</div>
+                                <div class="sc-card-body">
+                                    <div class="sc-name-line">
+                                        <strong>张杨松</strong>
+                                        <span class="sc-role-tag">副教授</span>
+                                        <span class="sc-univ-tag">🏛️ 西南科技大学(绵阳)</span>
+                                    </div>
+                                    <div class="sc-desc-line">脑机接口模式识别、脑电特征提取与智能控制</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- 过滤栏: 评级/技术/专家类型 + 搜索框 -->
                     <div class="bci-toolbar-wrapper">
                         <!-- 企业模式工具栏 (评级 + 技术路线) -->
                         <div class="bci-filter-section" id="bciEntFilterSection">
-                            <!-- 1. 评级维度 -->
+                            <!-- 1. 评级维度 (互斥归类，总数完全严丝合缝) -->
                             <div class="bci-filter-line">
                                 <span class="bci-filter-sublabel">🏆 研判评级:</span>
                                 <div class="bci-filter-chips" id="bciCompChips">
                                     <button class="chip-filter active" data-comp="all">全部评级 (<span id="cnt-comp-all">173</span>)</button>
-                                    <button class="chip-filter chip-high" data-comp="高">⭐ 高竞争力/稀缺 (<span id="cnt-comp-high">42</span>)</button>
-                                    <button class="chip-filter chip-mid" data-comp="中高">🔥 中高价值 (<span id="cnt-comp-mid">98</span>)</button>
-                                    <button class="chip-filter" data-comp="观察">👀 持续观察 (<span id="cnt-comp-obs">33</span>)</button>
+                                    <button class="chip-filter chip-high" data-comp="高">⭐ 高竞争力/稀缺 (<span id="cnt-comp-high">23</span>)</button>
+                                    <button class="chip-filter chip-mid" data-comp="中高">🔥 中高价值 (<span id="cnt-comp-mid">79</span>)</button>
+                                    <button class="chip-filter chip-norm" data-comp="中">💎 中等稳健 (<span id="cnt-comp-norm">49</span>)</button>
+                                    <button class="chip-filter" data-comp="观察">👀 持续观察 (<span id="cnt-comp-obs">22</span>)</button>
                                 </div>
                             </div>
-                            <!-- 2. 技术路线维度 -->
+                            <!-- 2. 技术路线维度 (互斥归类，总数完全严丝合缝) -->
                             <div class="bci-filter-line">
                                 <span class="bci-filter-sublabel">⚡ 技术路径:</span>
                                 <div class="bci-filter-chips" id="bciTechChips">
                                     <button class="chip-filter active" data-tech="all">全部路线 (<span id="cnt-tech-all">173</span>)</button>
-                                    <button class="chip-filter chip-tech-tag" data-tech="超声">超声脑机 (<span id="cnt-tech-超声">18</span>)</button>
-                                    <button class="chip-filter chip-tech-tag" data-tech="侵入">侵入/半侵入 (<span id="cnt-tech-侵入">36</span>)</button>
-                                    <button class="chip-filter chip-tech-tag" data-tech="非侵入">非侵入/脑电 (<span id="cnt-tech-非侵入">82</span>)</button>
-                                    <button class="chip-filter chip-tech-tag" data-tech="光学">光学成像 (<span id="cnt-tech-光学">16</span>)</button>
-                                    <button class="chip-filter chip-tech-tag" data-tech="闭环">闭环调控 (<span id="cnt-tech-闭环">14</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-tech="非侵入">⚡ 非侵入/脑电 (<span id="cnt-tech-非侵入">89</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-tech="侵入">🧬 侵入/植入 (<span id="cnt-tech-侵入">44</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-tech="闭环">🔄 闭环调控 (<span id="cnt-tech-闭环">23</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-tech="光学">💡 光学/脑磁 (<span id="cnt-tech-光学">10</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-tech="超声">🌊 超声脑机 (<span id="cnt-tech-超声">7</span>)</button>
                                 </div>
                             </div>
                         </div>
@@ -822,11 +820,11 @@
                                 <span class="bci-filter-sublabel">🎓 专家分类:</span>
                                 <div class="bci-filter-chips" id="bciExpTypeChips">
                                     <button class="chip-filter active" data-exptype="all">全部类型 (<span id="cnt-exp-all">85</span>)</button>
-                                    <button class="chip-filter" data-exptype="学术/产业">学术/产业转化 (<span id="cnt-exp-trans">21</span>)</button>
-                                    <button class="chip-filter" data-exptype="学术">前沿学术 (<span id="cnt-exp-acad">30</span>)</button>
-                                    <button class="chip-filter" data-exptype="产业">产业领军 (<span id="cnt-exp-ind">12</span>)</button>
-                                    <button class="chip-filter" data-exptype="标准">药监审评与标准 (<span id="cnt-exp-std">16</span>)</button>
-                                    <button class="chip-filter" data-exptype="临床">临床试验 (<span id="cnt-exp-clin">6</span>)</button>
+                                    <button class="chip-filter" data-exptype="前沿学术">🔬 前沿学术 (<span id="cnt-exp-acad">31</span>)</button>
+                                    <button class="chip-filter" data-exptype="学术/产业">🚀 学术/产业转化 (<span id="cnt-exp-trans">21</span>)</button>
+                                    <button class="chip-filter" data-exptype="产业领军">🏭 产业领军 (<span id="cnt-exp-ind">16</span>)</button>
+                                    <button class="chip-filter" data-exptype="标准">📋 药监审评与标准 (<span id="cnt-exp-std">9</span>)</button>
+                                    <button class="chip-filter" data-exptype="临床">🏥 临床试验 (<span id="cnt-exp-clin">8</span>)</button>
                                 </div>
                             </div>
                         </div>
