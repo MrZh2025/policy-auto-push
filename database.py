@@ -132,12 +132,13 @@ class PolicyDatabase:
 
     def clean_invalid_urls(self) -> int:
         """
-        自动清洗数据库中所有指向首页根域名或已知失效占位符及非医药强相关数据的脏数据
+        自动清洗数据库中所有指向首页根域名、已知失效占位符及非生物医药/医疗器械的非相干噪声数据，并重新高精度打标
         """
+        from scrapers.base import BaseScraper
         try:
             with self._get_connection() as conn:
                 cursor = conn.cursor()
-                # 删除仅有根域名（如 https://yjj.sc.gov.cn/）或无具体页面的 URL
+                # 1. 删除仅有根域名（如 https://yjj.sc.gov.cn/）或非医药核心领域政策
                 cursor.execute("""
                     DELETE FROM policies 
                     WHERE url = 'https://yjj.sc.gov.cn/'
@@ -157,14 +158,31 @@ class PolicyDatabase:
                        OR title LIKE '%交通运输%'
                        OR title LIKE '%海洋经济%'
                        OR title LIKE '%殡葬%'
+                       OR title LIKE '%互助性养老%'
+                       OR title LIKE '%服务贸易标准化%'
+                       OR title LIKE '%航空口岸%'
+                       OR title LIKE '%农村改革%'
+                       OR title LIKE '%救助管理机构%'
+                       OR title LIKE '%安全生产责任保险%'
+                       OR title LIKE '%旅行服务出口%'
+                       OR title LIKE '%养老机构突发事件%'
+                       OR title LIKE '%岗位挖潜扩容%'
                 """)
                 deleted_count = cursor.rowcount
+
+                # 2. 对库内所有在期政策使用 BaseScraper.classify_policy 执行严谨精准重打标
+                cursor.execute("SELECT id, title, summary, source FROM policies")
+                rows = cursor.fetchall()
+                for pid, title, summary, source in rows:
+                    correct_cat = BaseScraper.classify_policy(title or "", summary or "", source or "")
+                    cursor.execute("UPDATE policies SET category = ? WHERE id = ?", (correct_cat, pid))
+
                 conn.commit()
                 if deleted_count > 0:
-                    logger.info(f"[脏数据治理] 已清理 {deleted_count} 条无效/非医药占位政策记录")
+                    logger.info(f"[脏数据治理] 已清理 {deleted_count} 条无效/非医药占位政策记录，并完成全库精准分类打标")
                 return deleted_count
         except Exception as e:
-            logger.error(f"清洗无效 URL 失败: {e}")
+            logger.error(f"清洗无效 URL 与重新打标失败: {e}")
             return 0
 
     def clean_expired_policies(self, max_years: int = 2) -> int:

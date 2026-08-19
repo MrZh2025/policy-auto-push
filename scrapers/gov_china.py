@@ -17,15 +17,6 @@ import config
 
 logger = logging.getLogger(__name__)
 
-TRACK_KEYWORDS = {
-    "核医药": ["核药", "放射性", "同位素", "核医学", "堆照", "放药", "核技术", "辐射"],
-    "脑机接口": ["脑机接口", "脑科学", "神经调控", "脑电", "脑机", "侵入式", "神经接口", "假肢"],
-    "AI制药": ["ai制药", "人工智能", "计算生物", "大模型", "算法制药", "虚拟筛选", "结构生物", "合成生物"],
-    "医疗机器人": ["医疗机器人", "手术机器人", "康复机器人", "外骨骼", "手术导航", "智能器械", "智能装备", "智能医疗"],
-    "医保政策": ["医保", "医保目录", "集中带量采购", "集采", "支付方式", "drg", "dip", "价格治理", "药品价格", "医疗保障"],
-    "科技申报政策": ["申报", "奖励", "补助", "资助", "扶持", "资金", "重大专项", "专项资金", "创新平台", "揭榜挂帅", "新药创制", "高质量发展"]
-}
-
 class GovChinaScraper(BaseScraper):
     name = "gov_china"
     source_name = "中国政府网与各部委政策库"
@@ -34,17 +25,8 @@ class GovChinaScraper(BaseScraper):
 
     @staticmethod
     def identify_track(title: str, summary: str = "") -> str:
-        """根据标题与内容自动判定所属核心赛道"""
-        text = f"{title} {summary}".lower()
-        for track, keywords in TRACK_KEYWORDS.items():
-            for kw in keywords:
-                if kw in text:
-                    return track
-        if any(k in text for k in ["器械", "装备", "设备"]):
-            return "医疗机器人"
-        if any(k in text for k in ["药", "中药", "生物"]):
-            return "AI制药"
-        return "科技申报政策"
+        """根据标题与内容通过统一的高精度产业分类引擎进行打标"""
+        return BaseScraper.classify_policy(title, summary)
 
     def _fetch_single_topic(self, topic: str) -> List[Dict[str, Any]]:
         headers = {

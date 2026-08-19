@@ -94,15 +94,4 @@ class NmpaNhsaScraper(BaseScraper):
         return res_list
 
     def _classify_track(self, title: str, summary: str) -> str:
-        text = f"{title} {summary}".lower()
-        if any(k in text for k in ["核药", "同位素", "放射性", "堆照", "核医疗", "放药"]):
-            return "核医药"
-        if any(k in text for k in ["脑机接口", "脑科学", "神经调控", "侵入式"]):
-            return "脑机接口"
-        if any(k in text for k in ["ai制药", "人工智能", "计算生物", "大模型", "算法"]):
-            return "AI制药"
-        if any(k in text for k in ["机器人", "手术机器人", "外骨骼", "器械装备"]):
-            return "医疗机器人"
-        if any(k in text for k in ["医保", "集采", "带量采购", "支付方式", "drg", "dip"]):
-            return "医保政策"
-        return "科技申报政策"
+        return BaseScraper.classify_policy(title, summary)
