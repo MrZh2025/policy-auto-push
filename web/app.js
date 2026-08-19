@@ -1804,6 +1804,28 @@ function parseMarkdownSimple(md) {
     return outHtml;
 }
 
+// ==========================================
+// 全局通用消息提示气泡 (Toast 提示引擎)
+// ==========================================
+let toastTimer = null;
+function showToast(msg, duration = 3200) {
+    const toastEl = document.getElementById('toast') || (typeof el !== 'undefined' ? el.toast : null);
+    if (!toastEl) {
+        console.log('[Toast Notice]:', msg);
+        return;
+    }
+    toastEl.innerHTML = msg;
+    toastEl.classList.remove('hidden');
+    toastEl.classList.add('show');
+
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+        toastEl.classList.remove('show');
+        toastEl.classList.add('hidden');
+    }, duration);
+}
+window.showToast = showToast;
+
 async function handleScrapeNow() {
     showToast('🔄 正在全网检索各大部委与四川省局最新政策数据...');
     const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
@@ -1829,6 +1851,7 @@ async function handleScrapeNow() {
         showToast('💡 提示：当前已加载云端最新政策库。如需在本地立即执行全网深度爬虫，可双击项目根目录下的【启动网页大屏.bat】！');
     }
 }
+window.handleScrapeNow = handleScrapeNow;
 
 // ==========================================
 // 权威标准公文 Word 导出引擎 (GB/T 9704-2012)
