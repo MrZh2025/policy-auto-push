@@ -3112,19 +3112,315 @@ body {
     line-height: 1.4;
 }
 
-/* 响应式调整 */
+/* 头部右侧保留的检索更新按钮样式 */
+.action-scrape-btn {
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important;
+    border: 1px solid #38bdf8 !important;
+    color: #ffffff !important;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(2, 132, 199, 0.35);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.action-scrape-btn:hover {
+    background: linear-gradient(135deg, #0369a1 0%, #075985 100%) !important;
+    box-shadow: 0 3px 10px rgba(2, 132, 199, 0.45);
+    transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   📱 移动端与手机屏幕深度响应式适配引擎 (Mobile / Tablet Responsive Engine)
+   ========================================================================== */
+
+/* 1. 平板与大屏手机 (< 960px) */
 @media (max-width: 960px) {
+    .nmpa-main-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px;
+    }
+    .nmpa-left-col {
+        order: 1;
+    }
+    .consult-card {
+        order: 2;
+    }
     .bci-main-grid-layout {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
         overflow-y: auto;
     }
+    .bci-china-map-container {
+        min-height: 320px !important;
+        height: 320px !important;
+    }
     .bci-kpi-bar {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr) !important;
     }
     .matrix-grid-4 {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+    .bci-modal-card {
+        max-width: 98vw !important;
+        width: 98vw !important;
+        max-height: 94vh !important;
+        margin: 3vh auto !important;
+    }
+    .analytics-modal-card {
+        max-width: 98vw !important;
+        width: 98vw !important;
+        max-height: 94vh !important;
+    }
+    .analytics-grid-body {
+        grid-template-columns: 1fr !important;
     }
 }
+
+/* 2. 主流智能手机 (< 768px) */
+@media (max-width: 768px) {
+    /* 顶部政务红蓝条 */
+    .top-gov-bar {
+        padding: 4px 8px;
+    }
+    .gov-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 3px;
+    }
+    .gov-date {
+        font-size: 11px;
+    }
+    .gov-top-stats {
+        font-size: 11px;
+        flex-wrap: wrap;
+    }
+    .top-open-badge {
+        font-size: 10px;
+        padding: 1px 4px;
+    }
+
+    /* 头部 Header */
+    .nmpa-header {
+        padding: 10px 12px;
+    }
+    .nmpa-header-wrap {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+    }
+    .nmpa-brand {
+        gap: 8px;
+    }
+    .nmpa-emblem {
+        width: 32px;
+        height: 32px;
+    }
+    .emblem-inner {
+        width: 28px;
+        height: 28px;
+    }
+    .emblem-star {
+        font-size: 8px;
+    }
+    .emblem-text {
+        font-size: 7px;
+    }
+    .nmpa-title-box .main-title {
+        font-size: 15px !important;
+        line-height: 1.35;
+        letter-spacing: 0;
+    }
+    .action-scrape-btn {
+        padding: 4px 8px;
+        font-size: 11.5px;
+    }
+
+    /* 主导航栏：横向平滑触控滑动 */
+    .nmpa-navbar {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    .nmpa-navbar::-webkit-scrollbar {
+        display: none;
+    }
+    .nmpa-nav-wrap {
+        padding: 0 8px;
+        width: max-content;
+        min-width: 100%;
+    }
+    .nav-menu {
+        flex-wrap: nowrap;
+        gap: 2px;
+    }
+    .nav-item > a {
+        padding: 9px 10px;
+        font-size: 12.5px;
+        white-space: nowrap;
+    }
+    .nmpa-dropdown-menu {
+        position: fixed;
+        left: 8px;
+        right: 8px;
+        width: auto;
+        min-width: unset;
+        max-width: calc(100vw - 16px);
+        top: auto;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    }
+
+    /* 主卡片与列表 */
+    .gov-card {
+        padding: 12px 14px;
+        border-radius: 4px;
+    }
+    .gov-card-title-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .header-search {
+        width: 100%;
+    }
+    .header-search input {
+        width: 100%;
+        font-size: 13px;
+        padding: 6px 10px;
+    }
+    .search-btn {
+        padding: 6px 14px;
+        font-size: 13px;
+    }
+
+    .time-tabs-row {
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+    .time-tab {
+        padding: 4px 8px;
+        font-size: 11px;
+        flex: 1;
+        text-align: center;
+    }
+
+    .policy-item {
+        padding: 10px 12px;
+    }
+    .policy-title {
+        font-size: 14px;
+        line-height: 1.45;
+    }
+    .policy-meta {
+        font-size: 11px;
+        flex-wrap: wrap;
+        gap: 4px 10px;
+    }
+
+    /* 脑机接口大屏手机端交互 */
+    .bci-modal-card {
+        max-height: 96vh !important;
+        margin: 2vh auto !important;
+    }
+    .bci-header {
+        padding: 10px 14px !important;
+    }
+    .bci-header-title {
+        font-size: 14px !important;
+    }
+    .bci-header-badge {
+        display: none;
+    }
+    .bci-kpi-bar {
+        padding: 8px 12px !important;
+        gap: 8px;
+    }
+    .bci-kpi-val {
+        font-size: 16px !important;
+    }
+    .bci-kpi-label {
+        font-size: 10.5px !important;
+    }
+    .bci-panel-header {
+        padding: 8px 10px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+    .bci-region-quick-nav {
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 2px;
+    }
+    .bci-nav-btn {
+        padding: 2px 7px;
+        font-size: 10.5px;
+        white-space: nowrap;
+    }
+    .bci-toolbar-wrapper {
+        padding: 6px 10px;
+    }
+    .bci-filter-sublabel {
+        min-width: 58px;
+        font-size: 10.5px;
+    }
+    .chip-filter {
+        font-size: 10px;
+        padding: 2px 6px;
+    }
+    .bci-focus-cards-list {
+        max-height: 320px;
+        padding: 8px 10px;
+    }
+    .card-title {
+        font-size: 12.5px;
+    }
+    .card-main-desc {
+        font-size: 11.5px;
+    }
+    .matrix-grid-4 {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* AI 咨询模块手机端 */
+    .consult-card {
+        padding: 12px 14px;
+    }
+    .dialog-window {
+        height: 280px;
+    }
+    .chat-input-row textarea {
+        font-size: 12.5px;
+        min-height: 48px;
+    }
+    .btn-send {
+        padding: 0 16px;
+        font-size: 13px;
+    }
+}
+
+/* 3. 小屏手机 (< 480px) */
+@media (max-width: 480px) {
+    .nmpa-title-box .main-title {
+        font-size: 13.5px !important;
+    }
+    .action-scrape-btn .btn-text {
+        display: none;
+    }
+    .action-scrape-btn {
+        padding: 4px 8px;
+    }
+    .bci-kpi-bar {
+        grid-template-columns: 1fr 1fr !important;
+    }
+    .bci-china-map-container {
+        height: 260px !important;
+        min-height: 260px !important;
+    }
+}
+
 
 
 
