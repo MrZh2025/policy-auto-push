@@ -3405,11 +3405,62 @@ async function renderChinaBciMap() {
         value: provStats[p]
     }));
 
-    // 2. 统计核心城市/高校标注散点
+    // 2. 统计核心城市/高校标注散点与引线体系
     let scatterData = [];
+    let leaderLinesData = [];
+    let leaderLabelsData = [];
+
     if (isSichuanMode) {
-        // 四川省专属模式：精准标注高校、华西医院与独角兽生物城
+        // 四川专属模式：真实地理原点散点 (只显示发光脉冲点，0 文字遮挡)
         scatterData = SICHUAN_DETAILED_NODES;
+
+        // 四川专属模式：发散指引折线 (从真实经纬度平滑引出至右侧开阔区)
+        leaderLinesData = [
+            {
+                coords: [[104.6980, 31.5350], [105.80, 31.90], [106.25, 31.90]],
+                name: '西南科技大学'
+            },
+            {
+                coords: [[103.9314, 30.7490], [105.35, 31.05], [106.25, 31.05]],
+                name: '电子科技大学'
+            },
+            {
+                coords: [[104.0620, 30.6420], [105.25, 30.20], [106.25, 30.20]],
+                name: '四川大学华西医院'
+            },
+            {
+                coords: [[104.0300, 30.4800], [105.15, 29.35], [106.25, 29.35]],
+                name: '成都高新·天府生物城'
+            }
+        ];
+
+        // 四川专属模式：右侧开阔区整齐垂直并排胶囊标签 (绝对 0 遮挡)
+        leaderLabelsData = [
+            {
+                name: '西南科技大学',
+                value: [106.25, 31.90],
+                labelText: '🏛️ 西南科技大学 · 张杨松 (副教授)',
+                desc: '脑机接口模式识别、脑电特征提取与智能控制'
+            },
+            {
+                name: '电子科技大学',
+                value: [106.25, 31.05],
+                labelText: '🏛️ 电子科技大学 · 尧德中 (院士) / 徐鹏 (教授)',
+                desc: '前沿类脑人工智能创新中心 · 孵化成都芯脑科技'
+            },
+            {
+                name: '四川大学华西医院',
+                value: [106.25, 30.20],
+                labelText: '🏥 四川大学华西医院 · 神经临床中心 / 脑调控',
+                desc: '重大神经疾病临床评估与脑控康复中试平台'
+            },
+            {
+                name: '成都高新·天府生物城',
+                value: [106.25, 29.35],
+                labelText: '🏢 格式塔科技 (Gestala 独角兽) · 5.7亿投资',
+                desc: '国内稀缺超声全脑读写平台 · 半年获5.7亿元投资'
+            }
+        ];
     } else {
         // 全国视图模式：精选全国核心高校院所与学者枢纽
         scatterData = BCI_NATIONAL_HUBS.map(hub => {
@@ -3449,8 +3500,8 @@ async function renderChinaBciMap() {
     let mapCenter = [104.5, 36.5];
     let mapZoom = 1.25;
     if (isSichuanMode) {
-        mapCenter = [103.8, 30.7];
-        mapZoom = 3.6; // 高清放大四川省全景！
+        mapCenter = [104.2, 30.7];
+        mapZoom = 3.8; // 高清放大四川省全景！
     } else if (bciState.currentRegion === '长三角') {
         mapCenter = [120.0, 31.5];
         mapZoom = 1.6;
@@ -3460,6 +3511,153 @@ async function renderChinaBciMap() {
     } else if (bciState.currentRegion === '大湾区') {
         mapCenter = [113.5, 23.0];
         mapZoom = 1.8;
+    }
+
+    const seriesList = [
+        // 1. 省份热力地图层 (仅所选区域填色高亮)
+        {
+            name: '当前区域热度',
+            type: 'map',
+            geoIndex: 0,
+            data: mapData
+        }
+    ];
+
+    if (isSichuanMode) {
+        // 2. 四川专属：科技指引折线层 (Leader Lines)
+        seriesList.push({
+            name: '指引折线',
+            type: 'lines',
+            coordinateSystem: 'geo',
+            data: leaderLinesData,
+            polyline: true,
+            lineStyle: {
+                color: '#c5161d',
+                width: 1.5,
+                opacity: 0.85,
+                type: 'solid',
+                shadowBlur: 6,
+                shadowColor: 'rgba(197, 22, 29, 0.4)'
+            },
+            zlevel: 4
+        });
+
+        // 3. 四川专属：地理原点发光脉冲散点层 (0 文字，纯净呼吸圆点)
+        seriesList.push({
+            name: '地理原点',
+            type: 'effectScatter',
+            coordinateSystem: 'geo',
+            data: scatterData,
+            symbolSize: 15,
+            showEffectOn: 'render',
+            rippleEffect: {
+                brushType: 'stroke',
+                scale: 4.5,
+                period: 2.6
+            },
+            label: {
+                show: false
+            },
+            itemStyle: {
+                color: function(params) {
+                    if (params.data.type === 'hospital') return '#059669';
+                    if (params.data.type === 'industry') return '#d97706';
+                    return '#c5161d';
+                },
+                shadowBlur: 14,
+                shadowColor: 'rgba(197, 22, 29, 0.8)'
+            },
+            zlevel: 5
+        });
+
+        // 4. 四川专属：指引线终点并排清晰胶囊标签层
+        seriesList.push({
+            name: '机构标注',
+            type: 'scatter',
+            coordinateSystem: 'geo',
+            data: leaderLabelsData,
+            symbol: 'circle',
+            symbolSize: 5,
+            itemStyle: {
+                color: '#c5161d'
+            },
+            label: {
+                show: true,
+                formatter: function(params) {
+                    return params.data.labelText;
+                },
+                position: 'right',
+                distance: 6,
+                color: isDark ? '#ffffff' : '#0f172a',
+                fontWeight: 'bold',
+                fontSize: 11,
+                backgroundColor: isDark ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.96)',
+                borderColor: '#c5161d',
+                borderWidth: 1.2,
+                borderRadius: 4,
+                padding: [3, 8],
+                shadowBlur: 8,
+                shadowColor: 'rgba(197, 22, 29, 0.25)'
+            },
+            zlevel: 6
+        });
+    } else {
+        // 全国视图：核心城市 / 高校智库标注散点层
+        seriesList.push({
+            name: '标注散点',
+            type: 'effectScatter',
+            coordinateSystem: 'geo',
+            data: scatterData,
+            symbolSize: function(val, params) {
+                const c = params.data.count || 1;
+                return Math.max(13, Math.min(22, 13 + c * 0.5));
+            },
+            showEffectOn: 'render',
+            rippleEffect: {
+                brushType: 'stroke',
+                scale: 3.5,
+                period: 2.8
+            },
+            label: {
+                show: true,
+                formatter: function(params) {
+                    if (params.data.hubLabel) {
+                        return params.data.hubLabel;
+                    }
+                    return `${params.name}`;
+                },
+                position: 'top',
+                distance: 6,
+                color: isDark ? '#ffffff' : '#0f172a',
+                fontWeight: 'bold',
+                fontSize: 10.5,
+                backgroundColor: isDark ? 'rgba(15, 23, 42, 0.90)' : 'rgba(255, 255, 255, 0.92)',
+                borderColor: isDark ? '#6366f1' : '#c5161d',
+                borderWidth: 1,
+                borderRadius: 4,
+                padding: [2, 6],
+                shadowBlur: 6,
+                shadowColor: 'rgba(0,0,0,0.18)'
+            },
+            emphasis: {
+                scale: true,
+                label: {
+                    show: true,
+                    fontSize: 11
+                }
+            },
+            itemStyle: {
+                color: function(params) {
+                    if (params.data.highlight || (params.data.province && params.data.province.includes('四川'))) {
+                        return '#ef4444';
+                    }
+                    return '#6366f1';
+                },
+                shadowBlur: 14,
+                shadowColor: 'rgba(239, 68, 68, 0.75)'
+            },
+            zlevel: 5
+        });
     }
 
     const option = {
@@ -3472,6 +3670,16 @@ async function renderChinaBciMap() {
             padding: [8, 12],
             textStyle: { color: isDark ? '#f8fafc' : '#0f172a', fontSize: 12 },
             formatter: function(params) {
+                if (params.seriesType === 'lines') {
+                    return `<div style="font-size:12px; color:#c5161d; font-weight:700;">📍 ${params.data.name} 坐标引线</div>`;
+                }
+                if (params.seriesType === 'scatter' && params.data.labelText) {
+                    return `
+                        <div style="font-weight:bold; font-size:13.5px; color:#c5161d; margin-bottom:4px;">${params.data.labelText}</div>
+                        <div style="font-size:11.5px; color:#475569;">🔬 ${params.data.desc || ''}</div>
+                        <div style="font-size:10.5px; color:#0284c7; margin-top:4px;">👉 右侧看板已同步列出该机构相关详细档案</div>
+                    `;
+                }
                 if (params.seriesType === 'effectScatter') {
                     const d = params.data;
                     if (d.experts) {
@@ -3546,73 +3754,7 @@ async function renderChinaBciMap() {
                 }
             }
         },
-        series: [
-            // 1. 省份热力地图层 (仅所选区域填色高亮)
-            {
-                name: '当前区域热度',
-                type: 'map',
-                geoIndex: 0,
-                data: mapData
-            },
-            // 2. 核心城市 / 高校智库标注散点层 (清晰标注高校与学者，绝不堆叠遮挡)
-            {
-                name: '标注散点',
-                type: 'effectScatter',
-                coordinateSystem: 'geo',
-                data: scatterData,
-                symbolSize: function(val, params) {
-                    if (isSichuanMode) return 15;
-                    const c = params.data.count || 1;
-                    return Math.max(13, Math.min(22, 13 + c * 0.5));
-                },
-                showEffectOn: 'render',
-                rippleEffect: {
-                    brushType: 'stroke',
-                    scale: 3.5,
-                    period: 2.8
-                },
-                // 开启精致胶囊标注，标注高校与学者，错落排布！
-                label: {
-                    show: true,
-                    formatter: function(params) {
-                        if (params.data.hubLabel) {
-                            return params.data.hubLabel;
-                        }
-                        return `${params.name}`;
-                    },
-                    position: 'top',
-                    distance: 6,
-                    color: isDark ? '#ffffff' : '#0f172a',
-                    fontWeight: 'bold',
-                    fontSize: 10.5,
-                    backgroundColor: isDark ? 'rgba(15, 23, 42, 0.90)' : 'rgba(255, 255, 255, 0.92)',
-                    borderColor: isDark ? '#6366f1' : '#c5161d',
-                    borderWidth: 1,
-                    borderRadius: 4,
-                    padding: [2, 6],
-                    shadowBlur: 6,
-                    shadowColor: 'rgba(0,0,0,0.18)'
-                },
-                emphasis: {
-                    scale: true,
-                    label: {
-                        show: true,
-                        fontSize: 11
-                    }
-                },
-                itemStyle: {
-                    color: function(params) {
-                        if (params.data.highlight || (params.data.province && params.data.province.includes('四川'))) {
-                            return '#ef4444';
-                        }
-                        return '#6366f1';
-                    },
-                    shadowBlur: 14,
-                    shadowColor: 'rgba(239, 68, 68, 0.75)'
-                },
-                zlevel: 5
-            }
-        ]
+        series: seriesList
     };
 
     chartChinaMapInstance.setOption(option, true);
