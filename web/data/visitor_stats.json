@@ -1,0 +1,46 @@
+{
+  "code": 0,
+  "data": {
+    "total_pv": 3,
+    "total_uv": 3,
+    "today_pv": 3,
+    "today_uv": 3,
+    "top_locations": [
+      {
+        "location": "四川省成都市",
+        "count": 2
+      },
+      {
+        "location": "江苏省南京市",
+        "count": 1
+      }
+    ],
+    "recent_visits": [
+      {
+        "id": 3,
+        "visitor_id": "vid_test_nanjing_02",
+        "ip": "114.114.*.*",
+        "location": "江苏省南京市",
+        "visit_time": "2026-08-19 09:30:27",
+        "device": "移动终端"
+      },
+      {
+        "id": 2,
+        "visitor_id": "vid_test_chengdu_01",
+        "ip": "127.0.*.*",
+        "location": "四川省成都市",
+        "visit_time": "2026-08-19 09:30:27",
+        "device": "Windows 桌面"
+      },
+      {
+        "id": 1,
+        "visitor_id": "test_v1",
+        "ip": "127.0.*.*",
+        "location": "四川省成都市",
+        "visit_time": "2026-08-19 09:29:35",
+        "device": "Windows 桌面"
+      }
+    ],
+    "server_time": "2026-08-19 09:31:44"
+  }
+}

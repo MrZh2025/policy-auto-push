@@ -93,6 +93,8 @@ def run_pipeline(force_push: bool = False):
                 json.dump({"code": 0, "data": all_policies, "count": len(all_policies)}, f, ensure_ascii=False, indent=2)
             with open(os.path.join(data_dir, "stats.json"), "w", encoding="utf-8") as f:
                 json.dump({"code": 0, "data": {"stats": db.get_stats(), "categories": cat_stats}}, f, ensure_ascii=False, indent=2)
+            with open(os.path.join(data_dir, "visitor_stats.json"), "w", encoding="utf-8") as f:
+                json.dump({"code": 0, "data": db.get_visitor_stats()}, f, ensure_ascii=False, indent=2)
         logger.info("[静态数据] 已成功同步 web/data/ 和 docs/data/ 供 GitHub Pages 在线访问！")
     except Exception as e:
         logger.warning(f"导出静态网页数据失败: {e}")

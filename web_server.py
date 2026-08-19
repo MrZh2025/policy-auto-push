@@ -29,6 +29,57 @@ import config
 PORT = 8080
 WEB_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "web")
 
+_IP_LOCATION_CACHE = {}
+
+def resolve_ip_location(ip: str) -> str:
+    """智能解析客户端 IP 地理位置（支持本地专线、内网及公网多重容灾查询）"""
+    if not ip or ip in ("127.0.0.1", "localhost", "::1", "0.0.0.0"):
+        return "四川省成都市 (本地控制台)"
+    
+    # 局域网内网识别
+    if ip.startswith("192.168.") or ip.startswith("10.") or ip.startswith("172.16.") or ip.startswith("172.17.") or ip.startswith("172.18.") or ip.startswith("172.19.") or ip.startswith("172.2") or ip.startswith("172.3"):
+        return "企业专线网络 (四川·成都)"
+        
+    if ip in _IP_LOCATION_CACHE:
+        return _IP_LOCATION_CACHE[ip]
+
+    location = "中国 · 专网接入"
+    try:
+        import urllib.request
+        req = urllib.request.Request(
+            f"http://ip-api.com/json/{ip}?lang=zh-CN",
+            headers={"User-Agent": "Mozilla/5.0"}
+        )
+        with urllib.request.urlopen(req, timeout=1.5) as resp:
+            data = json.loads(resp.read().decode('utf-8'))
+            if data.get("status") == "success":
+                country = data.get("country", "")
+                region = data.get("regionName", "")
+                city = data.get("city", "")
+                parts = [p for p in [region, city] if p]
+                if parts:
+                    location = "".join(parts) if country in ("中国", "China") else f"{country} {region} {city}".strip()
+                elif country:
+                    location = country
+    except Exception:
+        try:
+            import urllib.request
+            req = urllib.request.Request(
+                f"http://whois.pconline.com.cn/ipJson.jsp?ip={ip}&json=true",
+                headers={"User-Agent": "Mozilla/5.0"}
+            )
+            with urllib.request.urlopen(req, timeout=1.5) as resp:
+                content = resp.read().decode('gbk', errors='ignore')
+                data = json.loads(content)
+                addr = data.get("addr", "").strip()
+                if addr:
+                    location = addr
+        except Exception:
+            pass
+
+    _IP_LOCATION_CACHE[ip] = location
+    return location
+
 def safe_log(msg: str):
     try:
         print(msg, flush=True)
@@ -43,6 +94,16 @@ class PolicyWebHandler(http.server.SimpleHTTPRequestHandler):
         # 简化日志，避免控制台报错
         pass
 
+    def get_client_ip(self) -> str:
+        """获取客户端真实 IP 地址"""
+        forwarded = self.headers.get("X-Forwarded-For")
+        if forwarded:
+            return forwarded.split(",")[0].strip()
+        real_ip = self.headers.get("X-Real-IP")
+        if real_ip:
+            return real_ip.strip()
+        return self.client_address[0] if self.client_address else "127.0.0.1"
+
     def do_GET(self):
         parsed = urllib.parse.urlparse(self.path)
         path = parsed.path
@@ -51,6 +112,8 @@ class PolicyWebHandler(http.server.SimpleHTTPRequestHandler):
             self.handle_get_policies(parsed)
         elif path == "/api/stats":
             self.handle_get_stats()
+        elif path == "/api/visitor-stats":
+            self.handle_get_visitor_stats()
         elif path == "/api/config":
             self.handle_get_config()
         else:
@@ -63,7 +126,9 @@ class PolicyWebHandler(http.server.SimpleHTTPRequestHandler):
         post_data = self.rfile.read(content_length).decode("utf-8") if content_length > 0 else "{}"
         body = json.loads(post_data) if post_data else {}
 
-        if path == "/api/chat":
+        if path == "/api/visit":
+            self.handle_record_visit(body)
+        elif path == "/api/chat":
             self.handle_ai_chat(body)
         elif path == "/api/weekly-report":
             self.handle_weekly_report(body)
@@ -115,6 +180,45 @@ class PolicyWebHandler(http.server.SimpleHTTPRequestHandler):
             cursor.execute("SELECT category, COUNT(*) as cnt FROM policies GROUP BY category")
             categories = {row["category"]: row["cnt"] for row in cursor.fetchall()}
         self._json_response({"code": 0, "data": {"stats": stats, "categories": categories}})
+
+    def handle_get_visitor_stats(self):
+        """获取访客人数、时间、地点及地域分布统计"""
+        client_ip = self.get_client_ip()
+        curr_loc = resolve_ip_location(client_ip)
+        db = PolicyDatabase()
+        visitor_stats = db.get_visitor_stats()
+        visitor_stats["current_client"] = {
+            "ip": client_ip,
+            "location": curr_loc,
+            "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        }
+        self._json_response({"code": 0, "data": visitor_stats})
+
+    def handle_record_visit(self, body):
+        """记录访客一次访问打点"""
+        client_ip = self.get_client_ip()
+        visitor_id = body.get("visitor_id", "")
+        reported_loc = body.get("location", "")
+        path = body.get("path", "/")
+        user_agent = self.headers.get("User-Agent", "")
+
+        # 优先使用传入地点，若无则服务端智能解析
+        location = reported_loc if (reported_loc and reported_loc != "未知地点") else resolve_ip_location(client_ip)
+
+        db = PolicyDatabase()
+        visitor_stats = db.record_visit(
+            ip=client_ip,
+            location=location,
+            visitor_id=visitor_id,
+            user_agent=user_agent,
+            path=path
+        )
+        visitor_stats["current_client"] = {
+            "ip": client_ip,
+            "location": location,
+            "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        }
+        self._json_response({"code": 0, "msg": "访问记录成功", "data": visitor_stats})
 
     def handle_get_config(self):
         self._json_response({

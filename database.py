@@ -44,6 +44,23 @@ class PolicyDatabase:
             """)
             cursor.execute("CREATE INDEX IF NOT EXISTS idx_fingerprint ON policies(fingerprint)")
             cursor.execute("CREATE INDEX IF NOT EXISTS idx_is_pushed ON policies(is_pushed)")
+
+            # 访客访问日志与热度统计表
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS visitor_logs (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    visitor_id TEXT,                    -- 访客唯一标识 (UUID/指纹)
+                    ip TEXT NOT NULL,                   -- 客户端 IP 地址
+                    location TEXT,                      -- 解析后的地理位置 (如: 四川省成都市)
+                    user_agent TEXT,                    -- 浏览器与设备 User-Agent
+                    path TEXT DEFAULT '/',              -- 访问页面路径
+                    visit_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 完整访问时间
+                    visit_date TEXT                     -- 访问日期 (YYYY-MM-DD)
+                )
+            """)
+            cursor.execute("CREATE INDEX IF NOT EXISTS idx_visit_time ON visitor_logs(visit_time)")
+            cursor.execute("CREATE INDEX IF NOT EXISTS idx_visit_date ON visitor_logs(visit_date)")
+            cursor.execute("CREATE INDEX IF NOT EXISTS idx_visitor_id ON visitor_logs(visitor_id)")
             conn.commit()
 
     @staticmethod
@@ -171,3 +188,140 @@ class PolicyDatabase:
                 "pushed": pushed,
                 "unpushed": total - pushed
             }
+
+    def record_visit(self, ip: str, location: str = "", visitor_id: str = "", user_agent: str = "", path: str = "/") -> Dict[str, Any]:
+        """
+        记录一次页面访问日志，并返回最新的关键统计数据
+        :param ip: 客户端 IP 地址
+        :param location: 访问地点 (如: 四川省成都市)
+        :param visitor_id: 访客唯一客户端 ID
+        :param user_agent: 浏览器 UA
+        :param path: 访问路径
+        :return: 包含统计结果的字典
+        """
+        now = datetime.now()
+        visit_time = now.strftime("%Y-%m-%d %H:%M:%S")
+        visit_date = now.strftime("%Y-%m-%d")
+        safe_ip = ip or "127.0.0.1"
+        safe_vid = visitor_id or f"anon_{hashlib.md5(safe_ip.encode('utf-8')).hexdigest()[:12]}"
+        safe_loc = location or "未知地点"
+
+        try:
+            with self._get_connection() as conn:
+                cursor = conn.cursor()
+                cursor.execute("""
+                    INSERT INTO visitor_logs (visitor_id, ip, location, user_agent, path, visit_time, visit_date)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                """, (safe_vid, safe_ip, safe_loc, user_agent[:250], path, visit_time, visit_date))
+                conn.commit()
+        except Exception as e:
+            logger.error(f"记录访客日志失败: {e}")
+
+        return self.get_visitor_stats()
+
+    def get_visitor_stats(self) -> Dict[str, Any]:
+        """
+        获取多维度访客统计信息：
+        - total_pv: 累计访问人次
+        - total_uv: 独立访客总数 (按 visitor_id 去重)
+        - today_pv: 今日访问人次
+        - today_uv: 今日独立访客数
+        - top_locations: 访问来源城市/地区分布 Top 8
+        - recent_visits: 最近访问流水 (前 15 条)
+        """
+        today_str = datetime.now().strftime("%Y-%m-%d")
+        
+        try:
+            with self._get_connection() as conn:
+                cursor = conn.cursor()
+                
+                # 1. 累计 PV 与 UV
+                cursor.execute("SELECT COUNT(*) FROM visitor_logs")
+                total_pv = cursor.fetchone()[0] or 0
+                
+                cursor.execute("SELECT COUNT(DISTINCT visitor_id) FROM visitor_logs")
+                total_uv = cursor.fetchone()[0] or 0
+                
+                # 2. 今日 PV 与 UV
+                cursor.execute("SELECT COUNT(*) FROM visitor_logs WHERE visit_date = ?", (today_str,))
+                today_pv = cursor.fetchone()[0] or 0
+                
+                cursor.execute("SELECT COUNT(DISTINCT visitor_id) FROM visitor_logs WHERE visit_date = ?", (today_str,))
+                today_uv = cursor.fetchone()[0] or 0
+
+                # 3. 访问地区分布排行 (Top 8)
+                cursor.execute("""
+                    SELECT location, COUNT(*) as cnt 
+                    FROM visitor_logs 
+                    WHERE location IS NOT NULL AND location != '' AND location != '未知地点'
+                    GROUP BY location 
+                    ORDER BY cnt DESC 
+                    LIMIT 8
+                """)
+                top_locations = [{"location": row["location"], "count": row["cnt"]} for row in cursor.fetchall()]
+
+                # 4. 最近访问流水清单 (最新 15 条)
+                cursor.execute("""
+                    SELECT id, visitor_id, ip, location, visit_time, user_agent 
+                    FROM visitor_logs 
+                    ORDER BY id DESC 
+                    LIMIT 15
+                """)
+                recent_visits = []
+                for row in cursor.fetchall():
+                    # 掩码脱敏 IP (如 192.168.1.100 -> 192.168.*.*)
+                    raw_ip = row["ip"] or ""
+                    masked_ip = raw_ip
+                    if "." in raw_ip:
+                        parts = raw_ip.split(".")
+                        if len(parts) == 4:
+                            masked_ip = f"{parts[0]}.{parts[1]}.*.*"
+
+                    recent_visits.append({
+                        "id": row["id"],
+                        "visitor_id": row["visitor_id"],
+                        "ip": masked_ip,
+                        "location": row["location"] or "中国 · 专网接入",
+                        "visit_time": row["visit_time"],
+                        "device": self._parse_device_type(row["user_agent"])
+                    })
+
+                return {
+                    "total_pv": total_pv,
+                    "total_uv": total_uv,
+                    "today_pv": today_pv,
+                    "today_uv": today_uv,
+                    "top_locations": top_locations,
+                    "recent_visits": recent_visits,
+                    "server_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                }
+        except Exception as e:
+            logger.error(f"获取访客统计失败: {e}")
+            return {
+                "total_pv": 0,
+                "total_uv": 0,
+                "today_pv": 0,
+                "today_uv": 0,
+                "top_locations": [],
+                "recent_visits": [],
+                "server_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            }
+
+    @staticmethod
+    def _parse_device_type(ua: str) -> str:
+        """从 User-Agent 解析简要设备类型与操作系统"""
+        if not ua:
+            return "PC 终端"
+        ua_lower = ua.lower()
+        if "micromessenger" in ua_lower:
+            return "微信客户端"
+        elif "mobile" in ua_lower or "android" in ua_lower or "iphone" in ua_lower:
+            return "移动终端"
+        elif "macintosh" in ua_lower or "mac os" in ua_lower:
+            return "macOS 桌面"
+        elif "windows" in ua_lower:
+            return "Windows 桌面"
+        elif "linux" in ua_lower:
+            return "Linux 终端"
+        return "桌面浏览器"
+

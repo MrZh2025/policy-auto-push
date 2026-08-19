@@ -2000,3 +2000,296 @@ body {
         font-size: 10.5px;
     }
 }
+
+/* ==========================================================================
+   访客时间、地点与人数统计模块样式 (政务蓝经典规范)
+   ========================================================================== */
+
+/* 1. 顶部栏访客地理位置与热度 */
+.gov-top-stats {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.92);
+    font-weight: 500;
+}
+
+.top-stat-divider {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.live-dot-pulse {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #10b981;
+    display: inline-block;
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    animation: livePulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+@keyframes livePulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 7px rgba(16, 185, 129, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    }
+}
+
+/* 2. 专栏三卡片容器 */
+.visitor-analytics-box {
+    margin-top: 14px;
+    padding: 16px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    border-radius: 4px;
+    box-shadow: var(--shadow-card);
+    position: relative;
+}
+
+.visitor-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed var(--border-light);
+}
+
+.visitor-title-area {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.visitor-icon {
+    font-size: 17px;
+}
+
+.visitor-title-text h4 {
+    margin: 0;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--nmpa-blue-main);
+    line-height: 1.2;
+}
+
+.visitor-sub-desc {
+    display: block;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.live-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+[data-theme="dark"] .live-status-pill {
+    background: rgba(6, 95, 70, 0.25);
+    color: #34d399;
+    border-color: rgba(52, 211, 153, 0.3);
+}
+
+/* 3. 四格指标统计网格 */
+.visitor-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.v-metric-card {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    padding: 9px 10px;
+    text-align: left;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.v-metric-card:hover {
+    border-color: var(--nmpa-blue-main);
+    transform: translateY(-1px);
+}
+
+.v-metric-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.v-metric-value {
+    font-size: 18px;
+    font-weight: 800;
+    font-family: var(--font-mono);
+    color: var(--nmpa-blue-main);
+    margin: 3px 0 1px 0;
+    line-height: 1.2;
+}
+
+.v-metric-value.highlight-uv {
+    color: #c5161d;
+}
+
+.v-metric-value.loc-val {
+    font-size: 12.5px;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    color: var(--text-title);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.v-metric-sub {
+    font-size: 10.5px;
+    color: var(--text-caption);
+}
+
+/* 4. 地域分布排行 */
+.visitor-regions-section {
+    margin-bottom: 14px;
+    background: var(--bg-inset);
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.v-section-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-title);
+    margin-bottom: 8px;
+}
+
+.region-badges-flow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.region-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 11.5px;
+    color: var(--text-body);
+    font-weight: 500;
+}
+
+.region-chip .chip-count {
+    background: var(--nmpa-blue-soft);
+    color: var(--nmpa-blue-main);
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 0 4px;
+    border-radius: 2px;
+}
+
+/* 5. 最新访问足迹流水列表 */
+.visitor-stream-section {
+    margin-top: 8px;
+}
+
+.btn-refresh-stream {
+    background: transparent;
+    border: none;
+    color: var(--nmpa-blue-main);
+    font-size: 11.5px;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 0 4px;
+}
+.btn-refresh-stream:hover {
+    text-decoration: underline;
+}
+
+.visits-stream-list {
+    max-height: 180px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 6px;
+    padding-right: 2px;
+}
+
+.visits-stream-list::-webkit-scrollbar {
+    width: 4px;
+}
+.visits-stream-list::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 2px;
+}
+
+.visits-stream-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border-light);
+    padding: 6px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    transition: background 0.15s ease;
+}
+
+.visits-stream-item:hover {
+    background: var(--bg-inset);
+    border-color: var(--border-color);
+}
+
+.stream-item-left {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.stream-location {
+    font-weight: 600;
+    color: var(--text-title);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.stream-meta {
+    font-size: 10px;
+    color: var(--text-muted);
+}
+
+.stream-item-right {
+    text-align: right;
+    font-size: 10.5px;
+    color: var(--text-caption);
+    font-family: var(--font-mono);
+}
+
+.stream-empty-hint {
+    text-align: center;
+    font-size: 11.5px;
+    color: var(--text-muted);
+    padding: 12px 0;
+}
+

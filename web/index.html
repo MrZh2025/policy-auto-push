@@ -17,6 +17,12 @@
             <div class="gov-date" id="currentDateStr">
                 📅 2026年8月18日 星期二 · 官方政策实时监测中
             </div>
+            <div class="gov-top-stats" id="topVisitorInfo">
+                <span class="live-dot-pulse"></span>
+                <span id="topLocationText">📍 接入地: 识别中...</span>
+                <span class="top-stat-divider">|</span>
+                <span id="topStatsSummary">👥 访问量: 0 PV · 0 访客</span>
+            </div>
         </div>
     </div>
 
@@ -235,6 +241,72 @@
                     <div class="consult-input-area">
                         <textarea id="chatInput" placeholder="输入政策咨询议题或品种申报疑问..." rows="2"></textarea>
                         <button id="btnSendChat" class="btn-send-msg">发送研判</button>
+                    </div>
+                </div>
+
+                <!-- 专栏三：👥 访问统计与地域足迹 -->
+                <div class="gov-card visitor-analytics-box">
+                    <div class="visitor-top">
+                        <div class="visitor-title-area">
+                            <span class="visitor-icon">👥</span>
+                            <div class="visitor-title-text">
+                                <h4>访问热度与实时足迹</h4>
+                                <span class="visitor-sub-desc">全网接入时间、地点与访客热度监测</span>
+                            </div>
+                        </div>
+                        <div class="live-status-pill" title="系统运行正常，实时打点接入中">
+                            <span class="live-dot-pulse"></span>
+                            <span>实时在线</span>
+                        </div>
+                    </div>
+
+                    <!-- 4格核心统计卡片 -->
+                    <div class="visitor-metrics-grid">
+                        <div class="v-metric-card">
+                            <div class="v-metric-label">累计访问 (PV)</div>
+                            <div class="v-metric-value" id="statTotalPv">0</div>
+                            <div class="v-metric-sub">总浏览人次</div>
+                        </div>
+                        <div class="v-metric-card">
+                            <div class="v-metric-label">独立访客 (UV)</div>
+                            <div class="v-metric-value highlight-uv" id="statTotalUv">0</div>
+                            <div class="v-metric-sub">累计服务人数</div>
+                        </div>
+                        <div class="v-metric-card">
+                            <div class="v-metric-label">今日访问 (PV)</div>
+                            <div class="v-metric-value" id="statTodayPv">0</div>
+                            <div class="v-metric-sub">今日浏览量</div>
+                        </div>
+                        <div class="v-metric-card">
+                            <div class="v-metric-label">当前接入地点</div>
+                            <div class="v-metric-value loc-val" id="statCurrentLocation" title="您的当前访问地理位置">定位中...</div>
+                            <div class="v-metric-sub" id="statCurrentTime">--:--:--</div>
+                        </div>
+                    </div>
+
+                    <!-- 访客主要地域分布 Top -->
+                    <div class="visitor-regions-section">
+                        <div class="v-section-title">
+                            <span>📍 访客主要地域分布</span>
+                            <span style="font-size:11px;color:var(--text-muted);">按来源热度排行</span>
+                        </div>
+                        <div class="region-badges-flow" id="locationRankBadges">
+                            <span class="region-chip">四川省 (成都)</span>
+                            <span class="region-chip">北京市</span>
+                            <span class="region-chip">广东省 (广州/深圳)</span>
+                            <span class="region-chip">上海市</span>
+                        </div>
+                    </div>
+
+                    <!-- 最新访问足迹流水 (时间/地点/设备) -->
+                    <div class="visitor-stream-section">
+                        <div class="v-section-title">
+                            <span>🕒 最新访问足迹流水</span>
+                            <button class="btn-refresh-stream" id="btnRefreshVisits" title="刷新访问动态">🔄 刷新</button>
+                        </div>
+                        <div class="visits-stream-list" id="recentVisitsStream">
+                            <div class="stream-empty-hint">正在调取访问动态...</div>
+                        </div>
                     </div>
                 </div>
             </aside>
