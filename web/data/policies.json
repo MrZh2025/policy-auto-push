@@ -2,7 +2,7 @@
   "code": 0,
   "data": [
     {
-      "id": 144,
+      "id": 1,
       "fingerprint": "dd9e872bdaf42b2e22ab798a811b8ba7",
       "title": "四川省药品监督管理局关于深化药品医疗器械审评审批制度改革鼓励创新药械发展的若干措施",
       "url": "https://yjj.sc.gov.cn/",
@@ -15,20 +15,7 @@
       "is_pushed": 1
     },
     {
-      "id": 142,
-      "fingerprint": "c202f2a73ca32a341b33ff4d53a05090",
-      "title": "四川省药品监督管理局关于深化药品医疗器械审评审批制度改革鼓励创新药械发展的若干措施",
-      "url": "https://yjj.sc.gov.cn/",
-      "source": "四川省药品监督管理局",
-      "pub_date": "2026-08-16",
-      "category": "科技申报政策",
-      "summary": "【创新药械绿色通道】川药监发〔2026〕18号：对进入国家和省级重大科技专项的创新药、罕见病治疗药、首创医疗器械实行‘提前介入、一企一策、全程辅导’；压缩审评审批与检验检测时限50%；建立全省生物医药企业申报专班对接机制。",
-      "created_at": "2026-08-18 09:54:36",
-      "pushed_at": "2026-08-18 17:55:19",
-      "is_pushed": 1
-    },
-    {
-      "id": 146,
+      "id": 2,
       "fingerprint": "a3aa1354c6e3b0503ee85ec611268d7a",
       "title": "四川省发展和改革委员会等部门关于印发《四川省支持医用同位素及放射性药物产业高质量发展若干政策实施细则》的通知",
       "url": "https://fgw.sc.gov.cn/",
@@ -41,20 +28,7 @@
       "is_pushed": 1
     },
     {
-      "id": 103,
-      "fingerprint": "ef9a8521a70741b14f7b3e6f924c9fd0",
-      "title": "四川省发展和改革委员会等部门关于印发《四川省支持医用同位素及放射性药物产业高质量发展若干政策实施细则》的通知",
-      "url": "https://fgw.sc.gov.cn/",
-      "source": "四川省发展改革委 省经济和信息化厅",
-      "pub_date": "2026-08-15",
-      "category": "核医药",
-      "summary": "【资金奖补最高2000万】重点支持医用核素堆照分离纯化线建设、靶向放射性新药研发及临床试验。对取得放射性新药临床批件并开展I/II/III期临床的企业，给予最高2000万元阶梯式后补助；对在川落地建设的医用同位素反应堆给予固定资产投资30%贴息支持。",
-      "created_at": "2026-08-18 09:50:01",
-      "pushed_at": "2026-08-18 17:50:34",
-      "is_pushed": 1
-    },
-    {
-      "id": 147,
+      "id": 3,
       "fingerprint": "da3597d1473b2107b2381aa563b4206b",
       "title": "国家药品监督管理局 国家卫生健康委关于印发《放射性药品审评审批工作程序及临床急需通道操作细则》的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -67,20 +41,7 @@
       "is_pushed": 1
     },
     {
-      "id": 104,
-      "fingerprint": "eaf05004c083b266dd8bd396f4b3dc7e",
-      "title": "国家药品监督管理局 国家卫生健康委关于印发《放射性药品审评审批工作程序及临床急需通道操作细则》的通知",
-      "url": "https://www.nmpa.gov.cn/",
-      "source": "国家药监局 国家卫健委",
-      "pub_date": "2026-08-14",
-      "category": "核医药",
-      "summary": "【审评绿色通道】国药监综药注〔2026〕48号：针对治疗用放射性药物、医用同位素短半衰期特性，建立60个工作日快速审评审批通道与随到随检机制；明确医疗机构自制放射性制剂区域内调剂使用备案流程。",
-      "created_at": "2026-08-18 09:50:01",
-      "pushed_at": "2026-08-18 17:50:34",
-      "is_pushed": 1
-    },
-    {
-      "id": 145,
+      "id": 4,
       "fingerprint": "3b9860b6c4c710cdebd334c883492c28",
       "title": "四川省药品监督管理局关于加强放射性药品生产经营监管促进核医疗产业健康发展的指导意见",
       "url": "https://yjj.sc.gov.cn/",
@@ -93,20 +54,7 @@
       "is_pushed": 1
     },
     {
-      "id": 143,
-      "fingerprint": "f93bff81a777e308d4617f862cc280d9",
-      "title": "四川省药品监督管理局关于加强放射性药品生产经营监管促进核医疗产业健康发展的指导意见",
-      "url": "https://yjj.sc.gov.cn/",
-      "source": "四川省药品监督管理局",
-      "pub_date": "2026-08-13",
-      "category": "核医药",
-      "summary": "【核药监管与合规保障】川药监办〔2026〕29号：明确短半衰期医用核素及靶向放药生产许可（GMP）快速现场核查规程；支持天府国际生物城及乐山核技术基地建设区域放射性药品检测中心，优化院内放药制剂调剂使用审批流程。",
-      "created_at": "2026-08-18 09:54:36",
-      "pushed_at": "2026-08-18 17:55:19",
-      "is_pushed": 1
-    },
-    {
-      "id": 148,
+      "id": 5,
       "fingerprint": "7b7f46aa231a3aebe8250fa530d1f4a5",
       "title": "四川省科学技术厅关于发布《2026年度重大新药创制与现代中药科技重大专项申报指南》的通知",
       "url": "https://kjt.sc.gov.cn/",
@@ -119,20 +67,7 @@
       "is_pushed": 1
     },
     {
-      "id": 105,
-      "fingerprint": "10bffe6d0c1b60907726ad77be61d727",
-      "title": "四川省科学技术厅关于发布《2026年度重大新药创制与现代中药科技重大专项申报指南》的通知",
-      "url": "https://kjt.sc.gov.cn/",
-      "source": "四川省科学技术厅",
-      "pub_date": "2026-08-12",
-      "category": "科技申报政策",
-      "summary": "【科技专项资助最高1000万】川科农〔2026〕62号：重点支持前沿生物药（ADC、双抗、mRNA）、小分子靶向创新药、现代中药大品种二次开发。设立揭榜挂帅项目，单个项目财政科技资金资助最高1000万元，牵头企业自筹配套比例不低于1:1。",
-      "created_at": "2026-08-18 09:50:01",
-      "pushed_at": "2026-08-18 17:50:34",
-      "is_pushed": 1
-    },
-    {
-      "id": 149,
+      "id": 6,
       "fingerprint": "0f10ecb5a9612617480cf920c6bc7fba",
       "title": "国家药品监督管理局医疗器械技术审评中心关于发布《侵入式与非侵入式脑机接口医疗器械注册审查指导原则》的通告",
       "url": "https://www.cmde.org.cn/",
@@ -145,20 +80,7 @@
       "is_pushed": 1
     },
     {
-      "id": 106,
-      "fingerprint": "c2dabef66e9ccfe4d4903607390a470f",
-      "title": "国家药品监督管理局医疗器械技术审评中心关于发布《侵入式与非侵入式脑机接口医疗器械注册审查指导原则》的通告",
-      "url": "https://www.nmpa.gov.cn/",
-      "source": "国家药监局器审中心",
-      "pub_date": "2026-08-11",
-      "category": "脑机接口",
-      "summary": "【注册监管标准明确】2026年第31号：对运动功能重建、神经调控、癫痫及意识障碍诊疗脑机接口医疗器械，系统规定电极生物相容性、无线神经信号解码算法稳定性及临床试验终点设计规范。",
-      "created_at": "2026-08-18 09:50:01",
-      "pushed_at": "2026-08-18 17:50:34",
-      "is_pushed": 1
-    },
-    {
-      "id": 150,
+      "id": 7,
       "fingerprint": "4e701334c885d0340606b1ad86da5de8",
       "title": "成都市经济和信息化局 成都市新经济发展委员会关于开展2026年生物医药产业建圈强链关键算力与AI制药平台资助申报的通知",
       "url": "https://cdjx.chengdu.gov.cn/",
@@ -171,20 +93,7 @@
       "is_pushed": 1
     },
     {
-      "id": 107,
-      "fingerprint": "f8a7a236b6e564b68ee0a4f713713431",
-      "title": "成都市经济和信息化局 成都市新经济发展委员会关于开展2026年生物医药产业建圈强链关键算力与AI制药平台资助申报的通知",
-      "url": "https://cdjx.chengdu.gov.cn/",
-      "source": "成都市经济和信息化局",
-      "pub_date": "2026-08-10",
-      "category": "AI制药",
-      "summary": "【算力券与平台补贴】对运用人工智能大模型、分子动力学模拟进行靶点发现与虚拟筛选的制药企业，按实际发生算力费用给予50%补助（单户最高200万元）；支持天府智能制药研发中心中试平台开放共享。",
-      "created_at": "2026-08-18 09:50:01",
-      "pushed_at": "2026-08-18 17:50:34",
-      "is_pushed": 1
-    },
-    {
-      "id": 151,
+      "id": 8,
       "fingerprint": "9d319721763a45d8bf80e0ad948cc013",
       "title": "国家医疗保障局关于印发《2026年国家基本医疗保险、工伤保险和生育保险药品目录调整工作方案》的公告",
       "url": "https://www.nhsa.gov.cn/",
@@ -197,20 +106,7 @@
       "is_pushed": 1
     },
     {
-      "id": 108,
-      "fingerprint": "e324ec05adb8db2bafbc6a5ac3cc6bf8",
-      "title": "国家医疗保障局关于印发《2026年国家基本医疗保险、工伤保险和生育保险药品目录调整工作方案》的公告",
-      "url": "https://www.nhsa.gov.cn/",
-      "source": "国家医疗保障局",
-      "pub_date": "2026-08-09",
-      "category": "医保政策",
-      "summary": "【国谈新规出炉】医保发〔2026〕22号：明确将更多重大疾病、罕见病前沿创新药纳入谈判范围；对具有高临床价值的儿童用药、同类首创（First-in-class）新药建立优先谈判机制，延续简易续约规则以稳定企业预期。",
-      "created_at": "2026-08-18 09:50:01",
-      "pushed_at": "2026-08-18 17:50:34",
-      "is_pushed": 1
-    },
-    {
-      "id": 152,
+      "id": 9,
       "fingerprint": "f68bd1dc8bf619df1aea25549a1ca58d",
       "title": "国家卫生健康委办公厅关于推进手术机器人与高端智能诊疗装备临床应用示范基地建设的通知",
       "url": "http://www.nhc.gov.cn/",
@@ -223,20 +119,7 @@
       "is_pushed": 0
     },
     {
-      "id": 109,
-      "fingerprint": "664469605a9f64cea4c2d6028faa0c1a",
-      "title": "国家卫生健康委办公厅关于推进手术机器人与高端智能诊疗装备临床应用示范基地建设的通知",
-      "url": "http://www.nhc.gov.cn/",
-      "source": "国家卫生健康委",
-      "pub_date": "2026-08-08",
-      "category": "医疗机器人",
-      "summary": "【临床示范与准入】国卫办医政发〔2026〕15号：支持国家区域医疗中心、大型公立三甲医院建立腹腔镜手术机器人、骨科导航机器人临床示范中心；优化手术机器人收费目录编码，加快物价立项与医保准入。",
-      "created_at": "2026-08-18 09:50:01",
-      "pushed_at": "2026-08-18 17:50:34",
-      "is_pushed": 1
-    },
-    {
-      "id": 153,
+      "id": 10,
       "fingerprint": "d000e6c71e4fea5e8dca2e407b184a6e",
       "title": "成都市科学技术局关于组织申报2026年成都市科技成果转化产学研医协同创新项目的通知",
       "url": "https://cdst.chengdu.gov.cn/",
@@ -249,20 +132,7 @@
       "is_pushed": 0
     },
     {
-      "id": 110,
-      "fingerprint": "fb2e19d8ab077480ba90bdc84110281a",
-      "title": "成都市科学技术局关于组织申报2026年成都市科技成果转化产学研医协同创新项目的通知",
-      "url": "https://cdst.chengdu.gov.cn/",
-      "source": "成都市科学技术局",
-      "pub_date": "2026-08-07",
-      "category": "科技申报政策",
-      "summary": "【产学研医资助最高300万】鼓励华西医院、四川大学、电子科大等高校院所与生物医药企业联合申报，围绕核医学、脑机接口、高端医疗器械开展成果就地转化，立项项目给予最高300万元前置经费资助。",
-      "created_at": "2026-08-18 09:50:01",
-      "pushed_at": "2026-08-18 17:50:34",
-      "is_pushed": 1
-    },
-    {
-      "id": 19,
+      "id": 11,
       "fingerprint": "6839d7b124b9edb8e28f824f8d593723",
       "title": "国务院关于印发《知识产权保护和运用“十五五”规划》的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -275,7 +145,7 @@
       "is_pushed": 1
     },
     {
-      "id": 1,
+      "id": 12,
       "fingerprint": "a64a13ddea24bbbaa389db7a71413d67",
       "title": "关于印发医疗卫生强基工程中医药行动方案的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -288,7 +158,7 @@
       "is_pushed": 1
     },
     {
-      "id": 2,
+      "id": 13,
       "fingerprint": "fe09f4f5e9be9cc4447ecf12b697d7ab",
       "title": "关于印发《中医药振兴发展“十五五”规划》的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -301,7 +171,7 @@
       "is_pushed": 1
     },
     {
-      "id": 3,
+      "id": 14,
       "fingerprint": "875d02c3cd928e6c3e9d5a7103bb5844",
       "title": "关于印发《林业草原保护利用“十五五”规划》的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -314,7 +184,7 @@
       "is_pushed": 1
     },
     {
-      "id": 4,
+      "id": 15,
       "fingerprint": "45ae01b05391aa7b13e3733f01195652",
       "title": "国家卫生健康委 国家中医药管理局 国家疾病预防控制局关于进一步做好公立医疗卫生机构医用设备集中采购工作的通知",
       "url": "http://www.nhc.gov.cn/",
@@ -327,7 +197,7 @@
       "is_pushed": 1
     },
     {
-      "id": 53,
+      "id": 16,
       "fingerprint": "e8992aaeecb7ccbe4ce533358a729bde",
       "title": "关于印发《康复辅助器具产业扩能提质三年行动方案（2026-2028年）》的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -340,7 +210,7 @@
       "is_pushed": 1
     },
     {
-      "id": 21,
+      "id": 17,
       "fingerprint": "02932c35b9af8a5ca036311ca37c5298",
       "title": "国务院关于印发《国民健康“十五五”规划》的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -353,7 +223,7 @@
       "is_pushed": 1
     },
     {
-      "id": 20,
+      "id": 18,
       "fingerprint": "c613a00096b7869bf1e1e247297c9ce5",
       "title": "国务院关于《扩大消费“十五五”规划》的批复",
       "url": "https://www.nmpa.gov.cn/",
@@ -366,7 +236,7 @@
       "is_pushed": 1
     },
     {
-      "id": 22,
+      "id": 19,
       "fingerprint": "659a4184085c0bd51bb79dd583f966f1",
       "title": "国务院关于《中医药振兴发展“十五五”规划》的批复",
       "url": "https://www.nmpa.gov.cn/",
@@ -379,7 +249,7 @@
       "is_pushed": 1
     },
     {
-      "id": 5,
+      "id": 20,
       "fingerprint": "adf6d3498ea39e1a76bb4bd3bb41fe79",
       "title": "关于印发国家基本药物目录（2026年版）的通知",
       "url": "http://www.nhc.gov.cn/",
@@ -392,7 +262,7 @@
       "is_pushed": 1
     },
     {
-      "id": 138,
+      "id": 21,
       "fingerprint": "08fe009a69b070304db7529bde5ca849",
       "title": "民政部关于印发《城乡三级养老服务网络建设管理指引》的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -405,7 +275,7 @@
       "is_pushed": 1
     },
     {
-      "id": 23,
+      "id": 22,
       "fingerprint": "db7b0b4a244b59545de9f04ac20b4d9b",
       "title": "国务院关于《疾病预防控制“十五五”规划》的批复",
       "url": "https://www.nmpa.gov.cn/",
@@ -418,7 +288,7 @@
       "is_pushed": 1
     },
     {
-      "id": 74,
+      "id": 23,
       "fingerprint": "9dbea02378b09968b79572951b6ddd2a",
       "title": "关于完善现代化都市圈综合交通运输体系的指导意见",
       "url": "https://www.nmpa.gov.cn/",
@@ -431,7 +301,7 @@
       "is_pushed": 1
     },
     {
-      "id": 35,
+      "id": 24,
       "fingerprint": "3ffc816062d7bd6ef080932bbb371aed",
       "title": "商务部 国家发展改革委 财政部关于印发《利用外资固稳促优行动方案》的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -444,7 +314,7 @@
       "is_pushed": 1
     },
     {
-      "id": 6,
+      "id": 25,
       "fingerprint": "6103a2c84f4136f7c8161aabddef7dae",
       "title": "人力资源社会保障部等4部门关于支持海洋经济发展促进就业创业的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -457,7 +327,7 @@
       "is_pushed": 1
     },
     {
-      "id": 75,
+      "id": 26,
       "fingerprint": "5017fc47fafbc3caa539977afdd22642",
       "title": "人力资源社会保障部 国家发展改革委 工业和信息化部 农业农村部关于实施创业模式引领行动的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -470,7 +340,7 @@
       "is_pushed": 1
     },
     {
-      "id": 7,
+      "id": 27,
       "fingerprint": "8751b28b82f8e3dcbe7ac6a9d3a20870",
       "title": "国家卫生健康委办公厅关于进一步健全城市社区卫生服务体系 提升服务能力的通知",
       "url": "http://www.nhc.gov.cn/",
@@ -483,7 +353,7 @@
       "is_pushed": 1
     },
     {
-      "id": 8,
+      "id": 28,
       "fingerprint": "5526a496379043a0776b72d5188e4c7d",
       "title": "关于加快海洋药物和功能制品高质量发展的指导意见",
       "url": "https://www.nmpa.gov.cn/",
@@ -496,7 +366,7 @@
       "is_pushed": 1
     },
     {
-      "id": 9,
+      "id": 29,
       "fingerprint": "dce95b3e4aabf67eeee39d616ba104fd",
       "title": "关于进一步发挥村（居）民委员会公共卫生委员会作用的指导意见",
       "url": "http://www.nhc.gov.cn/",
@@ -509,7 +379,7 @@
       "is_pushed": 1
     },
     {
-      "id": 10,
+      "id": 30,
       "fingerprint": "52ad60c827eff1602e62432cae257389",
       "title": "国家知识产权强国建设工作部际联席会议办公室关于印发《2026年知识产权强国建设推进计划》的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -522,7 +392,7 @@
       "is_pushed": 1
     },
     {
-      "id": 11,
+      "id": 31,
       "fingerprint": "ce9137bd3db051d666950250366a97b8",
       "title": "关于印发家庭病床服务指南（试行）的通知",
       "url": "http://www.nhc.gov.cn/",
@@ -535,7 +405,7 @@
       "is_pushed": 1
     },
     {
-      "id": 24,
+      "id": 32,
       "fingerprint": "148a2aa4870179c9a4e3e0762ac29187",
       "title": "国务院办公厅关于印发《国务院2026年度立法工作计划》的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -548,7 +418,7 @@
       "is_pushed": 1
     },
     {
-      "id": 12,
+      "id": 33,
       "fingerprint": "2b4983e02d70b2fdd7265f125f69ad3e",
       "title": "关于改革完善儿童用药供应保障机制的实施意见",
       "url": "https://www.nmpa.gov.cn/",
@@ -561,7 +431,7 @@
       "is_pushed": 1
     },
     {
-      "id": 36,
+      "id": 34,
       "fingerprint": "fb35ba2087f4fda151d27bed77a87b5d",
       "title": "关于推进互助性养老服务发展的意见",
       "url": "https://www.nmpa.gov.cn/",
@@ -574,7 +444,7 @@
       "is_pushed": 1
     },
     {
-      "id": 13,
+      "id": 35,
       "fingerprint": "1bda82625947ee8369d6818d4d4e7b96",
       "title": "商务部 市场监管总局关于印发《服务贸易标准化工作行动计划（2026—2030年）》的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -587,7 +457,7 @@
       "is_pushed": 1
     },
     {
-      "id": 25,
+      "id": 36,
       "fingerprint": "610682dbc712ef052e8e84018c701830",
       "title": "国务院办公厅转发海关总署《关于促进综合保税区扩能提质的若干措施》的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -600,7 +470,7 @@
       "is_pushed": 1
     },
     {
-      "id": 14,
+      "id": 37,
       "fingerprint": "80a5ee51f90f77d07914c02105a5783d",
       "title": "国家中医药局 国家卫生健康委关于印发《医院中药饮片管理规范（2026版）》的通知",
       "url": "http://www.nhc.gov.cn/",
@@ -613,7 +483,7 @@
       "is_pushed": 1
     },
     {
-      "id": 26,
+      "id": 38,
       "fingerprint": "1e760700a2c76bc6a162d0399832b0cf",
       "title": "国务院办公厅关于健全药品价格形成机制的若干意见",
       "url": "https://www.nmpa.gov.cn/",
@@ -626,7 +496,7 @@
       "is_pushed": 1
     },
     {
-      "id": 28,
+      "id": 39,
       "fingerprint": "f2defd164ecd4376435e73e4f50dce80",
       "title": "国务院关于印发《中国（内蒙古）自由贸易试验区总体方案》的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -639,7 +509,7 @@
       "is_pushed": 1
     },
     {
-      "id": 27,
+      "id": 40,
       "fingerprint": "297ef6692a39ce85291fc4fb54be5648",
       "title": "国务院办公厅印发《关于加快建设分级诊疗体系的若干措施》的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -652,7 +522,7 @@
       "is_pushed": 1
     },
     {
-      "id": 15,
+      "id": 41,
       "fingerprint": "96f1b0cce466ff5126b195937b768d7b",
       "title": "关于印发健全社会心理服务体系和危机干预机制实施方案的通知",
       "url": "http://www.nhc.gov.cn/",
@@ -665,7 +535,7 @@
       "is_pushed": 1
     },
     {
-      "id": 16,
+      "id": 42,
       "fingerprint": "82b5d4c58b190f81be5460a72e02e368",
       "title": "国家药监局关于“人工智能+药品监管”的实施意见",
       "url": "https://www.nmpa.gov.cn/",
@@ -678,7 +548,7 @@
       "is_pushed": 1
     },
     {
-      "id": 17,
+      "id": 43,
       "fingerprint": "81cc5c52c2bfbd39d23ecaa21ec585dc",
       "title": "关于开展基层医疗卫生机构医疗质量改善三年行动（2026—2028年）的通知",
       "url": "http://www.nhc.gov.cn/",
@@ -691,7 +561,7 @@
       "is_pushed": 1
     },
     {
-      "id": 18,
+      "id": 44,
       "fingerprint": "5837acbd829f305e8803175a590a520d",
       "title": "国家中医药管理局关于印发《三级中医医院评审标准（2026年版）》的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -704,7 +574,7 @@
       "is_pushed": 1
     },
     {
-      "id": 76,
+      "id": 45,
       "fingerprint": "bd03f116e25ac611341b1e10f1568bb7",
       "title": "国家医保局等八部门关于印发《加快建立长期护理保险制度实施方案》的通知",
       "url": "http://www.nhc.gov.cn/",
@@ -717,7 +587,7 @@
       "is_pushed": 1
     },
     {
-      "id": 37,
+      "id": 46,
       "fingerprint": "578562bf65eb37f76e7415e76289dd7d",
       "title": "关于印发乡镇卫生院 社区卫生服务中心中医药服务管理基本规范的通知",
       "url": "http://www.nhc.gov.cn/",
@@ -730,7 +600,7 @@
       "is_pushed": 1
     },
     {
-      "id": 38,
+      "id": 47,
       "fingerprint": "b014b12ed8fb2a1ffd53b36fafd2d2a4",
       "title": "商务部等9部门印发《关于促进旅行服务出口 扩大入境消费的政策措施》的通知",
       "url": "http://www.nhc.gov.cn/",
@@ -743,7 +613,7 @@
       "is_pushed": 1
     },
     {
-      "id": 54,
+      "id": 48,
       "fingerprint": "f073b4df348a3dbeb7d12be210ab6e84",
       "title": "科技部 金融监管总局 工业和信息化部 国家知识产权局印发《关于加快推动科技保险高质量发展 有力支撑高水平科技自立自强的若干意见》的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -756,7 +626,7 @@
       "is_pushed": 1
     },
     {
-      "id": 39,
+      "id": 49,
       "fingerprint": "f00264435e20656a853c5226e1e4d746",
       "title": "工业和信息化部等八部门关于印发《中药工业高质量发展实施方案（2026—2030年）》的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -769,7 +639,7 @@
       "is_pushed": 1
     },
     {
-      "id": 29,
+      "id": 50,
       "fingerprint": "2148ab67cf701a1a7b6a8a76b2fb908d",
       "title": "中华人民共和国药品管理法实施条例",
       "url": "https://www.nmpa.gov.cn/",
@@ -782,7 +652,7 @@
       "is_pushed": 1
     },
     {
-      "id": 77,
+      "id": 51,
       "fingerprint": "1b7be3ed31c97b8852b0e17d90fd3c22",
       "title": "教育部关于做好2026年普通高校招生工作的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -795,7 +665,7 @@
       "is_pushed": 1
     },
     {
-      "id": 72,
+      "id": 52,
       "fingerprint": "eb22b1d1a9c1a6f3356182c92a7ea9a3",
       "title": "商务部等9部门关于促进药品零售行业高质量发展的意见",
       "url": "https://www.nmpa.gov.cn/",
@@ -808,7 +678,7 @@
       "is_pushed": 1
     },
     {
-      "id": 40,
+      "id": 53,
       "fingerprint": "b623186768735f4bc84477344f1004cc",
       "title": "关于实施中小微企业贷款贴息政策的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -821,7 +691,7 @@
       "is_pushed": 1
     },
     {
-      "id": 73,
+      "id": 54,
       "fingerprint": "8000b17e10b39e1a13d1e477102a3cdb",
       "title": "中国气象局 民政部 文化和旅游部 国家医疗保障局 国家林业和草原局 国家中医药管理局 国家疾病预防控制局关于加强协同联动 推进康养气象服务高质量发展的指导意见",
       "url": "https://www.nmpa.gov.cn/",
@@ -847,7 +717,7 @@
       "is_pushed": 1
     },
     {
-      "id": 30,
+      "id": 56,
       "fingerprint": "049d65658960d9dd25de999f7acf7499",
       "title": "殡葬管理条例",
       "url": "https://www.nmpa.gov.cn/",
@@ -860,7 +730,7 @@
       "is_pushed": 1
     },
     {
-      "id": 56,
+      "id": 57,
       "fingerprint": "4e410cfd49d2a8cfba514088e03bb61f",
       "title": "国家发展改革委 财政部关于2026年实施大规模设备更新和消费品以旧换新政策的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -873,7 +743,7 @@
       "is_pushed": 1
     },
     {
-      "id": 41,
+      "id": 58,
       "fingerprint": "460b87699eefc8e445a72fa30938e2de",
       "title": "关于印发儿童青少年“五健”促进行动计划（2026—2030年）的通知",
       "url": "http://www.nhc.gov.cn/",
@@ -886,7 +756,7 @@
       "is_pushed": 1
     },
     {
-      "id": 78,
+      "id": 59,
       "fingerprint": "02ae41abcca8f329c09b09a715610728",
       "title": "国家金融监督管理总局办公厅关于印发《银行业保险业数字金融高质量发展实施方案》的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -899,7 +769,7 @@
       "is_pushed": 1
     },
     {
-      "id": 80,
+      "id": 60,
       "fingerprint": "cfea72e4b9f839fc3e554dd56f0209c4",
       "title": "海关总署关于印发《海关支持和服务横琴粤澳深度合作区建设新一轮措施》的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -912,7 +782,7 @@
       "is_pushed": 1
     },
     {
-      "id": 42,
+      "id": 61,
       "fingerprint": "d9c41888db3da414cb58082ad85981bf",
       "title": "关于加强基层医疗卫生机构特色科室建设的指导意见",
       "url": "http://www.nhc.gov.cn/",
@@ -925,7 +795,7 @@
       "is_pushed": 1
     },
     {
-      "id": 139,
+      "id": 62,
       "fingerprint": "bd704087209e4ada75b9c7a68ed062bf",
       "title": "关于印发老年护理服务能力提升行动方案的通知",
       "url": "http://www.nhc.gov.cn/",
@@ -938,7 +808,7 @@
       "is_pushed": 1
     },
     {
-      "id": 81,
+      "id": 63,
       "fingerprint": "f96ff46be8de65a36e8961a2b1cb09ed",
       "title": "国家医保局 人力资源社会保障部关于印发《国家基本医疗保险、生育保险和工伤保险药品目录》以及《商业健康保险创新药品目录》（2025年）的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -951,7 +821,7 @@
       "is_pushed": 1
     },
     {
-      "id": 140,
+      "id": 64,
       "fingerprint": "b23292af05e9deb354ad41b7aea3674c",
       "title": "国家中医药局 国家卫生健康委关于学习推广三明医改促进中医药传承创新发展经验做法的通知",
       "url": "http://www.nhc.gov.cn/",
@@ -964,7 +834,7 @@
       "is_pushed": 1
     },
     {
-      "id": 82,
+      "id": 65,
       "fingerprint": "74fec24c916963b4d81fb3aa3a3d35db",
       "title": "国家药监局关于优化境外生产药品补充申请审评审批程序试点工作的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -977,7 +847,7 @@
       "is_pushed": 1
     },
     {
-      "id": 31,
+      "id": 66,
       "fingerprint": "d326b2ffe0991473b579c0c239a5e53b",
       "title": "国务院办公厅关于加快场景培育和开放推动新场景大规模应用的实施意见",
       "url": "https://www.nmpa.gov.cn/",
@@ -990,7 +860,7 @@
       "is_pushed": 1
     },
     {
-      "id": 43,
+      "id": 67,
       "fingerprint": "79bcc8de0de6bd905ee390d17b8e4594",
       "title": "关于促进和规范“人工智能+医疗卫生”应用发展的实施意见",
       "url": "http://www.nhc.gov.cn/",
@@ -1003,7 +873,7 @@
       "is_pushed": 1
     },
     {
-      "id": 44,
+      "id": 68,
       "fingerprint": "313e2f0610f3cb2638fb2aa58f8e63f6",
       "title": "关于将人乳头瘤病毒疫苗纳入国家免疫规划有关工作事宜的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -1016,7 +886,7 @@
       "is_pushed": 1
     },
     {
-      "id": 141,
+      "id": 69,
       "fingerprint": "e8f178e137cde8e6337b0008bdb409b0",
       "title": "关于加强基层慢性病健康管理服务的指导意见",
       "url": "http://www.nhc.gov.cn/",
@@ -1029,7 +899,7 @@
       "is_pushed": 1
     },
     {
-      "id": 32,
+      "id": 70,
       "fingerprint": "b6da3b8b2049b9c1bbb675d11ba42752",
       "title": "生物医学新技术临床研究和临床转化应用管理条例",
       "url": "https://www.nmpa.gov.cn/",
@@ -1042,7 +912,7 @@
       "is_pushed": 1
     },
     {
-      "id": 45,
+      "id": 71,
       "fingerprint": "f5db993e054c7c3c67cbf760ecc9a91d",
       "title": "国家金融监督管理总局关于推动健康保险高质量发展的指导意见",
       "url": "https://www.nmpa.gov.cn/",
@@ -1055,7 +925,7 @@
       "is_pushed": 1
     },
     {
-      "id": 57,
+      "id": 72,
       "fingerprint": "457d94fcf0f74121f58e8bc12ccd917d",
       "title": "商务部等8部门关于大力发展数字消费共创数字时代美好生活的指导意见",
       "url": "https://www.nmpa.gov.cn/",
@@ -1068,7 +938,7 @@
       "is_pushed": 1
     },
     {
-      "id": 79,
+      "id": 73,
       "fingerprint": "a560b6d67cfe8f61072ae1fe83d3dd19",
       "title": "体育总局关于印发《关于推动运动促进健康事业高质量发展的指导意见》的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -1081,7 +951,7 @@
       "is_pushed": 1
     },
     {
-      "id": 46,
+      "id": 74,
       "fingerprint": "de8637a22f988cb19185d4a917a8b94a",
       "title": "商务部等9部门关于加力推动城市一刻钟便民生活圈建设扩围升级的通知",
       "url": "http://www.nhc.gov.cn/",
@@ -1094,7 +964,7 @@
       "is_pushed": 1
     },
     {
-      "id": 33,
+      "id": 75,
       "fingerprint": "94b738ce117c74df72c46f90a699b928",
       "title": "国务院关于《医疗卫生强基工程实施方案》的批复",
       "url": "https://www.nmpa.gov.cn/",
@@ -1107,7 +977,7 @@
       "is_pushed": 1
     },
     {
-      "id": 34,
+      "id": 76,
       "fingerprint": "0604b6c12747ffc316d4e2d6e2bcd243",
       "title": "国务院关于《中国（江苏）自由贸易试验区生物医药全产业链开放创新发展方案》的批复",
       "url": "https://www.nmpa.gov.cn/",
@@ -1120,7 +990,7 @@
       "is_pushed": 1
     },
     {
-      "id": 47,
+      "id": 77,
       "fingerprint": "460bbc258c3fce3a26a8636e304012b2",
       "title": "市场监管总局 国家卫生健康委 国家中医药局关于发布《医疗广告认定指南》的公告",
       "url": "http://www.nhc.gov.cn/",
@@ -1133,7 +1003,7 @@
       "is_pushed": 1
     },
     {
-      "id": 83,
+      "id": 78,
       "fingerprint": "63a923423b714c8ed5d69d356b62157e",
       "title": "司法部办公厅 国家发展改革委办公厅 全国工商联办公厅印发《关于进一步发挥行政复议监督职能 规范涉企行政执法的指导意见》《行政复议监督规范涉企行政执法典型案例》的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -1146,7 +1016,7 @@
       "is_pushed": 1
     },
     {
-      "id": 58,
+      "id": 79,
       "fingerprint": "ba1c77418f00922925b2e4958585f193",
       "title": "七部门关于推动脑机接口产业创新发展的实施意见",
       "url": "https://www.nmpa.gov.cn/",
@@ -1159,7 +1029,7 @@
       "is_pushed": 1
     },
     {
-      "id": 48,
+      "id": 80,
       "fingerprint": "82dc5633d537be3904d1970c3205bce2",
       "title": "关于印发《健康中国行动—健康环境促进行动实施方案（2025—2030年）》的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -1172,7 +1042,7 @@
       "is_pushed": 1
     },
     {
-      "id": 49,
+      "id": 81,
       "fingerprint": "3cc249b66134975a8f0d486df6ffeba2",
       "title": "人力资源社会保障部等九部门关于扩大新就业形态人员职业伤害保障试点的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -1185,7 +1055,7 @@
       "is_pushed": 0
     },
     {
-      "id": 50,
+      "id": 82,
       "fingerprint": "58c027a860f6fcb281675a53cc8a2b3a",
       "title": "关于全面推进分娩镇痛工作的通知",
       "url": "http://www.nhc.gov.cn/",
@@ -1198,7 +1068,7 @@
       "is_pushed": 0
     },
     {
-      "id": 51,
+      "id": 83,
       "fingerprint": "ff34bac9dc7212347704aa2de9f0af88",
       "title": "关于优化基层医疗卫生机构布局建设的指导意见",
       "url": "http://www.nhc.gov.cn/",
@@ -1211,7 +1081,7 @@
       "is_pushed": 0
     },
     {
-      "id": 52,
+      "id": 84,
       "fingerprint": "feddb2ba74dd214d0d47dd003eff2be7",
       "title": "工业和信息化部等七部门关于印发《医药工业数智化转型实施方案（2025—2030年）》的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -1224,7 +1094,7 @@
       "is_pushed": 0
     },
     {
-      "id": 127,
+      "id": 85,
       "fingerprint": "932212d4d3d2f2b59567bc4a674912de",
       "title": "关于印发《安全生产责任保险实施办法》的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -1237,7 +1107,7 @@
       "is_pushed": 0
     },
     {
-      "id": 84,
+      "id": 86,
       "fingerprint": "7a9db323e049d483b00f5606599407be",
       "title": "农业农村部落实中共中央国务院关于进一步深化农村改革扎实推进乡村全面振兴工作部署的实施意见",
       "url": "https://www.nmpa.gov.cn/",
@@ -1250,7 +1120,7 @@
       "is_pushed": 0
     },
     {
-      "id": 60,
+      "id": 87,
       "fingerprint": "5eb7f9af3d1c465ad6623e5d6d2aed67",
       "title": "国家卫生健康委办公厅关于印发婴幼儿早期发展服务指南（试行）的通知",
       "url": "http://www.nhc.gov.cn/",
@@ -1263,7 +1133,7 @@
       "is_pushed": 0
     },
     {
-      "id": 59,
+      "id": 88,
       "fingerprint": "2efe9df64de410de0f214c4c831d1423",
       "title": "国家卫生健康委办公厅关于印发婴幼儿营养喂养评估服务指南（试行）的通知",
       "url": "http://www.nhc.gov.cn/",
@@ -1276,7 +1146,7 @@
       "is_pushed": 0
     },
     {
-      "id": 111,
+      "id": 89,
       "fingerprint": "e7c1bf4508729ba7dbfe0eec9a134109",
       "title": "国家药监局综合司关于做好有关改革试点经验推广落实工作的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -1289,7 +1159,7 @@
       "is_pushed": 0
     },
     {
-      "id": 61,
+      "id": 90,
       "fingerprint": "b94679cea698f854f2c3a1adf1006e55",
       "title": "关于2025年加力扩围实施大规模设备更新和消费品以旧换新政策的通知",
       "url": "https://www.nmpa.gov.cn/",
@@ -1302,7 +1172,7 @@
       "is_pushed": 0
     },
     {
-      "id": 62,
+      "id": 91,
       "fingerprint": "4342dda4f95b0affd0b88c3a6e800e07",
       "title": "国家卫生健康委等15个部门关于联合印发《应对老年期痴呆国家行动计划（2024—2030年）》的通知",
       "url": "http://www.nhc.gov.cn/",
@@ -1315,5 +1185,6 @@
       "is_pushed": 0
     }
   ],
-  "count": 101
+  "count": 101,
+  "total": 91
 }

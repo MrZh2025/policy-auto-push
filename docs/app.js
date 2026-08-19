@@ -283,6 +283,11 @@ function bindEvents() {
         }
     });
 
+    // 头部全网政策实时检索更新按钮
+    if (el.btnScrape) {
+        el.btnScrape.addEventListener('click', handleScrapeNow);
+    }
+
     // 四川生物医药周回顾一键生成与导出 Word
     if (el.btnGenWeekly) el.btnGenWeekly.addEventListener('click', generateSichuanWeeklyReport);
     if (el.btnExportWeeklyDoc) el.btnExportWeeklyDoc.addEventListener('click', handleExportWeeklyWord);
@@ -1038,6 +1043,37 @@ function isThisWeekPolicy(p) {
     return diffDays >= -0.5 && diffDays <= 7;
 }
 
+// 前端强力指纹去重机制 (清洗标题与发布日期，确保同一天、同名政策绝对 0 重复)
+function deduplicatePoliciesList(list) {
+    if (!Array.isArray(list)) return [];
+    const seen = new Set();
+    const result = [];
+
+    list.forEach(item => {
+        if (!item || !item.title) return;
+        // 清洗标题标点、序号与空格
+        const cleanTitle = String(item.title)
+            .replace(/^\d+[\.、\s]+/, '')
+            .replace(/[《》\(\)（）\s\-_—]/g, '')
+            .toLowerCase();
+        const pubDate = String(item.pub_date || '').trim();
+
+        // 唯一指纹：清洗后标题 + 发布日期
+        const fingerPrint = `${cleanTitle}_${pubDate}`;
+        if (!seen.has(fingerPrint)) {
+            seen.add(fingerPrint);
+            result.push(item);
+        }
+    });
+
+    // 重新连续编排 ID
+    result.forEach((p, idx) => {
+        p.id = idx + 1;
+    });
+
+    return result;
+}
+
 // 统一数据加载（兼顾本地 API 与 GitHub Pages 静态模式）
 async function loadData() {
     el.policyList.innerHTML = '<div class="loading-state">正在调取国家及省局官方政策库...</div>';
@@ -1068,7 +1104,8 @@ async function loadData() {
         }
     }
 
-    state.allPolicies = policiesData;
+    // 严格执行前端指纹去重
+    state.allPolicies = deduplicatePoliciesList(policiesData);
 
     // 加载统计
     try {
