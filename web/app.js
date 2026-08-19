@@ -1131,30 +1131,51 @@ async function loadData() {
 }
 
 function updateStatsDisplay(statsData) {
-    // 统计本周更新
+    // 统计本周更新与总数
     const weekPolicies = state.allPolicies.filter(isThisWeekPolicy);
     const weekTotal = weekPolicies.length;
     const allTotal = state.allPolicies.length;
 
+    // 统计各大赛道【本周最新更新】数量
+    const trackWeekCounts = {
+        '核医药': 0,
+        '脑机接口': 0,
+        'AI制药': 0,
+        '医疗机器人': 0,
+        '合成生物': 0,
+        '科技申报政策': 0,
+        '医保政策': 0
+    };
+    weekPolicies.forEach(p => {
+        const cat = p.category || '科技申报政策';
+        if (trackWeekCounts.hasOwnProperty(cat)) {
+            trackWeekCounts[cat]++;
+        } else {
+            trackWeekCounts['科技申报政策'] = (trackWeekCounts['科技申报政策'] || 0) + 1;
+        }
+    });
+
+    // 5 大重点产业赛道总和 (严格保证产业下拉菜单内子项之和 100% 严丝合缝)
+    const industryWeekTotal = 
+        trackWeekCounts['核医药'] + 
+        trackWeekCounts['脑机接口'] + 
+        trackWeekCounts['AI制药'] + 
+        trackWeekCounts['医疗机器人'] + 
+        trackWeekCounts['合成生物'];
+
     if (el.statsBadge) {
-        el.statsBadge.textContent = `系统已就绪 · 本周新增 ${weekTotal} 篇（近两年政策库累计 ${allTotal} 篇）`;
+        el.statsBadge.textContent = `系统已就绪 · 本周新增 ${weekTotal} 篇（重点产业赛道 ${industryWeekTotal} 篇 · 科技与申报 ${weekTotal - industryWeekTotal} 篇）`;
     }
 
-    // 导航栏第一项：本周全部更新数量
+    // 重点产业赛道下拉菜单项：【全景赛道总览 (全部)】必须严格等于 5 大产业赛道子项之和！
     const countAll = document.getElementById('count-all');
     if (countAll) {
-        countAll.textContent = weekTotal;
-        if (weekTotal === 0) countAll.classList.add('badge-zero');
+        countAll.textContent = industryWeekTotal;
+        if (industryWeekTotal === 0) countAll.classList.add('badge-zero');
         else countAll.classList.remove('badge-zero');
     }
 
-    // 统计各大赛道【本周最新更新】数量
-    const trackWeekCounts = {};
-    weekPolicies.forEach(p => {
-        const cat = p.category || '科技申报政策';
-        trackWeekCounts[cat] = (trackWeekCounts[cat] || 0) + 1;
-    });
-
+    // 逐一更新各赛道徽标
     const tracks = ['核医药', '脑机接口', 'AI制药', '医疗机器人', '合成生物', '医保政策', '科技申报政策'];
     tracks.forEach(tr => {
         const badge = document.getElementById(`count-${tr}`);
