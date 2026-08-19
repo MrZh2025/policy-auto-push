@@ -114,6 +114,10 @@ class PolicyWebHandler(http.server.SimpleHTTPRequestHandler):
             self.handle_get_stats()
         elif path == "/api/visitor-stats":
             self.handle_get_visitor_stats()
+        elif path == "/api/bci-enterprises":
+            self.handle_get_bci_enterprises()
+        elif path == "/api/bci-experts":
+            self.handle_get_bci_experts()
         elif path == "/api/config":
             self.handle_get_config()
         else:
@@ -219,6 +223,26 @@ class PolicyWebHandler(http.server.SimpleHTTPRequestHandler):
             "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         }
         self._json_response({"code": 0, "msg": "访问记录成功", "data": visitor_stats})
+
+    def handle_get_bci_enterprises(self):
+        """获取脑机接口全国企业投资地图数据"""
+        json_path = os.path.join(WEB_DIR, "data", "bci_enterprises.json")
+        try:
+            with open(json_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            self._json_response(data)
+        except Exception as e:
+            self._json_response({"code": -1, "msg": str(e)}, status=500)
+
+    def handle_get_bci_experts(self):
+        """获取脑机接口全国专家智库地图数据"""
+        json_path = os.path.join(WEB_DIR, "data", "bci_experts.json")
+        try:
+            with open(json_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            self._json_response(data)
+        except Exception as e:
+            self._json_response({"code": -1, "msg": str(e)}, status=500)
 
     def handle_get_config(self):
         self._json_response({

@@ -44,6 +44,10 @@
 
             <!-- 右侧顶部显眼操作工具栏 -->
             <div class="nmpa-header-actions">
+                <button class="action-btn action-bci-map" id="btnOpenBciMap" title="打开全国脑机接口企业投资标的库(173家)与专家智库地图(85位)">
+                    <span class="btn-i">🧠</span>
+                    <span>脑机产业地图</span>
+                </button>
                 <button class="action-btn action-analytics" id="btnOpenAnalytics" title="打开系统访问热度、地域分布与时段趋势可视化大屏">
                     <span class="btn-i">📊</span>
                     <span>访问统计大屏</span>
@@ -516,6 +520,173 @@
         </div>
     </div>
 
+    <!-- 脑机接口企业投资与专家智库地图 - 全屏级产业大屏模态弹窗 -->
+    <div id="bciMapModal" class="nmpa-modal-backdrop hidden">
+        <div class="nmpa-modal-card bci-modal-card">
+            <!-- 头部标题与控制区 -->
+            <div class="modal-header bci-header">
+                <div class="modal-title-wrap">
+                    <span class="modal-badge-icon" style="background:#4f46e5;">🧠</span>
+                    <div>
+                        <h3 class="modal-title">中国脑机接口前沿产业智库与企业投资全景地图</h3>
+                        <span class="modal-subtitle">全国 173 家核心企业标的 · 85 位领军科学家智库 · 四川重点产业布局全览</span>
+                    </div>
+                </div>
+                <div class="bci-header-right">
+                    <div class="bci-badge-sichuan" title="四川省在全国脑机接口企业分布中位列全国第6、中西部第1">
+                        ⭐ 四川重点: 11家标的 (中西部第一)
+                    </div>
+                    <button class="modal-close-btn" id="modalBciCloseBtn" title="关闭大屏">×</button>
+                </div>
+            </div>
+
+            <!-- 顶部 4 大 KPI 卡片 -->
+            <div class="bci-kpi-bar">
+                <div class="bci-kpi-item">
+                    <span class="bci-kpi-label">全国脑机核心企业</span>
+                    <strong class="bci-kpi-num" id="bciKpiTotalEnt">173 <small>家</small></strong>
+                </div>
+                <div class="bci-kpi-item">
+                    <span class="bci-kpi-label">全国领军专家学者</span>
+                    <strong class="bci-kpi-num" id="bciKpiTotalExp">85 <small>位</small></strong>
+                </div>
+                <div class="bci-kpi-item highlight-sc">
+                    <span class="bci-kpi-label">四川本土重点标的</span>
+                    <strong class="bci-kpi-num" id="bciKpiScEnt">11 <small>家 (成都)</small></strong>
+                </div>
+                <div class="bci-kpi-item">
+                    <span class="bci-kpi-label">四川标的半年融资</span>
+                    <strong class="bci-kpi-num" style="color:#059669;">5.7 <small>亿元 (格式塔超声)</small></strong>
+                </div>
+                <div class="bci-kpi-item">
+                    <span class="bci-kpi-label">核心覆盖技术流派</span>
+                    <strong class="bci-kpi-num" style="color:#4f46e5;">5 <small>大前沿路线</small></strong>
+                </div>
+            </div>
+
+            <!-- 3 大核心视图 Tab 导航条 -->
+            <div class="bci-tab-nav-bar">
+                <div class="bci-tabs">
+                    <button class="bci-tab-btn active" data-bci-tab="enterprises" id="tabBciEnterprises">
+                        🏢 企业投资地图 (<span id="bciEntCountBadge">173</span>)
+                    </button>
+                    <button class="bci-tab-btn" data-bci-tab="experts" id="tabBciExperts">
+                        👨‍🔬 专家智库地图 (<span id="bciExpCountBadge">85</span>)
+                    </button>
+                    <button class="bci-tab-btn" data-bci-tab="charts" id="tabBciCharts">
+                        📊 产业生态可视化图表
+                    </button>
+                </div>
+                <!-- 搜索框 -->
+                <div class="bci-search-box">
+                    <input type="text" id="bciSearchInput" placeholder="搜索企业/专家/技术路线/产品/投资人...">
+                    <button id="btnBciSearch" class="btn-bci-search">搜索</button>
+                </div>
+            </div>
+
+            <!-- Tab 1: 企业投资地图内容区 -->
+            <div class="bci-tab-content active" id="bciContentEnterprises">
+                <!-- 过滤条件胶囊条 -->
+                <div class="bci-filter-pills-row">
+                    <span class="filter-label">📍 区域分布:</span>
+                    <div class="filter-pills" id="bciProvincePills">
+                        <button class="pill-btn active" data-prov="all">全部 (173)</button>
+                        <button class="pill-btn highlight-sc-pill" data-prov="四川省">⭐ 四川重点 (11)</button>
+                        <button class="pill-btn" data-prov="江苏省">江苏 (32)</button>
+                        <button class="pill-btn" data-prov="浙江省">浙江 (27)</button>
+                        <button class="pill-btn" data-prov="上海市">上海 (26)</button>
+                        <button class="pill-btn" data-prov="北京市">北京 (20)</button>
+                        <button class="pill-btn" data-prov="广东省">广东 (20)</button>
+                        <button class="pill-btn" data-prov="天津市">天津 (7)</button>
+                        <button class="pill-btn" data-prov="湖北省">湖北 (6)</button>
+                    </div>
+                </div>
+
+                <div class="bci-filter-pills-row" style="margin-top:4px;">
+                    <span class="filter-label">⚡ 技术路径:</span>
+                    <div class="filter-pills" id="bciTechPills">
+                        <button class="pill-btn active" data-tech="all">全部技术</button>
+                        <button class="pill-btn" data-tech="超声">超声脑机接口</button>
+                        <button class="pill-btn" data-tech="侵入">侵入/半侵入式</button>
+                        <button class="pill-btn" data-tech="非侵入">非侵入/消费级</button>
+                        <button class="pill-btn" data-tech="光学">光学成像 (fNIRS)</button>
+                        <button class="pill-btn" data-tech="闭环">闭环神经调控</button>
+                    </div>
+                </div>
+
+                <!-- 企业卡片网格列表 -->
+                <div class="bci-cards-grid" id="bciEnterpriseList">
+                    <div class="loading-state">正在调取全国脑机接口企业数据库...</div>
+                </div>
+            </div>
+
+            <!-- Tab 2: 专家智库地图内容区 -->
+            <div class="bci-tab-content" id="bciContentExperts" style="display:none;">
+                <!-- 专家类型胶囊条 -->
+                <div class="bci-filter-pills-row">
+                    <span class="filter-label">🎓 专家分类:</span>
+                    <div class="filter-pills" id="bciExpertTypePills">
+                        <button class="pill-btn active" data-exptype="all">全部类型 (85)</button>
+                        <button class="pill-btn" data-exptype="学术/产业">学术/产业转化 (21)</button>
+                        <button class="pill-btn" data-exptype="学术">前沿基础研发 (30)</button>
+                        <button class="pill-btn" data-exptype="产业">产业领军带头人 (12)</button>
+                        <button class="pill-btn" data-exptype="临床">临床试验与三甲 (6)</button>
+                        <button class="pill-btn" data-exptype="标准">国家标准与药监审评 (16)</button>
+                        <button class="pill-btn highlight-sc-pill" data-expprov="四川省">⭐ 四川专家 (3)</button>
+                    </div>
+                </div>
+
+                <!-- 专家卡片网格列表 -->
+                <div class="bci-cards-grid" id="bciExpertList">
+                    <div class="loading-state">正在调取全国脑机接口专家智库数据...</div>
+                </div>
+            </div>
+
+            <!-- Tab 3: 产业生态可视化 ECharts 图表区 -->
+            <div class="bci-tab-content" id="bciContentCharts" style="display:none;">
+                <div class="bci-charts-layout">
+                    <div class="bci-chart-box">
+                        <div class="chart-panel-header">
+                            <span class="chart-title">📊 全国各省市脑机接口企业与智库专家分布</span>
+                            <span class="chart-subtitle">四川省位列全国第6位、中西部第1位</span>
+                        </div>
+                        <div id="chartBciProvinceDist" class="bci-echarts-box"></div>
+                    </div>
+                    <div class="bci-chart-box">
+                        <div class="chart-panel-header">
+                            <span class="chart-title">🍩 核心技术路线分布构成 (全国标的)</span>
+                            <span class="chart-subtitle">超声/侵入/非侵入/光学多流派共存</span>
+                        </div>
+                        <div id="chartBciTechPie" class="bci-echarts-box"></div>
+                    </div>
+                </div>
+
+                <!-- 四川本土生态全景特别专栏 -->
+                <div class="bci-sichuan-ecosystem-box">
+                    <h4 style="margin:0 0 8px 0; color:#004886; font-size:13.5px; display:flex; align-items:center; gap:6px;">
+                        <span>🏛️</span>
+                        <span>四川省脑机接口产业链生态结构研判 (电子科大/华西医院/成都高新区)</span>
+                    </h4>
+                    <div class="sc-eco-grid">
+                        <div class="sc-eco-card">
+                            <div class="sc-eco-title">💡 独角兽代表：格式塔 (Gestala)</div>
+                            <div class="sc-eco-desc">国内极稀缺的<strong>全脑超声读写</strong>路线，半年融资超 5.7 亿元，处于临床前至 NMPA 注册筹备期。</div>
+                        </div>
+                        <div class="sc-eco-card">
+                            <div class="sc-eco-title">🎓 高校转化：电子科大/芯脑科技</div>
+                            <div class="sc-eco-desc">尧德中院士、徐鹏教授团队依托<strong>前沿类脑创新中心</strong>与芯脑科技，深耕孤独症脑网络标志物与非侵入式脑干预。</div>
+                        </div>
+                        <div class="sc-eco-card">
+                            <div class="sc-eco-title">🏥 医工结合：四川新源 / 华西临床</div>
+                            <div class="sc-eco-desc">与四川大学华西医院紧密合作，推进脑电/生物信号监测设备研发与临床科研商业化。</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
     <!-- 弹窗通知 -->
     <div id="toast" class="nmpa-toast hidden"></div>
 
@@ -523,6 +694,6 @@
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     <!-- 原生 OpenXML docx 生成库 -->
     <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
-    <script src="app.js?v=20260818v35"></script>
+    <script src="app.js?v=20260818v36"></script>
 </body>
 </html>

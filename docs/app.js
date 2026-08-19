@@ -104,6 +104,25 @@ const el = {
     chartRegionRose: document.getElementById('chartRegionRose'),
     chartDeviceRatio: document.getElementById('chartDeviceRatio'),
     modalVisitsStream: document.getElementById('modalVisitsStream'),
+    // 脑机接口产业智库与企业投资地图大屏元素
+    btnOpenBciMap: document.getElementById('btnOpenBciMap'),
+    bciMapModal: document.getElementById('bciMapModal'),
+    modalBciCloseBtn: document.getElementById('modalBciCloseBtn'),
+    tabBciEnterprises: document.getElementById('tabBciEnterprises'),
+    tabBciExperts: document.getElementById('tabBciExperts'),
+    tabBciCharts: document.getElementById('tabBciCharts'),
+    bciSearchInput: document.getElementById('bciSearchInput'),
+    btnBciSearch: document.getElementById('btnBciSearch'),
+    bciContentEnterprises: document.getElementById('bciContentEnterprises'),
+    bciContentExperts: document.getElementById('bciContentExperts'),
+    bciContentCharts: document.getElementById('bciContentCharts'),
+    bciEnterpriseList: document.getElementById('bciEnterpriseList'),
+    bciExpertList: document.getElementById('bciExpertList'),
+    bciProvincePills: document.getElementById('bciProvincePills'),
+    bciTechPills: document.getElementById('bciTechPills'),
+    bciExpertTypePills: document.getElementById('bciExpertTypePills'),
+    chartBciProvinceDist: document.getElementById('chartBciProvinceDist'),
+    chartBciTechPie: document.getElementById('chartBciTechPie'),
 };
 
 // 初始化
@@ -114,6 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initApiKeyForm();
     loadData();
     initVisitorAnalytics(); // 初始化访客统计打点与渲染
+    initBciMap(); // 初始化脑机接口产业智库地图
     bindEvents();
 });
 
@@ -354,6 +374,9 @@ function bindEvents() {
             if (el.visitorAnalyticsModal && !el.visitorAnalyticsModal.classList.contains('hidden')) {
                 closeVisitorAnalyticsModal();
             }
+            if (el.bciMapModal && !el.bciMapModal.classList.contains('hidden')) {
+                closeBciModal();
+            }
         }
     });
 
@@ -385,9 +408,48 @@ function bindEvents() {
         });
     }
 
+    // 脑机接口产业智库地图大屏事件绑定
+    if (el.btnOpenBciMap) {
+        el.btnOpenBciMap.addEventListener('click', openBciModal);
+    }
+    if (el.modalBciCloseBtn) {
+        el.modalBciCloseBtn.addEventListener('click', closeBciModal);
+    }
+    if (el.bciMapModal) {
+        el.bciMapModal.addEventListener('click', (e) => {
+            if (e.target === el.bciMapModal) closeBciModal();
+        });
+    }
+
+    // 脑机大屏 Tab 切换
+    if (el.tabBciEnterprises) el.tabBciEnterprises.addEventListener('click', () => switchBciTab('enterprises'));
+    if (el.tabBciExperts) el.tabBciExperts.addEventListener('click', () => switchBciTab('experts'));
+    if (el.tabBciCharts) el.tabBciCharts.addEventListener('click', () => switchBciTab('charts'));
+
+    // 脑机大屏即时搜索
+    if (el.btnBciSearch) {
+        el.btnBciSearch.addEventListener('click', () => {
+            bciSearchQuery = (el.bciSearchInput ? el.bciSearchInput.value : '').trim().toLowerCase();
+            applyBciFilters();
+        });
+    }
+    if (el.bciSearchInput) {
+        el.bciSearchInput.addEventListener('input', () => {
+            bciSearchQuery = (el.bciSearchInput.value || '').trim().toLowerCase();
+            applyBciFilters();
+        });
+        el.bciSearchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                bciSearchQuery = (el.bciSearchInput.value || '').trim().toLowerCase();
+                applyBciFilters();
+            }
+        });
+    }
+
     // 窗口尺寸变化自适应图表
     window.addEventListener('resize', () => {
         resizeAllEcharts();
+        resizeBciCharts();
     });
 }
 
@@ -1042,16 +1104,21 @@ function filterAndRenderPolicies() {
 
     if (badge) badge.textContent = `${trackName} · ${timeLabel}`;
     if (banner) {
+        let bciLink = '';
+        if (state.currentTrack === '脑机接口' || state.currentTrack.includes('脑机')) {
+            bciLink = ` <button onclick="openBciModal()" style="background:#4f46e5;color:#fff;border:none;border-radius:3px;padding:2px 8px;font-size:11px;font-weight:700;cursor:pointer;margin-left:6px;">🧠 查看全国脑机企业(173家)与专家(85位)智库大屏 ➔</button>`;
+        }
+
         if (state.timeRange === 'week') {
             if (timeFilteredList.length > 0) {
-                banner.innerHTML = `<span>📌 严格按当前日期筛选：<strong>本周共有 ${timeFilteredList.length} 篇最新政策更新</strong>，其余在期政策可点击 <strong>[近两年政策库]</strong> 查阅。</span>`;
+                banner.innerHTML = `<span>📌 严格按当前日期筛选：<strong>本周共有 ${timeFilteredList.length} 篇最新政策更新</strong>，其余在期政策可点击 <strong>[近两年政策库]</strong> 查阅。${bciLink}</span>`;
             } else {
-                banner.innerHTML = `<span>📌 严格按当前日期筛选：<strong>本周暂未监测到新增官方政策发布</strong>，您可以点击 <strong>[近两年政策库]</strong> 查阅以往在库文件。</span>`;
+                banner.innerHTML = `<span>📌 严格按当前日期筛选：<strong>本周暂未监测到新增官方政策发布</strong>，您可以点击 <strong>[近两年政策库]</strong> 查阅以往在库文件。${bciLink}</span>`;
             }
         } else if (state.timeRange === 'month') {
-            banner.innerHTML = `<span>📅 严格按当前日期筛选：<strong>近 30 天共有 ${timeFilteredList.length} 篇政策文件</strong>。</span>`;
+            banner.innerHTML = `<span>📅 严格按当前日期筛选：<strong>近 30 天共有 ${timeFilteredList.length} 篇政策文件</strong>。${bciLink}</span>`;
         } else {
-            banner.innerHTML = `<span>📚 当前呈现 <strong>近两年政策库</strong>（共收录 <strong>${timeFilteredList.length}</strong> 篇近两年有效政策，超期陈旧文件已自动淘汰清理）。</span>`;
+            banner.innerHTML = `<span>📚 当前呈现 <strong>近两年政策库</strong>（共收录 <strong>${timeFilteredList.length}</strong> 篇近两年有效政策，超期陈旧文件已自动淘汰清理）。${bciLink}</span>`;
         }
     }
 
@@ -2468,3 +2535,521 @@ function showToast(msg) {
         el.toast.classList.add('hidden');
     }, 4000);
 }
+
+// ==========================================
+// 🧠 脑机接口产业智库与企业投资地图模块 (BCI Map Engine)
+// ==========================================
+
+let bciEnterprisesData = [];
+let bciExpertsData = [];
+let bciActiveTab = 'enterprises';
+let bciFilterProvince = 'all';
+let bciFilterTech = 'all';
+let bciFilterExpertType = 'all';
+let bciFilterExpertProv = 'all';
+let bciSearchQuery = '';
+let chartBciProvInstance = null;
+let chartBciTechInstance = null;
+
+async function initBciMap() {
+    bindBciFilterPills();
+    await loadBciData();
+}
+
+async function loadBciData() {
+    // 1. 加载企业数据 (173家)
+    try {
+        const resp = await fetch('/api/bci-enterprises');
+        if (resp.ok) {
+            const res = await resp.json();
+            if (res.data && Array.isArray(res.data)) {
+                bciEnterprisesData = res.data;
+            }
+        }
+    } catch (e) {}
+
+    if (!bciEnterprisesData || bciEnterprisesData.length === 0) {
+        try {
+            const resp = await fetch('./data/bci_enterprises.json');
+            if (resp.ok) {
+                const res = await resp.json();
+                bciEnterprisesData = res.data || [];
+            }
+        } catch (e) {}
+    }
+
+    // 2. 加载专家数据 (85位)
+    try {
+        const resp = await fetch('/api/bci-experts');
+        if (resp.ok) {
+            const res = await resp.json();
+            if (res.data && Array.isArray(res.data)) {
+                bciExpertsData = res.data;
+            }
+        }
+    } catch (e) {}
+
+    if (!bciExpertsData || bciExpertsData.length === 0) {
+        try {
+            const resp = await fetch('./data/bci_experts.json');
+            if (resp.ok) {
+                const res = await resp.json();
+                bciExpertsData = res.data || [];
+            }
+        } catch (e) {}
+    }
+
+    // 更新 Badge 数量
+    const entCount = bciEnterprisesData.length || 173;
+    const expCount = bciExpertsData.length || 85;
+    const entBadge = document.getElementById('bciEntCountBadge');
+    const expBadge = document.getElementById('bciExpCountBadge');
+    if (entBadge) entBadge.textContent = entCount;
+    if (expBadge) expBadge.textContent = expCount;
+}
+
+function bindBciFilterPills() {
+    // 省份胶囊
+    if (el.bciProvincePills) {
+        el.bciProvincePills.addEventListener('click', (e) => {
+            const btn = e.target.closest('.pill-btn');
+            if (!btn) return;
+            el.bciProvincePills.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            bciFilterProvince = btn.getAttribute('data-prov') || 'all';
+            applyBciFilters();
+        });
+    }
+
+    // 技术路径胶囊
+    if (el.bciTechPills) {
+        el.bciTechPills.addEventListener('click', (e) => {
+            const btn = e.target.closest('.pill-btn');
+            if (!btn) return;
+            el.bciTechPills.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            bciFilterTech = btn.getAttribute('data-tech') || 'all';
+            applyBciFilters();
+        });
+    }
+
+    // 专家类型与四川专家胶囊
+    if (el.bciExpertTypePills) {
+        el.bciExpertTypePills.addEventListener('click', (e) => {
+            const btn = e.target.closest('.pill-btn');
+            if (!btn) return;
+            el.bciExpertTypePills.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            bciFilterExpertType = btn.getAttribute('data-exptype') || 'all';
+            bciFilterExpertProv = btn.getAttribute('data-expprov') || 'all';
+            applyBciFilters();
+        });
+    }
+}
+
+function openBciModal() {
+    if (!el.bciMapModal) return;
+    el.bciMapModal.classList.remove('hidden');
+    applyBciFilters();
+    if (bciActiveTab === 'charts') {
+        setTimeout(() => {
+            renderBciCharts();
+            resizeBciCharts();
+        }, 150);
+    }
+}
+
+function closeBciModal() {
+    if (el.bciMapModal) {
+        el.bciMapModal.classList.add('hidden');
+    }
+}
+
+function switchBciTab(tabName) {
+    bciActiveTab = tabName;
+    const tabs = [
+        { id: 'enterprises', btn: el.tabBciEnterprises, content: el.bciContentEnterprises },
+        { id: 'experts', btn: el.tabBciExperts, content: el.bciContentExperts },
+        { id: 'charts', btn: el.tabBciCharts, content: el.bciContentCharts }
+    ];
+
+    tabs.forEach(t => {
+        if (t.id === tabName) {
+            if (t.btn) t.btn.classList.add('active');
+            if (t.content) {
+                t.content.style.display = 'flex';
+                t.content.classList.add('active');
+            }
+        } else {
+            if (t.btn) t.btn.classList.remove('active');
+            if (t.content) {
+                t.content.style.display = 'none';
+                t.content.classList.remove('active');
+            }
+        }
+    });
+
+    if (tabName === 'charts') {
+        setTimeout(() => {
+            renderBciCharts();
+            resizeBciCharts();
+        }, 100);
+    } else {
+        applyBciFilters();
+    }
+}
+
+function applyBciFilters() {
+    if (bciActiveTab === 'enterprises') {
+        let list = [...bciEnterprisesData];
+
+        // 省份过滤
+        if (bciFilterProvince !== 'all') {
+            list = list.filter(item => (item.province || '').includes(bciFilterProvince));
+        }
+
+        // 技术路线过滤
+        if (bciFilterTech !== 'all') {
+            list = list.filter(item => (item.tech_route || '').includes(bciFilterTech) || (item.product_intro || '').includes(bciFilterTech));
+        }
+
+        // 搜索词过滤
+        if (bciSearchQuery) {
+            list = list.filter(item => {
+                const combined = `${item.name} ${item.tech_route} ${item.product_intro} ${item.financing} ${item.city} ${item.competitiveness}`.toLowerCase();
+                return combined.includes(bciSearchQuery);
+            });
+        }
+
+        // 排序：四川省企业始终置顶
+        list.sort((a, b) => {
+            const isScA = (a.province || '').includes('四川');
+            const isScB = (b.province || '').includes('四川');
+            if (isScA && !isScB) return -1;
+            if (!isScA && isScB) return 1;
+            return (a.id || 0) - (b.id || 0);
+        });
+
+        renderBciEnterprises(list);
+    } else if (bciActiveTab === 'experts') {
+        let list = [...bciExpertsData];
+
+        // 专家类型过滤
+        if (bciFilterExpertType !== 'all') {
+            list = list.filter(item => (item.expert_type || '').includes(bciFilterExpertType));
+        }
+
+        // 四川专家专属过滤
+        if (bciFilterExpertProv !== 'all') {
+            list = list.filter(item => (item.province || '').includes(bciFilterExpertProv));
+        }
+
+        // 搜索词过滤
+        if (bciSearchQuery) {
+            list = list.filter(item => {
+                const combined = `${item.name} ${item.direction} ${item.institution} ${item.associated_enterprise} ${item.paper}`.toLowerCase();
+                return combined.includes(bciSearchQuery);
+            });
+        }
+
+        // 排序：四川省专家置顶
+        list.sort((a, b) => {
+            const isScA = (a.province || '').includes('四川');
+            const isScB = (b.province || '').includes('四川');
+            if (isScA && !isScB) return -1;
+            if (!isScA && isScB) return 1;
+            return (a.id || 0) - (b.id || 0);
+        });
+
+        renderBciExperts(list);
+    }
+}
+
+function renderBciEnterprises(list) {
+    if (!el.bciEnterpriseList) return;
+
+    if (!list || list.length === 0) {
+        el.bciEnterpriseList.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 40px 0; color: var(--text-muted);">
+                <div style="font-size: 32px; margin-bottom: 8px;">🔍</div>
+                <div>未找到符合筛选条件的脑机接口企业标的</div>
+            </div>
+        `;
+        return;
+    }
+
+    el.bciEnterpriseList.innerHTML = list.map(item => {
+        const isSc = (item.province || '').includes('四川');
+        const comp = item.competitiveness || '';
+        let compClass = 'comp-mid';
+        let compBadge = '中等潜力';
+        if (comp.includes('高') && !comp.includes('中高')) {
+            compClass = 'comp-high';
+            compBadge = '⭐ 高竞争力';
+        } else if (comp.includes('中高')) {
+            compClass = 'comp-high';
+            compBadge = '🔥 中高价值';
+        } else if (comp.includes('观察')) {
+            compClass = 'comp-obs';
+            compBadge = '👀 持续观察';
+        }
+
+        const sourceLink = item.source_url && item.source_url.startsWith('http') 
+            ? `<a href="${item.source_url.split('\n')[0]}" target="_blank" rel="noopener noreferrer" class="btn-ent-action">🌐 查阅公开档案 ➔</a>` 
+            : '';
+
+        return `
+            <div class="bci-ent-card ${isSc ? 'is-sichuan' : ''}">
+                <div class="ent-card-header">
+                    <div class="ent-card-title">
+                        ${isSc ? '<span style="color:#c5161d; font-size:12px; font-weight:800;">[四川重点]</span>' : ''}
+                        <span>${item.name}</span>
+                    </div>
+                    <span class="badge-comp ${compClass}">${compBadge}</span>
+                </div>
+
+                <div class="ent-badges">
+                    <span class="badge-tech">⚡ ${item.tech_route || '脑机接口'}</span>
+                    <span class="badge-loc">📍 ${item.province || ''} · ${item.city || ''}</span>
+                    ${item.stage ? `<span class="badge-loc" style="background:#e0f2fe; color:#0369a1; border-color:#bae6fd;">🔬 ${item.stage}</span>` : ''}
+                </div>
+
+                <div class="ent-card-body">
+                    <div class="ent-row-item">
+                        <span class="ent-row-label">💡 核心产品:</span>
+                        <span class="ent-row-val">${item.product_intro || '前沿脑机设备与算法研发'}</span>
+                    </div>
+                    <div class="ent-row-item">
+                        <span class="ent-row-label">💰 融资进展:</span>
+                        <span class="ent-row-val highlight-fin">${item.financing || '融资未公开/自筹'}</span>
+                    </div>
+                    <div class="ent-row-item">
+                        <span class="ent-row-label">📊 研判要点:</span>
+                        <span class="ent-row-val" style="color:var(--text-title);">${comp || '待进一步尽调'}</span>
+                    </div>
+                </div>
+
+                <div class="ent-card-footer">
+                    <button class="btn-ent-action" onclick="copyEnterpriseName('${item.name}')">📋 复制公司名</button>
+                    ${sourceLink}
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function renderBciExperts(list) {
+    if (!el.bciExpertList) return;
+
+    if (!list || list.length === 0) {
+        el.bciExpertList.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 40px 0; color: var(--text-muted);">
+                <div style="font-size: 32px; margin-bottom: 8px;">🎓</div>
+                <div>未找到符合筛选条件的脑机接口专家</div>
+            </div>
+        `;
+        return;
+    }
+
+    el.bciExpertList.innerHTML = list.map(item => {
+        const isSc = (item.province || '').includes('四川');
+        const sourceLink = item.source_url && item.source_url.startsWith('http') 
+            ? `<a href="${item.source_url.split('\n')[0]}" target="_blank" rel="noopener noreferrer" class="btn-ent-action">📄 学者主页 ➔</a>` 
+            : '';
+
+        return `
+            <div class="bci-exp-card ${isSc ? 'is-sichuan' : ''}">
+                <div class="exp-card-header">
+                    <div>
+                        <div class="exp-name">
+                            ${isSc ? '<span style="color:#c5161d; font-size:12px; font-weight:800;">[四川专家]</span>' : ''}
+                            <span>${item.name}</span>
+                        </div>
+                        <div class="exp-institution">🏛️ ${item.institution || '高校院所'} · 📍 ${item.province || ''}</div>
+                    </div>
+                    <span class="badge-exp-type">🎓 ${item.expert_type || '学术研发'}</span>
+                </div>
+
+                <div class="ent-card-body">
+                    <div class="ent-row-item">
+                        <span class="ent-row-label">🔬 研究方向:</span>
+                        <span class="ent-row-val" style="font-weight:600; color:var(--text-title);">${item.direction || '脑机交互与神经工程'}</span>
+                    </div>
+                    ${item.associated_enterprise && item.associated_enterprise !== '无公开直接关联企业' ? `
+                    <div class="ent-row-item">
+                        <span class="ent-row-label">🏭 关联企业:</span>
+                        <span class="ent-row-val" style="color:#4f46e5; font-weight:700;">${item.associated_enterprise}</span>
+                    </div>` : ''}
+                    ${item.paper && !item.paper.includes('待进一步') ? `
+                    <div class="exp-paper-box">
+                        📜 <strong>代表作:</strong> ${item.paper}
+                    </div>` : ''}
+                </div>
+
+                <div class="ent-card-footer">
+                    <button class="btn-ent-action" onclick="copyEnterpriseName('${item.name} (${item.institution})')">📋 复制专家档案</button>
+                    ${sourceLink}
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function renderBciCharts() {
+    if (typeof echarts === 'undefined') return;
+
+    const isDark = state.theme === 'dark';
+    const textColor = isDark ? '#cbd5e1' : '#475569';
+    const gridColor = isDark ? '#1e293b' : '#f1f5f9';
+
+    // 1. 省市分布双柱图 (企业数 vs 专家数)
+    if (el.chartBciProvinceDist) {
+        if (!chartBciProvInstance) {
+            chartBciProvInstance = echarts.init(el.chartBciProvinceDist);
+        }
+
+        const provinces = ['江苏省', '浙江省', '上海市', '北京市', '广东省', '四川省', '天津市', '湖北省', '山东省', '陕西省', '安徽省'];
+        const entCounts = [32, 27, 26, 20, 20, 11, 7, 6, 4, 2, 3];
+        const expCounts = [3, 9, 10, 26, 7, 3, 5, 2, 2, 3, 3];
+
+        const option1 = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: { type: 'shadow' },
+                backgroundColor: isDark ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+                borderColor: isDark ? '#334155' : '#e2e8f0',
+                textStyle: { color: isDark ? '#f8fafc' : '#0f172a', fontSize: 12 }
+            },
+            legend: {
+                data: ['企业标的数量', '智库专家数量'],
+                top: 0,
+                textStyle: { color: textColor, fontSize: 11.5 }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                top: '32px',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                data: provinces.map(p => p.replace('省', '').replace('市', '')),
+                axisLabel: {
+                    color: (value) => value === '四川' ? '#c5161d' : textColor,
+                    fontWeight: (value) => value === '四川' ? 'bold' : 'normal',
+                    fontSize: 11
+                },
+                axisLine: { lineStyle: { color: isDark ? '#475569' : '#cbd5e1' } }
+            },
+            yAxis: {
+                type: 'value',
+                splitLine: { lineStyle: { color: gridColor } },
+                axisLabel: { color: textColor, fontSize: 11 }
+            },
+            series: [
+                {
+                    name: '企业标的数量',
+                    type: 'bar',
+                    barWidth: '35%',
+                    itemStyle: {
+                        color: (params) => params.name === '四川' ? '#c5161d' : '#0284c7',
+                        borderRadius: [3, 3, 0, 0]
+                    },
+                    data: entCounts
+                },
+                {
+                    name: '智库专家数量',
+                    type: 'bar',
+                    barWidth: '35%',
+                    itemStyle: {
+                        color: '#8b5cf6',
+                        borderRadius: [3, 3, 0, 0]
+                    },
+                    data: expCounts
+                }
+            ]
+        };
+
+        chartBciProvInstance.setOption(option1);
+    }
+
+    // 2. 核心技术路线分布玫瑰图
+    if (el.chartBciTechPie) {
+        if (!chartBciTechInstance) {
+            chartBciTechInstance = echarts.init(el.chartBciTechPie);
+        }
+
+        const techData = [
+            { name: '非侵入式/脑电监测与康复', value: 82 },
+            { name: '侵入式/半侵入电极路线', value: 36 },
+            { name: '超声脑机接口 (全脑读写)', value: 18 },
+            { name: '光学成像 (fNIRS近红外)', value: 16 },
+            { name: '闭环光遗传与神经调控', value: 14 },
+            { name: '消费级算法与芯片硬件', value: 7 }
+        ];
+
+        const option2 = {
+            tooltip: {
+                trigger: 'item',
+                formatter: '{b}: <strong>{c} 家</strong> ({d}%)',
+                backgroundColor: isDark ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+                borderColor: isDark ? '#334155' : '#e2e8f0',
+                textStyle: { color: isDark ? '#f8fafc' : '#0f172a', fontSize: 11.5 }
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                top: 'center',
+                itemWidth: 9,
+                itemHeight: 9,
+                textStyle: { color: textColor, fontSize: 10.5 }
+            },
+            color: ['#004886', '#0284c7', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899'],
+            series: [
+                {
+                    name: '技术路线',
+                    type: 'pie',
+                    radius: ['28%', '70%'],
+                    center: ['66%', '50%'],
+                    roseType: 'radius',
+                    itemStyle: {
+                        borderRadius: 4,
+                        borderColor: isDark ? '#142030' : '#ffffff',
+                        borderWidth: 2
+                    },
+                    label: { show: false },
+                    emphasis: {
+                        label: { show: true, fontSize: 11, fontWeight: 'bold' }
+                    },
+                    data: techData
+                }
+            ]
+        };
+
+        chartBciTechInstance.setOption(option2);
+    }
+}
+
+function resizeBciCharts() {
+    if (chartBciProvInstance) chartBciProvInstance.resize();
+    if (chartBciTechInstance) chartBciTechInstance.resize();
+}
+
+function copyEnterpriseName(name) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(name).then(() => {
+            showToast(`📋 已复制：${name}`);
+        }).catch(() => {
+            showToast(`📋 已复制：${name}`);
+        });
+    } else {
+        showToast(`📋 已复制：${name}`);
+    }
+}
+
+window.copyEnterpriseName = copyEnterpriseName;
+window.openBciModal = openBciModal;
+window.closeBciModal = closeBciModal;
+window.switchBciTab = switchBciTab;
+

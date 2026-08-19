@@ -2320,4 +2320,545 @@ body {
     }
 }
 
+/* ==========================================================================
+   🧠 脑机接口产业智库与企业投资地图模块样式 (BCI Map Modal)
+   ========================================================================== */
+
+/* 1. 顶部操作栏脑机产业地图按钮 */
+.action-bci-map {
+    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%) !important;
+    border-color: #818cf8 !important;
+    color: #ffffff !important;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+.action-bci-map:hover {
+    background: linear-gradient(135deg, #4338ca 0%, #3730a3 100%) !important;
+    box-shadow: 0 3px 12px rgba(79, 70, 229, 0.55);
+}
+
+/* 2. 脑机大屏模态框容器 */
+.bci-modal-card {
+    max-width: 1160px !important;
+    width: 96vw !important;
+    max-height: 93vh !important;
+    display: flex;
+    flex-direction: column;
+    padding: 0 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 24px 50px rgba(15, 23, 42, 0.4), 0 0 0 1px rgba(79, 70, 229, 0.25) !important;
+    overflow: hidden;
+    background: var(--bg-page);
+}
+
+.bci-header {
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 60%, #1e3a8a 100%) !important;
+    color: #ffffff !important;
+    padding: 14px 20px !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #6366f1 !important;
+}
+
+.bci-header .modal-title {
+    color: #ffffff !important;
+    font-size: 17.5px !important;
+    font-weight: 800 !important;
+    margin: 0 !important;
+}
+
+.bci-header .modal-subtitle {
+    display: block;
+    font-size: 11.5px;
+    color: rgba(255, 255, 255, 0.8);
+    margin-top: 2px;
+}
+
+.bci-header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.bci-badge-sichuan {
+    background: linear-gradient(135deg, rgba(234, 88, 12, 0.25), rgba(249, 115, 22, 0.35));
+    border: 1px solid #fb923c;
+    color: #ffedd5;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11.5px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    box-shadow: 0 0 8px rgba(249, 115, 22, 0.3);
+}
+
+/* 3. 顶部 KPI 条 */
+.bci-kpi-bar {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border-color);
+    padding: 10px 16px;
+    gap: 10px;
+}
+
+.bci-kpi-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    border-right: 1px solid var(--border-light);
+    padding-right: 8px;
+}
+.bci-kpi-item:last-child {
+    border-right: none;
+}
+
+.bci-kpi-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.bci-kpi-num {
+    font-size: 19px;
+    font-weight: 800;
+    font-family: var(--font-mono);
+    color: var(--nmpa-blue-main);
+    line-height: 1.2;
+}
+
+.bci-kpi-num small {
+    font-size: 11px;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    color: var(--text-caption);
+}
+
+.bci-kpi-item.highlight-sc .bci-kpi-num {
+    color: #c5161d;
+}
+
+/* 4. Tab 导航与搜索区 */
+.bci-tab-nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background: var(--bg-inset);
+    border-bottom: 1px solid var(--border-color);
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.bci-tabs {
+    display: flex;
+    gap: 6px;
+}
+
+.bci-tab-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-body);
+    padding: 6px 14px;
+    border-radius: 4px;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.bci-tab-btn:hover {
+    border-color: #6366f1;
+    color: #4f46e5;
+}
+.bci-tab-btn.active {
+    background: #4f46e5;
+    color: #ffffff;
+    border-color: #4338ca;
+    box-shadow: 0 2px 6px rgba(79, 70, 229, 0.3);
+}
+
+.bci-search-box {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.bci-search-box input {
+    width: 260px;
+    padding: 6px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 12px;
+    background: var(--bg-card);
+    color: var(--text-body);
+    outline: none;
+}
+.bci-search-box input:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+}
+
+.btn-bci-search {
+    background: var(--nmpa-blue-main);
+    color: #ffffff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* 5. 过滤胶囊条 */
+.bci-filter-pills-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    background: var(--bg-card);
+    border-bottom: 1px dashed var(--border-light);
+    flex-wrap: wrap;
+}
+
+.filter-label {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
+.filter-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.pill-btn {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border-color);
+    color: var(--text-body);
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.12s ease;
+}
+.pill-btn:hover {
+    border-color: #4f46e5;
+    color: #4f46e5;
+}
+.pill-btn.active {
+    background: #4f46e5;
+    color: #ffffff;
+    border-color: #4338ca;
+}
+
+.pill-btn.highlight-sc-pill {
+    background: #fef2f2;
+    color: #991b1b;
+    border-color: #fca5a5;
+    font-weight: 700;
+}
+.pill-btn.highlight-sc-pill.active {
+    background: #c5161d;
+    color: #ffffff;
+    border-color: #991b1b;
+}
+
+/* 6. 卡片网格 */
+.bci-tab-content {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.bci-cards-grid {
+    padding: 14px 16px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    overflow-y: auto;
+}
+
+/* 企业卡片样式 */
+.bci-ent-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    box-shadow: var(--shadow-card);
+    transition: transform 0.15s ease, border-color 0.15s ease;
+    position: relative;
+}
+.bci-ent-card:hover {
+    transform: translateY(-2px);
+    border-color: #4f46e5;
+}
+
+.bci-ent-card.is-sichuan {
+    border-left: 4px solid #c5161d;
+    background: linear-gradient(to right, rgba(197, 22, 29, 0.02), var(--bg-card) 20%);
+}
+
+.ent-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.ent-card-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--nmpa-blue-main);
+    line-height: 1.3;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.ent-badges {
+    display: inline-flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.badge-tech {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 10.5px;
+    font-weight: 600;
+}
+
+.badge-loc {
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 10.5px;
+}
+
+.badge-comp {
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 10.5px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.badge-comp.comp-high {
+    background: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+}
+.badge-comp.comp-mid {
+    background: #eff6ff;
+    color: #1e40af;
+    border: 1px solid #bfdbfe;
+}
+.badge-comp.comp-obs {
+    background: #fffbeb;
+    color: #92400e;
+    border: 1px solid #fde68a;
+}
+
+.ent-card-body {
+    font-size: 12px;
+    color: var(--text-body);
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ent-row-item {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+.ent-row-label {
+    color: var(--text-muted);
+    font-weight: 600;
+    flex-shrink: 0;
+    font-size: 11px;
+}
+
+.ent-row-val.highlight-fin {
+    color: #b91c1c;
+    font-weight: 700;
+}
+
+.ent-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 6px;
+    border-top: 1px dashed var(--border-light);
+    font-size: 11px;
+}
+
+.btn-ent-action {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 11px;
+    color: var(--text-body);
+    cursor: pointer;
+}
+.btn-ent-action:hover {
+    border-color: #4f46e5;
+    color: #4f46e5;
+}
+
+/* 专家卡片样式 */
+.bci-exp-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    box-shadow: var(--shadow-card);
+    transition: transform 0.15s ease;
+}
+.bci-exp-card:hover {
+    transform: translateY(-2px);
+    border-color: #6366f1;
+}
+
+.bci-exp-card.is-sichuan {
+    border-left: 4px solid #c5161d;
+    background: linear-gradient(to right, rgba(197, 22, 29, 0.02), var(--bg-card) 20%);
+}
+
+.exp-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.exp-name {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--text-title);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.badge-exp-type {
+    background: #fdf2f8;
+    color: #9d174d;
+    border: 1px solid #fbcfe8;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 10.5px;
+    font-weight: 600;
+}
+
+.exp-institution {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--nmpa-blue-main);
+    margin-top: 1px;
+}
+
+.exp-paper-box {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    padding: 6px 8px;
+    font-size: 11px;
+    color: var(--text-muted);
+    font-style: italic;
+    line-height: 1.4;
+}
+
+/* 7. ECharts 图表布局与四川生态专栏 */
+.bci-charts-layout {
+    padding: 14px 16px 8px 16px;
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 12px;
+}
+
+.bci-chart-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 12px 14px;
+    box-shadow: var(--shadow-card);
+}
+
+.bci-echarts-box {
+    width: 100%;
+    height: 290px;
+}
+
+.bci-sichuan-ecosystem-box {
+    margin: 0 16px 14px 16px;
+    background: var(--bg-card);
+    border: 1px solid #bfdbfe;
+    border-radius: 6px;
+    padding: 12px 14px;
+}
+
+.sc-eco-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.sc-eco-card {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    padding: 8px 10px;
+}
+
+.sc-eco-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-title);
+    margin-bottom: 3px;
+}
+
+.sc-eco-desc {
+    font-size: 11.5px;
+    color: var(--text-body);
+    line-height: 1.45;
+}
+
+/* 响应式适配 */
+@media (max-width: 900px) {
+    .bci-kpi-bar {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .bci-cards-grid {
+        grid-template-columns: 1fr;
+    }
+    .bci-charts-layout {
+        grid-template-columns: 1fr;
+    }
+    .sc-eco-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
 
