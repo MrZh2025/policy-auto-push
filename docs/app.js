@@ -5058,64 +5058,102 @@ function renderDynamicRobotTalentsBanner() {
 
     let targetExperts = [];
     const currentReg = robotState.currentRegion || 'all';
+    let regionLabel = '全国';
 
-    if (currentReg === '四川省' || currentReg === 'all') {
+    if (currentReg === 'all') {
+        regionLabel = '全国重点';
+        // 全国精选核心领军高校与临床转化智库
+        targetExperts = robotExpertsData.filter(e => 
+            (e.institution && (e.institution.includes('电子科') || e.institution.includes('华西') || e.institution.includes('清华') || e.institution.includes('哈尔滨') || e.institution.includes('积水潭') || e.institution.includes('北医三院') || e.institution.includes('苏州大学') || e.institution.includes('上海交大')))
+        );
+        if (targetExperts.length === 0) targetExperts = robotExpertsData.slice(0, 6);
+    } else if (currentReg === '四川省') {
+        regionLabel = '四川本土重点';
         targetExperts = robotExpertsData.filter(i => (i.province || '').includes('四川'));
-        if (titleEl) titleEl.textContent = '⭐ 四川本土重点医疗机器人智库与高校学者 (医工转化集群)';
     } else if (currentReg === '长三角') {
+        regionLabel = '长三角地区';
         targetExperts = robotExpertsData.filter(i => ['上海市', '江苏省', '浙江省', '安徽省'].includes(i.province));
-        if (titleEl) titleEl.textContent = '长三角重点医疗机器人高校学者与领军智库';
     } else if (currentReg === '京津冀') {
+        regionLabel = '京津冀地区';
         targetExperts = robotExpertsData.filter(i => ['北京市', '天津市', '河北省'].includes(i.province));
-        if (titleEl) titleEl.textContent = '京津冀重点医疗机器人高校学者与领军智库';
     } else if (currentReg === '粤港澳' || currentReg === '大湾区') {
+        regionLabel = '粤港澳大湾区';
         targetExperts = robotExpertsData.filter(i => ['广东省', '香港特别行政区', '澳门特别行政区'].includes(i.province));
-        if (titleEl) titleEl.textContent = '粤港澳大湾区医疗机器人创新专家学者';
     } else {
         const clean = currentReg.replace('省', '').replace('市', '');
+        regionLabel = currentReg;
         targetExperts = robotExpertsData.filter(i => (i.province || '').includes(clean));
-        if (titleEl) titleEl.textContent = `${currentReg}重点医疗机器人学者专家智库`;
+    }
+
+    if (titleEl) {
+        titleEl.textContent = `${regionLabel} 医疗机器人顶尖智库与高校学者 (横向动态联动)`;
+    }
+    if (badgeEl) {
+        badgeEl.textContent = `${targetExperts.length} 位学者`;
     }
 
     if (targetExperts.length === 0) {
-        targetExperts = robotExpertsData.slice(0, 5);
-        if (titleEl) titleEl.textContent = '全国重点医疗机器人智库与高校学者 (动态联动)';
+        cardsRow.innerHTML = `
+            <div class="sc-empty-talent-card">
+                <span>💡 <strong>${regionLabel}</strong> 医疗机器人前沿项目正在加快研发转化中，已为您联动国家级跨区域协同智库。</span>
+            </div>
+        `;
+        return;
     }
 
-    if (badgeEl) badgeEl.textContent = `${targetExperts.length} 位学者`;
-
     cardsRow.innerHTML = targetExperts.map(exp => {
-        const offUrl = getRobotExpertOfficialUrl(exp.name, exp.institution);
-        let linkHtml = '';
-        if (offUrl) {
-            linkHtml = `<a href="${offUrl}" target="_blank" class="sc-talent-link-btn" title="直达官方权威主页/机构官网">🔗 官方主页</a>`;
-        } else if (exp.source_url) {
-            const firstUrl = exp.source_url.split('\n')[0].split(';')[0].trim();
-            linkHtml = `<a href="${firstUrl}" target="_blank" class="sc-talent-link-btn" title="查看公开成果出处">📄 成果出处</a>`;
-        }
+        let avatar = '👨‍🔬';
+        if ((exp.expert_type || '').includes('学术') || (exp.expert_type || '').includes('院士')) avatar = '👨‍🏫';
+        else if ((exp.expert_type || '').includes('产业')) avatar = '🏭';
+        else if ((exp.expert_type || '').includes('临床')) avatar = '🏥';
+
+        const roleTag = exp.expert_type || '智库专家';
+        const inst = exp.institution || '高校院所';
+        const dir = exp.direction || '医疗机器人前沿研发与医工转化';
+        const assoc = exp.associated_enterprise ? ` · 关联${exp.associated_enterprise.split('（')[0]}` : '';
 
         return `
-            <div class="sc-talent-card">
-                <div class="sc-talent-top">
-                    <div class="sc-talent-info">
-                        <strong class="sc-talent-name">${escapeHtml(exp.name || '')}</strong>
-                        <span class="sc-talent-inst" title="${escapeHtml(exp.institution || '')}">${escapeHtml(exp.institution || '')}</span>
+            <div class="sc-side-talent-card" onclick="focusRobotTalentInList('${escapeHtml(exp.name)}')" title="点击在列表中精准定位【${escapeHtml(exp.name)}】">
+                <div class="sc-card-avatar">${avatar}</div>
+                <div class="sc-card-body">
+                    <div class="sc-name-line">
+                        <strong>${escapeHtml(exp.name)}</strong>
+                        <span class="sc-role-tag">${escapeHtml(roleTag)}</span>
+                        <span class="sc-univ-tag">🏛️ ${escapeHtml(inst)}</span>
                     </div>
-                    <span class="sc-talent-badge">${escapeHtml(exp.expert_type || '智库专家')}</span>
-                </div>
-                <div class="sc-talent-dir" title="${escapeHtml(exp.direction || '')}">
-                    ${escapeHtml(exp.direction || '')}
-                </div>
-                <div class="sc-talent-bottom">
-                    <span class="sc-talent-co" title="关联转化：${escapeHtml(exp.associated_enterprise || '产学研协同')}">
-                        🏭 ${escapeHtml(exp.associated_enterprise ? exp.associated_enterprise.split('（')[0] : '产学研协同')}
-                    </span>
-                    ${linkHtml}
+                    <div class="sc-desc-line" title="${escapeHtml(dir + assoc)}">${escapeHtml(dir + assoc)}</div>
                 </div>
             </div>
         `;
     }).join('');
 }
+
+function focusRobotTalentInList(talentName) {
+    robotState.currentView = 'experts';
+    const btnSwitchExp = document.getElementById('btnSwitchRobotExpView');
+    const btnSwitchEnt = document.getElementById('btnSwitchRobotEntView');
+    const entFilterSec = document.getElementById('robotEntFilterSection');
+    const expFilterSec = document.getElementById('robotExpFilterSection');
+
+    if (btnSwitchExp && btnSwitchEnt) {
+        btnSwitchExp.classList.add('active');
+        btnSwitchEnt.classList.remove('active');
+        if (entFilterSec) entFilterSec.classList.add('hidden');
+        if (expFilterSec) expFilterSec.classList.remove('hidden');
+    }
+
+    const searchInput = document.getElementById('robotSearchInput');
+    if (searchInput) {
+        searchInput.value = talentName;
+        robotState.searchQuery = talentName.toLowerCase();
+    }
+
+    applyRobotFilterAndRender();
+    showToast(`👨‍🏫 已在右侧列表中精准定位领军学者【${talentName}】详细档案！`);
+}
+
+window.focusRobotTalentInList = focusRobotTalentInList;
+
 
 // 8. 绘制 ECharts 医疗机器人全国地图 (100% 同构与防白屏加固)
 async function renderChinaRobotMap() {

@@ -3741,3 +3741,56 @@ body {
     gap: 6px;
     flex-wrap: wrap;
 }
+
+
+/* 医疗机器人智库学者专区横向滚动条定制 */
+#scSideRobotTalentsSection {
+    background: linear-gradient(135deg, rgba(2, 132, 199, 0.05) 0%, var(--bg-card) 100%);
+    border-bottom: 1px dashed rgba(2, 132, 199, 0.3);
+    padding: 8px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+#scSideRobotTalentsSection .sc-side-title {
+    color: #0284c7;
+}
+
+#scSideRobotTalentsSection .sc-side-badge {
+    background: #e0f2fe;
+    border: 1px solid #bae6fd;
+    color: #0369a1;
+}
+[data-theme="dark"] #scSideRobotTalentsSection .sc-side-badge {
+    background: #082f49;
+    border-color: #0369a1;
+    color: #7dd3fc;
+}
+
+#scSideRobotTalentsSection .sc-side-talent-card {
+    border-left: 3.5px solid #0284c7;
+}
+#scSideRobotTalentsSection .sc-side-talent-card:hover {
+    border-color: #0284c7;
+    box-shadow: 0 2px 8px rgba(2, 132, 199, 0.2);
+}
+#scSideRobotTalentsSection .sc-card-avatar {
+    background: #e0f2fe;
+    border-color: #bae6fd;
+}
+[data-theme="dark"] #scSideRobotTalentsSection .sc-card-avatar {
+    background: #082f49;
+    border-color: #0369a1;
+}
+#scSideRobotTalentsSection .sc-name-line strong {
+    color: #0284c7;
+}
+#scSideRobotTalentsSection .sc-role-tag {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+[data-theme="dark"] #scSideRobotTalentsSection .sc-role-tag {
+    background: #082f49;
+    color: #38bdf8;
+}
