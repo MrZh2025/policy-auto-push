@@ -2,6 +2,32 @@
   "code": 0,
   "data": [
     {
+      "id": 289,
+      "fingerprint": "690c60a64f6d65720e99799ff4a58d8b",
+      "title": "全民医保“十五五”规划发布 未来5年全面建成多层次医疗保障体系",
+      "url": "https://www.gov.cn/zhengce/202608/content_7078670.htm",
+      "source": "国务院政策文件库",
+      "pub_date": "2026-08-20",
+      "category": "医保政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
+      "id": 288,
+      "fingerprint": "7c842c847a5dc3016dc6c7a98827abef",
+      "title": "国家医疗保障局关于印发《全民医疗保障“十五五”规划》的通知",
+      "url": "https://www.gov.cn/zhengce/zhengceku/202608/content_7078568.htm",
+      "source": "国家医保局",
+      "pub_date": "2026-08-19",
+      "category": "医保政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
       "id": 160,
       "fingerprint": "fe09f4f5e9be9cc4447ecf12b697d7ab",
       "title": "关于印发《中医药振兴发展“十五五”规划》的通知",
@@ -28,6 +54,19 @@
       "is_pushed": 1
     },
     {
+      "id": 287,
+      "fingerprint": "0888051b420b1b2bc654335e369d0203",
+      "title": "国务院关于《中医药振兴发展“十五五”规划》的批复",
+      "url": "https://www.gov.cn/zhengce/zhengceku/202607/content_7074931.htm",
+      "source": "国务院",
+      "pub_date": "2026-07-10",
+      "category": "科技申报政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
       "id": 157,
       "fingerprint": "e8992aaeecb7ccbe4ce533358a729bde",
       "title": "关于印发《康复辅助器具产业扩能提质三年行动方案（2026-2028年）》的通知",
@@ -41,6 +80,19 @@
       "is_pushed": 1
     },
     {
+      "id": 286,
+      "fingerprint": "b69f1a61f01f56790e2a14d212729527",
+      "title": "国家药品监督管理局 中华人民共和国公安部 中华人民共和国国家卫生健康委员会 国家市　场监督管理总局 国家医疗保障局 国家中医药管理局 国家疾病预防控制局公告（2026年　　第42号）　　　国家药监局 公安部 国家卫生健康委 市场监管总局 国家医保局 国家中医药局 国家　　　　疾控局关于发布《医药代表管理办法》的公告",
+      "url": "https://www.gov.cn/gongbao/2026/issue_12826/202606/content_7073631.html",
+      "source": "国务院政策文件库",
+      "pub_date": "2026-06-30",
+      "category": "医保政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
       "id": 240,
       "fingerprint": "6103a2c84f4136f7c8161aabddef7dae",
       "title": "人力资源社会保障部等4部门关于支持海洋经济发展促进就业创业的通知",
@@ -50,6 +102,19 @@
       "category": "科技申报政策",
       "summary": "生物制品产业，支持涉海类高等学校、科研院所与企业深度合作，为海洋科研人员、医疗器械研发工程师等搭建研发推广平台，促进大健康产业高质量发展，吸纳更多高校毕业生等青年就业创业。着力提升海洋产业智能化、绿色化水平",
       "created_at": "2026-08-20 09:59:42",
+      "pushed_at": "2026-08-20 09:59:42",
+      "is_pushed": 1
+    },
+    {
+      "id": 285,
+      "fingerprint": "cb828fa4e5bb45d20280028333f23447",
+      "title": "中华人民共和国人力资源和社会保障部 中华人民共和国国家卫生健康委员会 中华人民共和国　应急管理部 国家税务总局 国家医疗保障局令（第56号）　　超龄劳动者基本权益保障暂行规定",
+      "url": "https://www.gov.cn/gongbao/2026/issue_12786/202606/content_7071610.html",
+      "source": "国务院政策文件库",
+      "pub_date": "2026-06-10",
+      "category": "医保政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
       "pushed_at": null,
       "is_pushed": 0
     },
@@ -91,6 +156,19 @@
       "created_at": "2026-08-19 07:06:24",
       "pushed_at": "2026-08-19 15:06:46",
       "is_pushed": 1
+    },
+    {
+      "id": 284,
+      "fingerprint": "8c32fa74385f13d099f20c8a7bd013ed",
+      "title": "国家医疗保障局关于印发《医疗保障基金监督检查五年行动计划（2026年—2030年）》的通知",
+      "url": "https://www.gov.cn/zhengce/zhengceku/202605/content_7068650.htm",
+      "source": "国家医保局",
+      "pub_date": "2026-05-13",
+      "category": "医保政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
     },
     {
       "id": 175,
@@ -145,6 +223,32 @@
       "is_pushed": 1
     },
     {
+      "id": 283,
+      "fingerprint": "ffdfbc8463e9d5427993986584edf795",
+      "title": "国家中医药管理局关于印发《三级中医医院评审标准（2026年版）》的通知",
+      "url": "https://www.gov.cn/zhengce/zhengceku/202603/content_7064072.htm",
+      "source": "国家中医药局",
+      "pub_date": "2026-03-28",
+      "category": "科技申报政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
+      "id": 282,
+      "fingerprint": "916c4c1d51c755c7545f027542b9865b",
+      "title": "国家医保局等八部门关于印发《加快建立长期护理保险制度实施方案》的通知",
+      "url": "https://www.gov.cn/zhengce/zhengceku/202603/content_7063915.htm",
+      "source": "国家医保局 民政部 财政部 人力资源社会保障部 农业农村部 国家卫生健康委 税务总局 中国残疾人联合会",
+      "pub_date": "2026-03-26",
+      "category": "医保政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
       "id": 164,
       "fingerprint": "81cc5c52c2bfbd39d23ecaa21ec585dc",
       "title": "关于开展基层医疗卫生机构医疗质量改善三年行动（2026—2028年）的通知",
@@ -171,6 +275,19 @@
       "is_pushed": 1
     },
     {
+      "id": 281,
+      "fingerprint": "5a1007232355ac8013895a2822ba7cb2",
+      "title": "国家药品监督管理局公告（2025年第126号）　　国家药监局关于发布医疗器械出口销售证明管理规定的公告",
+      "url": "https://www.gov.cn/gongbao/2026/issue_12626/202603/content_7063188.html",
+      "source": "国务院政策文件库",
+      "pub_date": "2026-03-20",
+      "category": "科技申报政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
       "id": 191,
       "fingerprint": "8836f7330ab0fb1839d78cc5814cc203",
       "title": "国家药监局关于印发药品现代物流规范化建设指导意见的通知",
@@ -182,6 +299,19 @@
       "created_at": "2026-08-19 07:06:46",
       "pushed_at": "2026-08-19 15:09:05",
       "is_pushed": 1
+    },
+    {
+      "id": 280,
+      "fingerprint": "c1d30808fcc376da0fbd88488de95db4",
+      "title": "国家医保局 国家发展改革委 国家卫生健康委关于医保支持基层医疗卫生服务发展的指导意见",
+      "url": "https://www.gov.cn/zhengce/zhengceku/202603/content_7063029.htm",
+      "source": "国家医保局 国家发展改革委 国家卫生健康委",
+      "pub_date": "2026-03-17",
+      "category": "医保政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
     },
     {
       "id": 177,
@@ -223,6 +353,19 @@
       "is_pushed": 1
     },
     {
+      "id": 279,
+      "fingerprint": "c93e471027b0280066f0e6264cd90dbf",
+      "title": "国家医保局关于加快医疗保障领域场景培育和开放 支持新场景大规模应用的通知",
+      "url": "https://www.gov.cn/zhengce/zhengceku/202602/content_7057134.htm",
+      "source": "国家医保局",
+      "pub_date": "2026-02-05",
+      "category": "医保政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
       "id": 187,
       "fingerprint": "f00264435e20656a853c5226e1e4d746",
       "title": "工业和信息化部等八部门关于印发《中药工业高质量发展实施方案（2026—2030年）》的通知",
@@ -234,6 +377,19 @@
       "created_at": "2026-08-19 07:06:45",
       "pushed_at": "2026-08-19 15:20:14",
       "is_pushed": 1
+    },
+    {
+      "id": 278,
+      "fingerprint": "c2413047d10d1be92242e1979e3d3222",
+      "title": "国家药品监督管理局公告（2025年第107号）　　国家药监局关于发布医疗器械生产质量管理规范的公告",
+      "url": "https://www.gov.cn/gongbao/2026/issue_12506/202601/content_7055196.html",
+      "source": "国务院政策文件库",
+      "pub_date": "2026-01-20",
+      "category": "科技申报政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
     },
     {
       "id": 209,
@@ -260,6 +416,32 @@
       "created_at": "2026-08-19 07:06:28",
       "pushed_at": "2026-08-19 15:20:14",
       "is_pushed": 1
+    },
+    {
+      "id": 277,
+      "fingerprint": "17c3062cfff518dafdebc1967fccc7b9",
+      "title": "国家医保局 财政部关于做好职工基本医疗保险个人账户跨省共济工作的通知",
+      "url": "https://www.gov.cn/zhengce/zhengceku/202601/content_7054311.htm",
+      "source": "国家医保局 财政部",
+      "pub_date": "2026-01-09",
+      "category": "医保政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
+      "id": 276,
+      "fingerprint": "a9589d1c438cfc6b32b4ffad20219350",
+      "title": "国家医疗保障局办公室关于大力推进刷脸支付、一码支付、移动支付、信用支付等便捷支付工作的通知",
+      "url": "https://www.gov.cn/zhengce/zhengceku/202601/content_7054281.htm",
+      "source": "国家医保局",
+      "pub_date": "2026-01-08",
+      "category": "医保政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
     },
     {
       "id": 188,
@@ -325,6 +507,19 @@
       "created_at": "2026-08-19 07:06:46",
       "pushed_at": "2026-08-19 15:43:05",
       "is_pushed": 1
+    },
+    {
+      "id": 275,
+      "fingerprint": "c02ce6daadc12c5dbaeb1d04b4e1f591",
+      "title": "国家医疗保障局办公室关于印发医保基金清算提质增效三年行动计划的通知",
+      "url": "https://www.gov.cn/zhengce/zhengceku/202512/content_7051326.htm",
+      "source": "国家医保局办公室",
+      "pub_date": "2025-12-15",
+      "category": "医保政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
     },
     {
       "id": 178,
@@ -418,6 +613,32 @@
       "is_pushed": 1
     },
     {
+      "id": 274,
+      "fingerprint": "f002523509d2b454735b5823ac07ea38",
+      "title": "国家医疗保障局办公室关于进一步加强超量开药智能监管工作的通知",
+      "url": "https://www.gov.cn/zhengce/zhengceku/202511/content_7047087.htm",
+      "source": "国家医保局办公室",
+      "pub_date": "2025-11-04",
+      "category": "医保政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
+      "id": 273,
+      "fingerprint": "8958e2d424958bdeb463883102dc98ac",
+      "title": "国家卫生健康委 国家中医药局 国家疾控局 中国残联关于推进耳与听力健康工作的指导意见",
+      "url": "https://www.gov.cn/gongbao/2025/issue_12366/202510/content_7046037.html",
+      "source": "国务院政策文件库",
+      "pub_date": "2025-10-30",
+      "category": "科技申报政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
       "id": 181,
       "fingerprint": "e8f178e137cde8e6337b0008bdb409b0",
       "title": "关于加强基层慢性病健康管理服务的指导意见",
@@ -429,6 +650,19 @@
       "created_at": "2026-08-19 07:06:28",
       "pushed_at": "2026-08-19 16:40:06",
       "is_pushed": 1
+    },
+    {
+      "id": 272,
+      "fingerprint": "321546281f072149c6c988b56368fc40",
+      "title": "国家医保局关于印发《医疗保障按病种付费管理暂行办法》的通知　　医疗保障按病种付费管理暂行办法",
+      "url": "https://www.gov.cn/gongbao/2025/issue_12346/202510/content_7044726.html",
+      "source": "国务院政策文件库",
+      "pub_date": "2025-10-20",
+      "category": "医保政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
     },
     {
       "id": 156,
@@ -444,6 +678,32 @@
       "is_pushed": 1
     },
     {
+      "id": 271,
+      "fingerprint": "8d242d3bc50c81eaa0655a2570cd0b1f",
+      "title": "国家医疗保障局办公室关于全面推进医保基金即时结算改革扩面提质的通知",
+      "url": "https://www.gov.cn/zhengce/zhengceku/202510/content_7044680.htm",
+      "source": "国家医保局办公室",
+      "pub_date": "2025-10-16",
+      "category": "医保政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
+      "id": 270,
+      "fingerprint": "e3cdffff046b2f89b35b5395cf6f9ec9",
+      "title": "国家医保局办公室 国家中医药局综合司关于开展中医优势病种按病种付费试点工作的通知",
+      "url": "https://www.gov.cn/zhengce/zhengceku/202510/content_7043780.htm",
+      "source": "国家医保局办公室 国家中医药局综合司",
+      "pub_date": "2025-10-10",
+      "category": "医保政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
       "id": 165,
       "fingerprint": "f5db993e054c7c3c67cbf760ecc9a91d",
       "title": "国家金融监督管理总局关于推动健康保险高质量发展的指导意见",
@@ -455,6 +715,19 @@
       "created_at": "2026-08-19 07:06:28",
       "pushed_at": "2026-08-19 16:40:06",
       "is_pushed": 1
+    },
+    {
+      "id": 269,
+      "fingerprint": "0077ab5f95daf7a2e904f8e0156198ed",
+      "title": "国家医疗保障局关于印发《国家长期护理保险服务项目目录（试行）》的通知",
+      "url": "https://www.gov.cn/zhengce/zhengceku/202509/content_7042325.htm",
+      "source": "国家医保局",
+      "pub_date": "2025-09-25",
+      "category": "医保政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
     },
     {
       "id": 200,
@@ -481,6 +754,19 @@
       "created_at": "2026-08-19 07:06:46",
       "pushed_at": "2026-08-19 16:40:06",
       "is_pushed": 1
+    },
+    {
+      "id": 268,
+      "fingerprint": "68375dc4e77d4efdd299a204067c3ca6",
+      "title": "国家卫生健康委办公厅关于印发药事管理等3个专业医疗质量控制指标（2025年版）的通知",
+      "url": "https://www.gov.cn/zhengce/zhengceku/202509/content_7039760.htm",
+      "source": "国家卫生健康委办公厅",
+      "pub_date": "2025-09-09",
+      "category": "科技申报政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
     },
     {
       "id": 213,
@@ -522,6 +808,19 @@
       "is_pushed": 1
     },
     {
+      "id": 267,
+      "fingerprint": "d15b8682c54ee0938a6afb95344a9ce6",
+      "title": "国务院关于《中国（江苏）自由贸易试验区生物医药全产业链开放创新发展方案》的批复",
+      "url": "https://www.gov.cn/zhengce/zhengceku/202508/content_7037375.htm",
+      "source": "国务院",
+      "pub_date": "2025-08-21",
+      "category": "科技申报政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
       "id": 223,
       "fingerprint": "c81a9ddc4d49bd2aa372197263c8159c",
       "title": "国家中医药管理局综合司关于开展中医药标准化研究转化中心建设的通知",
@@ -535,6 +834,19 @@
       "is_pushed": 1
     },
     {
+      "id": 266,
+      "fingerprint": "51f06f363eda8e628297481bdd5d6cd8",
+      "title": "国家医疗保障局关于印发《医疗保障按病种付费管理暂行办法》的通知",
+      "url": "https://www.gov.cn/zhengce/zhengceku/202508/content_7036853.htm",
+      "source": "国家医保局",
+      "pub_date": "2025-08-16",
+      "category": "医保政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
       "id": 196,
       "fingerprint": "cc4fb1de0feb8fdaf3000c3f3889e77f",
       "title": "关于印发《服务业经营主体贷款贴息政策实施方案》的通知",
@@ -546,6 +858,32 @@
       "created_at": "2026-08-19 07:06:46",
       "pushed_at": "2026-08-19 09:58:03",
       "is_pushed": 1
+    },
+    {
+      "id": 265,
+      "fingerprint": "b7d18f3d09158532572c977245b31fe1",
+      "title": "国家医疗保障局办公室关于印发《基本医保基金即时结算经办规程（试行）》的通知",
+      "url": "https://www.gov.cn/zhengce/zhengceku/202508/content_7035049.htm",
+      "source": "国家医保局办公室",
+      "pub_date": "2025-08-03",
+      "category": "医保政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
+      "id": 264,
+      "fingerprint": "010a4f926d2d901cf1e7e4a93ad848d2",
+      "title": "国家卫生健康委 中央编办 国家发展改革委 教育部 民政部 财政部 人力资源社会保障部　自然资源部 住房城乡建设部 农业农村部 国家医保局 国家中医药局 国家疾控局关于　优化基层医疗卫生机构布局建设的指导意见",
+      "url": "https://www.gov.cn/gongbao/2025/issue_12186/202507/content_7034085.html",
+      "source": "国务院政策文件库",
+      "pub_date": "2025-07-30",
+      "category": "医保政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
     },
     {
       "id": 201,
@@ -574,6 +912,19 @@
       "is_pushed": 1
     },
     {
+      "id": 263,
+      "fingerprint": "d6774b59466a25a2fb67e412cc11a39a",
+      "title": "国家医疗保障局关于公布《2025年国家基本医疗保险、生育保险和工伤保险药品目录及商业健康保险创新药品目录调整工作方案》等相关文件的公告",
+      "url": "https://www.gov.cn/zhengce/zhengceku/202507/content_7031575.htm",
+      "source": "国家医保局",
+      "pub_date": "2025-07-11",
+      "category": "医保政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
       "id": 214,
       "fingerprint": "82dc5633d537be3904d1970c3205bce2",
       "title": "关于印发《健康中国行动—健康环境促进行动实施方案（2025—2030年）》的通知",
@@ -585,6 +936,45 @@
       "created_at": "2026-08-19 07:06:46",
       "pushed_at": "2026-08-19 09:58:03",
       "is_pushed": 1
+    },
+    {
+      "id": 262,
+      "fingerprint": "555375a89e86154e899f2ec74f8b3e63",
+      "title": "国家医保局 国家卫生健康委关于印发《支持创新药高质量发展的若干措施》的通知",
+      "url": "https://www.gov.cn/zhengce/zhengceku/202507/content_7030260.htm",
+      "source": "国家医保局 国家卫生健康委",
+      "pub_date": "2025-07-01",
+      "category": "医保政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
+      "id": 261,
+      "fingerprint": "6e98dd92591d8ae19e1a020d810207f9",
+      "title": "国家医疗保障局关于进一步加强医疗保障定点医疗机构管理的通知",
+      "url": "https://www.gov.cn/zhengce/zhengceku/202506/content_7029260.htm",
+      "source": "国家医保局",
+      "pub_date": "2025-06-24",
+      "category": "医保政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
+      "id": 260,
+      "fingerprint": "5b681158c4616a297f383b8560a64b3e",
+      "title": "国家医疗保障局办公室关于优化医疗服务价格管理流程的通知",
+      "url": "https://www.gov.cn/zhengce/zhengceku/202506/content_7029277.htm",
+      "source": "国家医保局办公室",
+      "pub_date": "2025-06-24",
+      "category": "医保政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
     },
     {
       "id": 183,
@@ -600,6 +990,19 @@
       "is_pushed": 1
     },
     {
+      "id": 259,
+      "fingerprint": "942cd53a0a3aa7b6b8528b90fc78d073",
+      "title": "国家中医药局综合司 国家卫生健康委办公厅 中央军委后勤保障部卫生局关于印发《重大疑难疾病中西医临床协作项目建设管理办法》的通知",
+      "url": "https://www.gov.cn/zhengce/zhengceku/202506/content_7028824.htm",
+      "source": "国家中医药局综合司 国家卫生健康委办公厅 中央军委后勤保障部卫生局",
+      "pub_date": "2025-06-20",
+      "category": "科技申报政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
       "id": 166,
       "fingerprint": "221a2d81e34ed7dd7bb7d4bdcc7fa3c8",
       "title": "市场监管总局 工业和信息化部关于印发《计量支撑产业新质生产力发展行动方案（2025—2030年）》的通知",
@@ -613,6 +1016,32 @@
       "is_pushed": 1
     },
     {
+      "id": 258,
+      "fingerprint": "c143e96b06b4f95c56f60d97f44ab7d2",
+      "title": "国家药品监督管理局公告（2025年第46号）　　国家药监局关于发布医疗器械网络销售质量管理规范的公告",
+      "url": "https://www.gov.cn/gongbao/2025/issue_12086/202506/content_7027004.html",
+      "source": "国务院政策文件库",
+      "pub_date": "2025-06-10",
+      "category": "科技申报政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
+      "id": 257,
+      "fingerprint": "5f04b76ecad2616163df494f70743d7d",
+      "title": "人力资源社会保障部 财政部 国家卫生健康委关于全面开展工伤保险跨省异地就医直接结算　工作的通知",
+      "url": "https://www.gov.cn/gongbao/2025/issue_12046/202505/content_7023966.html",
+      "source": "国务院政策文件库",
+      "pub_date": "2025-05-20",
+      "category": "科技申报政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
       "id": 185,
       "fingerprint": "58c027a860f6fcb281675a53cc8a2b3a",
       "title": "关于全面推进分娩镇痛工作的通知",
@@ -624,6 +1053,19 @@
       "created_at": "2026-08-19 07:06:28",
       "pushed_at": "2026-08-20 02:02:18",
       "is_pushed": 1
+    },
+    {
+      "id": 256,
+      "fingerprint": "10b4db3149407e09e036a1b35f86a99c",
+      "title": "国家药监局关于发布医疗器械网络销售质量管理规范的公告",
+      "url": "https://www.gov.cn/zhengce/zhengceku/202504/content_7021640.htm",
+      "source": "国家药监局",
+      "pub_date": "2025-04-29",
+      "category": "科技申报政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
     },
     {
       "id": 216,
@@ -665,6 +1107,19 @@
       "is_pushed": 1
     },
     {
+      "id": 255,
+      "fingerprint": "615e9fff98a2a72761a881fd79e12e0a",
+      "title": "国家中医药管理局关于进一步加强中医药科研诚信建设的通知",
+      "url": "https://www.gov.cn/zhengce/zhengceku/202504/content_7018938.htm",
+      "source": "国家中医药管理局",
+      "pub_date": "2025-04-16",
+      "category": "科技申报政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
       "id": 222,
       "fingerprint": "5f85d9f071b2660dde3ec8e97aa36354",
       "title": "商务部印发《关于加快推进服务业扩大开放综合试点工作方案》的通知",
@@ -687,8 +1142,8 @@
       "category": "科技申报政策",
       "summary": "优质农产品销售专区、专柜，组织专场销售活动。打击食品非法添加，开展有机食品认证有效性抽查。实施促进营养健康专项行动。强化餐饮营养健康工程建设，引导餐饮企业推广使用食养指南。指导城乡基层医疗卫生机构为",
       "created_at": "2026-08-19 07:06:46",
-      "pushed_at": null,
-      "is_pushed": 0
+      "pushed_at": "2026-08-20 09:59:42",
+      "is_pushed": 1
     },
     {
       "id": 217,
@@ -700,6 +1155,19 @@
       "category": "科技申报政策",
       "summary": "落实《医药工业高质量发展行动计划（2023—2025年）》《制造业数字化转型行动方案》《关于全面深化药品医疗器械监管改革促进医药产业高质量发展的意见》，深入推进人工智能赋能新型工业化，推动新一代信息技术",
       "created_at": "2026-08-19 07:06:46",
+      "pushed_at": "2026-08-20 09:59:42",
+      "is_pushed": 1
+    },
+    {
+      "id": 254,
+      "fingerprint": "e8140a2c7ff7e3927c2f4aa167a494c3",
+      "title": "退役军人事务部 教育部 民政部 财政部 住房城乡建设部 国家卫生健康委 国家医保局关于　印发《困难退役军人帮扶援助工作规范》的通知　　困难退役军人帮扶援助工作规范",
+      "url": "https://www.gov.cn/gongbao/2025/issue_11946/202503/content_7015854.html",
+      "source": "国务院政策文件库",
+      "pub_date": "2025-03-30",
+      "category": "医保政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
       "pushed_at": null,
       "is_pushed": 0
     },
@@ -713,6 +1181,58 @@
       "category": "科技申报政策",
       "summary": "行业稳增长工作方案，研究保持制造业合理比重投入机制，落实“两重”、“两新”政策，稳住制造业就业规模。持续开展先进制造业促就业行动，实施制造业重点产业链高质量发展行动，培育智能装备、电子信息、生物医药、",
       "created_at": "2026-08-20 09:59:42",
+      "pushed_at": "2026-08-20 09:59:42",
+      "is_pushed": 1
+    },
+    {
+      "id": 253,
+      "fingerprint": "fbb3c1ec94d02f5d3c4aff6cca24ffea",
+      "title": "国家卫生健康委办公厅关于印发2025年国家医疗质量安全改进目标的通知",
+      "url": "https://www.gov.cn/zhengce/zhengceku/202503/content_7014945.htm",
+      "source": "国家卫生健康委办公厅",
+      "pub_date": "2025-03-21",
+      "category": "科技申报政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
+      "id": 252,
+      "fingerprint": "dbab999183184842de3e27e2adc829d5",
+      "title": "国家医保局 人力资源社会保障部 国家卫生健康委 国家药监局关于加强药品追溯码在医疗保障和工伤保险领域采集应用的通知",
+      "url": "https://www.gov.cn/zhengce/zhengceku/202503/content_7014584.htm",
+      "source": "国家医保局 人力资源社会保障部 国家卫生健康委 国家药监局",
+      "pub_date": "2025-03-20",
+      "category": "医保政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
+      "id": 251,
+      "fingerprint": "0f633d4a25e6d7d724b69e1207f0a26c",
+      "title": "国务院办公厅关于提升中药质量促进中医药产业高质量发展的意见",
+      "url": "https://www.gov.cn/zhengce/zhengceku/202503/content_7014717.htm",
+      "source": "国务院办公厅",
+      "pub_date": "2025-03-20",
+      "category": "科技申报政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
+      "id": 250,
+      "fingerprint": "23bfa0515687714e15e3bdcf63a2cf4a",
+      "title": "国家药监局关于进一步调整和优化进口医疗器械产品在中国境内企业生产有关事项的公告",
+      "url": "https://www.gov.cn/zhengce/zhengceku/202503/content_7014420.htm",
+      "source": "国家药监局",
+      "pub_date": "2025-03-19",
+      "category": "科技申报政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
       "pushed_at": null,
       "is_pushed": 0
     },
@@ -726,6 +1246,32 @@
       "category": "科技申报政策",
       "summary": "部门要聚焦党的二十届三中全会作出的全面深化改革总目标，深入贯彻“实施健康优先发展战略”，推动建立完善健康优先发展的规划、投入、治理等政策法规体系。进一步总结和推广以三明为代表的一批典型地区的医改经验。",
       "created_at": "2026-08-19 07:06:26",
+      "pushed_at": "2026-08-20 09:59:42",
+      "is_pushed": 1
+    },
+    {
+      "id": 249,
+      "fingerprint": "17129f2cb27e397b0cb9285b2135f39e",
+      "title": "国家卫生健康委 民政部 国家医保局 国家中医药局 国家疾控局关于促进医养结合服务高　质量发展的指导意见",
+      "url": "https://www.gov.cn/gongbao/2025/issue_11886/202502/content_7007110.html",
+      "source": "国务院政策文件库",
+      "pub_date": "2025-02-28",
+      "category": "医保政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
+      "id": 248,
+      "fingerprint": "c9dd1524e4dbf09c1f4e4e128c22cb4d",
+      "title": "国家中医药管理局关于印发《国家中医药管理局重点实验室管理办法》的通知",
+      "url": "https://www.gov.cn/zhengce/zhengceku/202502/content_7003583.htm",
+      "source": "国家中医药局",
+      "pub_date": "2025-02-13",
+      "category": "科技申报政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
       "pushed_at": null,
       "is_pushed": 0
     },
@@ -739,6 +1285,45 @@
       "category": "科技申报政策",
       "summary": "综合医院均提供儿科服务。 1.扩大儿科服务供给。各省级卫生健康行政部门要全面梳理辖区内尚未提供儿科服务的二、三级公立综合医院名单，督促指导其按照《医疗机构管理条例》及其实施细则、医疗机构基本标准有关要求设置",
       "created_at": "2026-08-19 07:06:46",
+      "pushed_at": "2026-08-20 09:59:42",
+      "is_pushed": 1
+    },
+    {
+      "id": 247,
+      "fingerprint": "cd0b6bd82b704eafed95734511f470f8",
+      "title": "国家卫生健康委 工业和信息化部 国家医保局 国家中医药局 国家疾控局 国家药监局关于　改革完善基层药品联动管理机制扩大基层药品种类的意见",
+      "url": "https://www.gov.cn/gongbao/2025/issue_11846/202502/content_7002778.html",
+      "source": "国务院政策文件库",
+      "pub_date": "2025-02-10",
+      "category": "医保政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
+      "id": 246,
+      "fingerprint": "1b09ff20630644b082946c0ce1fcc423",
+      "title": "国家卫生健康委 国家发展改革委 财政部 国家医保局 国家中医药局 国家疾控局 中央军委　后勤保障部卫生局关于进一步推进医疗机构检查检验结果互认的指导意见",
+      "url": "https://www.gov.cn/gongbao/2025/issue_11846/202502/content_7002779.html",
+      "source": "国务院政策文件库",
+      "pub_date": "2025-02-10",
+      "category": "医保政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
+      "id": 245,
+      "fingerprint": "1a8c6661005d64bcafd654e8d7200e6c",
+      "title": "中央组织部 人力资源社会保障部 外交部 教育部 科技部 公安部 中国人民银行 海关总署　国家医保局 国家移民局关于进一步做好留学人才回国服务工作的意见",
+      "url": "https://www.gov.cn/gongbao/2025/issue_11846/202502/content_7002784.html",
+      "source": "国务院政策文件库",
+      "pub_date": "2025-02-10",
+      "category": "医保政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
       "pushed_at": null,
       "is_pushed": 0
     },
@@ -752,8 +1337,8 @@
       "category": "科技申报政策",
       "summary": "各类医疗机构结合实际开展婴幼儿早期发展服务。 （一）养育风险评估与指导。 1.评估与指导时机及频次。根据不同年龄段婴幼儿发育特点，结合0～6岁儿童健康管理服务时间和频次，在婴幼儿满1、3、6、8、12、",
       "created_at": "2026-08-19 08:40:06",
-      "pushed_at": null,
-      "is_pushed": 0
+      "pushed_at": "2026-08-20 09:59:42",
+      "is_pushed": 1
     },
     {
       "id": 232,
@@ -765,8 +1350,8 @@
       "category": "科技申报政策",
       "summary": "其他专业医疗机构。 （二）咨询指导 1.喂养行为咨询指导 针对喂养行为评价中发现的问题，给予养育人针对性咨询指导。帮助养育人充分认识母乳喂养、辅食添加、合理膳食及饮食行为培养的重要性，了解自身在日常",
       "created_at": "2026-08-19 08:40:06",
-      "pushed_at": null,
-      "is_pushed": 0
+      "pushed_at": "2026-08-20 09:59:42",
+      "is_pushed": 1
     },
     {
       "id": 167,
@@ -795,6 +1380,45 @@
       "is_pushed": 0
     },
     {
+      "id": 244,
+      "fingerprint": "afc7c1999d1f997408c6e9fb22d9e576",
+      "title": "国务院办公厅印发《关于全面深化药品医疗器械监管改革促进医药产业高质量发展的意见》",
+      "url": "https://www.gov.cn/zhengce/202501/content_6996182.htm",
+      "source": "国务院政策文件库",
+      "pub_date": "2025-01-03",
+      "category": "科技申报政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
+      "id": 243,
+      "fingerprint": "16a7231d6974f0ca1a4705eae78f86b0",
+      "title": "深化药品医疗器械监管改革意见出台 审评审批资源进一步向创新倾斜",
+      "url": "https://www.gov.cn/zhengce/202501/content_6996214.htm",
+      "source": "国务院政策文件库",
+      "pub_date": "2025-01-03",
+      "category": "科技申报政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
+      "id": 242,
+      "fingerprint": "ad7713b3a19d9ce99d2eb9b278ca961b",
+      "title": "国务院办公厅关于全面深化药品医疗器械监管改革促进医药产业高质量发展的意见",
+      "url": "https://www.gov.cn/zhengce/zhengceku/202501/content_6996117.htm",
+      "source": "国务院办公厅",
+      "pub_date": "2025-01-03",
+      "category": "科技申报政策",
+      "summary": "",
+      "created_at": "2026-08-20 09:25:42",
+      "pushed_at": null,
+      "is_pushed": 0
+    },
+    {
       "id": 234,
       "fingerprint": "4342dda4f95b0affd0b88c3a6e800e07",
       "title": "国家卫生健康委等15个部门关于联合印发《应对老年期痴呆国家行动计划（2024—2030年）》的通知",
@@ -808,5 +1432,5 @@
       "is_pushed": 0
     }
   ],
-  "count": 62
+  "count": 110
 }
