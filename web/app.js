@@ -4558,6 +4558,37 @@ const ROBOT_NATIONAL_HUBS = [
 async function initRobotMap() {
     bindRobotEvents();
     await loadRobotData();
+    populateRobotProvinceSelect();
+}
+
+function populateRobotProvinceSelect() {
+    const provSelect = document.getElementById('robotProvinceSelect');
+    if (!provSelect || !robotEnterprisesData || robotEnterprisesData.length === 0) return;
+    const entCounts = {};
+    const expCounts = {};
+    robotEnterprisesData.forEach(i => {
+        const p = (i.province || '').trim();
+        if (p) entCounts[p] = (entCounts[p] || 0) + 1;
+    });
+    (robotExpertsData || []).forEach(i => {
+        const p = (i.province || '').trim();
+        if (p) expCounts[p] = (expCounts[p] || 0) + 1;
+    });
+    const provs = Object.keys({ ...entCounts, ...expCounts });
+    provs.sort((a, b) => (entCounts[b] || 0) - (entCounts[a] || 0) || (expCounts[b] || 0) - (expCounts[a] || 0));
+    const current = provSelect.value;
+    let html = `<option value="all">📍 全部${provs.length}个省市直达...</option>`;
+    provs.forEach(p => {
+        const e = entCounts[p] || 0;
+        const x = expCounts[p] || 0;
+        let label = p + ' (';
+        if (e > 0) label += `${e}家企业`;
+        if (x > 0) label += `${e > 0 ? ' / ' : ''}${x}位专家`;
+        label += ')';
+        html += `<option value="${p}">${label}</option>`;
+    });
+    provSelect.innerHTML = html;
+    if (current && (current === 'all' || provs.includes(current))) provSelect.value = current;
 }
 
 async function loadRobotData() {
@@ -4572,7 +4603,7 @@ async function loadRobotData() {
 
     if (!robotEnterprisesData || robotEnterprisesData.length === 0) {
         try {
-            const resp = await fetch('./data/robot_enterprises.json');
+            const resp = await fetch('./data/robot_enterprises.json?v=' + Date.now());
             if (resp.ok) {
                 const res = await resp.json();
                 robotEnterprisesData = res.data || [];
@@ -4591,7 +4622,7 @@ async function loadRobotData() {
 
     if (!robotExpertsData || robotExpertsData.length === 0) {
         try {
-            const resp = await fetch('./data/robot_experts.json');
+            const resp = await fetch('./data/robot_experts.json?v=' + Date.now());
             if (resp.ok) {
                 const res = await resp.json();
                 robotExpertsData = res.data || [];
