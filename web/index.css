@@ -3665,3 +3665,31 @@ body {
 
 
 
+
+
+
+/* ==========================================================================
+   🦾 医疗机器人产业智库与企业投资地图模块样式 (Medical Robotics Map Modal)
+   ========================================================================== */
+
+.robot-header {
+    background: linear-gradient(135deg, #0f172a 0%, #0369a1 50%, #0d9488 100%) !important;
+    border-bottom: 2px solid #38bdf8 !important;
+}
+
+.robot-modal-card {
+    border: 1px solid rgba(56, 189, 248, 0.25) !important;
+}
+
+.action-robot-map {
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important;
+    border-color: #38bdf8 !important;
+    color: #ffffff !important;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(2, 132, 199, 0.4);
+}
+
+.action-robot-map:hover {
+    background: linear-gradient(135deg, #0369a1 0%, #075985 100%) !important;
+    box-shadow: 0 3px 12px rgba(2, 132, 199, 0.55);
+}

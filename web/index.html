@@ -196,6 +196,13 @@
                         <span class="nav-arrow-icon">▼</span>
                     </a>
                     <div class="nmpa-dropdown-menu">
+                                                <a href="javascript:void(0)" class="dropdown-item" onclick="openRobotModal()">
+                            <span class="dropdown-item-icon">🦾</span>
+                            <div class="dropdown-item-text">
+                                <span class="dropdown-item-title">全国医疗机器人企业与专家地图</span>
+                                <span class="dropdown-tag-hot">93家企业 / 58位专家</span>
+                            </div>
+                        </a>
                         <a href="javascript:void(0)" class="dropdown-item" onclick="openBciModal()">
                             <span class="dropdown-item-icon">🧠</span>
                             <div class="dropdown-item-text">
@@ -850,6 +857,187 @@
                 <div class="footer-bar-left">
                     <span class="footer-live-indicator"></span>
                     <span class="footer-source-text">数据权威溯源：国家药品监督管理局 (NMPA) · 科技部 · 四川省药监局 · 成都市经信局 · 全景脑机产业图谱</span>
+                </div>
+                <div class="footer-bar-center">
+                    <span class="footer-center-tag">★ 四川发展·医药健康产业集团 创新事业部 决策内参 ★</span>
+                </div>
+                <div class="footer-bar-right">
+                    <span class="footer-version-tag">🛡️ 实时监测引擎 v2026.08 · 官方权威认证</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 医疗机器人企业投资与专家智库地图 - 全屏级产业大屏模态弹窗 (集成ECharts中国地图与重点穿透) -->
+    <div id="robotMapModal" class="nmpa-modal-backdrop hidden">
+        <div class="nmpa-modal-card bci-modal-card robot-modal-card">
+            <!-- 头部标题栏 -->
+            <div class="modal-header bci-header robot-header">
+                <div class="modal-title-wrap">
+                    <h3 class="modal-title">🦾 中国医疗机器人产业智库与重点企业投资决策全景地图</h3>
+                    <span class="modal-subtitle">覆盖全国 93 家核心手术/康复/介入机器人企业与 58 位顶尖专家学者 · 融合国家药监局三类器械获批与临床转化数据</span>
+                </div>
+                <div class="bci-header-right">
+                    <div class="bci-badge-sichuan" title="四川省在全国医疗机器人产业布局中位列全国第3、西部第1">
+                        ⭐ 四川重点布局 (11家企业 / 5位领军学者)
+                    </div>
+                    <button class="bci-action-header-btn btn-fullscreen" id="btnToggleRobotFullscreen" title="切换全屏沉浸大屏模式" onclick="toggleRobotFullscreen()">
+                        <span class="fullscreen-icon" id="fullscreenRobotIcon">⛶</span>
+                        <span class="fullscreen-text" id="fullscreenRobotText">全屏展示</span>
+                    </button>
+                    <button class="bci-action-header-btn btn-back-system" id="modalRobotCloseBtn" title="返回系统主页" onclick="closeRobotModal()">
+                        <span>✕ 返回主页</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 顶部高光 KPI 指标核心看板 -->
+            <div class="bci-kpi-bar">
+                <div class="bci-kpi-item">
+                    <span class="bci-kpi-label">全国机器人核心企业</span>
+                    <strong class="bci-kpi-num" id="robotKpiTotalEnt">93 <small>家</small></strong>
+                </div>
+                <div class="bci-kpi-item">
+                    <span class="bci-kpi-label">全国领军专家学者</span>
+                    <strong class="bci-kpi-num" id="robotKpiTotalExp">58 <small>位</small></strong>
+                </div>
+                <div class="bci-kpi-item highlight-sc">
+                    <span class="bci-kpi-label">四川本土重点标的</span>
+                    <strong class="bci-kpi-num" id="robotKpiScEnt">11 <small>家 (成都)</small></strong>
+                </div>
+                <div class="bci-kpi-item">
+                    <span class="bci-kpi-label">四川重点医工平台</span>
+                    <strong class="bci-kpi-num" style="color:#059669;">国家精准医学 <small>+华西转化</small></strong>
+                </div>
+                <div class="bci-kpi-item">
+                    <span class="bci-kpi-label">核心覆盖技术流派</span>
+                    <strong class="bci-kpi-num" style="color:#0284c7;">5 <small>大前沿路线</small></strong>
+                </div>
+            </div>
+
+            <!-- 主体双栏联动交互区 (左侧交互中国地图 + 右侧重点标的穿透看板) -->
+            <div class="bci-main-grid-layout">
+                <!-- 左侧: 交互式中国地图及地理标注 (纯净大地图，无任何浮层遮挡) -->
+                <div class="bci-map-panel">
+                    <div class="bci-panel-header">
+                        <div class="bci-panel-title-wrap">
+                            <span class="bci-panel-title">🗺️ 全国医疗机器人产业热度分布与地理标注 (点击省份/城市精准穿透)</span>
+                            <span class="bci-panel-subtitle">以地理坐标定位全国核心产业极 · 重点标注成都市、北京市、上海市、深圳市等</span>
+                        </div>
+                        <div class="bci-region-quick-nav" id="robotRegionQuickNav">
+                            <button class="bci-nav-btn active" data-region="all">全部全国</button>
+                            <button class="bci-nav-btn btn-sc-nav" data-region="四川省">⭐ 四川重点</button>
+                            <button class="bci-nav-btn" data-region="长三角">长三角</button>
+                            <button class="bci-nav-btn" data-region="京津冀">京津冀</button>
+                            <button class="bci-nav-btn" data-region="大湾区">粤港澳</button>
+                        </div>
+                    </div>
+                    
+                    <!-- ECharts 中国地图主容器 -->
+                    <div class="bci-map-wrapper-relative">
+                        <div id="chartChinaRobotMap" class="bci-china-map-container"></div>
+                    </div>
+                </div>
+
+                <!-- 右侧: 重点标的研判与专家穿透详情看板 -->
+                <div class="bci-detail-panel">
+                    <div class="bci-panel-header" style="flex-wrap: wrap; gap: 8px;">
+                        <!-- 当前选中区域状态指示与一键重置 -->
+                        <div class="bci-current-focus-status" id="robotCurrentFocusBanner">
+                            <span>📍 当前聚焦：<strong id="robotFocusRegionName" style="color:#0284c7;">全国全域</strong> (<span id="robotFocusEntCount">93</span> 家企业 / <span id="robotFocusExpCount">58</span> 位学者)</span>
+                            <button class="btn-reset-focus hidden" id="btnResetRobotFocus" title="恢复展示全国" onclick="resetRobotFocus()">🔄 恢复全国</button>
+                        </div>
+                        <!-- 模式切换: 重点企业 / 领军智库 -->
+                        <div class="bci-view-switch">
+                            <button class="bci-switch-btn active" data-view="enterprises" id="btnSwitchRobotEntView">
+                                🏢 重点企业 (<span id="robotViewEntBadge">93</span>)
+                            </button>
+                            <button class="bci-switch-btn" data-view="experts" id="btnSwitchRobotExpView">
+                                👨‍🔬 领军智库 (<span id="robotViewExpBadge">58</span>)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 顶尖智库与高校学者专区 (根据用户选择动态调整、横向排布，0遮挡地图) -->
+                    <div class="sc-side-talents-wrapper" id="scSideRobotTalentsSection">
+                        <div class="sc-side-header">
+                            <div class="sc-side-title">
+                                <span>⭐</span>
+                                <strong id="sideRobotTalentsTitle">全国重点医疗机器人智库与高校学者 (动态联动)</strong>
+                            </div>
+                            <span class="sc-side-badge" id="sideRobotTalentsBadge">5 位学者</span>
+                        </div>
+                        <div class="sc-side-cards-row" id="sideRobotTalentsCardsRow">
+                            <!-- 动态 JavaScript 实时根据用户选取横向排布渲染学者卡片 -->
+                        </div>
+                    </div>
+
+                    <!-- 过滤栏: 评级/技术/专家类型 + 搜索框 -->
+                    <div class="bci-toolbar-wrapper">
+                        <!-- 企业模式工具栏 (评级 + 技术路线) -->
+                        <div class="bci-filter-section" id="robotEntFilterSection">
+                            <!-- 1. 评级维度 (互斥归类，总数完全严丝合缝) -->
+                            <div class="bci-filter-line">
+                                <span class="bci-filter-sublabel">🏆 研判评级:</span>
+                                <div class="bci-filter-chips" id="robotCompChips">
+                                    <button class="chip-filter active" data-comp="all">全部评级 (<span id="cnt-robot-comp-all">93</span>)</button>
+                                    <button class="chip-filter chip-high" data-comp="高">⭐ 高竞争力/领军 (<span id="cnt-robot-comp-high">44</span>)</button>
+                                    <button class="chip-filter chip-mid" data-comp="中高">🔥 中高价值 (<span id="cnt-robot-comp-mid">34</span>)</button>
+                                    <button class="chip-filter chip-norm" data-comp="中">💎 中等稳健 (<span id="cnt-robot-comp-norm">12</span>)</button>
+                                    <button class="chip-filter" data-comp="观察">👀 持续观察 (<span id="cnt-robot-comp-obs">3</span>)</button>
+                                </div>
+                            </div>
+                            <!-- 2. 技术路线维度 (互斥归类，总数完全严丝合缝) -->
+                            <div class="bci-filter-line">
+                                <span class="bci-filter-sublabel">⚡ 技术流派:</span>
+                                <div class="bci-filter-chips" id="robotTechChips">
+                                    <button class="chip-filter active" data-tech="all">全部路线 (<span id="cnt-robot-tech-all">93</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-tech="腔镜/微创">🔬 腔镜/微创 (<span id="cnt-robot-tech-腔镜">15</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-tech="骨科/关节">🦴 骨科/关节 (<span id="cnt-robot-tech-骨科">10</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-tech="神经/介入/穿刺">🧠 神经/介入/穿刺 (<span id="cnt-robot-tech-神经介入">34</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-tech="康复/外骨骼">🦾 康复/外骨骼 (<span id="cnt-robot-tech-康复">14</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-tech="辅助/物流/诊疗">🏥 辅助/物流/诊疗 (<span id="cnt-robot-tech-辅助">20</span>)</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 专家模式工具栏 (专家分类) -->
+                        <div class="bci-filter-section hidden" id="robotExpFilterSection">
+                            <div class="bci-filter-line">
+                                <span class="bci-filter-sublabel">🎓 专家分类:</span>
+                                <div class="bci-filter-chips" id="robotExpTypeChips">
+                                    <button class="chip-filter active" data-exptype="all">全部类型 (<span id="cnt-robot-exp-all">58</span>)</button>
+                                    <button class="chip-filter" data-exptype="产业/领军">🏭 产业/领军 (<span id="cnt-robot-exp-ind">35</span>)</button>
+                                    <button class="chip-filter" data-exptype="学术/科研">🔬 学术/科研 (<span id="cnt-robot-exp-acad">9</span>)</button>
+                                    <button class="chip-filter" data-exptype="临床转化">🏥 临床转化 (<span id="cnt-robot-exp-clin">12</span>)</button>
+                                    <button class="chip-filter" data-exptype="标准/审评">📋 药监审评与标准 (<span id="cnt-robot-exp-std">2</span>)</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 即时搜索栏 -->
+                        <div class="bci-search-row">
+                            <div class="bci-search-input-wrap">
+                                <span class="bci-search-icon">🔍</span>
+                                <input type="text" id="robotSearchInput" placeholder="输入企业/专家/技术/产品/投资人检索...">
+                                <button class="btn-clear-search hidden" id="btnClearRobotSearch" title="清空搜索">×</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 标的/专家精炼卡片容器 -->
+                    <div class="bci-focus-cards-list" id="robotFocusCardsList">
+                        <div class="loading-state">正在调取医疗机器人重点标的数据库...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 大屏最底部高品质政务科技装饰条板块 -->
+            <div class="bci-screen-footer-bar">
+                <div class="footer-bar-left">
+                    <span class="footer-live-indicator" style="background:#0284c7;box-shadow:0 0 8px #0284c7;"></span>
+                    <span class="footer-source-text">数据权威溯源：国家药品监督管理局 (NMPA) · 国家卫健委 · 四川省药监局 · 成都市经信局 · 医疗机器人全景产业图谱</span>
                 </div>
                 <div class="footer-bar-center">
                     <span class="footer-center-tag">★ 四川发展·医药健康产业集团 创新事业部 决策内参 ★</span>

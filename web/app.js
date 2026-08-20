@@ -133,7 +133,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initApiKeyForm();
     loadData();
     initVisitorAnalytics(); // 初始化访客统计打点与渲染
-    initBciMap(); // 初始化脑机接口产业智库地图
+    initBciMap();
+    initRobotMap(); // 初始化医疗机器人产业智库地图 // 初始化脑机接口产业智库地图
     bindEvents();
 });
 
@@ -4363,4 +4364,1072 @@ window.closeBciModal = closeBciModal;
 
 
 
+
+
+
+
+// ==========================================================================
+// 🦾 医疗机器人产业智库与重点企业投资决策全景地图模块 (Medical Robotics Map Modal)
+// ==========================================================================
+
+let robotEnterprisesData = [];
+let robotExpertsData = [];
+let chartChinaRobotMapInstance = null;
+
+let robotState = {
+    currentRegion: 'all',       // 'all', '四川省', '北京市', '上海市', '长三角', '京津冀', '大湾区'
+    currentView: 'enterprises', // 'enterprises' | 'experts'
+    compFilter: 'all',          // 'all', '高', '中高', '中', '观察'
+    techFilter: 'all',          // 'all', '腔镜/微创', '骨科/关节', '神经/介入/穿刺', '康复/外骨骼', '辅助/物流/诊疗'
+    expTypeFilter: 'all',       // 'all', '产业/领军', '学术/科研', '临床转化', '标准/审评'
+    searchQuery: ''
+};
+
+// 核心城市地理坐标与标注点基准配置 (医疗机器人版)
+const ROBOT_CITIES_COORDS = [
+    { name: '成都市', coords: [104.066541, 30.572269], province: '四川省', highlight: true },
+    { name: '北京市', coords: [116.405285, 39.904989], province: '北京市' },
+    { name: '上海市', coords: [121.472644, 31.231706], province: '上海市' },
+    { name: '深圳市', coords: [114.057868, 22.543099], province: '广东省' },
+    { name: '杭州市', coords: [120.153576, 30.287459], province: '浙江省' },
+    { name: '苏州市', coords: [120.585315, 31.298886], province: '江苏省' },
+    { name: '南京市', coords: [118.767413, 32.041544], province: '江苏省' },
+    { name: '天津市', coords: [117.190182, 39.125596], province: '天津市' },
+    { name: '武汉市', coords: [114.298572, 30.584355], province: '湖北省' },
+    { name: '西安市', coords: [108.948024, 34.263161], province: '陕西省' },
+    { name: '哈尔滨市', coords: [126.642464, 45.756967], province: '黑龙江省' }
+];
+
+async function initRobotMap() {
+    bindRobotEvents();
+    await loadRobotData();
+}
+
+async function loadRobotData() {
+    // 1. 加载企业数据 (93家)
+    try {
+        const resp = await fetch('/api/robot-enterprises');
+        if (resp.ok) {
+            const res = await resp.json();
+            if (res.data && Array.isArray(res.data)) robotEnterprisesData = res.data;
+        }
+    } catch (e) {}
+
+    if (!robotEnterprisesData || robotEnterprisesData.length === 0) {
+        try {
+            const resp = await fetch('./data/robot_enterprises.json');
+            if (resp.ok) {
+                const res = await resp.json();
+                robotEnterprisesData = res.data || [];
+            }
+        } catch (e) {}
+    }
+
+    // 2. 加载专家数据 (58位)
+    try {
+        const resp = await fetch('/api/robot-experts');
+        if (resp.ok) {
+            const res = await resp.json();
+            if (res.data && Array.isArray(res.data)) robotExpertsData = res.data;
+        }
+    } catch (e) {}
+
+    if (!robotExpertsData || robotExpertsData.length === 0) {
+        try {
+            const resp = await fetch('./data/robot_experts.json');
+            if (resp.ok) {
+                const res = await resp.json();
+                robotExpertsData = res.data || [];
+            }
+        } catch (e) {}
+    }
+
+    // 3. 确保中国地图已注册
+    await ensureChinaMapRegistered();
+
+    updateRobotKpiBar();
+    updateRobotFilterBadges();
+    renderRobotFocusCards();
+}
+
+function updateRobotKpiBar() {
+    const totalEnt = robotEnterprisesData.length || 93;
+    const totalExp = robotExpertsData.length || 58;
+    const scEnt = robotEnterprisesData.filter(i => (i.province || '').includes('四川')).length || 11;
+
+    const elTotalEnt = document.getElementById('robotKpiTotalEnt');
+    const elTotalExp = document.getElementById('robotKpiTotalExp');
+    const elScEnt = document.getElementById('robotKpiScEnt');
+
+    if (elTotalEnt) elTotalEnt.innerHTML = `${totalEnt} <small>家</small>`;
+    if (elTotalExp) elTotalExp.innerHTML = `${totalExp} <small>位</small>`;
+    if (elScEnt) elScEnt.innerHTML = `${scEnt} <small>家 (成都)</small>`;
+}
+
+// 1. 医疗机器人企业评级标准化互斥归类 (高 / 中高 / 中 / 观察 四分法)
+function getRobotCompCategory(comp) {
+    if (!comp) return '观察';
+    const c = String(comp).trim();
+    if (c.startsWith('高：') || (c.startsWith('高') && !c.startsWith('中高'))) return '高';
+    if (c.startsWith('中高：') || c.startsWith('中高')) return '中高';
+    if (c.startsWith('中：') || (c.startsWith('中') && !c.startsWith('中高'))) return '中';
+    if (c.startsWith('观察：') || c.includes('观察')) return '观察';
+    return '中';
+}
+
+// 2. 医疗机器人企业技术路径标准化互斥归类 (腔镜微创 / 骨科关节 / 神经介入穿刺 / 康复外骨骼 / 辅助物流 五分法)
+function getRobotTechCategory(tech, intro) {
+    const t = ((tech || '') + ' ' + (intro || '')).toLowerCase();
+    if (t.includes('骨科') || t.includes('关节') || t.includes('脊柱') || t.includes('创伤骨科') || t.includes('天玑')) {
+        return '骨科/关节';
+    }
+    if (t.includes('腔镜') || t.includes('内窥镜') || t.includes('腹腔镜') || t.includes('微创手术机器人') || t.includes('自然腔道') || t.includes('支气管') || t.includes('胸外') || t.includes('妇科微创') || t.includes('生殖与妇科') || t.includes('达芬奇')) {
+        return '腔镜/微创';
+    }
+    if (t.includes('外骨骼') || t.includes('康复') || t.includes('仿生') || t.includes('假肢') || t.includes('义肢') || t.includes('步态') || t.includes('踝关节') || t.includes('盆底') || t.includes('瘫痪')) {
+        return '康复/外骨骼';
+    }
+    if (t.includes('神经') || t.includes('血管介入') || t.includes('穿刺') || t.includes('立体定向') || t.includes('脑科') || t.includes('心血管') || t.includes('磁控') || t.includes('介入') || t.includes('脑深部') || t.includes('癫痫') || t.includes('经颅') || t.includes('血流') || t.includes('口腔') || t.includes('种植')) {
+        return '神经/介入/穿刺';
+    }
+    return '辅助/物流/诊疗';
+}
+
+// 3. 专家分类标准化归类 (产业/领军 / 学术/科研 / 临床转化 / 标准/审评)
+function getRobotExpCategory(exp_type, direction) {
+    const et = String(exp_type || '');
+    if (et.includes('产业')) return '产业/领军';
+    if (et.includes('临床')) return '临床转化';
+    if (et.includes('标准') || et.includes('监管') || et.includes('审评')) return '标准/审评';
+    if (et.includes('学术') || et.includes('科研')) return '学术/科研';
+    return '学术/科研';
+}
+
+// 4. 获取经过区域与筛选过滤的数据集
+function getFilteredRobotList(forMapGlobal = false) {
+    if (robotState.currentView === 'enterprises') {
+        let list = [...robotEnterprisesData];
+
+        if (!forMapGlobal && robotState.currentRegion !== 'all') {
+            if (robotState.currentRegion === '长三角') {
+                list = list.filter(i => ['上海市', '江苏省', '浙江省', '安徽省'].includes(i.province));
+            } else if (robotState.currentRegion === '京津冀') {
+                list = list.filter(i => ['北京市', '天津市', '河北省'].includes(i.province));
+            } else if (robotState.currentRegion === '粤港澳' || robotState.currentRegion === '大湾区') {
+                list = list.filter(i => ['广东省', '香港特别行政区', '澳门特别行政区'].includes(i.province));
+            } else {
+                const clean = robotState.currentRegion.replace('省', '').replace('市', '');
+                list = list.filter(i => (i.province || '').includes(clean));
+            }
+        }
+
+        if (robotState.compFilter !== 'all') {
+            list = list.filter(i => getRobotCompCategory(i.competitiveness) === robotState.compFilter);
+        }
+
+        if (robotState.techFilter !== 'all') {
+            list = list.filter(i => getRobotTechCategory(i.tech_route, i.product_intro) === robotState.techFilter);
+        }
+
+        if (robotState.searchQuery && robotState.searchQuery.trim() !== '') {
+            const q = robotState.searchQuery.trim().toLowerCase();
+            list = list.filter(i => 
+                (i.name || '').toLowerCase().includes(q) ||
+                (i.tech_route || '').toLowerCase().includes(q) ||
+                (i.product_intro || '').toLowerCase().includes(q) ||
+                (i.financing || '').toLowerCase().includes(q) ||
+                (i.stage || '').toLowerCase().includes(q) ||
+                (i.city || '').toLowerCase().includes(q) ||
+                (i.province || '').toLowerCase().includes(q)
+            );
+        }
+        return list;
+    } else {
+        let list = [...robotExpertsData];
+
+        if (!forMapGlobal && robotState.currentRegion !== 'all') {
+            if (robotState.currentRegion === '长三角') {
+                list = list.filter(i => ['上海市', '江苏省', '浙江省', '安徽省'].includes(i.province));
+            } else if (robotState.currentRegion === '京津冀') {
+                list = list.filter(i => ['北京市', '天津市', '河北省'].includes(i.province));
+            } else if (robotState.currentRegion === '粤港澳' || robotState.currentRegion === '大湾区') {
+                list = list.filter(i => ['广东省', '香港特别行政区', '澳门特别行政区'].includes(i.province));
+            } else {
+                const clean = robotState.currentRegion.replace('省', '').replace('市', '');
+                list = list.filter(i => (i.province || '').includes(clean));
+            }
+        }
+
+        if (robotState.expTypeFilter !== 'all') {
+            list = list.filter(i => getRobotExpCategory(i.expert_type, i.direction) === robotState.expTypeFilter);
+        }
+
+        if (robotState.searchQuery && robotState.searchQuery.trim() !== '') {
+            const q = robotState.searchQuery.trim().toLowerCase();
+            list = list.filter(i => 
+                (i.name || '').toLowerCase().includes(q) ||
+                (i.direction || '').toLowerCase().includes(q) ||
+                (i.institution || '').toLowerCase().includes(q) ||
+                (i.associated_enterprise || '').toLowerCase().includes(q) ||
+                (i.expert_type || '').toLowerCase().includes(q) ||
+                (i.province || '').toLowerCase().includes(q)
+            );
+        }
+        return list;
+    }
+}
+
+// 5. 动态更新过滤器角标数量 (严丝合缝)
+function updateRobotFilterBadges() {
+    let regionEntList = [...robotEnterprisesData];
+    let regionExpList = [...robotExpertsData];
+
+    if (robotState.currentRegion !== 'all') {
+        if (robotState.currentRegion === '长三角') {
+            regionEntList = regionEntList.filter(i => ['上海市', '江苏省', '浙江省', '安徽省'].includes(i.province));
+            regionExpList = regionExpList.filter(i => ['上海市', '江苏省', '浙江省', '安徽省'].includes(i.province));
+        } else if (robotState.currentRegion === '京津冀') {
+            regionEntList = regionEntList.filter(i => ['北京市', '天津市', '河北省'].includes(i.province));
+            regionExpList = regionExpList.filter(i => ['北京市', '天津市', '河北省'].includes(i.province));
+        } else if (robotState.currentRegion === '粤港澳' || robotState.currentRegion === '大湾区') {
+            regionEntList = regionEntList.filter(i => ['广东省', '香港特别行政区', '澳门特别行政区'].includes(i.province));
+            regionExpList = regionExpList.filter(i => ['广东省', '香港特别行政区', '澳门特别行政区'].includes(i.province));
+        } else {
+            const clean = robotState.currentRegion.replace('省', '').replace('市', '');
+            regionEntList = regionEntList.filter(i => (i.province || '').includes(clean));
+            regionExpList = regionExpList.filter(i => (i.province || '').includes(clean));
+        }
+    }
+
+    // 企业模式统计
+    const compCounts = { '高': 0, '中高': 0, '中': 0, '观察': 0 };
+    const techCounts = { '腔镜/微创': 0, '骨科/关节': 0, '神经/介入/穿刺': 0, '康复/外骨骼': 0, '辅助/物流/诊疗': 0 };
+
+    regionEntList.forEach(item => {
+        const c = getRobotCompCategory(item.competitiveness);
+        if (compCounts[c] !== undefined) compCounts[c]++;
+        const t = getRobotTechCategory(item.tech_route, item.product_intro);
+        if (techCounts[t] !== undefined) techCounts[t]++;
+    });
+
+    const setBadge = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = val;
+    };
+
+    setBadge('cnt-robot-comp-all', regionEntList.length);
+    setBadge('cnt-robot-comp-high', compCounts['高']);
+    setBadge('cnt-robot-comp-mid', compCounts['中高']);
+    setBadge('cnt-robot-comp-norm', compCounts['中']);
+    setBadge('cnt-robot-comp-obs', compCounts['观察']);
+
+    setBadge('cnt-robot-tech-all', regionEntList.length);
+    setBadge('cnt-robot-tech-腔镜', techCounts['腔镜/微创']);
+    setBadge('cnt-robot-tech-骨科', techCounts['骨科/关节']);
+    setBadge('cnt-robot-tech-神经介入', techCounts['神经/介入/穿刺']);
+    setBadge('cnt-robot-tech-康复', techCounts['康复/外骨骼']);
+    setBadge('cnt-robot-tech-辅助', techCounts['辅助/物流/诊疗']);
+
+    // 专家模式统计
+    const expCounts = { '产业/领军': 0, '学术/科研': 0, '临床转化': 0, '标准/审评': 0 };
+    regionExpList.forEach(item => {
+        const e = getRobotExpCategory(item.expert_type, item.direction);
+        if (expCounts[e] !== undefined) expCounts[e]++;
+    });
+
+    setBadge('cnt-robot-exp-all', regionExpList.length);
+    setBadge('cnt-robot-exp-ind', expCounts['产业/领军']);
+    setBadge('cnt-robot-exp-acad', expCounts['学术/科研']);
+    setBadge('cnt-robot-exp-clin', expCounts['临床转化']);
+    setBadge('cnt-robot-exp-std', expCounts['标准/审评']);
+
+    const entFilterSec = document.getElementById('robotEntFilterSection');
+    const expFilterSec = document.getElementById('robotExpFilterSection');
+    if (entFilterSec && expFilterSec) {
+        if (robotState.currentView === 'enterprises') {
+            entFilterSec.classList.remove('hidden');
+            expFilterSec.classList.add('hidden');
+        } else {
+            entFilterSec.classList.add('hidden');
+            expFilterSec.classList.remove('hidden');
+        }
+    }
+
+    const viewEntBadge = document.getElementById('robotViewEntBadge');
+    const viewExpBadge = document.getElementById('robotViewExpBadge');
+    if (viewEntBadge) viewEntBadge.textContent = regionEntList.length;
+    if (viewExpBadge) viewExpBadge.textContent = regionExpList.length;
+}
+
+// 6. 绑定医疗机器人大屏各类事件
+function bindRobotEvents() {
+    // 快捷区域导航
+    const regionNav = document.getElementById('robotRegionQuickNav');
+    if (regionNav) {
+        regionNav.addEventListener('click', (e) => {
+            const btn = e.target.closest('.bci-nav-btn');
+            if (!btn) return;
+            regionNav.querySelectorAll('.bci-nav-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            robotState.currentRegion = btn.getAttribute('data-region');
+            applyRobotFilterAndRender();
+        });
+    }
+
+    // 视图模式切换 (企业 vs 智库)
+    const btnSwitchEnt = document.getElementById('btnSwitchRobotEntView');
+    const btnSwitchExp = document.getElementById('btnSwitchRobotExpView');
+
+    if (btnSwitchEnt) {
+        btnSwitchEnt.addEventListener('click', () => {
+            btnSwitchEnt.classList.add('active');
+            if (btnSwitchExp) btnSwitchExp.classList.remove('active');
+            robotState.currentView = 'enterprises';
+            applyRobotFilterAndRender();
+        });
+    }
+
+    if (btnSwitchExp) {
+        btnSwitchExp.addEventListener('click', () => {
+            btnSwitchExp.classList.add('active');
+            if (btnSwitchEnt) btnSwitchEnt.classList.remove('active');
+            robotState.currentView = 'experts';
+            applyRobotFilterAndRender();
+        });
+    }
+
+    // 评级过滤 Chips
+    const compChips = document.getElementById('robotCompChips');
+    if (compChips) {
+        compChips.addEventListener('click', (e) => {
+            const btn = e.target.closest('.chip-filter');
+            if (!btn) return;
+            compChips.querySelectorAll('.chip-filter').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            robotState.compFilter = btn.getAttribute('data-comp');
+            applyRobotFilterAndRender();
+        });
+    }
+
+    // 技术流派过滤 Chips
+    const techChips = document.getElementById('robotTechChips');
+    if (techChips) {
+        techChips.addEventListener('click', (e) => {
+            const btn = e.target.closest('.chip-filter');
+            if (!btn) return;
+            techChips.querySelectorAll('.chip-filter').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            robotState.techFilter = btn.getAttribute('data-tech');
+            applyRobotFilterAndRender();
+        });
+    }
+
+    // 专家类型过滤 Chips
+    const expChips = document.getElementById('robotExpTypeChips');
+    if (expChips) {
+        expChips.addEventListener('click', (e) => {
+            const btn = e.target.closest('.chip-filter');
+            if (!btn) return;
+            expChips.querySelectorAll('.chip-filter').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            robotState.expTypeFilter = btn.getAttribute('data-exptype');
+            applyRobotFilterAndRender();
+        });
+    }
+
+    // 实时搜索框
+    const searchInput = document.getElementById('robotSearchInput');
+    const btnClearSearch = document.getElementById('btnClearRobotSearch');
+
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            robotState.searchQuery = e.target.value;
+            if (btnClearSearch) {
+                if (robotState.searchQuery.trim().length > 0) {
+                    btnClearSearch.classList.remove('hidden');
+                } else {
+                    btnClearSearch.classList.add('hidden');
+                }
+            }
+            renderRobotFocusCards();
+        });
+    }
+
+    if (btnClearSearch) {
+        btnClearSearch.addEventListener('click', () => {
+            if (searchInput) searchInput.value = '';
+            robotState.searchQuery = '';
+            btnClearSearch.classList.add('hidden');
+            renderRobotFocusCards();
+        });
+    }
+
+    // 恢复全国聚焦
+    const btnResetFocus = document.getElementById('btnResetRobotFocus');
+    if (btnResetFocus) {
+        btnResetFocus.addEventListener('click', () => {
+            resetRobotFocus();
+        });
+    }
+
+    // 模态框背景点击关闭
+    const robotModal = document.getElementById('robotMapModal');
+    if (robotModal) {
+        robotModal.addEventListener('click', (e) => {
+            if (e.target === robotModal) closeRobotModal();
+        });
+    }
+}
+
+// 切换全屏沉浸大屏模式
+function toggleRobotFullscreen() {
+    const card = document.querySelector('.robot-modal-card');
+    const icon = document.getElementById('fullscreenRobotIcon');
+    const text = document.getElementById('fullscreenRobotText');
+    if (!card) return;
+
+    const isFull = card.classList.toggle('is-fullscreen');
+    if (icon && text) {
+        if (isFull) {
+            icon.textContent = '🗗';
+            text.textContent = '还原窗口';
+            showToast('⛶ 已切换为全屏沉浸大屏模式');
+        } else {
+            icon.textContent = '⛶';
+            text.textContent = '全屏展示';
+            showToast('🗗 已恢复普通窗口模式');
+        }
+    }
+
+    if (chartChinaRobotMapInstance) {
+        setTimeout(() => {
+            chartChinaRobotMapInstance.resize();
+        }, 120);
+    }
+}
+
+function openRobotModal() {
+    const modal = document.getElementById('robotMapModal');
+    if (!modal) return;
+    modal.classList.remove('hidden');
+    applyRobotFilterAndRender();
+    setTimeout(() => {
+        renderChinaRobotMap();
+    }, 120);
+}
+
+function closeRobotModal() {
+    const modal = document.getElementById('robotMapModal');
+    if (modal) modal.classList.add('hidden');
+}
+
+function resetRobotFocus() {
+    robotState.currentRegion = 'all';
+    const regionNav = document.getElementById('robotRegionQuickNav');
+    if (regionNav) {
+        regionNav.querySelectorAll('.bci-nav-btn').forEach(b => b.classList.remove('active'));
+        const allBtn = regionNav.querySelector('[data-region="all"]');
+        if (allBtn) allBtn.classList.add('active');
+    }
+    applyRobotFilterAndRender();
+}
+
+function applyRobotFilterAndRender() {
+    updateRobotFilterBadges();
+    renderDynamicRobotTalentsBanner();
+    renderRobotFocusCards();
+    if (chartChinaRobotMapInstance) {
+        renderChinaRobotMap();
+    }
+}
+
+// 知名医疗机器人代表企业真实官网官方字典
+const ROBOT_COMPANY_OFFICIAL_WEBSITES = {
+    "北京天智航医疗科技股份有限公司": "https://www.tinavi.com",
+    "天智航": "https://www.tinavi.com",
+    "北京术锐技术股份有限公司": "https://www.surgerii.com",
+    "术锐技术": "https://www.surgerii.com",
+    "术锐": "https://www.surgerii.com",
+    "上海微创医疗机器人(集团)股份有限公司": "https://www.medbotonline.com",
+    "微创医疗机器人": "https://www.medbotonline.com",
+    "微创机器人": "https://www.medbotonline.com",
+    "杭州键嘉医疗科技股份有限公司": "https://www.jianjiamedical.com",
+    "键嘉医疗": "https://www.jianjiamedical.com",
+    "北京华科精准医疗科技有限公司": "https://www.huake-med.com",
+    "华科精准": "https://www.huake-med.com",
+    "北京柏惠维康科技股份有限公司": "https://www.remebot.com",
+    "柏惠维康": "https://www.remebot.com",
+    "深圳市元化智能科技有限公司": "https://www.genorobotics.com",
+    "元化智能": "https://www.genorobotics.com",
+    "深圳市精锋医疗科技股份有限公司": "https://www.edge-medical.com",
+    "精锋医疗": "https://www.edge-medical.com",
+    "北京长木谷医疗科技股份有限公司": "https://www.changmugu.com",
+    "长木谷": "https://www.changmugu.com",
+    "布法罗机器人（成都）有限公司": "http://www.buffalo-robot.com",
+    "布法罗机器人": "http://www.buffalo-robot.com",
+    "四川华西精创医疗科技有限公司": "http://www.huaxi-creation.com",
+    "华西精创": "http://www.huaxi-creation.com",
+    "成都博恩思医学机器人有限公司": "http://www.bionsmed.com",
+    "博恩思": "http://www.bionsmed.com",
+    "四川奥泰医疗系统有限责任公司": "http://www.alltechmed.com",
+    "奥泰医疗": "http://www.alltechmed.com",
+    "中科院成都信息技术股份有限公司": "http://www.casit.com.cn",
+    "中科信息": "http://www.casit.com.cn",
+    "成都市前沿类脑人工智能创新中心有限公司": "http://www.brainai-center.com",
+    "前沿类脑": "http://www.brainai-center.com",
+    "成都瓦博科技有限公司": "http://www.vabootech.com",
+    "四川新源生物电子科技有限公司": "http://www.xinyuan-bio.com",
+    "四川鼎桥通信技术有限公司": "https://www.td-tech.com",
+    "鼎桥通信": "https://www.td-tech.com",
+    "四川锦欣医疗器械有限责任公司": "http://www.jinxinfertility.com",
+    "成都泰格尔医疗科技有限公司": "http://www.tiger-med.com",
+    "深圳迈步机器人科技有限公司": "https://www.miles-robot.com",
+    "迈步机器人": "https://www.miles-robot.com",
+    "北京大艾机器人科技有限公司": "http://www.ai-robotics.cn",
+    "大艾机器人": "http://www.ai-robotics.cn",
+    "杭州程天科技发展有限公司": "https://www.ct-robot.com",
+    "程天科技": "https://www.ct-robot.com",
+    "苏州微创畅行机器人有限公司": "https://www.medbotonline.com",
+    "唯精医疗机器人(上海)有限公司": "http://www.weijingmed.com",
+    "唯精医疗": "http://www.weijingmed.com",
+    "上海磅客策医疗科技有限公司": "https://www.punchingrobot.com",
+    "磅客策": "https://www.punchingrobot.com",
+    "南京佗道医疗科技有限公司": "https://www.tuodaomed.com",
+    "佗道医疗": "https://www.tuodaomed.com",
+    "苏州柳叶刀机器人有限公司": "https://www.lancetrobotics.com",
+    "柳叶刀机器人": "https://www.lancetrobotics.com",
+    "北京歌锐科技有限责任公司": "https://www.greatrobot.com",
+    "歌锐科技": "https://www.greatrobot.com",
+    "北京唯迈医疗设备有限公司": "http://www.weimai-med.com",
+    "唯迈医疗": "http://www.weimai-med.com",
+    "深圳普门科技股份有限公司": "http://www.pumene.com",
+    "普门科技": "http://www.pumene.com",
+    "河南翔宇医疗设备股份有限公司": "http://www.xiangyu.com.cn",
+    "翔宇医疗": "http://www.xiangyu.com.cn",
+    "鑫高益医疗设备股份有限公司": "http://www.xgy.cn",
+    "上海联影智能医疗科技有限公司": "https://www.united-imaging.com",
+    "联影智能": "https://www.united-imaging.com",
+    "上海傲意信息科技有限公司": "https://www.oymotion.com",
+    "傲意科技": "https://www.oymotion.com"
+};
+
+function getRobotCompanyOfficialUrl(companyName) {
+    if (!companyName) return null;
+    const name = companyName.trim();
+    if (ROBOT_COMPANY_OFFICIAL_WEBSITES[name]) return ROBOT_COMPANY_OFFICIAL_WEBSITES[name];
+    for (const k of Object.keys(ROBOT_COMPANY_OFFICIAL_WEBSITES)) {
+        if (name.includes(k) || k.includes(name)) {
+            return ROBOT_COMPANY_OFFICIAL_WEBSITES[k];
+        }
+    }
+    return null;
+}
+
+// 专家与院校机构权威字典
+const ROBOT_EXPERT_OFFICIAL_WEBSITES = {
+    "田伟": "http://www.cae.cn/cae/html/main/colys/74205462.html",
+    "乔杰": "http://www.cae.cn/cae/html/main/colys/74205462.html",
+    "程洪": "https://www.uestc.edu.cn",
+    "裴福兴": "http://www.cd120.com",
+    "李为民": "http://www.cd120.com",
+    "曾勇": "http://www.cd120.com",
+    "张杨松": "https://www.swust.edu.cn",
+    "孙立宁": "https://www.suda.edu.cn",
+    "王树新": "http://www.cqu.edu.cn",
+    "杜志江": "http://www.hit.edu.cn",
+    "孟庆虎": "https://www.sustech.edu.cn",
+    "郭书祥": "https://www.bit.edu.cn",
+    "易振宇": "http://www.rjh.com.cn",
+    "罗选民": "https://www.cmde.org.cn"
+};
+
+const ROBOT_INSTITUTION_OFFICIAL_WEBSITES = {
+    "电子科技大学": "https://www.uestc.edu.cn",
+    "四川大学华西医院": "http://www.cd120.com",
+    "华西医院": "http://www.cd120.com",
+    "西南科技大学": "https://www.swust.edu.cn",
+    "北京积水潭医院": "https://www.jst-hosp.com.cn",
+    "北京大学第三医院": "https://www.puh3.net.cn",
+    "哈尔滨工业大学": "http://www.hit.edu.cn",
+    "清华大学": "https://www.tsinghua.edu.cn",
+    "北京航空航天大学": "https://www.buaa.edu.cn",
+    "北京理工大学": "https://www.bit.edu.cn",
+    "上海交通大学": "https://www.sjtu.edu.cn",
+    "复旦大学": "https://www.fudan.edu.cn",
+    "浙江大学": "https://www.zju.edu.cn",
+    "苏州大学": "https://www.suda.edu.cn",
+    "东南大学": "https://www.seu.edu.cn",
+    "华中科技大学": "https://www.hust.edu.cn",
+    "中国工程院": "http://www.cae.cn",
+    "国家药监局医疗器械技术审评中心": "https://www.cmde.org.cn"
+};
+
+function getRobotExpertOfficialUrl(expertName, institution) {
+    if (expertName && ROBOT_EXPERT_OFFICIAL_WEBSITES[expertName.trim()]) {
+        return ROBOT_EXPERT_OFFICIAL_WEBSITES[expertName.trim()];
+    }
+    if (institution) {
+        for (const [ik, iv] of Object.entries(ROBOT_INSTITUTION_OFFICIAL_WEBSITES)) {
+            if (institution.includes(ik)) return iv;
+        }
+    }
+    return null;
+}
+
+// 7. 动态领军学者专区渲染
+function renderDynamicRobotTalentsBanner() {
+    const wrapper = document.getElementById('scSideRobotTalentsSection');
+    const cardsRow = document.getElementById('sideRobotTalentsCardsRow');
+    const titleEl = document.getElementById('sideRobotTalentsTitle');
+    const badgeEl = document.getElementById('sideRobotTalentsBadge');
+    if (!wrapper || !cardsRow) return;
+
+    let targetExperts = [];
+    const currentReg = robotState.currentRegion || 'all';
+
+    if (currentReg === '四川省' || currentReg === 'all') {
+        targetExperts = robotExpertsData.filter(i => (i.province || '').includes('四川'));
+        if (titleEl) titleEl.textContent = '⭐ 四川本土重点医疗机器人智库与高校学者 (医工转化集群)';
+    } else if (currentReg === '长三角') {
+        targetExperts = robotExpertsData.filter(i => ['上海市', '江苏省', '浙江省', '安徽省'].includes(i.province));
+        if (titleEl) titleEl.textContent = '长三角重点医疗机器人高校学者与领军智库';
+    } else if (currentReg === '京津冀') {
+        targetExperts = robotExpertsData.filter(i => ['北京市', '天津市', '河北省'].includes(i.province));
+        if (titleEl) titleEl.textContent = '京津冀重点医疗机器人高校学者与领军智库';
+    } else if (currentReg === '粤港澳' || currentReg === '大湾区') {
+        targetExperts = robotExpertsData.filter(i => ['广东省', '香港特别行政区', '澳门特别行政区'].includes(i.province));
+        if (titleEl) titleEl.textContent = '粤港澳大湾区医疗机器人创新专家学者';
+    } else {
+        const clean = currentReg.replace('省', '').replace('市', '');
+        targetExperts = robotExpertsData.filter(i => (i.province || '').includes(clean));
+        if (titleEl) titleEl.textContent = `${currentReg}重点医疗机器人学者专家智库`;
+    }
+
+    if (targetExperts.length === 0) {
+        targetExperts = robotExpertsData.slice(0, 5);
+        if (titleEl) titleEl.textContent = '全国重点医疗机器人智库与高校学者 (动态联动)';
+    }
+
+    if (badgeEl) badgeEl.textContent = `${targetExperts.length} 位学者`;
+
+    cardsRow.innerHTML = targetExperts.map(exp => {
+        const offUrl = getRobotExpertOfficialUrl(exp.name, exp.institution);
+        let linkHtml = '';
+        if (offUrl) {
+            linkHtml = `<a href="${offUrl}" target="_blank" class="sc-talent-link-btn" title="直达官方权威主页/机构官网">🔗 官方主页</a>`;
+        } else if (exp.source_url) {
+            const firstUrl = exp.source_url.split('\n')[0].split(';')[0].trim();
+            linkHtml = `<a href="${firstUrl}" target="_blank" class="sc-talent-link-btn" title="查看公开成果出处">📄 成果出处</a>`;
+        }
+
+        return `
+            <div class="sc-talent-card">
+                <div class="sc-talent-top">
+                    <div class="sc-talent-info">
+                        <strong class="sc-talent-name">${escapeHtml(exp.name || '')}</strong>
+                        <span class="sc-talent-inst" title="${escapeHtml(exp.institution || '')}">${escapeHtml(exp.institution || '')}</span>
+                    </div>
+                    <span class="sc-talent-badge">${escapeHtml(exp.expert_type || '智库专家')}</span>
+                </div>
+                <div class="sc-talent-dir" title="${escapeHtml(exp.direction || '')}">
+                    ${escapeHtml(exp.direction || '')}
+                </div>
+                <div class="sc-talent-bottom">
+                    <span class="sc-talent-co" title="关联转化：${escapeHtml(exp.associated_enterprise || '产学研协同')}">
+                        🏭 ${escapeHtml(exp.associated_enterprise ? exp.associated_enterprise.split('（')[0] : '产学研协同')}
+                    </span>
+                    ${linkHtml}
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// 8. 绘制 ECharts 医疗机器人全国地图
+async function renderChinaRobotMap() {
+    const container = document.getElementById('chartChinaRobotMap');
+    if (!container || typeof echarts === 'undefined') return;
+
+    const isMapReady = await ensureChinaMapRegistered();
+    if (!isMapReady) {
+        container.innerHTML = '<div class="map-loading-hint">⚠️ 中国矢量地图加载中，请稍候...</div>';
+        return;
+    }
+
+    if (container.clientWidth === 0 || container.clientHeight === 0) {
+        setTimeout(renderChinaRobotMap, 80);
+        return;
+    }
+
+    if (!chartChinaRobotMapInstance) {
+        chartChinaRobotMapInstance = echarts.init(container);
+        
+        chartChinaRobotMapInstance.on('click', function(params) {
+            let selectedProv = '';
+            if (params.seriesType === 'effectScatter') {
+                selectedProv = params.data.province || params.name;
+            } else if (params.seriesType === 'map') {
+                selectedProv = params.name;
+            }
+
+            if (selectedProv) {
+                if (selectedProv === '四川' || selectedProv.includes('四川')) selectedProv = '四川省';
+                else if (selectedProv === '北京' || selectedProv.includes('北京')) selectedProv = '北京市';
+                else if (selectedProv === '上海' || selectedProv.includes('上海')) selectedProv = '上海市';
+                else if (selectedProv === '浙江' || selectedProv.includes('浙江')) selectedProv = '浙江省';
+                else if (selectedProv === '江苏' || selectedProv.includes('江苏')) selectedProv = '江苏省';
+                else if (selectedProv === '广东' || selectedProv.includes('广东')) selectedProv = '广东省';
+                else if (selectedProv === '天津' || selectedProv.includes('天津')) selectedProv = '天津市';
+                else if (selectedProv === '湖北' || selectedProv.includes('湖北')) selectedProv = '湖北省';
+                else if (selectedProv === '陕西' || selectedProv.includes('陕西')) selectedProv = '陕西省';
+                else if (selectedProv === '安徽' || selectedProv.includes('安徽')) selectedProv = '安徽省';
+                else if (selectedProv === '山东' || selectedProv.includes('山东')) selectedProv = '山东省';
+
+                robotState.currentRegion = selectedProv;
+                applyRobotFilterAndRender();
+
+                const regionNav = document.getElementById('robotRegionQuickNav');
+                if (regionNav) {
+                    regionNav.querySelectorAll('.bci-nav-btn').forEach(b => b.classList.remove('active'));
+                    if (selectedProv === '四川省') {
+                        const scBtn = regionNav.querySelector('[data-region="四川省"]');
+                        if (scBtn) scBtn.classList.add('active');
+                    }
+                }
+            }
+        });
+    } else {
+        chartChinaRobotMapInstance.resize();
+    }
+
+    const isDark = state.theme === 'dark';
+    const isSichuanMode = (robotState.currentRegion === '四川省');
+    const currentRegionList = getFilteredRobotList(false);
+
+    // 统计各省份热度数据
+    const provStats = {};
+    currentRegionList.forEach(item => {
+        const p = normalizeProvName(item.province);
+        if (p) provStats[p] = (provStats[p] || 0) + 1;
+    });
+
+    const mapData = Object.keys(provStats).map(p => ({
+        name: p,
+        value: provStats[p]
+    }));
+
+    // 散点与标注
+    let scatterData = [];
+    if (isSichuanMode) {
+        scatterData = [
+            { name: '四川大学华西医院/精准医学中心', value: [104.0620, 30.6420, 15], province: '四川省' },
+            { name: '电子科技大学机器人研究中心/布法罗', value: [103.9314, 30.7490, 15], province: '四川省' },
+            { name: '西南科技大学智能医学实验室', value: [104.6980, 31.5350, 10], province: '四川省' },
+            { name: '成都高新区前沿医学中心(博恩思/新源等)', value: [104.0450, 30.5580, 12], province: '四川省' },
+            { name: '四川奥泰医疗系统(超导MRI与导航)', value: [104.0120, 30.6980, 10], province: '四川省' }
+        ];
+    } else {
+        scatterData = ROBOT_CITIES_COORDS.map(city => {
+            const count = currentRegionList.filter(item => (item.province || '').includes(city.province.replace('省','').replace('市',''))).length;
+            return {
+                name: city.name,
+                value: [...city.coords, count || 1],
+                province: city.province,
+                isHighlight: city.highlight
+            };
+        });
+    }
+
+    const option = {
+        backgroundColor: 'transparent',
+        tooltip: {
+            trigger: 'item',
+            backgroundColor: isDark ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+            borderColor: '#0284c7',
+            borderWidth: 1.5,
+            padding: [10, 14],
+            textStyle: {
+                color: isDark ? '#f1f5f9' : '#0f172a',
+                fontSize: 12.5
+            },
+            formatter: function(params) {
+                if (params.seriesType === 'effectScatter') {
+                    const count = params.value[2] || 0;
+                    return `<strong>📍 ${params.name}</strong><br/>` +
+                           `<span style="color:#0284c7;">●</span> 当前收录核心标的/专家：<strong>${count}</strong> 项<br/>` +
+                           `<span style="font-size:11px;color:#64748b;">点击下钻穿透该区域数据看板</span>`;
+                } else if (params.seriesType === 'map') {
+                    const count = params.value || 0;
+                    return `<strong>🗺️ ${params.name}</strong><br/>` +
+                           `<span style="color:#0284c7;">●</span> 医疗机器人企业/专家总计：<strong>${count}</strong> 项<br/>` +
+                           `<span style="font-size:11px;color:#64748b;">点击精准筛选 ${params.name} 详情</span>`;
+                }
+                return params.name;
+            }
+        },
+        geo: {
+            map: 'china',
+            roam: true,
+            zoom: isSichuanMode ? 2.8 : 1.15,
+            center: isSichuanMode ? [104.066541, 30.572269] : [104.114129, 36.550339],
+            label: {
+                show: true,
+                color: isDark ? '#94a3b8' : '#475569',
+                fontSize: 10
+            },
+            itemStyle: {
+                areaColor: isDark ? '#1e293b' : '#f8fafc',
+                borderColor: isDark ? '#334155' : '#cbd5e1',
+                borderWidth: 1
+            },
+            emphasis: {
+                label: {
+                    show: true,
+                    color: '#ffffff'
+                },
+                itemStyle: {
+                    areaColor: isDark ? '#0284c7' : '#38bdf8'
+                }
+            }
+        },
+        visualMap: {
+            min: 0,
+            max: isSichuanMode ? 15 : 20,
+            left: 20,
+            bottom: 20,
+            text: ['高热度', '低热度'],
+            calculable: true,
+            inRange: {
+                color: isDark 
+                    ? ['#1e293b', '#0369a1', '#0284c7', '#38bdf8'] 
+                    : ['#f1f5f9', '#bae6fd', '#38bdf8', '#0284c7']
+            },
+            textStyle: {
+                color: isDark ? '#94a3b8' : '#64748b',
+                fontSize: 11
+            }
+        },
+        series: [
+            {
+                name: '各省热度',
+                type: 'map',
+                geoIndex: 0,
+                data: mapData
+            },
+            {
+                name: '产业极散点',
+                type: 'effectScatter',
+                coordinateSystem: 'geo',
+                data: scatterData,
+                symbolSize: function(val) {
+                    return Math.max(10, Math.min(22, (val[2] || 5) * 1.4));
+                },
+                showEffectOn: 'render',
+                rippleEffect: {
+                    brushType: 'stroke',
+                    scale: 3,
+                    period: 4
+                },
+                itemStyle: {
+                    color: '#0284c7',
+                    shadowBlur: 10,
+                    shadowColor: '#0284c7'
+                },
+                zlevel: 2
+            }
+        ]
+    };
+
+    chartChinaRobotMapInstance.setOption(option, true);
+}
+
+// 9. 渲染医疗机器人右侧卡片列表
+function renderRobotFocusCards() {
+    const listContainer = document.getElementById('robotFocusCardsList');
+    const regionNameEl = document.getElementById('robotFocusRegionName');
+    const entCountEl = document.getElementById('robotFocusEntCount');
+    const expCountEl = document.getElementById('robotFocusExpCount');
+    const btnReset = document.getElementById('btnResetRobotFocus');
+    const viewEntBadge = document.getElementById('robotViewEntBadge');
+    const viewExpBadge = document.getElementById('robotViewExpBadge');
+
+    if (!listContainer) return;
+
+    const filteredList = getFilteredRobotList(false);
+
+    let totalEntInRegion = robotEnterprisesData.length;
+    let totalExpInRegion = robotExpertsData.length;
+
+    if (robotState.currentRegion !== 'all') {
+        if (regionNameEl) regionNameEl.textContent = robotState.currentRegion;
+        if (btnReset) btnReset.classList.remove('hidden');
+
+        if (robotState.currentRegion === '长三角') {
+            totalEntInRegion = robotEnterprisesData.filter(i => ['上海市', '江苏省', '浙江省', '安徽省'].includes(i.province)).length;
+            totalExpInRegion = robotExpertsData.filter(i => ['上海市', '江苏省', '浙江省', '安徽省'].includes(i.province)).length;
+        } else if (robotState.currentRegion === '京津冀') {
+            totalEntInRegion = robotEnterprisesData.filter(i => ['北京市', '天津市', '河北省'].includes(i.province)).length;
+            totalExpInRegion = robotExpertsData.filter(i => ['北京市', '天津市', '河北省'].includes(i.province)).length;
+        } else if (robotState.currentRegion === '粤港澳' || robotState.currentRegion === '大湾区') {
+            totalEntInRegion = robotEnterprisesData.filter(i => ['广东省', '香港特别行政区', '澳门特别行政区'].includes(i.province)).length;
+            totalExpInRegion = robotExpertsData.filter(i => ['广东省', '香港特别行政区', '澳门特别行政区'].includes(i.province)).length;
+        } else {
+            const cleanProv = robotState.currentRegion.replace('省', '').replace('市', '');
+            totalEntInRegion = robotEnterprisesData.filter(i => (i.province || '').includes(cleanProv)).length;
+            totalExpInRegion = robotExpertsData.filter(i => (i.province || '').includes(cleanProv)).length;
+        }
+    } else {
+        if (regionNameEl) regionNameEl.textContent = '全国全域';
+        if (btnReset) btnReset.classList.add('hidden');
+    }
+
+    if (entCountEl) entCountEl.textContent = totalEntInRegion;
+    if (expCountEl) expCountEl.textContent = totalExpInRegion;
+    if (viewEntBadge) viewEntBadge.textContent = totalEntInRegion;
+    if (viewExpBadge) viewExpBadge.textContent = totalExpInRegion;
+
+    if (filteredList.length === 0) {
+        listContainer.innerHTML = `
+            <div class="empty-state-wrap">
+                <span class="empty-state-icon">🔍</span>
+                <h4>未找到匹配的医疗机器人标的或专家</h4>
+                <p>请尝试放宽筛选条件，或点击上方的「🔄 恢复全国」重新探索。</p>
+            </div>
+        `;
+        return;
+    }
+
+    if (robotState.currentView === 'enterprises') {
+        listContainer.innerHTML = filteredList.map(item => {
+            const isSc = (item.province || '').includes('四川');
+            const compLevel = getRobotCompCategory(item.competitiveness);
+            const techCat = getRobotTechCategory(item.tech_route, item.product_intro);
+            const offUrl = getRobotCompanyOfficialUrl(item.name);
+
+            let compBadgeClass = 'chip-norm';
+            if (compLevel === '高') compBadgeClass = 'chip-high';
+            else if (compLevel === '中高') compBadgeClass = 'chip-mid';
+
+            let cardClass = 'bci-focus-card';
+            if (isSc) cardClass += ' is-sichuan-highlight';
+
+            let websiteBtn = '';
+            if (offUrl) {
+                websiteBtn = `<a href="${offUrl}" target="_blank" class="card-action-btn btn-official" title="直达官方权威企业官网">🌐 官网直达</a>`;
+            }
+
+            let sourceBtn = '';
+            if (item.source_url) {
+                const firstUrl = item.source_url.split('\n')[0].split(';')[0].trim();
+                sourceBtn = `<a href="${firstUrl}" target="_blank" class="card-action-btn btn-source" title="查看研判出处与佐证资料">📄 来源出处</a>`;
+            }
+
+            return `
+                <div class="${cardClass}">
+                    <div class="card-top-row">
+                        <div class="card-title-group">
+                            <strong class="card-main-title">${escapeHtml(item.name || '')}</strong>
+                            <span class="card-region-tag">${escapeHtml(item.province || '')} · ${escapeHtml(item.city || '')}</span>
+                        </div>
+                        <div class="card-badges-group">
+                            <span class="card-tech-badge">⚡ ${escapeHtml(item.tech_route || techCat)}</span>
+                            <span class="card-comp-badge ${compBadgeClass}">🏆 ${escapeHtml(item.competitiveness ? item.competitiveness.split('：')[0] : compLevel)}</span>
+                        </div>
+                    </div>
+
+                    <div class="card-info-block">
+                        <div class="info-row">
+                            <span class="info-label">📦 核心产品与方案:</span>
+                            <span class="info-val">${escapeHtml(item.product_intro || '暂无公开披露')}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">🏥 临床/注册阶段:</span>
+                            <span class="info-val stage-highlight">${escapeHtml(item.stage || '推进研发与临床中')}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">💰 资本与融资情况:</span>
+                            <span class="info-val">${escapeHtml(item.financing || '未披露专项融资')}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">🎯 综合研判分析:</span>
+                            <span class="info-val comp-analysis-text">${escapeHtml(item.competitiveness || '行业领军布局')}</span>
+                        </div>
+                    </div>
+
+                    <div class="card-bottom-bar">
+                        <div class="card-tags-left">
+                            <span class="sub-tag">核验日期: ${escapeHtml(item.date || '2026-08-20')}</span>
+                            <span class="sub-tag">${escapeHtml(item.category || '核心企业')}</span>
+                        </div>
+                        <div class="card-actions-right">
+                            ${websiteBtn}
+                            ${sourceBtn}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    } else {
+        listContainer.innerHTML = filteredList.map(exp => {
+            const isSc = (exp.province || '').includes('四川');
+            const offUrl = getRobotExpertOfficialUrl(exp.name, exp.institution);
+
+            let cardClass = 'bci-focus-card expert-card';
+            if (isSc) cardClass += ' is-sichuan-highlight';
+
+            let linkBtn = '';
+            if (offUrl) {
+                linkBtn = `<a href="${offUrl}" target="_blank" class="card-action-btn btn-official" title="直达官方权威学者主页/机构官网">🔗 官方主页</a>`;
+            } else if (exp.source_url) {
+                const firstUrl = exp.source_url.split('\n')[0].split(';')[0].trim();
+                linkBtn = `<a href="${firstUrl}" target="_blank" class="card-action-btn btn-source" title="查看公开成果出处">📄 成果出处</a>`;
+            }
+
+            return `
+                <div class="${cardClass}">
+                    <div class="card-top-row">
+                        <div class="card-title-group">
+                            <strong class="card-main-title">👨‍🔬 ${escapeHtml(exp.name || '')}</strong>
+                            <span class="card-region-tag">${escapeHtml(exp.province || '')} · ${escapeHtml(exp.institution || '')}</span>
+                        </div>
+                        <div class="card-badges-group">
+                            <span class="card-tech-badge">🎓 ${escapeHtml(exp.expert_type || '学术专家')}</span>
+                        </div>
+                    </div>
+
+                    <div class="card-info-block">
+                        <div class="info-row">
+                            <span class="info-label">🔬 专业方向:</span>
+                            <span class="info-val font-semibold">${escapeHtml(exp.direction || '')}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">🏭 关联/转化企业:</span>
+                            <span class="info-val">${escapeHtml(exp.associated_enterprise || '无公开直接关联企业')}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">📑 代表性成果/论文:</span>
+                            <span class="info-val text-muted">${escapeHtml(exp.paper || '以产业/监管/临床实践为主')}</span>
+                        </div>
+                    </div>
+
+                    <div class="card-bottom-bar">
+                        <div class="card-tags-left">
+                            <span class="sub-tag">所属省份: ${escapeHtml(exp.province || '')}</span>
+                            <span class="sub-tag">核验日期: ${escapeHtml(exp.date || '2026-08-20')}</span>
+                        </div>
+                        <div class="card-actions-right">
+                            ${linkBtn}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+}
+
+// 暴露全局访问函数
+window.openRobotModal = openRobotModal;
+window.closeRobotModal = closeRobotModal;
+window.toggleRobotFullscreen = toggleRobotFullscreen;
+window.resetRobotFocus = resetRobotFocus;
 
