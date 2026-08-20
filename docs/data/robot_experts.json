@@ -1,6 +1,6 @@
 {
   "code": 0,
-  "count": 58,
+  "count": 53,
   "data": [
     {
       "id": 1,
@@ -220,18 +220,6 @@
     },
     {
       "id": 19,
-      "name": "潘秋晨",
-      "direction": "智慧医院服务机器人、核医学特种消杀与院内物流",
-      "paper": "Medical service robots in infectious disease hospitals: Design, deployment, and clinical impact (2021)",
-      "associated_enterprise": "上海钛米机器人股份有限公司（创始人兼董事长）",
-      "institution": "上海钛米机器人股份有限公司",
-      "province": "上海市",
-      "expert_type": "产业",
-      "source_url": "https://doi.org/10.1109/RAMS.2021.9605412\nhttps://www.tmirob.com",
-      "date": "2026-08-20"
-    },
-    {
-      "id": 20,
       "name": "严壮志",
       "direction": "医学影像处理、术中三维导航与手术机器人定位",
       "paper": "Real-time 3D multimodal image registration for robotic-assisted surgery (2019)",
@@ -243,7 +231,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 21,
+      "id": 20,
       "name": "何超",
       "direction": "多孔/单孔腔镜手术机器人、血管介入机器人与平台架构",
       "paper": "Development of the Toumai laparoscopic surgical robot system: Engineering design and preclinical testing (2021)",
@@ -255,7 +243,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 22,
+      "id": 21,
       "name": "王鹏",
       "direction": "智能上肢康复机器人、多关节生物力学与人机协作",
       "paper": "Adaptive impedance control of upper-limb rehabilitation robot based on human motion intention estimation (2020)",
@@ -267,7 +255,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 23,
+      "id": 22,
       "name": "倪思德",
       "direction": "肌电神经智能解码、仿生义肢与神经康复机器人",
       "paper": "High-density surface EMG decoding for intuitive robotic prosthetic hand control (2020)",
@@ -279,7 +267,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 24,
+      "id": 23,
       "name": "程洪",
       "direction": "下肢康复外骨骼机器人、人机智能共融与生物运动控制",
       "paper": "Locomotion intention recognition and adaptive gait generation for lower-limb exoskeleton (2019)",
@@ -291,7 +279,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 25,
+      "id": 24,
       "name": "裴福兴",
       "direction": "骨科微创手术、关节置换手术机器人与快速康复（ERAS）",
       "paper": "Robotic-assisted versus conventional total knee arthroplasty: Clinical outcomes and accuracy analysis (2021)",
@@ -303,7 +291,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 26,
+      "id": 25,
       "name": "李为民",
       "direction": "呼吸系统重大疾病、经自然腔道支气管镜导航与穿刺机器人",
       "paper": "Bronchoscopic navigation and robotic-assisted diagnosis of peripheral pulmonary lesions (2021)",
@@ -315,7 +303,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 27,
+      "id": 26,
       "name": "张杨松",
       "direction": "智能医学工程、脑机交互与神经康复辅助机器人",
       "paper": "EEG-based intent decoding and hybrid brain-controlled robotic rehabilitation system (2020)",
@@ -327,7 +315,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 28,
+      "id": 27,
       "name": "曾勇",
       "direction": "肝胆胰外科微创手术、腹腔镜手术机器人临床应用",
       "paper": "Robotic versus laparoscopic liver resection for hepatocellular carcinoma: A multicenter clinical study (2020)",
@@ -339,7 +327,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 29,
+      "id": 28,
       "name": "王树新",
       "direction": "微创外科手术机器人、微型机构学与“妙手”机器人系统",
       "paper": "Design and clinical trial of MicroHand S surgical robot system for minimally invasive surgery (2018)",
@@ -351,7 +339,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 30,
+      "id": 29,
       "name": "明东",
       "direction": "神经工程、脑机接口与神经运动康复机器人",
       "paper": "Brain-computer interface controlled exoskeleton for motor neurorehabilitation: Clinical evaluation (2021)",
@@ -363,7 +351,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 31,
+      "id": 30,
       "name": "崔玉国",
       "direction": "智能康复机械臂、生物力学与人机工程",
       "paper": "Kinematic modeling and force control of upper-limb rehabilitation exoskeleton (2019)",
@@ -375,7 +363,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 32,
+      "id": 31,
       "name": "孙立宁",
       "direction": "微纳制造、机器人机构学与医疗手术机器人装备",
       "paper": "Micro-nano manipulation and surgical robotics: Technologies, systems and clinical applications (2019)",
@@ -387,7 +375,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 33,
+      "id": 32,
       "name": "陈新湖",
       "direction": "口腔种植手术机器人、光学三维空间立体定位导航",
       "paper": "Accuracy analysis of autonomous robotic system for dental implant surgery (2020)",
@@ -399,19 +387,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 34,
-      "name": "张建",
-      "direction": "智慧药房自动化系统、医院物流与配液机器人",
-      "paper": "Automated dispensing machine and intravenous compounding robotic workflow in tertiary hospitals (2020)",
-      "associated_enterprise": "苏州艾隆科技股份有限公司（创始人兼董事长）",
-      "institution": "苏州艾隆科技股份有限公司",
-      "province": "江苏省",
-      "expert_type": "产业",
-      "source_url": "https://doi.org/10.1016/j.ajhp.2020.08.012\nhttps://www.iron-tech.cn",
-      "date": "2026-08-20"
-    },
-    {
-      "id": 35,
+      "id": 33,
       "name": "钱祖元",
       "direction": "康复机器人系统、多模态运动康复与智能化诊疗装备",
       "paper": "Development and standardization of multi-joint robotic rehabilitation systems in China (2021)",
@@ -423,7 +399,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 36,
+      "id": 34,
       "name": "王跃明",
       "direction": "侵入式脑机接口、神经电极阵列与灵巧仿生机器人手控制",
       "paper": "Neural decoding of finger movements using motor cortical signals for robotic hand control (2020)",
@@ -435,7 +411,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 37,
+      "id": 35,
       "name": "王天",
       "direction": "下肢康复外骨骼机器人、自适应步态控制与国家标准制定",
       "paper": "Adaptive gait trajectory generation for lower limb exoskeleton based on user motion states (2020)",
@@ -447,7 +423,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 38,
+      "id": 36,
       "name": "李德生",
       "direction": "踝关节外骨骼机器人、柔性传动机构与偏瘫步态矫正",
       "paper": "Design and clinical assessment of a lightweight assistive ankle exoskeleton robot (2021)",
@@ -459,7 +435,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 39,
+      "id": 37,
       "name": "韩璧丞",
       "direction": "脑机接口、智能仿生假肢与神经可塑性康复机器人",
       "paper": "Non-invasive brain-machine interfaces for upper-limb robotic prosthetic control (2020)",
@@ -471,7 +447,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 40,
+      "id": 38,
       "name": "孟庆虎",
       "direction": "手术机器人、微创医疗自主系统与医疗场景智能感知",
       "paper": "Autonomous robotic navigation and tissue manipulation in minimally invasive surgery (2020)",
@@ -483,7 +459,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 41,
+      "id": 39,
       "name": "王建辰",
       "direction": "多孔及单孔腔镜手术机器人、主从遥操作系统与控制架构",
       "paper": "Engineering architecture and multi-specialty clinical performance of Edge SP1000 surgical robot (2021)",
@@ -495,7 +471,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 42,
+      "id": 40,
       "name": "孟广耀",
       "direction": "骨科全膝/全髋置换手术机器人、六维机械臂与双目导航",
       "paper": "High-precision coordinate registration and bone cutting control for robotic knee arthroplasty (2021)",
@@ -507,7 +483,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 43,
+      "id": 41,
       "name": "陈功",
       "direction": "下肢康复外骨骼机器人、柔性驱动器（SEA）与意图识别",
       "paper": "Design and compliance control of series elastic actuators for lower-extremity rehabilitation robot (2019)",
@@ -519,7 +495,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 44,
+      "id": 42,
       "name": "欧国威",
       "direction": "腔镜微创手术机器人系统设计、柔性连续体传动与临床工程",
       "paper": "Development of cable-driven continuum surgical robot for laparoscopic applications (2020)",
@@ -531,19 +507,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 45,
-      "name": "刘石星",
-      "direction": "桌面协作机械臂、医疗自动化辅助与力觉传感反馈",
-      "paper": "Compliance and safety control algorithms for collaborative robotic arms in medical applications (2021)",
-      "associated_enterprise": "深圳越疆科技股份有限公司（创始人兼CEO）",
-      "institution": "深圳越疆科技股份有限公司",
-      "province": "广东省",
-      "expert_type": "产业",
-      "source_url": "https://doi.org/10.1109/ICRA.2021.9561423\nhttps://www.dobot-robots.com",
-      "date": "2026-08-20"
-    },
-    {
-      "id": 46,
+      "id": 43,
       "name": "杜志江",
       "direction": "微创腹腔镜手术机器人系统架构、机构学与多学科临床应用",
       "paper": "Design and preclinical validation of the KangDuo multi-arm surgical robot system (2020)",
@@ -555,7 +519,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 47,
+      "id": 44,
       "name": "王天然",
       "direction": "机器人学、智能装备与自动化控制国家战略",
       "paper": "Robotics and intelligent manufacturing development strategies in China (2018)",
@@ -567,7 +531,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 48,
+      "id": 45,
       "name": "董念国",
       "direction": "心血管外科微创手术、人工心脏与机器人辅助心脏手术",
       "paper": "Robotic-assisted cardiac surgery: Clinical experiences in mitral valve repair and congenital heart disease (2021)",
@@ -579,7 +543,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 49,
+      "id": 46,
       "name": "肖国华",
       "direction": "磁控胶囊内镜机器人、消化道无创智能诊疗与磁场导航",
       "paper": "Magnetic-controlled capsule endoscopy for gastric disease screening: A nationwide multicenter study (2019)",
@@ -591,7 +555,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 50,
+      "id": 47,
       "name": "张建伟",
       "direction": "多模态人机交互、自主智能系统与医疗手术机器人技术顾问",
       "paper": "Multimodal robotic perception and cognitive manipulation in surgical and service robotics (2020)",
@@ -603,7 +567,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 51,
+      "id": 48,
       "name": "汤晨",
       "direction": "微创腹腔镜手术机器人制造工艺、量产控制与临床推广",
       "paper": "Manufacturing and clinical application of MicroHand S laparoscopic surgical system (2021)",
@@ -615,7 +579,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 52,
+      "id": 49,
       "name": "崔春雷",
       "direction": "全周期智能康复机器人工程化、多模态康复与标准体系",
       "paper": "Clinical applications and technological progress of multi-functional rehabilitation robots in China (2021)",
@@ -627,7 +591,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 53,
+      "id": 50,
       "name": "王春宝",
       "direction": "脑机接口康复外骨骼机器人、神经肌电信号交互控制",
       "paper": "Brain-computer interface-driven lower extremity exoskeleton for stroke rehabilitation (2021)",
@@ -639,7 +603,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 54,
+      "id": 51,
       "name": "周晓东",
       "direction": "超声介入手术导航、微创穿刺消融定位机器人与精准诊疗",
       "paper": "Robotic-assisted ultrasound-guided percutaneous tumor ablation: Clinical feasibility and precision (2020)",
@@ -651,7 +615,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 55,
+      "id": 52,
       "name": "颜伟",
       "direction": "胶囊内镜机器人、消化微创诊断与高清无线内窥系统",
       "paper": "Autonomous navigation and clinical evaluation of intelligent capsule endoscopy in gastrointestinal diseases (2020)",
@@ -663,31 +627,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 56,
-      "name": "陶晓东",
-      "direction": "智慧医疗AI大模型、智能语音交互导医机器人与影像辅助",
-      "paper": "Medical artificial intelligence and speech recognition algorithms for hospital service robotics (2021)",
-      "associated_enterprise": "安徽科大讯飞医疗信息技术股份有限公司（总裁）",
-      "institution": "安徽科大讯飞医疗信息技术股份有限公司",
-      "province": "安徽省",
-      "expert_type": "产业/学术",
-      "source_url": "https://doi.org/10.1038/s41746-021-00452-1\nhttps://www.iflyhealth.com",
-      "date": "2026-08-20"
-    },
-    {
-      "id": 57,
-      "name": "陈大为",
-      "direction": "智能康复器械、居家康复辅具机器人与全渠道流通规范",
-      "paper": "Standardization and market accessibility of home rehabilitation robotic devices (2021)",
-      "associated_enterprise": "可孚医疗科技股份有限公司（技术副总裁）",
-      "institution": "可孚医疗科技股份有限公司",
-      "province": "湖南省",
-      "expert_type": "产业/标准化",
-      "source_url": "https://www.kofumed.com",
-      "date": "2026-08-20"
-    },
-    {
-      "id": 58,
+      "id": 53,
       "name": "刘云辉",
       "direction": "微创手术机器人、生物医疗自动化系统与智能视觉跟踪",
       "paper": "Robotic-assisted laparoscopic surgery using dynamic visual servoing and flexible instruments (2019)",
