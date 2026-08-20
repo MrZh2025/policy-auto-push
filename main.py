@@ -38,6 +38,13 @@ def run_pipeline(force_push: bool = False):
 
     db = PolicyDatabase()
 
+    # 先把网页数据 (docs/web data) 中的新政策合并入库，避免重新生成 JSON 时覆盖丢失
+    try:
+        import merge_web_data
+        merge_web_data.main()
+    except Exception as e:
+        logger.warning(f"网页数据合并入库异常: {e}")
+
     # 自动执行无效/根域名占位 URL 治理
     db.clean_invalid_urls()
 
