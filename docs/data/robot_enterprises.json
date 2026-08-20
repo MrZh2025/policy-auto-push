@@ -1,6 +1,6 @@
 {
   "code": 0,
-  "count": 33,
+  "count": 32,
   "data": [
     {
       "id": 1,
@@ -372,22 +372,6 @@
     },
     {
       "id": 24,
-      "name": "杭州佳量医疗科技有限公司",
-      "category": "神经外科手术机器人",
-      "benchmark_tier": "脑部微创癫痫与脑胶质瘤“磁共振实时测温+光纤激光消融”手术系统（对标美敦力Visualase）",
-      "product_name": "磁共振引导颅脑微创“LITT”激光消融手术机器人系统",
-      "tech_route": "术中实时磁共振温度监控场、柔性水冷激光光纤传动、亚毫米级穿刺导向定位",
-      "university_platform": "浙江大学脑机交互与神经工程中心 / 浙江大学医学院附属第二医院",
-      "academic_leader": "王跃明 教授（浙大博导）、张建民 教授（浙大二院神经外科主任）",
-      "stage": "获国家创新医疗器械特别审查绿色通道，取得NMPA三类医疗器械注册证并开展多例脑瘤消融",
-      "financing": "完成数亿元B轮融资（知名医疗投资基金领投）",
-      "province": "浙江省",
-      "city": "杭州",
-      "source_url": "https://www.jialiangmed.com\nhttps://www.zju.edu.cn",
-      "date": "2026-08-20"
-    },
-    {
-      "id": 25,
       "name": "唯迈医疗科技（北京/天津）有限公司",
       "category": "血管介入手术机器人",
       "benchmark_tier": "直接对标西门子Corindus血管介入手术机器人",
@@ -403,7 +387,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 26,
+      "id": 25,
       "name": "上海奥朋医疗科技有限公司",
       "category": "血管介入手术机器人",
       "benchmark_tier": "对标西门子Corindus / 泛血管主从遥操作介入手术机器人",
@@ -419,7 +403,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 27,
+      "id": 26,
       "name": "苏州梅奥心磁医疗科技有限公司",
       "category": "血管介入手术机器人",
       "benchmark_tier": "直接对标强生/Stereotaxis磁控心脏电生理介入手术机器人",
@@ -435,7 +419,7 @@
       "date": "2026-08-20"
     },
     {
-      "id": 28,
+      "id": 27,
       "name": "真健康（北京）医疗科技有限公司",
       "category": "经皮穿刺手术机器人",
       "benchmark_tier": "经皮穿刺与肿瘤微创介入“达芬奇级”多自由度机械臂消融系统",
@@ -463,7 +447,7 @@
       "province": "江苏省",
       "city": "常州",
       "source_url": "https://lunghealth.cn/about.html\nhttps://www.vbdata.cn/intelDetail/640562",
-      "id": 29,
+      "id": 28,
       "date": "2026-08-20"
     },
     {
@@ -479,7 +463,7 @@
       "province": "广东省",
       "city": "深圳",
       "source_url": "https://abrobo.com\nhttps://www.vbdata.cn/1518982738",
-      "id": 30,
+      "id": 29,
       "date": "2026-08-20"
     },
     {
@@ -495,7 +479,7 @@
       "province": "上海市",
       "city": "上海",
       "source_url": "https://www.vbdata.cn/52176\nhttps://pitchhub.36kr.com/project/1679683299595011",
-      "id": 31,
+      "id": 30,
       "date": "2026-08-20"
     },
     {
@@ -511,7 +495,7 @@
       "province": "上海市",
       "city": "上海",
       "source_url": "http://www.pangce.com.cn\nhttps://www.vbdata.cn/53946",
-      "id": 32,
+      "id": 31,
       "date": "2026-08-20"
     },
     {
@@ -527,7 +511,7 @@
       "province": "江苏省",
       "city": "南京",
       "source_url": "https://www.tuodaomedical.com/news/197\nhttps://www.tuodaomedical.com/news/369\nhttps://company.cnstock.com/company/scp_gsxw/202208/4945388.htm",
-      "id": 33,
+      "id": 32,
       "date": "2026-08-20"
     }
   ]
