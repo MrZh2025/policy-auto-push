@@ -4369,6 +4369,9 @@ window.closeBciModal = closeBciModal;
 
 
 // ==========================================================================
+
+
+// ==========================================================================
 // 🦾 医疗机器人产业智库与重点企业投资决策全景地图模块 (Medical Robotics Map Modal)
 // ==========================================================================
 
@@ -4377,7 +4380,7 @@ let robotExpertsData = [];
 let chartChinaRobotMapInstance = null;
 
 let robotState = {
-    currentRegion: 'all',       // 'all', '四川省', '北京市', '上海市', '长三角', '京津冀', '大湾区'
+    currentRegion: 'all',       // 'all', '四川省', '北京市', '上海市', '长三角', '京津冀', '大湾区', etc.
     currentView: 'enterprises', // 'enterprises' | 'experts'
     compFilter: 'all',          // 'all', '高', '中高', '中', '观察'
     techFilter: 'all',          // 'all', '腔镜/微创', '骨科/关节', '神经/介入/穿刺', '康复/外骨骼', '辅助/物流/诊疗'
@@ -4385,19 +4388,19 @@ let robotState = {
     searchQuery: ''
 };
 
-// 核心城市地理坐标与标注点基准配置 (医疗机器人版)
-const ROBOT_CITIES_COORDS = [
-    { name: '成都市', coords: [104.066541, 30.572269], province: '四川省', highlight: true },
-    { name: '北京市', coords: [116.405285, 39.904989], province: '北京市' },
-    { name: '上海市', coords: [121.472644, 31.231706], province: '上海市' },
-    { name: '深圳市', coords: [114.057868, 22.543099], province: '广东省' },
-    { name: '杭州市', coords: [120.153576, 30.287459], province: '浙江省' },
-    { name: '苏州市', coords: [120.585315, 31.298886], province: '江苏省' },
-    { name: '南京市', coords: [118.767413, 32.041544], province: '江苏省' },
-    { name: '天津市', coords: [117.190182, 39.125596], province: '天津市' },
-    { name: '武汉市', coords: [114.298572, 30.584355], province: '湖北省' },
-    { name: '西安市', coords: [108.948024, 34.263161], province: '陕西省' },
-    { name: '哈尔滨市', coords: [126.642464, 45.756967], province: '黑龙江省' }
+// 医疗机器人全国主要产业极与创新枢纽
+const ROBOT_NATIONAL_HUBS = [
+    { name: '成都市', value: [104.066541, 30.572269], province: '四川省', hubLabel: '⭐ 成都 · 华西精准转化 / 布法罗', experts: '程洪 / 裴福兴 / 李为民 / 曾勇 / 张杨松', desc: '华西医院成果转化体系 · 电子科大人机共融 · 11家重点企业', highlight: true },
+    { name: '北京市', value: [116.405285, 39.904989], province: '北京市', hubLabel: '北京 · 田伟/乔杰院士 · 天智航/术锐', experts: '田伟(工程院院士) / 乔杰(工程院院士) / 杜志江', desc: '骨科与单孔腔镜策源地 · 天智航/术锐/华科精准/长木谷', highlight: true },
+    { name: '上海市', value: [121.472644, 31.231706], province: '上海市', hubLabel: '上海 · 微创医疗机器人 / 联影', experts: '易振宇 / 联影/微创研发团队', desc: '微创MedBot港股龙头 · 联影智能 · 唯精/磅客策', highlight: true },
+    { name: '深圳市', value: [114.057868, 22.543099], province: '广东省', hubLabel: '深圳 · 精锋医疗 / 元化智能 / 迈步', experts: '孟庆虎(加拿大工程院院士) / 郭书祥', desc: '精锋多孔/单孔腔镜 · 元化骨科 · 迈步外骨骼', highlight: true },
+    { name: '苏州市', value: [120.585315, 31.298886], province: '江苏省', hubLabel: '苏州 · 孙立宁院士 · 微创畅行/柳叶刀', experts: '孙立宁(俄罗斯工程院外籍院士)', desc: '微创畅行 · 柳叶刀关节 · 机器人减速器与核心零部件', highlight: false },
+    { name: '杭州市', value: [120.153576, 30.287459], province: '浙江省', hubLabel: '杭州 · 键嘉医疗 / 程天科技', experts: '键嘉医疗产学研 / 浙大系', desc: '键嘉骨科/种植牙机器人 · 程天外骨骼康复', highlight: false },
+    { name: '南京市', value: [118.767413, 32.041544], province: '江苏省', hubLabel: '南京 · 佗道医疗', experts: '东南大学/南医大转化团队', desc: '佗道全赛道手术机器人平台 (骨科/腔镜/介入)', highlight: false },
+    { name: '天津市', value: [117.190182, 39.125596], province: '天津市', hubLabel: '天津 · 王树新院士 · 妙手机器人', experts: '王树新(中国工程院院士 / 重大/天大)', desc: '妙手微创腹腔镜手术机器人系列研发团队', highlight: false },
+    { name: '武汉市', value: [114.298572, 30.584355], province: '湖北省', hubLabel: '武汉 · 华中科技大 / 协和同济', experts: '华中科技大学数字化医疗中心', desc: '经皮穿刺 · 智能康复 · 血管介入机器人', highlight: false },
+    { name: '西安市', value: [108.948024, 34.263161], province: '陕西省', hubLabel: '西安 · 西安交大 / 西京医院', experts: '西交大机械制造系统工程国家重点实验室', desc: '口腔手术机器人 · 创伤复位与术中磁压榨', highlight: false },
+    { name: '哈尔滨市', value: [126.642464, 45.756967], province: '黑龙江省', hubLabel: '哈尔滨 · 哈工大机器人研究所', experts: '杜志江教授 / 哈工大机器人团队', desc: '微创手术机器人工程化与关键机构学策源地', highlight: false }
 ];
 
 async function initRobotMap() {
@@ -4406,7 +4409,7 @@ async function initRobotMap() {
 }
 
 async function loadRobotData() {
-    // 1. 加载企业数据 (93家)
+    // 1. 加载企业数据
     try {
         const resp = await fetch('/api/robot-enterprises');
         if (resp.ok) {
@@ -4425,7 +4428,7 @@ async function loadRobotData() {
         } catch (e) {}
     }
 
-    // 2. 加载专家数据 (58位)
+    // 2. 加载专家数据
     try {
         const resp = await fetch('/api/robot-experts');
         if (resp.ok) {
@@ -4444,7 +4447,7 @@ async function loadRobotData() {
         } catch (e) {}
     }
 
-    // 3. 确保中国地图已注册
+    // 3. 确保地图数据
     await ensureChinaMapRegistered();
 
     updateRobotKpiBar();
@@ -4466,7 +4469,6 @@ function updateRobotKpiBar() {
     if (elScEnt) elScEnt.innerHTML = `${scEnt} <small>家 (成都)</small>`;
 }
 
-// 1. 医疗机器人企业评级标准化互斥归类 (高 / 中高 / 中 / 观察 四分法)
 function getRobotCompCategory(comp) {
     if (!comp) return '观察';
     const c = String(comp).trim();
@@ -4477,7 +4479,6 @@ function getRobotCompCategory(comp) {
     return '中';
 }
 
-// 2. 医疗机器人企业技术路径标准化互斥归类 (腔镜微创 / 骨科关节 / 神经介入穿刺 / 康复外骨骼 / 辅助物流 五分法)
 function getRobotTechCategory(tech, intro) {
     const t = ((tech || '') + ' ' + (intro || '')).toLowerCase();
     if (t.includes('骨科') || t.includes('关节') || t.includes('脊柱') || t.includes('创伤骨科') || t.includes('天玑')) {
@@ -4495,7 +4496,6 @@ function getRobotTechCategory(tech, intro) {
     return '辅助/物流/诊疗';
 }
 
-// 3. 专家分类标准化归类 (产业/领军 / 学术/科研 / 临床转化 / 标准/审评)
 function getRobotExpCategory(exp_type, direction) {
     const et = String(exp_type || '');
     if (et.includes('产业')) return '产业/领军';
@@ -4505,7 +4505,6 @@ function getRobotExpCategory(exp_type, direction) {
     return '学术/科研';
 }
 
-// 4. 获取经过区域与筛选过滤的数据集
 function getFilteredRobotList(forMapGlobal = false) {
     if (robotState.currentView === 'enterprises') {
         let list = [...robotEnterprisesData];
@@ -4579,7 +4578,6 @@ function getFilteredRobotList(forMapGlobal = false) {
     }
 }
 
-// 5. 动态更新过滤器角标数量 (严丝合缝)
 function updateRobotFilterBadges() {
     let regionEntList = [...robotEnterprisesData];
     let regionExpList = [...robotExpertsData];
@@ -4601,7 +4599,6 @@ function updateRobotFilterBadges() {
         }
     }
 
-    // 企业模式统计
     const compCounts = { '高': 0, '中高': 0, '中': 0, '观察': 0 };
     const techCounts = { '腔镜/微创': 0, '骨科/关节': 0, '神经/介入/穿刺': 0, '康复/外骨骼': 0, '辅助/物流/诊疗': 0 };
 
@@ -4630,7 +4627,6 @@ function updateRobotFilterBadges() {
     setBadge('cnt-robot-tech-康复', techCounts['康复/外骨骼']);
     setBadge('cnt-robot-tech-辅助', techCounts['辅助/物流/诊疗']);
 
-    // 专家模式统计
     const expCounts = { '产业/领军': 0, '学术/科研': 0, '临床转化': 0, '标准/审评': 0 };
     regionExpList.forEach(item => {
         const e = getRobotExpCategory(item.expert_type, item.direction);
@@ -4661,9 +4657,8 @@ function updateRobotFilterBadges() {
     if (viewExpBadge) viewExpBadge.textContent = regionExpList.length;
 }
 
-// 6. 绑定医疗机器人大屏各类事件
 function bindRobotEvents() {
-    // 快捷区域导航
+    // 快捷区域导航按钮
     const regionNav = document.getElementById('robotRegionQuickNav');
     if (regionNav) {
         regionNav.addEventListener('click', (e) => {
@@ -4671,12 +4666,61 @@ function bindRobotEvents() {
             if (!btn) return;
             regionNav.querySelectorAll('.bci-nav-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            robotState.currentRegion = btn.getAttribute('data-region');
+            const reg = btn.getAttribute('data-region');
+            robotState.currentRegion = reg;
+
+            const provSelect = document.getElementById('robotProvinceSelect');
+            if (provSelect) {
+                provSelect.value = (reg === 'all' || reg === '长三角' || reg === '京津冀' || reg === '粤港澳') ? 'all' : reg;
+            }
+
             applyRobotFilterAndRender();
         });
     }
 
-    // 视图模式切换 (企业 vs 智库)
+    // 省份下拉直达选择器
+    const provSelect = document.getElementById('robotProvinceSelect');
+    if (provSelect) {
+        provSelect.addEventListener('change', function() {
+            const selVal = this.value;
+            robotState.currentRegion = selVal;
+            
+            if (regionNav) {
+                regionNav.querySelectorAll('.bci-nav-btn').forEach(b => b.classList.remove('active'));
+                if (selVal === 'all') {
+                    const allBtn = regionNav.querySelector('[data-region="all"]');
+                    if (allBtn) allBtn.classList.add('active');
+                } else if (selVal === '四川省') {
+                    const scBtn = regionNav.querySelector('[data-region="四川省"]');
+                    if (scBtn) scBtn.classList.add('active');
+                }
+            }
+            applyRobotFilterAndRender();
+        });
+    }
+
+    // 脑机接口省份下拉直达选择器
+    const bciProvSelect = document.getElementById('bciProvinceSelect');
+    if (bciProvSelect) {
+        bciProvSelect.addEventListener('change', function() {
+            const selVal = this.value;
+            bciState.currentRegion = selVal;
+            const bciRegionNav = document.getElementById('bciRegionQuickNav');
+            if (bciRegionNav) {
+                bciRegionNav.querySelectorAll('.bci-nav-btn').forEach(b => b.classList.remove('active'));
+                if (selVal === 'all') {
+                    const allBtn = bciRegionNav.querySelector('[data-region="all"]');
+                    if (allBtn) allBtn.classList.add('active');
+                } else if (selVal === '四川省') {
+                    const scBtn = bciRegionNav.querySelector('[data-region="四川省"]');
+                    if (scBtn) scBtn.classList.add('active');
+                }
+            }
+            applyBciFilterAndRender();
+        });
+    }
+
+    // 视图模式切换
     const btnSwitchEnt = document.getElementById('btnSwitchRobotEntView');
     const btnSwitchExp = document.getElementById('btnSwitchRobotExpView');
 
@@ -4781,7 +4825,6 @@ function bindRobotEvents() {
     }
 }
 
-// 切换全屏沉浸大屏模式
 function toggleRobotFullscreen() {
     const card = document.querySelector('.robot-modal-card');
     const icon = document.getElementById('fullscreenRobotIcon');
@@ -4813,9 +4856,14 @@ function openRobotModal() {
     if (!modal) return;
     modal.classList.remove('hidden');
     applyRobotFilterAndRender();
+    
+    // 多重保证地图在容器渲染尺寸就绪后立即绘制与重置尺寸
     setTimeout(() => {
         renderChinaRobotMap();
-    }, 120);
+    }, 60);
+    setTimeout(() => {
+        if (chartChinaRobotMapInstance) chartChinaRobotMapInstance.resize();
+    }, 200);
 }
 
 function closeRobotModal() {
@@ -4831,6 +4879,8 @@ function resetRobotFocus() {
         const allBtn = regionNav.querySelector('[data-region="all"]');
         if (allBtn) allBtn.classList.add('active');
     }
+    const provSelect = document.getElementById('robotProvinceSelect');
+    if (provSelect) provSelect.value = 'all';
     applyRobotFilterAndRender();
 }
 
@@ -4925,7 +4975,6 @@ function getRobotCompanyOfficialUrl(companyName) {
     return null;
 }
 
-// 专家与院校机构权威字典
 const ROBOT_EXPERT_OFFICIAL_WEBSITES = {
     "田伟": "http://www.cae.cn/cae/html/main/colys/74205462.html",
     "乔杰": "http://www.cae.cn/cae/html/main/colys/74205462.html",
@@ -4976,7 +5025,6 @@ function getRobotExpertOfficialUrl(expertName, institution) {
     return null;
 }
 
-// 7. 动态领军学者专区渲染
 function renderDynamicRobotTalentsBanner() {
     const wrapper = document.getElementById('scSideRobotTalentsSection');
     const cardsRow = document.getElementById('sideRobotTalentsCardsRow');
@@ -5050,6 +5098,12 @@ async function renderChinaRobotMap() {
     const container = document.getElementById('chartChinaRobotMap');
     if (!container || typeof echarts === 'undefined') return;
 
+    // 确保有尺寸
+    if (!container.style.height || container.style.height === '0px') {
+        container.style.height = '520px';
+        container.style.width = '100%';
+    }
+
     const isMapReady = await ensureChinaMapRegistered();
     if (!isMapReady) {
         container.innerHTML = '<div class="map-loading-hint">⚠️ 中国矢量地图加载中，请稍候...</div>';
@@ -5057,7 +5111,7 @@ async function renderChinaRobotMap() {
     }
 
     if (container.clientWidth === 0 || container.clientHeight === 0) {
-        setTimeout(renderChinaRobotMap, 80);
+        setTimeout(renderChinaRobotMap, 60);
         return;
     }
 
@@ -5066,27 +5120,20 @@ async function renderChinaRobotMap() {
         
         chartChinaRobotMapInstance.on('click', function(params) {
             let selectedProv = '';
-            if (params.seriesType === 'effectScatter') {
+            if (params.seriesType === 'effectScatter' || params.seriesType === 'scatter') {
                 selectedProv = params.data.province || params.name;
             } else if (params.seriesType === 'map') {
                 selectedProv = params.name;
             }
 
             if (selectedProv) {
-                if (selectedProv === '四川' || selectedProv.includes('四川')) selectedProv = '四川省';
-                else if (selectedProv === '北京' || selectedProv.includes('北京')) selectedProv = '北京市';
-                else if (selectedProv === '上海' || selectedProv.includes('上海')) selectedProv = '上海市';
-                else if (selectedProv === '浙江' || selectedProv.includes('浙江')) selectedProv = '浙江省';
-                else if (selectedProv === '江苏' || selectedProv.includes('江苏')) selectedProv = '江苏省';
-                else if (selectedProv === '广东' || selectedProv.includes('广东')) selectedProv = '广东省';
-                else if (selectedProv === '天津' || selectedProv.includes('天津')) selectedProv = '天津市';
-                else if (selectedProv === '湖北' || selectedProv.includes('湖北')) selectedProv = '湖北省';
-                else if (selectedProv === '陕西' || selectedProv.includes('陕西')) selectedProv = '陕西省';
-                else if (selectedProv === '安徽' || selectedProv.includes('安徽')) selectedProv = '安徽省';
-                else if (selectedProv === '山东' || selectedProv.includes('山东')) selectedProv = '山东省';
-
+                selectedProv = normalizeProvName(selectedProv);
                 robotState.currentRegion = selectedProv;
-                applyRobotFilterAndRender();
+
+                const provSelect = document.getElementById('robotProvinceSelect');
+                if (provSelect) {
+                    provSelect.value = selectedProv;
+                }
 
                 const regionNav = document.getElementById('robotRegionQuickNav');
                 if (regionNav) {
@@ -5096,13 +5143,15 @@ async function renderChinaRobotMap() {
                         if (scBtn) scBtn.classList.add('active');
                     }
                 }
+
+                applyRobotFilterAndRender();
             }
         });
     } else {
         chartChinaRobotMapInstance.resize();
     }
 
-    const isDark = state.theme === 'dark';
+    const isDark = (typeof state !== 'undefined' && state.theme === 'dark');
     const isSichuanMode = (robotState.currentRegion === '四川省');
     const currentRegionList = getFilteredRobotList(false);
 
@@ -5118,25 +5167,229 @@ async function renderChinaRobotMap() {
         value: provStats[p]
     }));
 
-    // 散点与标注
+    const maxVal = Math.max(...mapData.map(d => d.value), 1);
+
+    // 动态调整中心与缩放
+    let mapCenter = [104.5, 36.5];
+    let mapZoom = 1.25;
+
+    if (isSichuanMode) {
+        mapCenter = [104.2, 30.7];
+        mapZoom = 3.8;
+    } else if (robotState.currentRegion === '长三角') {
+        mapCenter = [120.0, 31.5];
+        mapZoom = 1.6;
+    } else if (robotState.currentRegion === '京津冀') {
+        mapCenter = [116.5, 39.5];
+        mapZoom = 1.8;
+    } else if (robotState.currentRegion === '大湾区' || robotState.currentRegion === '粤港澳') {
+        mapCenter = [113.5, 23.0];
+        mapZoom = 1.8;
+    } else if (robotState.currentRegion !== 'all') {
+        // 单个省份聚焦
+        const provCoords = {
+            '北京市': [116.405, 39.904],
+            '上海市': [121.472, 31.231],
+            '江苏省': [118.767, 32.041],
+            '浙江省': [120.153, 30.287],
+            '广东省': [113.264, 23.129],
+            '湖北省': [114.298, 30.584],
+            '山东省': [117.000, 36.650],
+            '陕西省': [108.948, 34.263],
+            '天津市': [117.190, 39.125],
+            '重庆市': [106.551, 29.563],
+            '河南省': [113.665, 34.757],
+            '安徽省': [117.283, 31.861],
+            '黑龙江省': [126.642, 45.756],
+            '辽宁省': [123.429, 41.796],
+            '湖南省': [112.982, 28.194]
+        };
+        if (provCoords[robotState.currentRegion]) {
+            mapCenter = provCoords[robotState.currentRegion];
+            mapZoom = 2.4;
+        }
+    }
+
     let scatterData = [];
+    let leaderLinesData = [];
+    let leaderLabelsData = [];
+
     if (isSichuanMode) {
         scatterData = [
-            { name: '四川大学华西医院/精准医学中心', value: [104.0620, 30.6420, 15], province: '四川省' },
-            { name: '电子科技大学机器人研究中心/布法罗', value: [103.9314, 30.7490, 15], province: '四川省' },
-            { name: '西南科技大学智能医学实验室', value: [104.6980, 31.5350, 10], province: '四川省' },
-            { name: '成都高新区前沿医学中心(博恩思/新源等)', value: [104.0450, 30.5580, 12], province: '四川省' },
-            { name: '四川奥泰医疗系统(超导MRI与导航)', value: [104.0120, 30.6980, 10], province: '四川省' }
+            { name: '四川大学华西医院/精准医学创新中心', value: [104.0620, 30.6420], type: 'hospital' },
+            { name: '电子科技大学机器人研究中心/布法罗', value: [103.9314, 30.7490], type: 'university' },
+            { name: '西南科技大学智能医学实验室', value: [104.6980, 31.5350], type: 'university' },
+            { name: '成都高新·前沿医学中心 (博恩思/新源等)', value: [104.0450, 30.5580], type: 'industry' },
+            { name: '四川奥泰医疗系统 (超导MRI与导航)', value: [104.0120, 30.6980], type: 'industry' }
+        ];
+
+        leaderLinesData = [
+            { coords: [[104.6980, 31.5350], [105.80, 31.90], [106.25, 31.90]], name: '西南科技大学' },
+            { coords: [[103.9314, 30.7490], [105.35, 31.05], [106.25, 31.05]], name: '电子科技大学' },
+            { coords: [[104.0620, 30.6420], [105.25, 30.20], [106.25, 30.20]], name: '华西医院精准医学中心' },
+            { coords: [[104.0450, 30.5580], [105.15, 29.35], [106.25, 29.35]], name: '成都高新前沿医学中心' }
+        ];
+
+        leaderLabelsData = [
+            { name: '西南科技大学', value: [106.25, 31.90], labelText: '🏛️ 西南科技大学 · 张杨松 (教授)', desc: '智能医学工程与神经康复机器人' },
+            { name: '电子科技大学', value: [106.25, 31.05], labelText: '🏛️ 电子科技大学 · 程洪 (教授/布法罗创始人)', desc: '下肢康复外骨骼机器人与人机智能共融' },
+            { name: '华西医院精准医学中心', value: [106.25, 30.20], labelText: '🏥 华西医院 · 裴福兴/李为民/曾勇 (主委)', desc: '骨科/呼吸介入/腹腔镜微创手术机器人转化' },
+            { name: '成都高新前沿医学中心', value: [106.25, 29.35], labelText: '🏢 博恩思 / 新源生物 / 华西精创', desc: '微创手术机器人 · 术中神经电生理导航' }
         ];
     } else {
-        scatterData = ROBOT_CITIES_COORDS.map(city => {
-            const count = currentRegionList.filter(item => (item.province || '').includes(city.province.replace('省','').replace('市',''))).length;
+        scatterData = ROBOT_NATIONAL_HUBS.map(hub => {
+            const count = currentRegionList.filter(item => (item.province || '').includes(hub.province.replace('省', '').replace('市', ''))).length;
             return {
-                name: city.name,
-                value: [...city.coords, count || 1],
-                province: city.province,
-                isHighlight: city.highlight
+                name: hub.name,
+                value: [hub.value[0], hub.value[1], Math.max(count, 1)],
+                province: hub.province,
+                hubLabel: hub.hubLabel,
+                experts: hub.experts,
+                desc: hub.desc,
+                highlight: hub.highlight || false,
+                count: count
             };
+        });
+    }
+
+    const seriesList = [
+        {
+            name: '当前区域热度',
+            type: 'map',
+            geoIndex: 0,
+            data: mapData
+        }
+    ];
+
+    if (isSichuanMode) {
+        seriesList.push({
+            name: '指引折线',
+            type: 'lines',
+            coordinateSystem: 'geo',
+            data: leaderLinesData,
+            polyline: true,
+            lineStyle: {
+                color: '#0284c7',
+                width: 1.5,
+                opacity: 0.85,
+                type: 'solid',
+                shadowBlur: 6,
+                shadowColor: 'rgba(2, 132, 199, 0.4)'
+            },
+            zlevel: 4
+        });
+
+        seriesList.push({
+            name: '地理原点',
+            type: 'effectScatter',
+            coordinateSystem: 'geo',
+            data: scatterData,
+            symbolSize: 15,
+            showEffectOn: 'render',
+            rippleEffect: {
+                brushType: 'stroke',
+                scale: 4.5,
+                period: 2.6
+            },
+            itemStyle: {
+                color: function(params) {
+                    if (params.data.type === 'hospital') return '#059669';
+                    if (params.data.type === 'industry') return '#0284c7';
+                    return '#d97706';
+                },
+                shadowBlur: 14,
+                shadowColor: 'rgba(2, 132, 199, 0.8)'
+            },
+            zlevel: 5
+        });
+
+        seriesList.push({
+            name: '机构标注',
+            type: 'scatter',
+            coordinateSystem: 'geo',
+            data: leaderLabelsData,
+            symbol: 'circle',
+            symbolSize: 5,
+            label: {
+                show: true,
+                formatter: function(params) {
+                    return `{title|${params.data.labelText}}\n{desc|🔬 ${params.data.desc}}`;
+                },
+                position: 'right',
+                distance: 12,
+                rich: {
+                    title: {
+                        color: isDark ? '#ffffff' : '#0f172a',
+                        fontWeight: 'bold',
+                        fontSize: 11,
+                        lineHeight: 18
+                    },
+                    desc: {
+                        color: isDark ? '#94a3b8' : '#475569',
+                        fontSize: 10,
+                        lineHeight: 15
+                    }
+                },
+                backgroundColor: isDark ? 'rgba(15, 23, 42, 0.94)' : 'rgba(255, 255, 255, 0.96)',
+                borderColor: '#0284c7',
+                borderWidth: 1.2,
+                borderRadius: 5,
+                padding: [4, 8],
+                shadowBlur: 8,
+                shadowColor: 'rgba(0,0,0,0.15)'
+            },
+            itemStyle: { color: '#0284c7' },
+            zlevel: 6
+        });
+    } else {
+        seriesList.push({
+            name: '标注散点',
+            type: 'effectScatter',
+            coordinateSystem: 'geo',
+            data: scatterData,
+            symbolSize: function(val, params) {
+                const c = params.data.count || 1;
+                return Math.max(12, Math.min(22, 12 + c * 0.5));
+            },
+            showEffectOn: 'render',
+            rippleEffect: {
+                brushType: 'stroke',
+                scale: 3.5,
+                period: 2.8
+            },
+            label: {
+                show: true,
+                formatter: function(params) {
+                    return params.data.hubLabel || params.name;
+                },
+                position: 'top',
+                distance: 6,
+                color: isDark ? '#ffffff' : '#0f172a',
+                fontWeight: 'bold',
+                fontSize: 10.5,
+                backgroundColor: isDark ? 'rgba(15, 23, 42, 0.90)' : 'rgba(255, 255, 255, 0.92)',
+                borderColor: '#0284c7',
+                borderWidth: 1,
+                borderRadius: 4,
+                padding: [2, 6],
+                shadowBlur: 6,
+                shadowColor: 'rgba(0,0,0,0.18)'
+            },
+            emphasis: {
+                scale: true,
+                label: { show: true, fontSize: 11 }
+            },
+            itemStyle: {
+                color: function(params) {
+                    if (params.data.highlight || (params.data.province && params.data.province.includes('四川'))) {
+                        return '#0284c7';
+                    }
+                    return '#0ea5e9';
+                },
+                shadowBlur: 14,
+                shadowColor: 'rgba(2, 132, 199, 0.75)'
+            },
+            zlevel: 5
         });
     }
 
@@ -5144,100 +5397,92 @@ async function renderChinaRobotMap() {
         backgroundColor: 'transparent',
         tooltip: {
             trigger: 'item',
-            backgroundColor: isDark ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+            backgroundColor: isDark ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.96)',
             borderColor: '#0284c7',
             borderWidth: 1.5,
-            padding: [10, 14],
-            textStyle: {
-                color: isDark ? '#f1f5f9' : '#0f172a',
-                fontSize: 12.5
-            },
+            padding: [8, 12],
+            textStyle: { color: isDark ? '#f8fafc' : '#0f172a', fontSize: 12 },
             formatter: function(params) {
-                if (params.seriesType === 'effectScatter') {
-                    const count = params.value[2] || 0;
-                    return `<strong>📍 ${params.name}</strong><br/>` +
-                           `<span style="color:#0284c7;">●</span> 当前收录核心标的/专家：<strong>${count}</strong> 项<br/>` +
-                           `<span style="font-size:11px;color:#64748b;">点击下钻穿透该区域数据看板</span>`;
-                } else if (params.seriesType === 'map') {
-                    const count = params.value || 0;
-                    return `<strong>🗺️ ${params.name}</strong><br/>` +
-                           `<span style="color:#0284c7;">●</span> 医疗机器人企业/专家总计：<strong>${count}</strong> 项<br/>` +
-                           `<span style="font-size:11px;color:#64748b;">点击精准筛选 ${params.name} 详情</span>`;
+                if (params.seriesType === 'lines') {
+                    return `<div style="font-size:12px; color:#0284c7; font-weight:700;">📍 ${params.data.name} 坐标引线</div>`;
                 }
-                return params.name;
-            }
-        },
-        geo: {
-            map: 'china',
-            roam: true,
-            zoom: isSichuanMode ? 2.8 : 1.15,
-            center: isSichuanMode ? [104.066541, 30.572269] : [104.114129, 36.550339],
-            label: {
-                show: true,
-                color: isDark ? '#94a3b8' : '#475569',
-                fontSize: 10
-            },
-            itemStyle: {
-                areaColor: isDark ? '#1e293b' : '#f8fafc',
-                borderColor: isDark ? '#334155' : '#cbd5e1',
-                borderWidth: 1
-            },
-            emphasis: {
-                label: {
-                    show: true,
-                    color: '#ffffff'
-                },
-                itemStyle: {
-                    areaColor: isDark ? '#0284c7' : '#38bdf8'
+                if (params.seriesType === 'scatter' && params.data.labelText) {
+                    return `
+                        <div style="font-weight:bold; font-size:13.5px; color:#0284c7; margin-bottom:4px;">${params.data.labelText}</div>
+                        <div style="font-size:11.5px; color:#475569;">🔬 ${params.data.desc || ''}</div>
+                        <div style="font-size:10.5px; color:#0284c7; margin-top:4px;">👉 右侧看板已同步列出该机构相关详细档案</div>
+                    `;
+                }
+                if (params.seriesType === 'effectScatter') {
+                    const d = params.data;
+                    if (d.experts) {
+                        return `
+                            <div style="font-weight:bold; font-size:13.5px; color:#0284c7; margin-bottom:4px;">🏛️ ${d.name} (${d.province})</div>
+                            <div style="font-size:12px; color:#0f172a; font-weight:700;">👨‍🏫 领军高校/学者: <span style="color:#0284c7;">${d.experts}</span></div>
+                            <div style="font-size:11.5px; color:#64748b; margin-top:2px;">🔬 方向与代表标的: ${d.desc || '医疗机器人核心技术研发'}</div>
+                            <div style="font-size:10.5px; color:#0284c7; margin-top:4px;">👉 右侧看板已同步联动该区域学者与标的</div>
+                        `;
+                    }
+                    return `
+                        <div style="font-weight:bold; font-size:13px; color:#0284c7; margin-bottom:4px;">📍 ${d.name} (${d.province})</div>
+                        <div style="font-size:12px; color:#0f172a;">📊 当前分布: <strong style="color:#0284c7; font-size:13px;">${d.count}</strong> ${robotState.currentView === 'enterprises' ? '家' : '位'}</div>
+                    `;
+                }
+                if (params.seriesType === 'map') {
+                    const pName = params.name;
+                    const count = provStats[normalizeProvName(pName)] || 0;
+                    const isSc = pName.includes('四川');
+                    if (count === 0) {
+                        return `<div style="font-size:12px; color:#64748b;">${pName}: 当前聚焦区域下无标的</div>`;
+                    }
+                    return `
+                        <div style="font-weight:bold; font-size:13px; color:${isSc ? '#0284c7' : '#004886'};">
+                            ${isSc ? '⭐ 四川省 (医工转化集群 · 点击已放大下钻)' : pName}
+                        </div>
+                        <div style="margin-top:4px; font-size:12px;">
+                            <span>📊 医疗机器人【${robotState.currentView === 'enterprises' ? '企业' : '专家'}】: <strong style="color:#0284c7; font-size:13px;">${count}</strong> ${robotState.currentView === 'enterprises' ? '家' : '位'}</span>
+                        </div>
+                        <div style="margin-top:4px; font-size:10.5px; color:#94a3b8;">👉 点击可精准锁定该省份所有标的</div>
+                    `;
                 }
             }
         },
         visualMap: {
             min: 0,
-            max: isSichuanMode ? 15 : 20,
-            left: 20,
-            bottom: 20,
-            text: ['高热度', '低热度'],
-            calculable: true,
+            max: maxVal,
+            left: '3%',
+            bottom: '4%',
+            text: [`当前聚焦 (${maxVal})`, '0'],
+            calculable: false,
             inRange: {
                 color: isDark 
                     ? ['#1e293b', '#0369a1', '#0284c7', '#38bdf8'] 
-                    : ['#f1f5f9', '#bae6fd', '#38bdf8', '#0284c7']
+                    : ['#f8fafc', '#bae6fd', '#38bdf8', '#0284c7']
             },
             textStyle: {
-                color: isDark ? '#94a3b8' : '#64748b',
-                fontSize: 11
+                color: isDark ? '#94a3b8' : '#475569',
+                fontSize: 10.5
             }
         },
-        series: [
-            {
-                name: '各省热度',
-                type: 'map',
-                geoIndex: 0,
-                data: mapData
+        geo: {
+            map: 'china',
+            roam: true,
+            zoom: mapZoom,
+            center: mapCenter,
+            label: { show: false },
+            itemStyle: {
+                areaColor: isDark ? '#1e293b' : '#f8fafc',
+                borderColor: isDark ? '#334155' : '#cbd5e1',
+                borderWidth: 0.8
             },
-            {
-                name: '产业极散点',
-                type: 'effectScatter',
-                coordinateSystem: 'geo',
-                data: scatterData,
-                symbolSize: function(val) {
-                    return Math.max(10, Math.min(22, (val[2] || 5) * 1.4));
-                },
-                showEffectOn: 'render',
-                rippleEffect: {
-                    brushType: 'stroke',
-                    scale: 3,
-                    period: 4
-                },
+            emphasis: {
+                label: { show: false },
                 itemStyle: {
-                    color: '#0284c7',
-                    shadowBlur: 10,
-                    shadowColor: '#0284c7'
-                },
-                zlevel: 2
+                    areaColor: isDark ? '#0284c7' : '#bae6fd'
+                }
             }
-        ]
+        },
+        series: seriesList
     };
 
     chartChinaRobotMapInstance.setOption(option, true);

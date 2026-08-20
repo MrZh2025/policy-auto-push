@@ -3693,3 +3693,51 @@ body {
     background: linear-gradient(135deg, #0369a1 0%, #075985 100%) !important;
     box-shadow: 0 3px 12px rgba(2, 132, 199, 0.55);
 }
+
+
+/* 增强型中国地图容器尺寸与省份选择器样式 */
+.bci-china-map-container {
+    flex: 1;
+    width: 100% !important;
+    min-height: 480px !important;
+    height: 520px !important;
+    position: relative;
+    display: block !important;
+}
+
+.bci-province-select {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid var(--border-color, #cbd5e1);
+    background: var(--bg-card, #ffffff);
+    color: var(--text-main, #0f172a);
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.bci-province-select:hover, .bci-province-select:focus {
+    border-color: #0284c7;
+    box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.2);
+}
+
+.bci-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border-color, #e2e8f0);
+    background: var(--bg-page, #f8fafc);
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.bci-region-quick-nav {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
