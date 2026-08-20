@@ -1,3 +1,16 @@
+
+// 安全 HTML 转义函数
+function escapeHtml(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+window.escapeHtml = escapeHtml;
+
 /**
  * 医药健康产业集团政策监测信息系统 - 前端交互逻辑
  * 支持 GitHub Pages 静态无服务器部署与本地动态 API 模式自适应切换
@@ -4141,6 +4154,17 @@ function normalizeProvName(prov) {
     if (prov.includes('陕西')) return '陕西省';
     if (prov.includes('山东')) return '山东省';
     if (prov.includes('安徽')) return '安徽省';
+    if (prov.includes('重庆')) return '重庆市';
+    if (prov.includes('河南')) return '河南省';
+    if (prov.includes('黑龙江')) return '黑龙江省';
+    if (prov.includes('辽宁')) return '辽宁省';
+    if (prov.includes('湖南')) return '湖南省';
+    if (prov.includes('福建')) return '福建省';
+    if (prov.includes('江西')) return '江西省';
+    if (prov.includes('海南')) return '海南省';
+    if (prov.includes('贵州')) return '贵州省';
+    if (prov.includes('云南')) return '云南省';
+    if (prov.includes('香港')) return '香港特别行政区';
     return prov;
 }
 
@@ -4455,6 +4479,7 @@ async function loadRobotData() {
 
     updateRobotKpiBar();
     updateRobotFilterBadges();
+    renderDynamicRobotTalentsBanner();
     renderRobotFocusCards();
 }
 
