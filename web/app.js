@@ -4609,7 +4609,7 @@ async function loadRobotData() {
 }
 
 function updateRobotKpiBar() {
-    const totalEnt = robotEnterprisesData.length || 60;
+    const totalEnt = robotEnterprisesData.length || 66;
     const totalExp = robotExpertsData.length || 53;
     const scEnt = robotEnterprisesData.filter(i => (i.province || '').includes('四川')).length || 7;
 

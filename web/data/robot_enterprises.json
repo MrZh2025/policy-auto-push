@@ -1,6 +1,6 @@
 {
   "code": 0,
-  "count": 60,
+  "count": 66,
   "data": [
     {
       "id": 1,
@@ -312,14 +312,14 @@
     },
     {
       "id": 23,
-      "name": "苏州键嘉医疗科技股份有限公司",
+      "name": "杭州键嘉医疗科技股份有限公司",
       "tech_route": "骨科手术机器人平台",
       "product_intro": "ARTHROBOT关节置换手术机器人系统（髋/膝一体化）、THETA脊柱手术机器人系统、YOUI口腔种植机器人",
       "stage": "关节置换机器人及脊柱机器人均获NMPA三类注册证，全国数百家三甲骨科医院装机，累计手术超万例",
       "financing": "完成数亿元D轮及Pre-IPO轮融资，高瓴创投、软银中国、复星医药、普华资本等联合投资，推进科创板IPO",
       "competitiveness": "高：国内骨科关节置换手术机器人第一梯队领军，髋膝一体与多专科平台化能力极强",
-      "province": "江苏省",
-      "city": "苏州",
+      "province": "浙江省",
+      "city": "杭州",
       "category": "核心企业",
       "source_url": "https://www.jianjia-med.com",
       "date": "2026-08-20"
@@ -840,6 +840,90 @@
       "city": "昆明",
       "category": "核心企业",
       "source_url": "https://www.km-ortho.com",
+      "date": "2026-08-20"
+    },
+    {
+      "id": 61,
+      "name": "重庆金山医疗机器人有限公司",
+      "tech_route": "多孔腔镜手术机器人",
+      "product_intro": "腔镜手术机器人、高清3D医用内窥镜；产品列入国家《“十四五”医疗装备产业发展规划》",
+      "stage": "腔镜手术机器人临床/注册推进阶段，核心部件自研自产率100%，专利申请295件（发明占比30.4%）",
+      "financing": "完成A+轮融资；2024年重庆市专精特新中小企业",
+      "competitiveness": "较高：金山科技集团基于国家多孔腔镜手术机器人项目孵化，主要起草单位参与国内首份手术机器人行业标准，2022年获沙利文中国医疗机器人创新奖",
+      "province": "重庆市",
+      "city": "重庆",
+      "category": "核心企业",
+      "source_url": "https://www.frostchina.com/en/content/insight/detail/634f58b71741eafe0c8406f0\nhttps://www.zhaopin.com/companydetail/CZL1300484570.htm",
+      "date": "2026-08-20"
+    },
+    {
+      "id": 62,
+      "name": "南京佗道医疗科技有限公司",
+      "tech_route": "骨科手术机器人/多赛道平台",
+      "product_intro": "佗手骨科手术机器人（脊柱外科全节段开放/微创手术定位）、移动式C形臂X射线机；布局骨科、腔镜、经皮穿刺、经自然腔道、医学影像五大赛道",
+      "stage": "佗手骨科手术机器人2022年8月获NMPA三类注册证（国内首个完成同类产品随机对照临床试验的骨科手术机器人），2款产品商业化",
+      "financing": "注册资本1亿元，多轮融资",
+      "competitiveness": "较高：临床精度亚毫米级，螺钉置入优良率优于对照产品，多赛道平台化布局",
+      "province": "江苏省",
+      "city": "南京",
+      "category": "核心企业",
+      "source_url": "https://www.tuodaomedical.com/news/197\nhttps://company.cnstock.com/company/scp_gsxw/202208/4945388.htm",
+      "date": "2026-08-20"
+    },
+    {
+      "id": 63,
+      "name": "深圳市鑫君特智能医疗器械有限公司",
+      "tech_route": "脊柱手术机器人（导航+主动执行）",
+      "product_intro": "ORTHBOT手术机器人系统：术前规划、手术导航与主动置钉一体，覆盖脊柱外科；截骨机器人与关节置换机器人在研",
+      "stage": "ORTHBOT 2021年2月获NMPA三类注册证（国产首个导航+手术操作全智能骨科机器人），2023年5月获欧盟MDR CE认证",
+      "financing": "国家高新技术企业，注册资本5487万元",
+      "competitiveness": "较高：广东省首家获批骨科机器人注册证企业，60例临床误差均在1毫米内",
+      "province": "广东省",
+      "city": "深圳",
+      "category": "核心企业",
+      "source_url": "https://www.futurtec.com/guanyuwomen\nhttps://www.sznews.com/news/content/2021-03/18/content_24056036.htm",
+      "date": "2026-08-20"
+    },
+    {
+      "id": 64,
+      "name": "深圳爱博合创医疗机器人有限公司",
+      "tech_route": "血管介入手术机器人",
+      "product_intro": "PANVIS-A脑血管介入手术辅助操作系统（原roboangio），支持导丝导管精准递送与远程介入方向",
+      "stage": "PANVIS-A 2024年8月获NMPA三类注册证（国械注准20243011574）",
+      "financing": "多轮融资",
+      "competitiveness": "较高：国产脑血管介入手术机器人代表，填补血管介入机器人领域多项技术空白",
+      "province": "广东省",
+      "city": "深圳",
+      "category": "核心企业",
+      "source_url": "https://www.brainmed.com/info/detail?id=47489\nhttps://www.vbdata.cn/1518982738",
+      "date": "2026-08-20"
+    },
+    {
+      "id": 65,
+      "name": "苏州铸正机器人有限公司",
+      "tech_route": "脊柱手术导航定位机器人",
+      "product_intro": "佐航500骨科手术导航定位系统（高精度力控机械臂+光学追踪），覆盖脊柱外科、创伤骨科、手足外科与运动医学；超声骨组织手术设备",
+      "stage": "持有多张NMPA三类注册证（国械注准20223010268、20243010513、20243012475等）",
+      "financing": "国家高新技术企业（2016年创立）",
+      "competitiveness": "较高：核心团队源自北航医疗机器人实验室，两次获国家科技进步二等奖",
+      "province": "江苏省",
+      "city": "苏州",
+      "category": "核心企业",
+      "source_url": "https://www.qxw18.com/sc/KZrVSPqwAA.html\nhttps://bydrug.pharmcube.com/news/detail/1a9985e7327d248d09cbebbac874088b",
+      "date": "2026-08-20"
+    },
+    {
+      "id": 66,
+      "name": "瑞龙外科（Ronovo Surgical）",
+      "tech_route": "分体式腔镜手术机器人",
+      "product_intro": "海山一腔镜手术机器人：国内首款分体式/模块化架构，机械臂独立布局，35平方米即可部署，覆盖普外、胸外、妇科、泌尿四大专科",
+      "stage": "海山一2025年3月获NMPA三类注册证（国械注准20253010500），首款上市即获批4大专科全适应症",
+      "financing": "D轮融资",
+      "competitiveness": "较高：多中心临床试验成功率100%，分体式+全专科适配双重突破",
+      "province": "上海市",
+      "city": "上海",
+      "category": "核心企业",
+      "source_url": "https://www.medvalley.cn/yiliaoqixie/76955.html\nhttps://www.vbdata.cn/1519010314",
       "date": "2026-08-20"
     }
   ]
