@@ -2,12 +2,12 @@
   "code": 0,
   "data": {
     "stats": {
-      "total": 118,
+      "total": 119,
       "pushed": 59,
-      "unpushed": 59
+      "unpushed": 60
     },
     "categories": {
-      "AI制药": 2,
+      "AI制药": 3,
       "医保政策": 38,
       "医疗机器人": 3,
       "合成生物": 2,
