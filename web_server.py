@@ -122,6 +122,10 @@ class PolicyWebHandler(http.server.SimpleHTTPRequestHandler):
             self.handle_get_robot_enterprises()
         elif path == "/api/robot-experts":
             self.handle_get_robot_experts()
+        elif path == "/api/nuclear-enterprises":
+            self.handle_get_nuclear_enterprises()
+        elif path == "/api/nuclear-experts":
+            self.handle_get_nuclear_experts()
         elif path == "/api/config":
             self.handle_get_config()
         else:
@@ -261,6 +265,26 @@ class PolicyWebHandler(http.server.SimpleHTTPRequestHandler):
     def handle_get_robot_experts(self):
         """获取医疗机器人全国专家智库地图数据"""
         json_path = os.path.join(WEB_DIR, "data", "robot_experts.json")
+        try:
+            with open(json_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            self._json_response(data)
+        except Exception as e:
+            self._json_response({"code": -1, "msg": str(e)}, status=500)
+
+    def handle_get_nuclear_enterprises(self):
+        """获取核医药（核药）全国企业投资地图数据"""
+        json_path = os.path.join(WEB_DIR, "data", "nuclear_enterprises.json")
+        try:
+            with open(json_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            self._json_response(data)
+        except Exception as e:
+            self._json_response({"code": -1, "msg": str(e)}, status=500)
+
+    def handle_get_nuclear_experts(self):
+        """获取核医药（核药）全国专家智库地图数据"""
+        json_path = os.path.join(WEB_DIR, "data", "nuclear_experts.json")
         try:
             with open(json_path, "r", encoding="utf-8") as f:
                 data = json.load(f)

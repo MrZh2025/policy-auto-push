@@ -210,6 +210,13 @@
                                 <span class="dropdown-tag-hot">173家企业 / 85位专家</span>
                             </div>
                         </a>
+                        <a href="javascript:void(0)" class="dropdown-item" onclick="openNuclearModal()">
+                            <span class="dropdown-item-icon">☢️</span>
+                            <div class="dropdown-item-text">
+                                <span class="dropdown-item-title">全国核医药（核药）企业与专家地图</span>
+                                <span class="dropdown-tag-hot">22家企业 / 23位专家</span>
+                            </div>
+                        </a>
                         <a href="javascript:void(0)" class="dropdown-item" onclick="openVisitorAnalyticsModal()">
                             <span class="dropdown-item-icon">📊</span>
                             <div class="dropdown-item-text">
@@ -1101,6 +1108,198 @@
         </div>
     </div>
 
+    <!-- 核医药（核药）企业投资与专家智库地图 - 全屏级产业大屏模态弹窗 (集成ECharts中国地图与省份/城市精准下钻) -->
+    <div id="nuclearMapModal" class="nmpa-modal-backdrop hidden">
+        <div class="nmpa-modal-card bci-modal-card nuclear-modal-card">
+            <!-- 头部标题栏 -->
+            <div class="modal-header bci-header robot-header">
+                <div class="modal-title-wrap">
+                    <h3 class="modal-title">☢️ 中国核医药（核药）产业智库与重点企业投资决策全景地图</h3>
+                    <span class="modal-subtitle">覆盖全国 22 家核药研发/同位素供应/CXO核心主体与 23 位核医学领军专家 · 基于公开可溯源信息整理</span>
+                </div>
+                <div class="bci-header-right">
+                    <div class="bci-badge-sichuan" title="四川拥有核动院体系+全球最大医用同位素生产基地，为全国核药产业核心极">
+                        ⭐ 四川重点布局 (5家企业 / 4位领军专家)
+                    </div>
+                    <button class="bci-action-header-btn btn-fullscreen" id="btnToggleNuclearFullscreen" title="切换全屏沉浸大屏模式" onclick="toggleNuclearFullscreen()">
+                        <span class="fullscreen-icon" id="fullscreenNuclearIcon">⛶</span>
+                        <span class="fullscreen-text" id="fullscreenNuclearText">全屏展示</span>
+                    </button>
+                    <button class="bci-action-header-btn btn-back-system" id="modalNuclearCloseBtn" title="返回系统主页" onclick="closeNuclearModal()">
+                        <span>✕ 返回主页</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 顶部高光 KPI 指标核心看板 -->
+            <div class="bci-kpi-bar">
+                <div class="bci-kpi-item">
+                    <span class="bci-kpi-label">全国核药核心主体</span>
+                    <strong class="bci-kpi-num" id="nuclearKpiTotalEnt">22 <small>家</small></strong>
+                </div>
+                <div class="bci-kpi-item">
+                    <span class="bci-kpi-label">全国领军专家学者</span>
+                    <strong class="bci-kpi-num" id="nuclearKpiTotalExp">23 <small>位</small></strong>
+                </div>
+                <div class="bci-kpi-item highlight-sc">
+                    <span class="bci-kpi-label">四川本土重点标的</span>
+                    <strong class="bci-kpi-num" id="nuclearKpiScEnt">5 <small>家 (成都/乐山)</small></strong>
+                </div>
+                <div class="bci-kpi-item">
+                    <span class="bci-kpi-label">四川同位素供应优势</span>
+                    <strong class="bci-kpi-num" style="color:#059669;">全球最大 <small>堆照同位素基地</small></strong>
+                </div>
+                <div class="bci-kpi-item">
+                    <span class="bci-kpi-label">产业链覆盖环节</span>
+                    <strong class="bci-kpi-num" style="color:#d97706;">4 <small>大链条环节</small></strong>
+                </div>
+            </div>
+
+            <!-- 主体双栏联动交互区 (左侧交互中国地图 + 右侧重点标的穿透看板) -->
+            <div class="bci-main-grid-layout">
+                <!-- 左侧: 交互式中国地图及地理标注 -->
+                <div class="bci-map-panel">
+                    <div class="bci-panel-header">
+                        <div class="bci-panel-title-wrap">
+                            <span class="bci-panel-title">🗺️ 全国核药产业热度分布与地理标注 (点击省份只看该省 · 再点城市只看该市)</span>
+                            <span class="bci-panel-subtitle">以地理坐标定位全国核药产业极 · 重点标注成都市、乐山市、北京市、烟台市等</span>
+                        </div>
+                        <div class="bci-region-quick-nav" id="nuclearRegionQuickNav">
+                            <button class="bci-nav-btn active" data-region="all">全部全国</button>
+                            <button class="bci-nav-btn btn-sc-nav" data-region="四川省">⭐ 四川重点</button>
+                            <button class="bci-nav-btn" data-region="长三角">长三角</button>
+                            <button class="bci-nav-btn" data-region="京津冀">京津冀</button>
+                            <button class="bci-nav-btn" data-region="大湾区">粤港澳</button>
+                            <select id="nuclearProvinceSelect" class="bci-province-select" title="全部省份精准筛选直达">
+                                <option value="all">📍 全部省份直达...</option>
+                                <option value="北京市">北京市 (5家企业 / 5位专家)</option>
+                                <option value="四川省">四川省 (5家企业 / 4位专家)</option>
+                                <option value="上海市">上海市 (3家企业 / 3位专家)</option>
+                                <option value="江苏省">江苏省 (3家企业 / 2位专家)</option>
+                                <option value="广东省">广东省 (2家企业 / 2位专家)</option>
+                                <option value="山东省">山东省 (2家企业)</option>
+                                <option value="湖北省">湖北省 (1家企业 / 2位专家)</option>
+                                <option value="云南省">云南省 (1家企业)</option>
+                                <option value="天津市">天津市 (1位专家)</option>
+                                <option value="山西省">山西省 (1位专家)</option>
+                                <option value="辽宁省">辽宁省 (1位专家)</option>
+                                <option value="浙江省">浙江省 (1位专家)</option>
+                                <option value="陕西省">陕西省 (1位专家)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- ECharts 中国地图主容器 -->
+                    <div class="bci-map-wrapper-relative">
+                        <div id="chartChinaNuclearMap" class="bci-china-map-container" style="height: 520px; width: 100%; min-height: 480px;"></div>
+                    </div>
+                </div>
+
+                <!-- 右侧: 重点标的研判与专家穿透详情看板 -->
+                <div class="bci-detail-panel">
+                    <div class="bci-panel-header" style="flex-wrap: wrap; gap: 8px;">
+                        <div class="bci-current-focus-status" id="nuclearCurrentFocusBanner">
+                            <span>📍 当前聚焦：<strong id="nuclearFocusRegionName" style="color:#d97706;">全国全域</strong> (<span id="nuclearFocusEntCount">22</span> 家企业 / <span id="nuclearFocusExpCount">23</span> 位专家)</span>
+                            <button class="btn-reset-focus hidden" id="btnResetNuclearFocus" title="恢复展示全国" onclick="resetNuclearFocus()">🔄 恢复全国</button>
+                        </div>
+                        <div class="bci-view-switch">
+                            <button class="bci-switch-btn active" data-view="enterprises" id="btnSwitchNuclearEntView">
+                                🏢 重点企业 (<span id="nuclearViewEntBadge">22</span>)
+                            </button>
+                            <button class="bci-switch-btn" data-view="experts" id="btnSwitchNuclearExpView">
+                                👨‍🔬 领军智库 (<span id="nuclearViewExpBadge">23</span>)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 顶尖智库与临床核医学专家专区 (动态联动) -->
+                    <div class="sc-side-talents-wrapper" id="scSideNuclearTalentsSection">
+                        <div class="sc-side-header">
+                            <div class="sc-side-title">
+                                <span>⭐</span>
+                                <strong id="sideNuclearTalentsTitle">全国重点核医学智库与领军专家 (动态联动)</strong>
+                            </div>
+                            <span class="sc-side-badge" id="sideNuclearTalentsBadge">23 位专家</span>
+                        </div>
+                        <div class="sc-side-cards-row" id="sideNuclearTalentsCardsRow">
+                            <!-- 动态 JavaScript 实时根据用户选取横向排布渲染专家卡片 -->
+                        </div>
+                    </div>
+
+                    <!-- 过滤栏 -->
+                    <div class="bci-toolbar-wrapper">
+                        <!-- 企业模式工具栏 (评级 + 产业链环节) -->
+                        <div class="bci-filter-section" id="nuclearEntFilterSection">
+                            <div class="bci-filter-line">
+                                <span class="bci-filter-sublabel">🏆 研判评级:</span>
+                                <div class="bci-filter-chips" id="nuclearCompChips">
+                                    <button class="chip-filter active" data-comp="all">全部评级 (<span id="cnt-nuclear-comp-all">22</span>)</button>
+                                    <button class="chip-filter chip-high" data-comp="高">⭐ 高竞争力/领军 (<span id="cnt-nuclear-comp-high">10</span>)</button>
+                                    <button class="chip-filter chip-mid" data-comp="中高">🔥 中高价值 (<span id="cnt-nuclear-comp-mid">9</span>)</button>
+                                    <button class="chip-filter chip-norm" data-comp="中">💎 中等稳健 (<span id="cnt-nuclear-comp-norm">2</span>)</button>
+                                    <button class="chip-filter" data-comp="观察">👀 持续观察 (<span id="cnt-nuclear-comp-obs">1</span>)</button>
+                                </div>
+                            </div>
+                            <div class="bci-filter-line">
+                                <span class="bci-filter-sublabel">⚡ 产业链环节:</span>
+                                <div class="bci-filter-chips" id="nuclearCatChips">
+                                    <button class="chip-filter active" data-cat="all">全部环节 (<span id="cnt-nuclear-cat-all">22</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-cat="核心企业">💊 核药研发/生产 (<span id="cnt-nuclear-cat-core">13</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-cat="核素供应">☢️ 同位素供应 (<span id="cnt-nuclear-cat-iso">3</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-cat="研发服务">🧪 CXO/非临床评价 (<span id="cnt-nuclear-cat-cxo">3</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-cat="关联布局">🏦 上市公司关联布局 (<span id="cnt-nuclear-cat-rel">3</span>)</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 专家模式工具栏 -->
+                        <div class="bci-filter-section hidden" id="nuclearExpFilterSection">
+                            <div class="bci-filter-line">
+                                <span class="bci-filter-sublabel">🎓 专家分类:</span>
+                                <div class="bci-filter-chips" id="nuclearExpTypeChips">
+                                    <button class="chip-filter active" data-exptype="all">全部类型 (<span id="cnt-nuclear-exp-all">23</span>)</button>
+                                    <button class="chip-filter" data-exptype="临床/学术">🏥 临床/学术带头人 (<span id="cnt-nuclear-exp-clin-acad">14</span>)</button>
+                                    <button class="chip-filter" data-exptype="临床">🩺 临床核医学 (<span id="cnt-nuclear-exp-clin">4</span>)</button>
+                                    <button class="chip-filter" data-exptype="研发/工程">🏭 研发/同位素工程 (<span id="cnt-nuclear-exp-rd">2</span>)</button>
+                                    <button class="chip-filter" data-exptype="学术/转化">🔬 学术/成果转化 (<span id="cnt-nuclear-exp-trans">3</span>)</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 即时搜索栏 -->
+                        <div class="bci-search-row">
+                            <div class="bci-search-input-wrap">
+                                <span class="bci-search-icon">🔍</span>
+                                <input type="text" id="nuclearSearchInput" placeholder="输入企业/专家/核素/管线/城市检索...">
+                                <button class="btn-clear-search hidden" id="btnClearNuclearSearch" title="清空搜索">×</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 标的/专家精炼卡片容器 -->
+                    <div class="bci-focus-cards-list" id="nuclearFocusCardsList">
+                        <div class="loading-state">正在调取核医药重点标的数据库...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 大屏最底部装饰条 -->
+            <div class="bci-screen-footer-bar">
+                <div class="footer-bar-left">
+                    <span class="footer-live-indicator" style="background:#d97706;box-shadow:0 0 8px #d97706;"></span>
+                    <span class="footer-source-text">数据公开溯源：国家药监局 (NMPA) · 中华医学会核医学分会 · 上市公司公告/年报 · 前瞻产业研究院 · 主流财经媒体</span>
+                </div>
+                <div class="footer-bar-center">
+                    <span class="footer-center-tag">★ 四川发展·医药健康产业集团 创新事业部 决策内参 ★</span>
+                </div>
+                <div class="footer-bar-right">
+                    <span class="footer-version-tag">🛡️ 核验日期 2026-08-20 · 公开可溯源口径</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
     <!-- 弹窗通知 -->
     <div id="toast" class="nmpa-toast hidden"></div>
 
@@ -1110,6 +1309,6 @@
     <script src="data/china_map_data.js"></script>
     <!-- 原生 OpenXML docx 生成库 -->
     <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
-    <script src="app.js?v=20260820v80"></script>
+    <script src="app.js?v=20260821v81"></script>
 </body>
 </html>
