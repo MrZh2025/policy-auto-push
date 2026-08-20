@@ -4372,6 +4372,9 @@ window.closeBciModal = closeBciModal;
 
 
 // ==========================================================================
+
+
+// ==========================================================================
 // 🦾 医疗机器人产业智库与重点企业投资决策全景地图模块 (Medical Robotics Map Modal)
 // ==========================================================================
 
@@ -4447,7 +4450,7 @@ async function loadRobotData() {
         } catch (e) {}
     }
 
-    // 3. 确保地图数据
+    // 3. 确保地图数据注册
     await ensureChinaMapRegistered();
 
     updateRobotKpiBar();
@@ -4658,7 +4661,6 @@ function updateRobotFilterBadges() {
 }
 
 function bindRobotEvents() {
-    // 快捷区域导航按钮
     const regionNav = document.getElementById('robotRegionQuickNav');
     if (regionNav) {
         regionNav.addEventListener('click', (e) => {
@@ -4678,7 +4680,6 @@ function bindRobotEvents() {
         });
     }
 
-    // 省份下拉直达选择器
     const provSelect = document.getElementById('robotProvinceSelect');
     if (provSelect) {
         provSelect.addEventListener('change', function() {
@@ -4699,7 +4700,6 @@ function bindRobotEvents() {
         });
     }
 
-    // 脑机接口省份下拉直达选择器
     const bciProvSelect = document.getElementById('bciProvinceSelect');
     if (bciProvSelect) {
         bciProvSelect.addEventListener('change', function() {
@@ -4720,7 +4720,6 @@ function bindRobotEvents() {
         });
     }
 
-    // 视图模式切换
     const btnSwitchEnt = document.getElementById('btnSwitchRobotEntView');
     const btnSwitchExp = document.getElementById('btnSwitchRobotExpView');
 
@@ -4742,7 +4741,6 @@ function bindRobotEvents() {
         });
     }
 
-    // 评级过滤 Chips
     const compChips = document.getElementById('robotCompChips');
     if (compChips) {
         compChips.addEventListener('click', (e) => {
@@ -4755,7 +4753,6 @@ function bindRobotEvents() {
         });
     }
 
-    // 技术流派过滤 Chips
     const techChips = document.getElementById('robotTechChips');
     if (techChips) {
         techChips.addEventListener('click', (e) => {
@@ -4768,7 +4765,6 @@ function bindRobotEvents() {
         });
     }
 
-    // 专家类型过滤 Chips
     const expChips = document.getElementById('robotExpTypeChips');
     if (expChips) {
         expChips.addEventListener('click', (e) => {
@@ -4781,7 +4777,6 @@ function bindRobotEvents() {
         });
     }
 
-    // 实时搜索框
     const searchInput = document.getElementById('robotSearchInput');
     const btnClearSearch = document.getElementById('btnClearRobotSearch');
 
@@ -4808,7 +4803,6 @@ function bindRobotEvents() {
         });
     }
 
-    // 恢复全国聚焦
     const btnResetFocus = document.getElementById('btnResetRobotFocus');
     if (btnResetFocus) {
         btnResetFocus.addEventListener('click', () => {
@@ -4816,7 +4810,6 @@ function bindRobotEvents() {
         });
     }
 
-    // 模态框背景点击关闭
     const robotModal = document.getElementById('robotMapModal');
     if (robotModal) {
         robotModal.addEventListener('click', (e) => {
@@ -4855,15 +4848,21 @@ function openRobotModal() {
     const modal = document.getElementById('robotMapModal');
     if (!modal) return;
     modal.classList.remove('hidden');
+    
+    // 初始化数据和卡片
     applyRobotFilterAndRender();
     
-    // 多重保证地图在容器渲染尺寸就绪后立即绘制与重置尺寸
+    // 在弹窗就绪后立即进行多轮重绘保障，彻底杜绝地图空白
     setTimeout(() => {
         renderChinaRobotMap();
-    }, 60);
+    }, 50);
     setTimeout(() => {
+        renderChinaRobotMap();
         if (chartChinaRobotMapInstance) chartChinaRobotMapInstance.resize();
     }, 200);
+    setTimeout(() => {
+        if (chartChinaRobotMapInstance) chartChinaRobotMapInstance.resize();
+    }, 450);
 }
 
 function closeRobotModal() {
@@ -5093,13 +5092,13 @@ function renderDynamicRobotTalentsBanner() {
     }).join('');
 }
 
-// 8. 绘制 ECharts 医疗机器人全国地图
+// 8. 绘制 ECharts 医疗机器人全国地图 (100% 同构与防白屏加固)
 async function renderChinaRobotMap() {
     const container = document.getElementById('chartChinaRobotMap');
     if (!container || typeof echarts === 'undefined') return;
 
     // 确保有尺寸
-    if (!container.style.height || container.style.height === '0px') {
+    if (!container.style.height || container.style.height === '0px' || container.clientHeight === 0) {
         container.style.height = '520px';
         container.style.width = '100%';
     }
@@ -5110,13 +5109,8 @@ async function renderChinaRobotMap() {
         return;
     }
 
-    if (container.clientWidth === 0 || container.clientHeight === 0) {
-        setTimeout(renderChinaRobotMap, 60);
-        return;
-    }
-
     if (!chartChinaRobotMapInstance) {
-        chartChinaRobotMapInstance = echarts.init(container);
+        chartChinaRobotMapInstance = echarts.getInstanceByDom(container) || echarts.init(container);
         
         chartChinaRobotMapInstance.on('click', function(params) {
             let selectedProv = '';
@@ -5147,8 +5141,6 @@ async function renderChinaRobotMap() {
                 applyRobotFilterAndRender();
             }
         });
-    } else {
-        chartChinaRobotMapInstance.resize();
     }
 
     const isDark = (typeof state !== 'undefined' && state.theme === 'dark');
@@ -5186,7 +5178,6 @@ async function renderChinaRobotMap() {
         mapCenter = [113.5, 23.0];
         mapZoom = 1.8;
     } else if (robotState.currentRegion !== 'all') {
-        // 单个省份聚焦
         const provCoords = {
             '北京市': [116.405, 39.904],
             '上海市': [121.472, 31.231],
@@ -5450,6 +5441,7 @@ async function renderChinaRobotMap() {
         visualMap: {
             min: 0,
             max: maxVal,
+            seriesIndex: 0,
             left: '3%',
             bottom: '4%',
             text: [`当前聚焦 (${maxVal})`, '0'],
@@ -5486,6 +5478,7 @@ async function renderChinaRobotMap() {
     };
 
     chartChinaRobotMapInstance.setOption(option, true);
+    chartChinaRobotMapInstance.resize();
 }
 
 // 9. 渲染医疗机器人右侧卡片列表
@@ -5678,3 +5671,8 @@ window.closeRobotModal = closeRobotModal;
 window.toggleRobotFullscreen = toggleRobotFullscreen;
 window.resetRobotFocus = resetRobotFocus;
 
+// 窗口自适应监听
+window.addEventListener('resize', () => {
+    if (chartChinaRobotMapInstance) chartChinaRobotMapInstance.resize();
+    if (typeof chartChinaMapInstance !== 'undefined' && chartChinaMapInstance) chartChinaMapInstance.resize();
+});
