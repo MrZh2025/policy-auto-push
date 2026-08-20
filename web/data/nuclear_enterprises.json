@@ -1,6 +1,6 @@
 {
   "code": 0,
-  "count": 22,
+  "count": 25,
   "data": [
     {
       "id": 1,
@@ -309,6 +309,48 @@
       "category": "关联布局",
       "source_url": "https://www.qianzhan.com/analyst/detail/220/241115-9b88d56f.html",
       "date": "2026-08-20"
+    },
+    {
+      "name": "重庆原子高科医药有限公司",
+      "tech_route": "正电子放射性药品生产（核药房网络节点）",
+      "product_intro": "正电子类放射性药品（PET显像用药）委托生产；中国同辐旗下原子高科全国医药中心网络布局的重庆节点",
+      "stage": "已取得正电子类放射性药品委托生产批件并投产运营",
+      "financing": "中国同辐（01763.HK）旗下原子高科全资子公司",
+      "competitiveness": "中：依托中国同辐/原子高科体系，补齐西南地区正电子药品就近供应",
+      "province": "重庆市",
+      "city": "重庆",
+      "category": "核心企业/龙头子公司",
+      "source_url": "https://www.ccnta.cn/article/4187.html",
+      "date": "2026-08-20",
+      "id": 23
+    },
+    {
+      "name": "国电投核素同创（重庆）科技有限公司",
+      "tech_route": "高能强流质子回旋加速器批量生产医用同位素",
+      "product_intro": "重庆创新医用同位素项目：120MeV/50MeV加速器批量生产Ac-225、Ra-223、Ge-68、Sr-82、Cu-67、I-123等新型医用同位素",
+      "stage": "一期工程投资概算9.18亿元，两座加速器厂房已主体封顶，计划2027年投运",
+      "financing": "国家电投（国核铀业控股），首批央企跟投试点项目",
+      "competitiveness": "高：投产后实现Ac-225等高端医用同位素自主化生产，辐射西南乃至全国",
+      "province": "重庆市",
+      "city": "重庆",
+      "category": "核心企业/在建重大项目",
+      "source_url": "https://www.ccnta.cn/article/17991.html",
+      "date": "2026-08-20",
+      "id": 24
+    },
+    {
+      "name": "强核医药科技（重庆）有限公司",
+      "tech_route": "放射性药物研发生产及CRDMO服务",
+      "product_intro": "规划建设集自主放射性药物研发生产与CRDMO（合同研究、开发和生产）服务的综合性基地，覆盖核药药学、非临床、临床及注册全流程",
+      "stage": "2024年12月成立，核药物研发生产项目（一期）已开展环评，落地重庆高新区",
+      "financing": "注册资本1.52亿元人民币",
+      "competitiveness": "中：西南地区少有的核药CRDMO平台定位，成长性待验证",
+      "province": "重庆市",
+      "city": "重庆",
+      "category": "创新企业",
+      "source_url": "https://gxq.cq.gov.cn/hbslgg/202504/W020250428408815839636.pdf",
+      "date": "2026-08-20",
+      "id": 25
     }
   ]
 }
