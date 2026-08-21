@@ -592,6 +592,11 @@ async function detectClientLocation() {
     return '四川省成都市 (本地专线)';
 }
 
+// 访客统计后端：本地 web_server.py 用相对路径，线上静态页面用 Cloudflare Worker
+const VISITOR_API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+    ? ''
+    : 'https://policy-visitor-stats.1943752276.workers.dev';
+
 async function initVisitorAnalytics() {
     const vid = getOrCreateVisitorId();
     await recordAndFetchVisitorStats(vid);
@@ -604,7 +609,7 @@ async function initVisitorAnalytics() {
 async function recordAndFetchVisitorStats(vid) {
     let stats = null;
     try {
-        const resp = await fetch('/api/visit', {
+        const resp = await fetch(VISITOR_API_BASE + '/api/visit', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -663,7 +668,7 @@ async function recordAndFetchVisitorStats(vid) {
 
 async function fetchVisitorStatsOnly(forceRenderCharts = false) {
     try {
-        const resp = await fetch('/api/visitor-stats');
+        const resp = await fetch(VISITOR_API_BASE + '/api/visitor-stats');
         if (resp.ok) {
             const res = await resp.json();
             if (res.code === 0 && res.data) {
