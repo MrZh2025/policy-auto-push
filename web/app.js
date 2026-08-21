@@ -508,9 +508,9 @@ function bindEvents() {
         });
     }
     if (el.btnRefreshAnalyticsModal) {
-        el.btnRefreshAnalyticsModal.addEventListener('click', () => {
-            fetchVisitorStatsOnly(true);
-            showToast('🔄 访问态势与地域大屏数据已实时刷新！');
+        el.btnRefreshAnalyticsModal.addEventListener('click', async () => {
+            const ok = await fetchVisitorStatsOnly(true);
+            showToast(ok ? '🔄 访问态势与地域大屏数据已实时刷新！' : '⚠️ 访客数据刷新失败，请检查网络后重试');
         });
     }
 
@@ -668,7 +668,7 @@ async function recordAndFetchVisitorStats(vid) {
 
 async function fetchVisitorStatsOnly(forceRenderCharts = false) {
     try {
-        const resp = await fetch(VISITOR_API_BASE + '/api/visitor-stats');
+        const resp = await fetch(VISITOR_API_BASE + '/api/visitor-stats?ts=' + Date.now(), { cache: 'no-store' });
         if (resp.ok) {
             const res = await resp.json();
             if (res.code === 0 && res.data) {
@@ -678,9 +678,11 @@ async function fetchVisitorStatsOnly(forceRenderCharts = false) {
                     updateAnalyticsModalKpis(res.data);
                     renderAllEcharts(res.data);
                 }
+                return true;
             }
         }
     } catch (e) {}
+    return false;
 }
 
 function renderVisitorStatsSummaryUI(stats) {
@@ -797,14 +799,22 @@ function renderVisitTrendChart(stats) {
     const totalPv = stats.total_pv || 120;
     const todayPv = stats.today_pv || 15;
 
+    // 优先用后端真实逐日历史（UTC+8），无则退回估算曲线
+    const histMap = {};
+    (Array.isArray(stats.history) ? stats.history : []).forEach(h => { histMap[h.date] = h; });
+    const hasHistory = Object.keys(histMap).length > 0;
+
     const days = [];
     const pvData = [];
     const uvData = [];
-    const now = new Date();
     for (let i = 6; i >= 0; i--) {
-        const d = new Date(now.getTime() - i * 24 * 3600 * 1000);
-        days.push(`${d.getMonth() + 1}/${d.getDate()}`);
-        if (i === 0) {
+        const d8 = new Date(Date.now() + 8 * 3600 * 1000 - i * 24 * 3600 * 1000);
+        days.push(`${d8.getUTCMonth() + 1}/${d8.getUTCDate()}`);
+        if (hasHistory) {
+            const h = histMap[d8.toISOString().slice(0, 10)];
+            pvData.push(h ? h.pv : 0);
+            uvData.push(h ? h.uv : 0);
+        } else if (i === 0) {
             pvData.push(todayPv);
             uvData.push(stats.today_uv || Math.max(1, Math.floor(todayPv * 0.7)));
         } else {
