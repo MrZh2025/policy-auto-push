@@ -959,25 +959,37 @@ function renderDeviceRatioChart(stats) {
         chartDeviceInstance = echarts.init(el.chartDeviceRatio);
     }
 
-    const visits = stats.recent_visits || [];
-    let winCount = 0;
-    let macCount = 0;
-    let mobileCount = 0;
-    let wechatCount = 0;
+    // 优先用后端汇总的设备占比（按 User-Agent 全量统计），无则退回最近访问记录
+    let deviceData = [];
+    if (Array.isArray(stats.devices) && stats.devices.length > 0) {
+        deviceData = stats.devices.map(d => ({ name: d.device, value: d.count }));
+    } else {
+        const visits = stats.recent_visits || [];
+        let winCount = 0;
+        let macCount = 0;
+        let mobileCount = 0;
+        let wechatCount = 0;
 
-    visits.forEach(v => {
-        const d = (v.device || '').toLowerCase();
-        if (d.includes('微信')) wechatCount++;
-        else if (d.includes('移动') || d.includes('手机')) mobileCount++;
-        else if (d.includes('mac')) macCount++;
-        else winCount++;
-    });
+        visits.forEach(v => {
+            const d = (v.device || '').toLowerCase();
+            if (d.includes('微信')) wechatCount++;
+            else if (d.includes('移动') || d.includes('手机')) mobileCount++;
+            else if (d.includes('mac')) macCount++;
+            else winCount++;
+        });
 
-    if (winCount + macCount + mobileCount + wechatCount === 0) {
-        winCount = 18;
-        wechatCount = 8;
-        mobileCount = 5;
-        macCount = 4;
+        if (winCount + macCount + mobileCount + wechatCount === 0) {
+            winCount = 18;
+            wechatCount = 8;
+            mobileCount = 5;
+            macCount = 4;
+        }
+        deviceData = [
+            { value: winCount, name: 'Windows 桌面' },
+            { value: wechatCount, name: '微信/政务端' },
+            { value: mobileCount, name: '移动终端' },
+            { value: macCount, name: 'macOS 终端' }
+        ];
     }
 
     const isDark = state.theme === 'dark';
@@ -991,7 +1003,7 @@ function renderDeviceRatioChart(stats) {
             borderColor: isDark ? '#334155' : '#e2e8f0',
             textStyle: { color: isDark ? '#f8fafc' : '#0f172a', fontSize: 11.5 }
         },
-        color: ['#004886', '#10b981', '#f59e0b', '#6366f1'],
+        color: ['#004886', '#10b981', '#f59e0b', '#6366f1', '#c5161d', '#8b5cf6', '#0ea5e9'],
         series: [
             {
                 name: '终端接入',
@@ -1011,12 +1023,7 @@ function renderDeviceRatioChart(stats) {
                     fontSize: 10.5,
                     color: textColor
                 },
-                data: [
-                    { value: winCount, name: 'Windows 桌面' },
-                    { value: wechatCount, name: '微信/政务端' },
-                    { value: mobileCount, name: '移动终端' },
-                    { value: macCount, name: 'macOS 终端' }
-                ]
+                data: deviceData
             }
         ]
     };
