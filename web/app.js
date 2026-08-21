@@ -625,40 +625,20 @@ async function recordAndFetchVisitorStats(vid) {
         }
     } catch (e) {}
 
+    // 后端不可达时不再编造模拟数据，只展示真实统计（失败则置 0 并由定时/手动刷新重试）
     if (!stats) {
-        try {
-            const resp = await fetch('./data/visitor_stats.json');
-            if (resp.ok) {
-                const res = await resp.json();
-                stats = res.data || res;
-            }
-        } catch (e) {}
-
         const loc = await detectClientLocation();
-        const storedPv = parseInt(localStorage.getItem('POLICY_STATIC_PV') || '368', 10) + 1;
-        const storedUv = parseInt(localStorage.getItem('POLICY_STATIC_UV') || '142', 10);
-        localStorage.setItem('POLICY_STATIC_PV', storedPv);
-
-        if (!stats || !stats.total_pv) {
-            stats = {
-                total_pv: storedPv,
-                total_uv: storedUv,
-                today_pv: Math.floor(storedPv * 0.18) + 8,
-                today_uv: Math.floor(storedUv * 0.15) + 3,
-                top_locations: [
-                    { location: '四川省成都市', count: Math.floor(storedPv * 0.52) },
-                    { location: '北京市', count: Math.floor(storedPv * 0.16) },
-                    { location: '广东省广州市', count: Math.floor(storedPv * 0.12) },
-                    { location: '上海市', count: Math.floor(storedPv * 0.10) },
-                    { location: '四川省绵阳市', count: Math.floor(storedPv * 0.05) },
-                ],
-                recent_visits: []
-            };
-        }
-
-        stats.current_client = {
-            location: loc,
-            time: new Date().toLocaleTimeString('zh-CN', { hour12: false })
+        stats = {
+            total_pv: 0,
+            total_uv: 0,
+            today_pv: 0,
+            today_uv: 0,
+            top_locations: [],
+            recent_visits: [],
+            current_client: {
+                location: loc,
+                time: new Date().toLocaleTimeString('zh-CN', { hour12: false })
+            }
         };
     }
 
@@ -732,7 +712,7 @@ function updateAnalyticsModalKpis(stats) {
     const totalPv = stats.total_pv || 0;
     const totalUv = stats.total_uv || 0;
     const todayPv = stats.today_pv || 0;
-    const todayUv = stats.today_uv || Math.max(1, Math.floor(todayPv * 0.7));
+    const todayUv = stats.today_uv || 0;
     const client = stats.current_client || {};
     const currLoc = client.location || '四川省成都市 (本地控制台)';
 
@@ -816,12 +796,10 @@ function renderVisitTrendChart(stats) {
             uvData.push(h ? h.uv : 0);
         } else if (i === 0) {
             pvData.push(todayPv);
-            uvData.push(stats.today_uv || Math.max(1, Math.floor(todayPv * 0.7)));
+            uvData.push(stats.today_uv || 0);
         } else {
-            const baseFactor = Math.sin((7 - i) * 0.8) * 0.3 + 0.7;
-            const dayP = Math.max(2, Math.round((totalPv / 8) * baseFactor));
-            pvData.push(dayP);
-            uvData.push(Math.max(1, Math.round(dayP * 0.65)));
+            pvData.push(0);
+            uvData.push(0);
         }
     }
 
@@ -988,12 +966,6 @@ function renderDeviceRatioChart(stats) {
             else winCount++;
         });
 
-        if (winCount + macCount + mobileCount + wechatCount === 0) {
-            winCount = 18;
-            wechatCount = 8;
-            mobileCount = 5;
-            macCount = 4;
-        }
         deviceData = [
             { value: winCount, name: 'Windows 桌面' },
             { value: wechatCount, name: '微信/政务端' },
