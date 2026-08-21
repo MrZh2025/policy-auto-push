@@ -11,8 +11,8 @@
       "category": "医保政策",
       "summary": "",
       "created_at": "2026-08-20 09:25:42",
-      "pushed_at": null,
-      "is_pushed": 0
+      "pushed_at": "2026-08-21 02:08:07",
+      "is_pushed": 1
     },
     {
       "id": 288,
@@ -24,8 +24,8 @@
       "category": "医保政策",
       "summary": "",
       "created_at": "2026-08-20 09:25:42",
-      "pushed_at": null,
-      "is_pushed": 0
+      "pushed_at": "2026-08-21 02:08:07",
+      "is_pushed": 1
     },
     {
       "id": 160,
@@ -63,8 +63,8 @@
       "category": "科技申报政策",
       "summary": "",
       "created_at": "2026-08-20 09:25:42",
-      "pushed_at": null,
-      "is_pushed": 0
+      "pushed_at": "2026-08-21 02:08:07",
+      "is_pushed": 1
     },
     {
       "id": 157,
@@ -89,11 +89,11 @@
       "category": "医保政策",
       "summary": "",
       "created_at": "2026-08-20 09:25:42",
-      "pushed_at": null,
-      "is_pushed": 0
+      "pushed_at": "2026-08-21 02:08:07",
+      "is_pushed": 1
     },
     {
-      "id": 308,
+      "id": 316,
       "fingerprint": "6103a2c84f4136f7c8161aabddef7dae",
       "title": "人力资源社会保障部等4部门关于支持海洋经济发展促进就业创业的通知",
       "url": "https://www.gov.cn/zhengce/zhengceku/202606/content_7072347.htm",
@@ -101,7 +101,7 @@
       "pub_date": "2026-06-16",
       "category": "科技申报政策",
       "summary": "生物制品产业，支持涉海类高等学校、科研院所与企业深度合作，为海洋科研人员、医疗器械研发工程师等搭建研发推广平台，促进大健康产业高质量发展，吸纳更多高校毕业生等青年就业创业。着力提升海洋产业智能化、绿色化水平",
-      "created_at": "2026-08-21 02:08:06",
+      "created_at": "2026-08-21 09:57:06",
       "pushed_at": null,
       "is_pushed": 0
     },
@@ -115,8 +115,8 @@
       "category": "医保政策",
       "summary": "",
       "created_at": "2026-08-20 09:25:42",
-      "pushed_at": null,
-      "is_pushed": 0
+      "pushed_at": "2026-08-21 02:08:07",
+      "is_pushed": 1
     },
     {
       "id": 174,
@@ -167,8 +167,8 @@
       "category": "医保政策",
       "summary": "",
       "created_at": "2026-08-20 09:25:42",
-      "pushed_at": null,
-      "is_pushed": 0
+      "pushed_at": "2026-08-21 02:08:07",
+      "is_pushed": 1
     },
     {
       "id": 175,
@@ -232,8 +232,8 @@
       "category": "科技申报政策",
       "summary": "",
       "created_at": "2026-08-20 09:25:42",
-      "pushed_at": null,
-      "is_pushed": 0
+      "pushed_at": "2026-08-21 02:08:07",
+      "is_pushed": 1
     },
     {
       "id": 282,
@@ -1263,7 +1263,7 @@
       "is_pushed": 0
     },
     {
-      "id": 314,
+      "id": 317,
       "fingerprint": "067ebd173ee40491efe8a80cff440ed9",
       "title": "国务院就业促进和劳动保护工作领导小组关于印发《加力重点领域、重点行业、城乡基层和中小微企业岗位挖潜扩容 支持重点群体就业创业实施方案》的通知",
       "url": "https://www.gov.cn/zhengce/zhengceku/202503/content_7015975.htm",
@@ -1271,7 +1271,7 @@
       "pub_date": "2025-03-27",
       "category": "科技申报政策",
       "summary": "行业稳增长工作方案，研究保持制造业合理比重投入机制，落实“两重”、“两新”政策，稳住制造业就业规模。持续开展先进制造业促就业行动，实施制造业重点产业链高质量发展行动，培育智能装备、电子信息、生物医药、",
-      "created_at": "2026-08-21 02:08:07",
+      "created_at": "2026-08-21 09:57:06",
       "pushed_at": null,
       "is_pushed": 0
     },
