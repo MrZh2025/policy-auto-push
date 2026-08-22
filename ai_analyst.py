@@ -4,6 +4,7 @@
 内置用户专属《四川省生物医药科技创新与奖补周回顾》5大结构化分析模块
 支持 DeepSeek / 通义千问 / OpenAI / Gemini 等 API
 """
+import re
 import requests
 import json
 import logging
@@ -20,8 +21,8 @@ class AIAnalyst:
 
     @staticmethod
     def chat(prompt: str, api_key: str = "", base_url: str = "", model: str = "", context_policies: Optional[List[Dict]] = None) -> str:
-        real_key = api_key or config.AI_API_KEY or "sk-1be5b76a1ca7418e8e0ca3ca94744297"
-        raw_base_url = (base_url or config.AI_BASE_URL or "https://api.deepseek.com").rstrip("/")
+        real_key = api_key or config.AI_API_KEY
+        raw_base_url = (base_url or config.AI_BASE_URL or "https://api.ailodsh.men/v1").rstrip("/")
         # 兼容 DeepSeek 及各类 OpenAI 兼容接口的标准路径
         if raw_base_url.endswith("/chat/completions"):
             endpoint_url = raw_base_url
@@ -30,7 +31,7 @@ class AIAnalyst:
         else:
             endpoint_url = f"{raw_base_url}/chat/completions"
 
-        real_model = model or config.AI_MODEL or "deepseek-chat"
+        real_model = model or config.AI_MODEL or "gemini-2.5-flash"
 
         context_str = ""
         if context_policies:
@@ -48,7 +49,10 @@ class AIAnalyst:
             "你是一名服务于四川生物医药产业集团创新事业部的政策研究总监兼科技申报总监。\n"
             f"【重要时间基准】：当前系统真实时间为 {cur_date_str}（即【{period_str}】）。\n"
             f"【硬性规定】：涉及所有政策周报标题、研判周期、申报时效必须严格以当前真实时间（{now.year}年{now.month}月）为准，严禁出现过期的 2024 年、2025 年等历史年份！\n"
-            "文风要求：严谨、干练、精炼，彻底去除 AI 味与机械套话，结论前置，直接给出政策依据、适用对象、奖补金额及实操申报建议。"
+            "文风要求：严谨、干练、精炼，彻底去除 AI 味与机械套话，结论前置，直接给出政策依据、适用对象、奖补金额及实操申报建议。\n"
+            "【格式硬性规定】：输出为正式公文报告体，严禁使用任何 Markdown 语法（禁止 #、##、####、**加粗**、*斜体*、- 列表符、表格、代码块）。"
+            "层级标题一律采用公文序号：一级用「一、二、三、」，二级用「（一）（二）（三）」，三级用「1. 2. 3.」，四级用「（1）（2）（3）」。"
+            "正文分段落陈述，每段结论前置，不使用表情符号。"
         )
 
         if not real_key:
@@ -70,20 +74,37 @@ class AIAnalyst:
             "model": real_model,
             "messages": messages,
             "temperature": 0.3,
-            "max_tokens": 1600
+            "max_tokens": getattr(config, "AI_MAX_TOKENS", 8192)
         }
 
         try:
-            resp = requests.post(endpoint_url, json=payload, headers=headers, timeout=35)
+            resp = requests.post(endpoint_url, json=payload, headers=headers, timeout=getattr(config, "AI_REQUEST_TIMEOUT", 180))
             if resp.status_code == 200:
                 data = resp.json()
-                return data["choices"][0]["message"]["content"].strip()
+                content = (data["choices"][0]["message"].get("content") or "").strip()
+                if not content:
+                    logger.warning(f"大模型返回内容为空: {data}")
+                    return "⚠️ 模型返回内容为空，可能是输出被截断或模型思考消耗了全部 token，请重试或调大 AI_MAX_TOKENS。"
+                return AIAnalyst._to_official_style(content)
             else:
                 logger.warning(f"大模型 API 响应异常: {resp.status_code} - {resp.text}")
                 return f"⚠️ 接口响应异常 (HTTP {resp.status_code})，请核对 API Key 或模型配置。\n\n返回信息: {resp.text}"
         except Exception as e:
             logger.error(f"研判请求异常: {e}")
             return f"❌ 连接模型服务异常: {e}，请检查网络配置。"
+
+    @staticmethod
+    def _to_official_style(text: str) -> str:
+        """将 Markdown 痕迹清理为公文样式"""
+        lines = []
+        for line in text.splitlines():
+            line = re.sub(r"^\s*#{1,6}\s*", "", line)
+            line = re.sub(r"\*\*(.+?)\*\*", r"\1", line)
+            line = re.sub(r"\*(.+?)\*", r"\1", line)
+            line = re.sub(r"^(\s*)[-*]\s+", r"\1", line)
+            line = line.replace("`", "")
+            lines.append(line)
+        return "\n".join(lines).strip()
 
     @classmethod
     def generate_sichuan_weekly_report(cls, api_key: str = "", base_url: str = "", model: str = "", policies: Optional[List[Dict]] = None) -> str:

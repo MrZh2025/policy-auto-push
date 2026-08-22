@@ -73,12 +73,15 @@ ENABLED_SOURCES = {
 }
 
 # ==========================================
-# 3. 智能 AI 摘要与深度解读配置 (DeepSeek 默认)
+# 3. 智能 AI 摘要与深度解读配置 (Gemini 中转默认)
 # ==========================================
 AI_SUMMARY_ENABLED = True
-AI_API_KEY = os.getenv("AI_API_KEY", "sk-1be5b76a1ca7418e8e0ca3ca94744297")
-AI_BASE_URL = os.getenv("AI_BASE_URL", "https://api.deepseek.com")
-AI_MODEL = os.getenv("AI_MODEL", "deepseek-chat")
+AI_API_KEY = os.getenv("AI_API_KEY", "sk-016208dae3e5e97ef884aeaa5ce8bb04ac64e805cfa289fc22292541e600d17a")
+AI_BASE_URL = os.getenv("AI_BASE_URL", "https://api.ailodsh.men/v1")
+AI_MODEL = os.getenv("AI_MODEL", "gemini-2.5-flash")
+# AI 请求超时（秒）与最大输出 token 数（设大避免长文被截断）
+AI_REQUEST_TIMEOUT = int(os.getenv("AI_REQUEST_TIMEOUT", "180"))
+AI_MAX_TOKENS = int(os.getenv("AI_MAX_TOKENS", "8192"))
 
 # 爬虫通用网络请求配置
 REQUEST_TIMEOUT = 12
