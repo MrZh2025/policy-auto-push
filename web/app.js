@@ -16,22 +16,28 @@ window.escapeHtml = escapeHtml;
  * 支持 GitHub Pages 静态无服务器部署与本地动态 API 模式自适应切换
  */
 
-// 默认 DeepSeek 大模型配置
-const DEFAULT_AI_KEY = 'sk-1be5b76a1ca7418e8e0ca3ca94744297';
-const DEFAULT_AI_BASE_URL = 'https://api.deepseek.com';
-const DEFAULT_AI_MODEL = 'deepseek-chat';
+// 默认 Grok 中转大模型配置
+const DEFAULT_AI_KEY = 'g2a_61c5d96702f7_1NmHPh9WGUWk0SOOE9yuxyQBdt0aJyDp';
+const DEFAULT_AI_BASE_URL = 'https://grok.ailodsh.men/v1';
+const DEFAULT_AI_MODEL = 'grok-4.6';
 
 // 自动纠偏与自愈机制（平滑升级至最新有效 Key 与绝对路径）
 let rawStoredKey = localStorage.getItem('POLICY_AI_API_KEY');
-if (!rawStoredKey || rawStoredKey.length < 20 || rawStoredKey.includes('7daca') || rawStoredKey.includes('5043')) {
+if (!rawStoredKey || rawStoredKey.length < 20 || rawStoredKey.includes('7daca') || rawStoredKey.includes('5043') || rawStoredKey.includes('1be5b76a') || rawStoredKey.includes('016208dae')) {
     rawStoredKey = DEFAULT_AI_KEY;
     localStorage.setItem('POLICY_AI_API_KEY', rawStoredKey);
 }
 
 let rawStoredBase = localStorage.getItem('POLICY_AI_BASE_URL');
-if (!rawStoredBase || !rawStoredBase.startsWith('http') || rawStoredBase.includes('localhost') || rawStoredBase.includes('/api/')) {
+if (!rawStoredBase || !rawStoredBase.startsWith('http') || rawStoredBase.includes('localhost') || rawStoredBase.includes('/api/') || rawStoredBase.includes('deepseek.com') || rawStoredBase.includes('api.ailodsh.men')) {
     rawStoredBase = DEFAULT_AI_BASE_URL;
     localStorage.setItem('POLICY_AI_BASE_URL', rawStoredBase);
+}
+
+let rawStoredModel = localStorage.getItem('POLICY_AI_MODEL');
+if (!rawStoredModel || rawStoredModel.startsWith('deepseek') || rawStoredModel.startsWith('gemini')) {
+    rawStoredModel = DEFAULT_AI_MODEL;
+    localStorage.setItem('POLICY_AI_MODEL', rawStoredModel);
 }
 
 // 状态管理
@@ -44,7 +50,7 @@ const state = {
     theme: localStorage.getItem('POLICY_THEME') || 'light',
     apiKey: rawStoredKey,
     baseUrl: rawStoredBase,
-    model: localStorage.getItem('POLICY_AI_MODEL') || DEFAULT_AI_MODEL,
+    model: rawStoredModel,
 };
 
 // 预设专属 Prompt
@@ -347,7 +353,11 @@ function bindEvents() {
             } else {
                 el.inputModel.value = selected;
                 // 智能联动调整 Base URL
-                if (selected.startsWith('deepseek')) {
+                if (selected.startsWith('grok')) {
+                    el.inputBaseUrl.value = 'https://grok.ailodsh.men/v1';
+                } else if (selected.startsWith('gemini')) {
+                    el.inputBaseUrl.value = 'https://api.ailodsh.men/v1';
+                } else if (selected.startsWith('deepseek')) {
                     el.inputBaseUrl.value = 'https://api.deepseek.com';
                 } else if (selected.startsWith('qwen')) {
                     el.inputBaseUrl.value = 'https://dashscope.aliyuncs.com/compatible-mode/v1';
@@ -377,7 +387,7 @@ function bindEvents() {
         const rawModel = el.inputModel.value.trim() || DEFAULT_AI_MODEL;
 
         if (rawKey && rawKey.length < 15) {
-            showToast('⚠️ 提示：标准 API Key 通常是一串以 sk- 开头的长字符串，请检查是否复制完整！');
+            showToast('⚠️ 提示：标准 API Key 通常是一串以 sk- 或 g2a_ 开头的长字符串，请检查是否复制完整！');
         }
 
         state.apiKey = rawKey;
@@ -388,7 +398,7 @@ function bindEvents() {
         localStorage.setItem('POLICY_AI_MODEL', state.model);
         el.apiKeyDrawer.classList.add('hidden');
         if (el.keyStatusHint) el.keyStatusHint.textContent = `已配置 (${state.model})`;
-        showToast(`✅ 已更新模型为【${state.model}】并连接 DeepSeek 官方通道！`);
+        showToast(`✅ 已更新模型为【${state.model}】并连接智能研判通道！`);
     });
 
     if (el.btnResetKey) {
@@ -400,7 +410,7 @@ function bindEvents() {
             localStorage.setItem('POLICY_AI_BASE_URL', state.baseUrl);
             localStorage.setItem('POLICY_AI_MODEL', state.model);
             initApiKeyForm();
-            showToast('✅ 已恢复 DeepSeek 官方最新默认配置！');
+            showToast('✅ 已恢复系统最新默认配置（Grok 中转）！');
         });
     }
 
@@ -1529,7 +1539,7 @@ function getCandidateEndpoints(rawBaseUrl, model) {
     let clean = (rawBaseUrl || DEFAULT_AI_BASE_URL).trim().replace(/\/+$/, '');
     
     // 如果是 deepseek 模型系列或官方域名，直接使用官方标准端点
-    if ((model && model.startsWith('deepseek')) || clean.includes('deepseek.com')) {
+    if ((model && model.startsWith('deepseek')) && clean.includes('deepseek.com')) {
         return [
             'https://api.deepseek.com/chat/completions',
             'https://api.deepseek.com/v1/chat/completions'
@@ -1541,18 +1551,18 @@ function getCandidateEndpoints(rawBaseUrl, model) {
     }
 
     if (clean.includes('/chat/completions')) {
-        return [clean, 'https://api.deepseek.com/chat/completions'];
+        return [clean, 'https://grok.ailodsh.men/v1/chat/completions'];
     }
     if (clean.endsWith('/v1')) {
         return [
             `${clean}/chat/completions`,
-            'https://api.deepseek.com/chat/completions'
+            'https://grok.ailodsh.men/v1/chat/completions'
         ];
     }
     return [
         `${clean}/chat/completions`,
         `${clean}/v1/chat/completions`,
-        'https://api.deepseek.com/chat/completions'
+        'https://grok.ailodsh.men/v1/chat/completions'
     ];
 }
 
@@ -1603,7 +1613,7 @@ async function sendChatMessage() {
             updateMessage(loadingId, reply);
             return;
         } catch (err) {
-            updateMessage(loadingId, `⚠️ 大模型接口调用异常: ${err.message}\n\n💡 提示：系统已默认内置 DeepSeek 官方智能研判通道。您可点击右上角【🔑 AI 研判密钥配置】检查或重置您的 API Key。`);
+            updateMessage(loadingId, `⚠️ 大模型接口调用异常: ${err.message}\n\n💡 提示：系统已默认内置智能研判通道。您可点击右上角【🔑 AI 研判密钥配置】检查或重置您的 API Key。`);
             return;
         }
     }
@@ -1665,7 +1675,7 @@ async function callDirectLLM(prompt, apiKey) {
         model: model,
         messages: messages,
         temperature: 0.3,
-        max_tokens: 1600
+        max_tokens: 8192
     };
 
     let lastError = null;
@@ -1673,7 +1683,7 @@ async function callDirectLLM(prompt, apiKey) {
     // 逐个尝试候选端点，彻底解决 404 路径不匹配问题
     for (const endpoint of endpoints) {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 35000);
+        const timeoutId = setTimeout(() => controller.abort(), 180000);
 
         try {
             const resp = await fetch(endpoint, {
@@ -1690,13 +1700,56 @@ async function callDirectLLM(prompt, apiKey) {
             if (resp.ok) {
                 const data = await resp.json();
                 if (data && data.choices && data.choices[0] && data.choices[0].message) {
-                    return data.choices[0].message.content.trim();
+                    let fullContent = data.choices[0].message.content || '';
+                    let finishReason = data.choices[0].finish_reason;
+
+                    // 输出因 max_tokens 被截断时，自动请求模型从截断处续写（最多 3 次）
+                    let continueRounds = 0;
+                    while (finishReason === 'length' && continueRounds < 3) {
+                        continueRounds++;
+                        const contMessages = messages.concat([
+                            { role: 'assistant', content: fullContent },
+                            { role: 'user', content: '你上一条回答因长度限制被截断了。请从截断处无缝继续输出剩余内容：不要重复已输出的部分，不要添加任何开场白、过渡语或总结，直接续写。' }
+                        ]);
+                        const contController = new AbortController();
+                        const contTimeoutId = setTimeout(() => contController.abort(), 180000);
+                        try {
+                            const contResp = await fetch(endpoint, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${key}`
+                                },
+                                body: JSON.stringify(Object.assign({}, payload, { messages: contMessages })),
+                                signal: contController.signal
+                            });
+                            clearTimeout(contTimeoutId);
+                            if (!contResp.ok) break;
+                            const contData = await contResp.json();
+                            if (!(contData && contData.choices && contData.choices[0] && contData.choices[0].message)) break;
+                            fullContent += contData.choices[0].message.content || '';
+                            finishReason = contData.choices[0].finish_reason;
+                        } catch (contErr) {
+                            clearTimeout(contTimeoutId);
+                            break;
+                        }
+                    }
+
+                    const content = fullContent.trim();
+                    if (content) {
+                        return content;
+                    }
+                    lastError = new Error('模型返回内容为空，请重试。');
+                    if (endpoints.indexOf(endpoint) < endpoints.length - 1) {
+                        continue;
+                    }
+                    throw lastError;
                 }
             } else {
                 const errText = await resp.text();
                 lastError = new Error(`HTTP ${resp.status}: ${errText || '接口响应异常'}`);
-                // 若出现 404 且有备用端点，自动尝试下一个
-                if (resp.status === 404 && endpoints.indexOf(endpoint) < endpoints.length - 1) {
+                // 任何错误状态（404 路径不符 / 401 鉴权失败 / 429 限流等）均自动尝试下一个备用端点
+                if (endpoints.indexOf(endpoint) < endpoints.length - 1) {
                     continue;
                 }
                 throw lastError;
@@ -1704,7 +1757,7 @@ async function callDirectLLM(prompt, apiKey) {
         } catch (err) {
             clearTimeout(timeoutId);
             if (err.name === 'AbortError') {
-                throw new Error('大模型响应超时（超过35秒），请检查网络连接。');
+                throw new Error('大模型响应超时（超过180秒），请检查网络连接。');
             }
             lastError = err;
             if (endpoints.indexOf(endpoint) < endpoints.length - 1) {
@@ -1869,7 +1922,7 @@ function handleClearChat() {
         <div class="dialog-row bot-row">
             <div class="dialog-card">
                 <div class="dialog-author">AI·政策研判与申报咨询</div>
-                本系统已对接国家药监局、国家医保局、四川省药监局及省科技厅官方政策库，默认接入 DeepSeek 智能分析。您可以直接咨询核医药、脑机接口、AI制药、医疗机器人、医保集采或科技资金申报等具体问题，或点击上方按钮生成 <strong>《四川省生物医药周回顾报告》</strong>。
+                本系统已对接国家药监局、国家医保局、四川省药监局及省科技厅官方政策库，默认接入 Grok 智能分析。您可以直接咨询核医药、脑机接口、AI制药、医疗机器人、医保集采或科技资金申报等具体问题，或点击上方按钮生成 <strong>《四川省生物医药周回顾报告》</strong>。
             </div>
         </div>
     `;

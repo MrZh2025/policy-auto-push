@@ -73,12 +73,17 @@ ENABLED_SOURCES = {
 }
 
 # ==========================================
-# 3. 智能 AI 摘要与深度解读配置 (DeepSeek 默认)
+# 3. 智能 AI 摘要与深度解读配置 (Grok 中转默认)
 # ==========================================
 AI_SUMMARY_ENABLED = True
-AI_API_KEY = os.getenv("AI_API_KEY", "sk-1be5b76a1ca7418e8e0ca3ca94744297")
-AI_BASE_URL = os.getenv("AI_BASE_URL", "https://api.deepseek.com")
-AI_MODEL = os.getenv("AI_MODEL", "deepseek-chat")
+AI_API_KEY = os.getenv("AI_API_KEY", "g2a_61c5d96702f7_1NmHPh9WGUWk0SOOE9yuxyQBdt0aJyDp")
+AI_BASE_URL = os.getenv("AI_BASE_URL", "https://grok.ailodsh.men/v1")
+AI_MODEL = os.getenv("AI_MODEL", "grok-4.6")
+# AI 请求超时（秒）与最大输出 token 数（设大避免长文被截断）
+AI_REQUEST_TIMEOUT = int(os.getenv("AI_REQUEST_TIMEOUT", "180"))
+AI_MAX_TOKENS = int(os.getenv("AI_MAX_TOKENS", "8192"))
+# 输出被 max_tokens 截断时的自动续写总轮数（含首轮请求）
+AI_CONTINUE_ROUNDS = int(os.getenv("AI_CONTINUE_ROUNDS", "4"))
 
 # 爬虫通用网络请求配置
 REQUEST_TIMEOUT = 12
