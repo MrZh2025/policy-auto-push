@@ -1116,7 +1116,7 @@ async function loadData() {
 
     if (!policiesData || policiesData.length === 0) {
         try {
-            const resp = await fetch('./data/policies.json');
+            const resp = await fetch('./data/policies.json?v=' + Date.now(), { cache: 'no-store' });
             if (resp.ok) {
                 const res = await resp.json();
                 policiesData = res.data || [];
@@ -1140,7 +1140,7 @@ async function loadData() {
 
     if (!statsData) {
         try {
-            const resp = await fetch('./data/stats.json');
+            const resp = await fetch('./data/stats.json?v=' + Date.now(), { cache: 'no-store' });
             if (resp.ok) {
                 const res = await resp.json();
                 statsData = res.data;
