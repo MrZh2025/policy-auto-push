@@ -41,6 +41,7 @@ const state = {
     searchQuery: '',
     allPolicies: [],
     filteredPolicies: [],
+    latestPolicyDate: '2026-08-20',
     theme: localStorage.getItem('POLICY_THEME') || 'light',
     apiKey: rawStoredKey,
     baseUrl: rawStoredBase,
@@ -163,8 +164,9 @@ function updateDateDisplay() {
     const hours = String(now.getHours()).padStart(2, '0');
     const minutes = String(now.getMinutes()).padStart(2, '0');
     const seconds = String(now.getSeconds()).padStart(2, '0');
+    const latestSuffix = state.latestPolicyDate ? ` · 最近采集公文：${state.latestPolicyDate}` : '';
     if (el.currentDateStr) {
-        el.currentDateStr.textContent = `📅 ${year}年${month}月${date}日 ${day} ${hours}:${minutes}:${seconds} · 官方政策实时监测中`;
+        el.currentDateStr.textContent = `📅 ${year}年${month}月${date}日 ${day} ${hours}:${minutes}:${seconds} · 官方政策实时监测中${latestSuffix}`;
     }
     if (el.statCurrentTime) {
         el.statCurrentTime.textContent = `${hours}:${minutes}:${seconds}`;
@@ -1126,6 +1128,16 @@ async function loadData() {
 
     // 严格执行前端指纹去重
     state.allPolicies = deduplicatePoliciesList(policiesData);
+
+    // 动态提取最新政策日期并刷新顶部显示
+    if (state.allPolicies && state.allPolicies.length > 0) {
+        const dates = state.allPolicies.map(p => p.pub_date).filter(Boolean);
+        dates.sort();
+        if (dates.length > 0) {
+            state.latestPolicyDate = dates[dates.length - 1];
+        }
+    }
+    updateDateDisplay();
 
     // 加载统计
     try {
