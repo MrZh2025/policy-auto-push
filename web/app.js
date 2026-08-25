@@ -41,7 +41,7 @@ const state = {
     searchQuery: '',
     allPolicies: [],
     filteredPolicies: [],
-    latestPolicyDate: '2026-08-20',
+    lastCrawledDate: '2026-08-25',
     theme: localStorage.getItem('POLICY_THEME') || 'light',
     apiKey: rawStoredKey,
     baseUrl: rawStoredBase,
@@ -164,7 +164,7 @@ function updateDateDisplay() {
     const hours = String(now.getHours()).padStart(2, '0');
     const minutes = String(now.getMinutes()).padStart(2, '0');
     const seconds = String(now.getSeconds()).padStart(2, '0');
-    const latestSuffix = state.latestPolicyDate ? ` · 最近采集公文：${state.latestPolicyDate}` : '';
+    const latestSuffix = state.lastCrawledDate ? ` · 最近采集更新：${state.lastCrawledDate}` : '';
     if (el.currentDateStr) {
         el.currentDateStr.textContent = `📅 ${year}年${month}月${date}日 ${day} ${hours}:${minutes}:${seconds} · 官方政策实时监测中${latestSuffix}`;
     }
@@ -1129,16 +1129,6 @@ async function loadData() {
     // 严格执行前端指纹去重
     state.allPolicies = deduplicatePoliciesList(policiesData);
 
-    // 动态提取最新政策日期并刷新顶部显示
-    if (state.allPolicies && state.allPolicies.length > 0) {
-        const dates = state.allPolicies.map(p => p.pub_date).filter(Boolean);
-        dates.sort();
-        if (dates.length > 0) {
-            state.latestPolicyDate = dates[dates.length - 1];
-        }
-    }
-    updateDateDisplay();
-
     // 加载统计
     try {
         const resp = await fetch('/api/stats');
@@ -1157,6 +1147,16 @@ async function loadData() {
             }
         } catch (err) {}
     }
+
+    // 动态提取最近抓取执行日期（优先从 stats 读取，次优从 policies created_at 提取，默认今日）
+    if (statsData && statsData.stats && (statsData.stats.last_crawled_date || statsData.stats.last_crawled_at)) {
+        state.lastCrawledDate = statsData.stats.last_crawled_date || statsData.stats.last_crawled_at.split(' ')[0];
+    } else {
+        const createdDates = (state.allPolicies || []).map(p => p.created_at ? p.created_at.split(' ')[0] : '').filter(Boolean);
+        createdDates.sort();
+        state.lastCrawledDate = createdDates.length > 0 ? createdDates[createdDates.length - 1] : new Date().toISOString().split('T')[0];
+    }
+    updateDateDisplay();
 
     updateStatsDisplay(statsData);
     filterAndRenderPolicies();
