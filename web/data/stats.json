@@ -3,8 +3,10 @@
   "data": {
     "stats": {
       "total": 142,
-      "pushed": 55,
-      "unpushed": 87
+      "pushed": 142,
+      "unpushed": 0,
+      "last_crawled_at": "2026-08-25 22:09:13",
+      "last_crawled_date": "2026-08-25"
     },
     "categories": {
       "医保政策": 49,
