@@ -1,1309 +1,1312 @@
-<!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="theme-color" content="#004886">
-    <title>四川生物医药产业集团创新事业部政策信息系统 - 四川发展·医药集团</title>
-    <link rel="stylesheet" href="index.css?v=20260818v34">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700;900&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-</head>
-<body>
-    <!-- 顶部政务红蓝权威辅助条 (干净政务风范) -->
-    <div class="top-gov-bar">
-        <div class="gov-container">
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#004886">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>四川生物医药产业集团创新事业部政策信息系统 - 四川发展·医药集团</title>
+    <link rel="stylesheet" href="index.css?v=20260825v105">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700;900&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 顶部政务红蓝权威辅助条 (干净政务风范) -->
+    <div class="top-gov-bar">
+        <div class="gov-container">
             <div class="gov-date" id="currentDateStr">
                 📅 2026年8月25日 星期二 · 官方政策实时监测中 · 最近采集更新：2026-08-25
-            </div>
-        </div>
-    </div>
-
-    <!-- NMPA 标志性权威大标题区 (Header) -->
-    <header class="nmpa-header">
-        <div class="nmpa-header-wrap">
-            <div class="nmpa-brand">
-                <div class="nmpa-emblem">
-                    <div class="emblem-inner">
-                        <span class="emblem-star">★</span>
-                        <span class="emblem-text">医药</span>
-                    </div>
-                </div>
-                <div class="nmpa-title-box">
-                    <div class="main-title">四川生物医药产业集团创新事业部政策信息系统</div>
-                </div>
-            </div>
-
-            <!-- 头部右侧检索更新按钮 (保留核心操作，适配移动端) -->
-            <div class="nmpa-header-actions">
-                <button class="action-btn action-scrape-btn" id="btnScrape" onclick="handleScrapeNow()" title="触发全网最新政策检索更新">
-                    <span class="btn-i">🔄</span>
-                    <span class="btn-text">检索更新</span>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <!-- NMPA 经典政务主导航栏 (带下拉子菜单 · 五大赛道与工具深度聚合) -->
-    <nav class="nmpa-navbar">
-        <div class="nmpa-nav-wrap">
-            <ul class="nav-menu">
-                <!-- 1. 首页 (带房屋图标) -->
-                <li class="nav-item nav-item-home active" data-track="all" id="navHome">
-                    <a href="javascript:void(0)" title="返回首页查看全部最新政策">
-                        <span class="nav-icon-home">🏠</span>
-                        <span>首 页</span>
-                    </a>
-                </li>
-
-                <!-- 2. 重点产业赛道 (五大赛道深度整合下拉大菜单) -->
-                <li class="nav-item nav-item-dropdown" id="navTrackDropdown">
-                    <a href="javascript:void(0)" class="dropdown-trigger">
-                        <span>🧬 重点产业赛道</span>
-                        <span class="nav-arrow-icon">▼</span>
-                    </a>
-                    <!-- 下拉子菜单选项 -->
-                    <div class="nmpa-dropdown-menu">
-                        <a href="javascript:void(0)" class="dropdown-item" data-track="核医药">
-                            <span class="dropdown-item-icon">⚛️</span>
-                            <div class="dropdown-item-text">
-                                <span class="dropdown-item-title">核医药与放射性药物</span>
-                                <span class="dropdown-item-badge" id="count-核医药">0</span>
-                            </div>
-                        </a>
-                        <a href="javascript:void(0)" class="dropdown-item" data-track="脑机接口">
-                            <span class="dropdown-item-icon">🧠</span>
-                            <div class="dropdown-item-text">
-                                <span class="dropdown-item-title">脑机接口与神经工程</span>
-                                <span class="dropdown-item-badge" id="count-脑机接口">0</span>
-                            </div>
-                        </a>
-                        <a href="javascript:void(0)" class="dropdown-item" data-track="AI制药">
-                            <span class="dropdown-item-icon">🧬</span>
-                            <div class="dropdown-item-text">
-                                <span class="dropdown-item-title">AI制药与前沿算法</span>
-                                <span class="dropdown-item-badge" id="count-AI制药">0</span>
-                            </div>
-                        </a>
-                        <a href="javascript:void(0)" class="dropdown-item" data-track="医疗机器人">
-                            <span class="dropdown-item-icon">🤖</span>
-                            <div class="dropdown-item-text">
-                                <span class="dropdown-item-title">医疗机器人与智能器械</span>
-                                <span class="dropdown-item-badge" id="count-医疗机器人">0</span>
-                            </div>
-                        </a>
-                        <a href="javascript:void(0)" class="dropdown-item" data-track="合成生物">
-                            <span class="dropdown-item-icon">🧪</span>
-                            <div class="dropdown-item-text">
-                                <span class="dropdown-item-title">合成生物与先进制造</span>
-                                <span class="dropdown-item-badge" id="count-合成生物">0</span>
-                            </div>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="javascript:void(0)" class="dropdown-item dropdown-item-all" data-track="all">
-                            <span class="dropdown-item-icon">🌐</span>
-                            <div class="dropdown-item-text">
-                                <span class="dropdown-item-title">全景赛道总览 (全部)</span>
-                                <span class="dropdown-item-badge" id="count-all">0</span>
-                            </div>
-                        </a>
-                    </div>
-                </li>
-
-                <!-- 3. 科技创新与申报通知 -->
-                <li class="nav-item nav-item-dropdown" data-track="科技申报政策" id="navTechDropdown">
-                    <a href="javascript:void(0)" class="dropdown-trigger">
-                        <span>📑 科技申报与奖补</span>
-                        <span class="nav-arrow-icon">▼</span>
-                    </a>
-                    <div class="nmpa-dropdown-menu">
-                        <a href="javascript:void(0)" class="dropdown-item" data-track="科技申报政策" data-sub="平台资金">
-                            <span class="dropdown-item-icon">🏆</span>
-                            <div class="dropdown-item-text">
-                                <span class="dropdown-item-title">科技厅重大专项与创新平台</span>
-                                <span class="dropdown-item-badge" id="count-tech-平台资金">0</span>
-                            </div>
-                        </a>
-                        <a href="javascript:void(0)" class="dropdown-item" data-track="科技申报政策" data-sub="经信技改">
-                            <span class="dropdown-item-icon">💰</span>
-                            <div class="dropdown-item-text">
-                                <span class="dropdown-item-title">经信厅工业发展与技改资金</span>
-                                <span class="dropdown-item-badge" id="count-tech-经信技改">0</span>
-                            </div>
-                        </a>
-                        <a href="javascript:void(0)" class="dropdown-item" data-track="科技申报政策" data-sub="发改产业">
-                            <span class="dropdown-item-icon">🏛️</span>
-                            <div class="dropdown-item-text">
-                                <span class="dropdown-item-title">发改委产业基金与重大工程</span>
-                                <span class="dropdown-item-badge" id="count-tech-发改产业">0</span>
-                            </div>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="javascript:void(0)" class="dropdown-item dropdown-item-all" data-track="科技申报政策" data-sub="all">
-                            <span class="dropdown-item-icon">🌐</span>
-                            <div class="dropdown-item-text">
-                                <span class="dropdown-item-title">科技申报总览 (全部)</span>
-                                <span class="dropdown-item-badge" id="count-科技申报政策">0</span>
-                            </div>
-                        </a>
-                    </div>
-                </li>
-
-                <!-- 4. 医保政策与集采支付 -->
-                <li class="nav-item nav-item-dropdown" data-track="医保政策" id="navMedDropdown">
-                    <a href="javascript:void(0)" class="dropdown-trigger">
-                        <span>💳 医保准入与集采</span>
-                        <span class="nav-arrow-icon">▼</span>
-                    </a>
-                    <div class="nmpa-dropdown-menu">
-                        <a href="javascript:void(0)" class="dropdown-item" data-track="医保政策" data-sub="集采">
-                            <span class="dropdown-item-icon">💊</span>
-                            <div class="dropdown-item-text">
-                                <span class="dropdown-item-title">国家/省级药品集中带量采购</span>
-                                <span class="dropdown-item-badge" id="count-med-集采">0</span>
-                            </div>
-                        </a>
-                        <a href="javascript:void(0)" class="dropdown-item" data-track="医保政策" data-sub="双通道">
-                            <span class="dropdown-item-icon">🏥</span>
-                            <div class="dropdown-item-text">
-                                <span class="dropdown-item-title">创新药挂网与双通道支付</span>
-                                <span class="dropdown-item-badge" id="count-med-双通道">0</span>
-                            </div>
-                        </a>
-                        <a href="javascript:void(0)" class="dropdown-item" data-track="医保政策" data-sub="DRG">
-                            <span class="dropdown-item-icon">🩺</span>
-                            <div class="dropdown-item-text">
-                                <span class="dropdown-item-title">医保DRG/DIP支付方式改革</span>
-                                <span class="dropdown-item-badge" id="count-med-DRG">0</span>
-                            </div>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="javascript:void(0)" class="dropdown-item dropdown-item-all" data-track="医保政策" data-sub="all">
-                            <span class="dropdown-item-icon">🌐</span>
-                            <div class="dropdown-item-text">
-                                <span class="dropdown-item-title">医保集采总览 (全部)</span>
-                                <span class="dropdown-item-badge" id="count-医保政策">0</span>
-                            </div>
-                        </a>
-                    </div>
-                </li>
-
-                <!-- 5. 产业智库与决策大屏 -->
-                <li class="nav-item nav-item-dropdown" id="navMapsDropdown">
-                    <a href="javascript:void(0)" class="dropdown-trigger">
-                        <span>🗺️ 产业智库与大屏</span>
-                        <span class="nav-arrow-icon">▼</span>
-                    </a>
-                    <div class="nmpa-dropdown-menu">
-                                                <a href="javascript:void(0)" class="dropdown-item" onclick="openRobotModal()">
-                            <span class="dropdown-item-icon">🦾</span>
-                            <div class="dropdown-item-text">
-                                <span class="dropdown-item-title">全国医疗机器人企业与专家地图</span>
-                                <span class="dropdown-tag-hot">66家企业 / 53位专家</span>
-                            </div>
-                        </a>
-                        <a href="javascript:void(0)" class="dropdown-item" onclick="openBciModal()">
-                            <span class="dropdown-item-icon">🧠</span>
-                            <div class="dropdown-item-text">
-                                <span class="dropdown-item-title">全国脑机接口企业与专家地图</span>
-                                <span class="dropdown-tag-hot">173家企业 / 85位专家</span>
-                            </div>
-                        </a>
-                        <a href="javascript:void(0)" class="dropdown-item" onclick="openNuclearModal()">
-                            <span class="dropdown-item-icon">☢️</span>
-                            <div class="dropdown-item-text">
-                                <span class="dropdown-item-title">全国核医药（核药）企业与专家地图</span>
-                                <span class="dropdown-tag-hot">34家企业 / 25位专家</span>
-                            </div>
-                        </a>
-                        <a href="javascript:void(0)" class="dropdown-item" onclick="openVisitorAnalyticsModal()">
-                            <span class="dropdown-item-icon">📊</span>
-                            <div class="dropdown-item-text">
-                                <span class="dropdown-item-title">访问态势与地域可视化大屏</span>
-                                <span class="dropdown-tag-live">实时打点</span>
-                            </div>
-                        </a>
-                    </div>
-                </li>
-
-                <!-- 6. AI 政策智囊 -->
-                <li class="nav-item nav-item-dropdown" id="navAiDropdown">
-                    <a href="javascript:void(0)" class="dropdown-trigger">
-                        <span>🤖 AI 政策智囊</span>
-                        <span class="nav-arrow-icon">▼</span>
-                    </a>
-                    <div class="nmpa-dropdown-menu">
-                        <a href="javascript:void(0)" class="dropdown-item" id="navAiDirect">
-                            <span class="dropdown-item-icon">💬</span>
-                            <span class="dropdown-item-title">直达 AI 政策智能专家助手</span>
-                        </a>
-                        <a href="javascript:void(0)" class="dropdown-item" id="navAiConfigDirect">
-                            <span class="dropdown-item-icon">🔑</span>
-                            <span class="dropdown-item-title">配置 AI 研判模型密钥 (API Key)</span>
-                        </a>
-                    </div>
-                </li>
-
-                <!-- 7. 系统工具 -->
-                <li class="nav-item nav-item-dropdown" id="navToolsDropdown">
-                    <a href="javascript:void(0)" class="dropdown-trigger">
-                        <span>⚙️ 导出与工具</span>
-                        <span class="nav-arrow-icon">▼</span>
-                    </a>
-                    <div class="nmpa-dropdown-menu">
-                        <a href="javascript:void(0)" class="dropdown-item" id="navExportWordDirect">
-                            <span class="dropdown-item-icon">📄</span>
-                            <span class="dropdown-item-title">导出国家标准公文Word简报</span>
-                        </a>
-                        <a href="javascript:void(0)" class="dropdown-item" id="navScrapeDirect">
-                            <span class="dropdown-item-icon">🔄</span>
-                            <span class="dropdown-item-title">触发全网最新政策检索更新</span>
-                        </a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
-    <!-- 主体内容区 -->
-    <main class="nmpa-main">
-        <div class="nmpa-main-grid">
-            <!-- 左侧主栏 (70%): 官方政策法规与通知公告列表 -->
-            <section class="nmpa-left-col">
-                <div class="gov-card">
-                    <!-- 第一行：大标题与搜索框 -->
-                    <div class="gov-card-title-row">
-                        <div class="header-left">
-                            <span class="header-red-bar"></span>
-                            <h2 class="header-title">政策法规与通知公告</h2>
-                        </div>
-                        <div class="header-search">
-                            <input type="text" id="searchInput" placeholder="搜索政策标题、文号、发文单位...">
-                            <button id="searchBtn" class="search-btn">搜索</button>
-                        </div>
-                    </div>
-
-                    <!-- 第二行：时间范围切换栏与当前赛道状态 -->
-                    <div class="gov-card-filter-row">
-                        <div class="time-filter-tabs">
-                            <button class="time-tab active" data-time="all" id="tabTimeAll">📚 现行在期政策库 (全量)</button>
-                            <button class="time-tab" data-time="month" id="tabTimeMonth">📅 近期发布与修订</button>
-                            <button class="time-tab" data-time="week" id="tabTimeWeek">🔥 本周最新监测</button>
-                        </div>
-                        <div class="filter-status-tag" id="listBadge">全部赛道 · 📚 现行在期政策库</div>
-                    </div>
-
-                    <!-- 动态状态提示横条 -->
-                    <div class="filter-status-banner" id="filterStatusBanner">
-                        <span>📌 严格按当前日期筛选：<strong>本周最新政策更新已置顶</strong>，历史政策已归入政策库。</span>
-                    </div>
-
-                    <!-- 政策法规列表 -->
-                    <div class="policy-table-stream" id="policyList">
-                        <div class="loading-state">正在调取国家及省局官方政策库...</div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 右侧辅栏 (30%): 四川省专项周回顾 & 智能研判工作台 -->
-            <aside class="nmpa-right-col">
-                <!-- 专栏一：四川省生物医药科技奖补周回顾 -->
-                <div class="gov-card special-sichuan-box">
-                    <div class="special-card-top">
-                        <div class="special-badge">四川省专项内参</div>
-                        <h3 class="special-card-title">生物医药科技创新与奖补周回顾</h3>
-                        <p class="special-card-desc">
-                            重点跟踪四川省科技厅、省发改委、成都市经信局关于科技创新奖励、研发补助、重大专项及资金奖补政策。
-                        </p>
-                        <div class="weekly-btn-group" style="display:flex; gap:8px; margin-top:8px;">
-                            <button class="btn-generate-report" id="btnGenWeekly" style="flex:1;">
-                                ⚡ 一键生成本周回顾报告
-                            </button>
-                            <button class="btn-export-weekly-doc" id="btnExportWeeklyDoc" title="将本周回顾报告导出为规范公文 Word" style="background:#f0f5fb; color:var(--nmpa-blue-main); border:1px solid #c0d8f0; font-weight:600; padding:0 12px; border-radius:3px; cursor:pointer; font-size:12.5px; display:inline-flex; align-items:center; gap:4px; white-space:nowrap;">
-                                📄 导出周报Word
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 专栏二：AI·政策研判与申报咨询 -->
-                <div class="gov-card consult-box">
-                    <div class="consult-top">
-                        <div class="consult-title-area">
-                            <span class="consult-icon">🤖</span>
-                            <h4>AI·政策研判与申报咨询</h4>
-                        </div>
-                        <div class="consult-actions">
-                            <button class="btn-clear-chat" id="btnClearChat" title="清除对话研判记录">
-                                🗑️ 清除记录
-                            </button>
-                            <button class="btn-ai-setup" id="toggleApiKey">
-                                🔑 配置 AI 密钥
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- 模型密钥配置抽屉 -->
-                    <div class="config-drawer hidden" id="apiKeyDrawer">
-                        <div class="drawer-header">
-                            <strong>🔑 AI 政策研判大模型参数配置</strong>
-                            <span style="font-size:11px;color:var(--text-muted)">（默认直连 DeepSeek 官方接口）</span>
-                        </div>
-                        
-                        <!-- API Key 输入与明文查看切换 -->
-                        <div class="drawer-field">
-                            <label style="font-size:11.5px;color:var(--text-muted);display:flex;justify-content:space-between;margin-bottom:3px;">
-                                <span>API Key（保存在本地浏览器，安全私密）：</span>
-                                <span id="keyStatusHint" style="color:var(--nmpa-blue-main);font-weight:600;font-size:11px;">已绑定 DeepSeek</span>
-                            </label>
-                            <div class="input-with-eye">
-                                <input type="password" id="inputApiKey" placeholder="sk-1be5b76a1ca7418e8e0ca3ca94744297">
-                                <button type="button" id="btnToggleKeyEye" class="btn-toggle-eye" title="点击查看/隐藏明文密钥">👁️</button>
-                            </div>
-                        </div>
-
-                        <!-- 接口地址与模型选择 -->
-                        <div class="drawer-row">
-                            <div style="flex:1">
-                                <label style="font-size:11.5px;color:var(--text-muted);display:block;margin-bottom:3px;">接口地址 (Base URL):</label>
-                                <input type="text" id="inputBaseUrl" placeholder="https://api.deepseek.com">
-                            </div>
-                        </div>
-
-                        <!-- 模型选择与自定义输入 -->
-                        <div class="drawer-row" style="margin-top:6px;">
-                            <div style="flex:1.15">
-                                <label style="font-size:11.5px;color:var(--text-muted);display:block;margin-bottom:3px;">选择常用模型:</label>
-                                <select id="selectModel" class="drawer-select">
-                                    <option value="deepseek-chat" selected>deepseek-chat (DeepSeek V3 官方通用·推荐)</option>
-                                    <option value="deepseek-reasoner">deepseek-reasoner (DeepSeek R1 深度思考推理)</option>
-                                    <option value="qwen-plus">qwen-plus (通义千问 Plus)</option>
-                                    <option value="qwen-max">qwen-max (通义千问 Max)</option>
-                                    <option value="gpt-4o">gpt-4o (OpenAI GPT-4o)</option>
-                                    <option value="gpt-4o-mini">gpt-4o-mini (OpenAI Mini)</option>
-                                    <option value="custom">⚙️ 自定义模型名称...</option>
-                                </select>
-                            </div>
-                            <div style="flex:0.85">
-                                <label style="font-size:11.5px;color:var(--text-muted);display:block;margin-bottom:3px;">模型标识 (Model ID):</label>
-                                <input type="text" id="inputModel" placeholder="deepseek-chat">
-                            </div>
-                        </div>
-
-                        <div style="display:flex; gap:8px; margin-top:10px;">
-                            <button class="btn-save-key-full" id="btnSaveKey" style="flex:1;">✓ 保存配置并启用</button>
-                            <button class="btn-reset-key" id="btnResetKey" type="button" style="background:var(--bg-inset);border:1px solid var(--border-color);color:var(--text-muted);font-size:12px;padding:0 12px;border-radius:3px;cursor:pointer;">🔄 恢复默认</button>
-                        </div>
-                    </div>
-
-                    <!-- 常用高频政策研判议题 -->
-                    <div class="query-tags">
-                        <button class="tag-chip" data-prompt="梳理四川省及成都市对核医疗、放射性药物产业的最新扶持举措与申报要求。">四川核医疗政策</button>
-                        <button class="tag-chip" data-prompt="分析最新国家医保目录谈判及挂网集采政策对创新药械企业的影响。">医保集采影响</button>
-                        <button class="tag-chip" data-prompt="当前四川省科技创新重大专项中，脑机接口与AI制药支持方向与资助标准。">脑机接口申报</button>
-                        <button class="tag-chip" data-prompt="起草一份生物医药科技成果转化与研发费用奖补资金申报策略要点。">资金申报策略</button>
-                    </div>
-
-                    <!-- 对话交流区 -->
-                    <div class="consult-dialog-viewport" id="chatMessages">
-                        <div class="dialog-row bot-row">
-                            <div class="dialog-card">
-                                <div class="dialog-author">AI·政策研判与申报咨询</div>
-                                本系统已对接国家药监局、国家医保局、四川省药监局及省科技厅官方政策库，默认接入 DeepSeek 智能分析。您可以直接咨询核医药、脑机接口、AI制药、医疗机器人、医保集采或科技资金申报等具体问题，或点击上方按钮生成 <strong>《四川省生物医药周回顾报告》</strong>。
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 底部输入框 -->
-                    <div class="consult-input-area">
-                        <textarea id="chatInput" placeholder="输入政策咨询议题或品种申报疑问..." rows="2"></textarea>
-                        <button id="btnSendChat" class="btn-send-msg">发送研判</button>
-                    </div>
-                </div>
-            </aside>
-        </div>
-    </main>
-
-    <!-- 底部权威政务版记与部门官网导航 (复刻 NMPA 国家药监局标准底栏) -->
-    <footer class="nmpa-footer">
-        <!-- 友情链接与各单位官网导航条 -->
-        <div class="footer-links-bar">
-            <div class="footer-links-container">
-                <!-- 重点部委直达链接 -->
-                <div class="footer-quick-links">
-                    <a href="https://www.gov.cn/" target="_blank" rel="noopener" class="foot-link">
-                        <span class="foot-icon">🇨🇳</span>中国政府网
-                    </a>
-                    <span class="foot-divider">|</span>
-                    <a href="https://www.gov.cn/guowuyuan/index.htm" target="_blank" rel="noopener" class="foot-link">
-                        <span class="foot-icon">🏛️</span>国务院客户端
-                    </a>
-                    <span class="foot-divider">|</span>
-                    <a href="https://www.samr.gov.cn/" target="_blank" rel="noopener" class="foot-link">国家市场监督管理总局</a>
-                    <span class="foot-divider">|</span>
-                    <a href="https://www.nmpa.gov.cn/" target="_blank" rel="noopener" class="foot-link highlight">国家药品监督管理局</a>
-                    <span class="foot-divider">|</span>
-                    <a href="https://www.nhsa.gov.cn/" target="_blank" rel="noopener" class="foot-link highlight">国家医疗保障局</a>
-                    <span class="foot-divider">|</span>
-                    <a href="http://www.nhc.gov.cn/" target="_blank" rel="noopener" class="foot-link">国家卫生健康委</a>
-                    <span class="foot-divider">|</span>
-                    <a href="https://yjj.sc.gov.cn/" target="_blank" rel="noopener" class="foot-link highlight">四川省药监局</a>
-                    <span class="foot-divider">|</span>
-                    <a href="https://ylbz.sc.gov.cn/" target="_blank" rel="noopener" class="foot-link highlight">四川省医保局</a>
-                    <span class="foot-divider">|</span>
-                    <a href="https://kjt.sc.gov.cn/" target="_blank" rel="noopener" class="foot-link highlight">四川省科技厅</a>
-                </div>
-
-                <!-- 快捷下拉菜单 -->
-                <div class="footer-selects">
-                    <select class="gov-select" onchange="if(this.value) window.open(this.value, '_blank')">
-                        <option value="">----- 国家部委及直属机构 -----</option>
-                        <option value="https://www.nmpa.gov.cn/">国家药品监督管理局 (NMPA)</option>
-                        <option value="https://www.nhsa.gov.cn/">国家医疗保障局 (NHSA)</option>
-                        <option value="http://www.nhc.gov.cn/">国家卫生健康委员会 (NHC)</option>
-                        <option value="http://www.natcm.gov.cn/">国家中医药管理局</option>
-                        <option value="https://www.most.gov.cn/">科学技术部 (MOST)</option>
-                        <option value="https://www.miit.gov.cn/">工业和信息化部 (MIIT)</option>
-                        <option value="https://www.cde.org.cn/">国家药监局药品审评中心 (CDE)</option>
-                        <option value="https://www.cmde.org.cn/">国家药监局医疗器械技术审评中心 (CMDE)</option>
-                        <option value="https://www.nifdc.org.cn/">中国食品药品检定研究院 (中检院)</option>
-                        <option value="https://www.cfdi.org.cn/">国家药监局食品药品审核查验中心 (CFDI)</option>
-                        <option value="https://www.chp.org.cn/">国家药典委员会</option>
-                    </select>
-
-                    <select class="gov-select" onchange="if(this.value) window.open(this.value, '_blank')">
-                        <option value="">----- 四川及地方监管部门 -----</option>
-                        <option value="https://yjj.sc.gov.cn/">四川省药品监督管理局</option>
-                        <option value="https://ylbz.sc.gov.cn/">四川省医疗保障局</option>
-                        <option value="https://kjt.sc.gov.cn/">四川省科学技术厅</option>
-                        <option value="http://wsjkw.sc.gov.cn/">四川省卫生健康委员会</option>
-                        <option value="https://jxt.sc.gov.cn/">四川省经济和信息化厅</option>
-                        <option value="https://fgw.sc.gov.cn/">四川省发展和改革委员会</option>
-                        <option value="https://gzw.sc.gov.cn/">四川省国有资产监督管理委员会</option>
-                        <option value="http://scjg.chengdu.gov.cn/">成都市市场监督管理局</option>
-                        <option value="http://yjj.beijing.gov.cn/">北京市药品监督管理局</option>
-                        <option value="https://yjj.sh.gov.cn/">上海市药品监督管理局</option>
-                        <option value="http://mpa.gd.gov.cn/">广东省药品监督管理局</option>
-                        <option value="http://da.jiangsu.gov.cn/">江苏省药品监督管理局</option>
-                        <option value="http://mpa.zj.gov.cn/">浙江省药品监督管理局</option>
-                        <option value="http://www.sdholding.com/">四川发展（控股）有限责任公司</option>
-                    </select>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- 下层政务版权与权威说明 -->
-        <div class="footer-main-bar">
-            <div class="footer-main-container">
-                <div class="footer-info-text">
-                    <div class="footer-org">
-                        四川生物医药产业集团 · 创新事业部
-                    </div>
-                    <div class="footer-meta">
-                        数据来源：国家药品监督管理局 (NMPA) · 国家医疗保障局 (NHSA) · 国家卫生健康委员会 (NHC) · 四川省药品监督管理局 (Sichuan MPA) · 四川省科学技术厅 · 四川省发展改革委 · 中国政府网
-                    </div>
-                </div>
-
-                <!-- 右侧政务权威标识卡片 -->
-                <div class="footer-gov-badges">
-                    <!-- 党政机关红盾标识 -->
-                    <div class="gov-badge-card badge-red-shield" title="党政机关主办权威认证">
-                        <div class="shield-icon">🏛️</div>
-                        <div class="shield-text">
-                            <span class="shield-line1">党政机关</span>
-                            <span class="shield-line2">权威发布</span>
-                        </div>
-                    </div>
-
-                    <!-- 政府网站找错徽章 -->
-                    <a href="https://zfwzjc.www.gov.cn/" target="_blank" rel="noopener" class="gov-badge-card badge-error-check" title="全国政府网站找错平台">
-                        <div class="error-icon">🔍</div>
-                        <div class="error-text">
-                            <span class="error-line1">政府网站</span>
-                            <span class="error-line2">找 错</span>
-                        </div>
-                    </a>
-
-                    <!-- 适老化与无障碍服务 -->
-                    <div class="gov-badge-card badge-barrier-free" title="适老化及无障碍无缝服务">
-                        <div class="bf-icon">♿</div>
-                        <div class="bf-text">
-                            <span class="bf-line1">适老化</span>
-                            <span class="bf-line2">无障碍服务</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- 政策文件详情与官方权威直达弹窗 -->
-    <div id="policyDetailModal" class="nmpa-modal-backdrop hidden">
-        <div class="nmpa-modal-card">
-            <div class="modal-header">
-                <div class="modal-title-wrap">
-                    <span class="modal-badge-icon">🏛️</span>
-                    <h3 id="modalPolicyTitle" class="modal-title">政策文件详情与研判指引</h3>
-                </div>
-                <button class="modal-close-btn" id="modalCloseBtn" title="关闭窗口">×</button>
-            </div>
-            <div class="modal-body">
-                <div class="modal-meta-bar">
-                    <span class="modal-tag" id="modalDeptTag">发布单位</span>
-                    <span class="modal-tag category-tag" id="modalCategoryTag">赛道分类</span>
-                    <span class="modal-meta-date" id="modalDate">发布日期: 2026-08-18</span>
-                </div>
-                
-                <div class="modal-section-box">
-                    <h4 class="section-title">📋 文件核心内容与申报要点摘要</h4>
-                    <p id="modalSummary" class="modal-summary-text"></p>
-                </div>
-
-                <div class="modal-section-box" style="background:#f0f7fd; border-color:#bee3f8;">
-                    <h4 class="section-title" style="color:#004886;">💡 官方文件查阅指引</h4>
-                    <p style="font-size:12.5px; color:#2d3748; line-height:1.6; margin:0;">
-                        点击下方 <strong>【🏛️ 访问发文机关官网 ➔】</strong> 即可在新标签页直达发文部门官方门户，查阅最新政务公开专栏与申报通知；亦可点击 <strong>【📋 复制公文全称】</strong> 便于在官网站内精准核验。
-                    </p>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="modal-btn btn-ai-ask" id="modalAiAskBtn">
-                    🤖 咨询AI申报机会
-                </button>
-                <button class="modal-btn btn-copy-title" id="modalCopyTitleBtn">
-                    📋 复制公文全称
-                </button>
-                <a href="#" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" class="modal-btn btn-visit-gov" id="modalGovLinkBtn" title="直达发文主管机关官方网站">
-                    🏛️ 访问发文机关官网 ➔
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- 访客时间、地点与人数统计 - 高端政务可视化大屏模态弹窗 -->
-    <div id="visitorAnalyticsModal" class="nmpa-modal-backdrop hidden">
-        <div class="nmpa-modal-card analytics-modal-card">
-            <!-- 头部标题栏 -->
-            <div class="modal-header analytics-header">
-                <div class="modal-title-wrap">
-                    <span class="modal-badge-icon">📊</span>
-                    <div>
-                        <h3 class="modal-title">医药集团政策监测系统 · 访问态势与地域可视化大屏</h3>
-                        <span class="modal-subtitle">全网实时接入监测 · 访客来源与时段趋势分析</span>
-                    </div>
-                </div>
-                <div class="analytics-header-right">
-                    <div class="live-status-pill">
-                        <span class="live-dot-pulse"></span>
-                        <span>实时监测在线</span>
-                    </div>
-                    <button class="btn-refresh-analytics" id="btnRefreshAnalyticsModal" title="刷新最新数据">🔄 刷新数据</button>
-                    <button class="modal-close-btn" id="modalAnalyticsCloseBtn" title="关闭大屏">×</button>
-                </div>
-            </div>
-
-            <!-- 大屏主体内容 -->
-            <div class="modal-body analytics-modal-body">
-                <!-- 1. 4 大核心 KPI 指标卡 -->
-                <div class="analytics-kpi-grid">
-                    <div class="kpi-card">
-                        <div class="kpi-icon">📈</div>
-                        <div class="kpi-info">
-                            <div class="kpi-label">累计访问量 (PV)</div>
-                            <div class="kpi-value" id="kpiTotalPv">0</div>
-                            <div class="kpi-tip">全网总浏览人次</div>
-                        </div>
-                    </div>
-                    <div class="kpi-card highlight-uv">
-                        <div class="kpi-icon">👥</div>
-                        <div class="kpi-info">
-                            <div class="kpi-label">独立访客数 (UV)</div>
-                            <div class="kpi-value" id="kpiTotalUv">0</div>
-                            <div class="kpi-tip">累计独立服务人数</div>
-                        </div>
-                    </div>
-                    <div class="kpi-card">
-                        <div class="kpi-icon">🔥</div>
-                        <div class="kpi-info">
-                            <div class="kpi-label">今日访问人次</div>
-                            <div class="kpi-value" id="kpiTodayPv">0</div>
-                            <div class="kpi-tip" id="kpiTodayUvTip">今日访客: 0 人</div>
-                        </div>
-                    </div>
-                    <div class="kpi-card loc-card">
-                        <div class="kpi-icon">📍</div>
-                        <div class="kpi-info">
-                            <div class="kpi-label">当前接入地点</div>
-                            <div class="kpi-value loc-text" id="kpiCurrentLoc" title="您的网络接入归属地">四川省成都市</div>
-                            <div class="kpi-tip" id="kpiCurrentTime">--:--:--</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 2. 双 ECharts 图表区 -->
-                <div class="analytics-charts-row">
-                    <!-- 左侧：访问时段趋势图 -->
-                    <div class="chart-panel">
-                        <div class="chart-panel-header">
-                            <span class="chart-title">📈 访问时间与热度趋势 (时段波动)</span>
-                            <span class="chart-subtitle">近7日及今日各时段 PV/UV 访问分布</span>
-                        </div>
-                        <div id="chartVisitTrend" class="echarts-container"></div>
-                    </div>
-
-                    <!-- 右侧：访客地域分布玫瑰图 -->
-                    <div class="chart-panel">
-                        <div class="chart-panel-header">
-                            <span class="chart-title">🍩 访客来源地域分布 (省市占比)</span>
-                            <span class="chart-subtitle">全国各省市医药同仁访问热度排行</span>
-                        </div>
-                        <div id="chartRegionRose" class="echarts-container"></div>
-                    </div>
-                </div>
-
-                <!-- 3. 下层：终端设备分布条 + 最新访问实时足迹流水 -->
-                <div class="analytics-bottom-row">
-                    <!-- 左下：终端与网络类型 -->
-                    <div class="bottom-left-panel">
-                        <div class="chart-panel-header">
-                            <span class="chart-title">💻 终端设备与接入结构</span>
-                            <span class="chart-subtitle">桌面端/移动端/专线占比</span>
-                        </div>
-                        <div id="chartDeviceRatio" class="echarts-mini-container"></div>
-                    </div>
-
-                    <!-- 右下：实时访问足迹流水线 -->
-                    <div class="bottom-right-panel">
-                        <div class="chart-panel-header">
-                            <span class="chart-title">🕒 实时接入足迹动态流水</span>
-                            <span style="font-size:11px;color:var(--text-muted);">最新访问记录实时同步</span>
-                        </div>
-                        <div class="modal-stream-list" id="modalVisitsStream">
-                            <div class="stream-empty-hint">正在调取访问动态...</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 脑机接口企业投资与专家智库地图 - 全屏级产业大屏模态弹窗 (集成ECharts中国地图与重点穿透) -->
-    <div id="bciMapModal" class="nmpa-modal-backdrop hidden">
-        <div class="nmpa-modal-card bci-modal-card">
-            <!-- 头部标题与控制区 -->
-            <div class="modal-header bci-header">
-                <div class="modal-title-wrap">
-                    <span class="modal-badge-icon" style="background:#4f46e5;">🧠</span>
-                    <div>
-                        <h3 class="modal-title">中国脑机接口产业智库与重点企业投资决策全景地图</h3>
-                        <span class="modal-subtitle">全国 173 家核心企业标的 · 85 位领军科学家智库 · 四川重点产业布局全览</span>
-                    </div>
-                </div>
-                <div class="bci-header-right">
-                    <div class="bci-badge-sichuan" title="四川省在全国脑机接口企业分布中位列全国第6、中西部第1">
-                        ⭐ 四川重点: 11家标的 (中西部第一)
-                    </div>
-                    <!-- 全屏展示切换按钮 -->
-                    <button class="bci-action-header-btn btn-fullscreen" id="btnToggleBciFullscreen" title="切换全屏沉浸大屏模式">
-                        <span id="fullscreenIcon">⛶</span>
-                        <span id="fullscreenText">全屏展示</span>
-                    </button>
-                    <!-- 返回系统主页按钮 -->
-                    <button class="bci-action-header-btn btn-back-system" id="modalBciCloseBtn" title="返回系统主页">
-                        <span>⬅️ 返回系统</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- 顶部 4 大宏观 KPI 态势条 -->
-            <div class="bci-kpi-bar">
-                <div class="bci-kpi-item">
-                    <span class="bci-kpi-label">全国脑机核心企业</span>
-                    <strong class="bci-kpi-num" id="bciKpiTotalEnt">173 <small>家</small></strong>
-                </div>
-                <div class="bci-kpi-item">
-                    <span class="bci-kpi-label">全国领军专家学者</span>
-                    <strong class="bci-kpi-num" id="bciKpiTotalExp">85 <small>位</small></strong>
-                </div>
-                <div class="bci-kpi-item highlight-sc">
-                    <span class="bci-kpi-label">四川本土重点标的</span>
-                    <strong class="bci-kpi-num" id="bciKpiScEnt">11 <small>家 (成都)</small></strong>
-                </div>
-                <div class="bci-kpi-item">
-                    <span class="bci-kpi-label">四川重点半年融资</span>
-                    <strong class="bci-kpi-num" style="color:#059669;">5.7 <small>亿元 (格式塔超声)</small></strong>
-                </div>
-                <div class="bci-kpi-item">
-                    <span class="bci-kpi-label">核心覆盖技术流派</span>
-                    <strong class="bci-kpi-num" style="color:#4f46e5;">5 <small>大前沿路线</small></strong>
-                </div>
-            </div>
-
-            <!-- 主体双栏联动交互区 (左侧交互中国地图 + 右侧重点标的穿透看板) -->
-            <div class="bci-main-grid-layout">
-                <!-- 左侧: 交互式中国地图及地理标注 (纯净大地图，无任何浮层遮挡) -->
-                <div class="bci-map-panel">
-                    <div class="bci-panel-header">
-                        <div class="bci-panel-title-wrap">
-                            <span class="bci-panel-title">🗺️ 全国脑机产业热度分布与地理标注 (点击省份/城市精准穿透)</span>
-                            <span class="bci-panel-subtitle">以地理坐标定位全国核心产业极 · 重点标注成都市、北京市、上海市等</span>
-                        </div>
-                        <div class="bci-region-quick-nav" id="bciRegionQuickNav">
-                            <button class="bci-nav-btn active" data-region="all">全部全国</button>
-                            <button class="bci-nav-btn btn-sc-nav" data-region="四川省">⭐ 四川重点</button>
-                            <button class="bci-nav-btn" data-region="长三角">长三角</button>
-                            <button class="bci-nav-btn" data-region="京津冀">京津冀</button>
-                            <button class="bci-nav-btn" data-region="大湾区">粤港澳</button>
-                            <select id="bciProvinceSelect" class="bci-province-select" title="全部省份精准筛选直达">
-                                <option value="all">📍 全部21个省市直达...</option>
-                                <option value="江苏省">江苏省 (32家企业 / 3位专家)</option>
-                                <option value="浙江省">浙江省 (27家企业 / 9位专家)</option>
-                                <option value="上海市">上海市 (26家企业 / 10位专家)</option>
-                                <option value="北京市">北京市 (20家企业 / 26位专家)</option>
-                                <option value="广东省">广东省 (20家企业 / 7位专家)</option>
-                                <option value="四川省">四川省 (11家企业 / 3位专家)</option>
-                                <option value="天津市">天津市 (7家企业 / 5位专家)</option>
-                                <option value="湖北省">湖北省 (6家企业 / 2位专家)</option>
-                                <option value="山东省">山东省 (4家企业 / 2位专家)</option>
-                                <option value="安徽省">安徽省 (3家企业 / 3位专家)</option>
-                                <option value="陕西省">陕西省 (2家企业 / 3位专家)</option>
-                                <option value="江西省">江西省 (3家企业)</option>
-                                <option value="福建省">福建省 (2家企业)</option>
-                                <option value="河南省">河南省 (2家企业 / 1位专家)</option>
-                                <option value="重庆市">重庆市 (2家企业 / 2位专家)</option>
-                                <option value="河北省">河北省 (1家企业 / 2位专家)</option>
-                                <option value="辽宁省">辽宁省 (1家企业 / 1位专家)</option>
-                                <option value="黑龙江省">黑龙江省 (1位专家)</option>
-                                <option value="湖南省">湖南省 (1家企业 / 2位专家)</option>
-                                <option value="海南省">海南省 (1家企业 / 1位专家)</option>
-                                <option value="贵州省">贵州省 (1家企业)</option>
-                                <option value="云南省">云南省 (1家企业 / 1位专家)</option>
-                                <option value="香港特别行政区">香港特别行政区 (1位专家)</option>
-                            </select>
-                        </div>
-                    </div>
-                    <!-- ECharts 中国地图主容器 (全屏视野清晰展现) -->
-                    <div class="bci-map-wrapper-relative">
-                        <div id="chartChinaBciMap" class="bci-china-map-container" style="height: 520px; width: 100%; min-height: 480px;">
-                            <div class="map-loading-hint">正在加载中国矢量地理图层与标注点...</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 右侧: 重点标的与领军智库速查看板 (学者与高校在右侧列表旁边优雅呈现) -->
-                <div class="bci-detail-panel">
-                    <div class="bci-panel-header" style="flex-wrap: wrap; gap: 8px;">
-                        <div class="bci-current-focus-status" id="bciCurrentFocusBanner">
-                            <span>📍 当前聚焦：<strong id="bciFocusRegionName" style="color:#c5161d;">全国全域</strong> (<span id="bciFocusEntCount">173</span> 家企业 / <span id="bciFocusExpCount">85</span> 位专家)</span>
-                            <button class="btn-reset-focus hidden" id="btnResetBciFocus" title="恢复展示全国">🔄 恢复全国</button>
-                        </div>
-                        <!-- 模式切换: 重点企业 / 领军智库 -->
-                        <div class="bci-view-switch">
-                            <button class="bci-switch-btn active" data-view="enterprises" id="btnSwitchEntView">
-                                🏢 重点企业 (<span id="bciViewEntBadge">173</span>)
-                            </button>
-                            <button class="bci-switch-btn" data-view="experts" id="btnSwitchExpView">
-                                👨‍🔬 领军智库 (<span id="bciViewExpBadge">85</span>)
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- 顶尖智库与高校学者专区 (根据用户选择动态调整、横向排布，0遮挡地图) -->
-                    <div class="sc-side-talents-wrapper" id="scSideTalentsSection">
-                        <div class="sc-side-header">
-                            <div class="sc-side-title">
-                                <span>⭐</span>
-                                <strong id="sideTalentsTitle">全国重点脑机智库与高校学者 (动态联动)</strong>
-                            </div>
-                            <span class="sc-side-badge" id="sideTalentsBadge">3 位学者</span>
-                        </div>
-                        <div class="sc-side-cards-row" id="sideTalentsCardsRow">
-                            <!-- 动态 JavaScript 实时根据用户选取横向排布渲染学者卡片 -->
-                        </div>
-                    </div>
-
-                    <!-- 过滤栏: 评级/技术/专家类型 + 搜索框 -->
-                    <div class="bci-toolbar-wrapper">
-                        <!-- 企业模式工具栏 (评级 + 技术路线) -->
-                        <div class="bci-filter-section" id="bciEntFilterSection">
-                            <!-- 1. 评级维度 (互斥归类，总数完全严丝合缝) -->
-                            <div class="bci-filter-line">
-                                <span class="bci-filter-sublabel">🏆 研判评级:</span>
-                                <div class="bci-filter-chips" id="bciCompChips">
-                                    <button class="chip-filter active" data-comp="all">全部评级 (<span id="cnt-comp-all">173</span>)</button>
-                                    <button class="chip-filter chip-high" data-comp="高">⭐ 高竞争力/稀缺 (<span id="cnt-comp-high">23</span>)</button>
-                                    <button class="chip-filter chip-mid" data-comp="中高">🔥 中高价值 (<span id="cnt-comp-mid">79</span>)</button>
-                                    <button class="chip-filter chip-norm" data-comp="中">💎 中等稳健 (<span id="cnt-comp-norm">49</span>)</button>
-                                    <button class="chip-filter" data-comp="观察">👀 持续观察 (<span id="cnt-comp-obs">22</span>)</button>
-                                </div>
-                            </div>
-                            <!-- 2. 技术路线维度 (互斥归类，总数完全严丝合缝) -->
-                            <div class="bci-filter-line">
-                                <span class="bci-filter-sublabel">⚡ 技术路径:</span>
-                                <div class="bci-filter-chips" id="bciTechChips">
-                                    <button class="chip-filter active" data-tech="all">全部路线 (<span id="cnt-tech-all">173</span>)</button>
-                                    <button class="chip-filter chip-tech-tag" data-tech="非侵入">⚡ 非侵入/脑电 (<span id="cnt-tech-非侵入">89</span>)</button>
-                                    <button class="chip-filter chip-tech-tag" data-tech="侵入">🧬 侵入/植入 (<span id="cnt-tech-侵入">44</span>)</button>
-                                    <button class="chip-filter chip-tech-tag" data-tech="闭环">🔄 闭环调控 (<span id="cnt-tech-闭环">23</span>)</button>
-                                    <button class="chip-filter chip-tech-tag" data-tech="光学">💡 光学/脑磁 (<span id="cnt-tech-光学">10</span>)</button>
-                                    <button class="chip-filter chip-tech-tag" data-tech="超声">🌊 超声脑机 (<span id="cnt-tech-超声">7</span>)</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 专家模式工具栏 (专家分类) -->
-                        <div class="bci-filter-section hidden" id="bciExpFilterSection">
-                            <div class="bci-filter-line">
-                                <span class="bci-filter-sublabel">🎓 专家分类:</span>
-                                <div class="bci-filter-chips" id="bciExpTypeChips">
-                                    <button class="chip-filter active" data-exptype="all">全部类型 (<span id="cnt-exp-all">85</span>)</button>
-                                    <button class="chip-filter" data-exptype="前沿学术">🔬 前沿学术 (<span id="cnt-exp-acad">31</span>)</button>
-                                    <button class="chip-filter" data-exptype="学术/产业">🚀 学术/产业转化 (<span id="cnt-exp-trans">21</span>)</button>
-                                    <button class="chip-filter" data-exptype="产业领军">🏭 产业领军 (<span id="cnt-exp-ind">16</span>)</button>
-                                    <button class="chip-filter" data-exptype="标准">📋 药监审评与标准 (<span id="cnt-exp-std">9</span>)</button>
-                                    <button class="chip-filter" data-exptype="临床">🏥 临床试验 (<span id="cnt-exp-clin">8</span>)</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 即时搜索栏 -->
-                        <div class="bci-search-row">
-                            <div class="bci-search-input-wrap">
-                                <span class="bci-search-icon">🔍</span>
-                                <input type="text" id="bciSearchInput" placeholder="输入企业/专家/技术/产品/投资人检索...">
-                                <button class="btn-clear-search hidden" id="btnClearBciSearch" title="清空搜索">×</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 标的/专家精炼卡片容器 -->
-                    <div class="bci-focus-cards-list" id="bciFocusCardsList">
-                        <div class="loading-state">正在调取脑机接口重点标的数据库...</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 大屏最底部高品质政务科技装饰条板块 -->
-            <div class="bci-screen-footer-bar">
-                <div class="footer-bar-left">
-                    <span class="footer-live-indicator"></span>
-                    <span class="footer-source-text">数据权威溯源：国家药品监督管理局 (NMPA) · 科技部 · 四川省药监局 · 成都市经信局 · 全景脑机产业图谱</span>
-                </div>
-                <div class="footer-bar-center">
-                    <span class="footer-center-tag">★ 四川发展·医药健康产业集团 创新事业部 决策内参 ★</span>
-                </div>
-                <div class="footer-bar-right">
-                    <span class="footer-version-tag">🛡️ 实时监测引擎 v2026.08 · 官方权威认证</span>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- 医疗机器人企业投资与专家智库地图 - 全屏级产业大屏模态弹窗 (集成ECharts中国地图与重点穿透) -->
-    <div id="robotMapModal" class="nmpa-modal-backdrop hidden">
-        <div class="nmpa-modal-card bci-modal-card robot-modal-card">
-            <!-- 头部标题栏 -->
-            <div class="modal-header bci-header robot-header">
-                <div class="modal-title-wrap">
-                    <h3 class="modal-title">🦾 中国医疗机器人产业智库与重点企业投资决策全景地图</h3>
-                    <span class="modal-subtitle">覆盖全国 66 家核心手术/康复/介入机器人企业与 53 位顶尖专家学者 · 融合国家药监局三类器械获批与临床转化数据</span>
-                </div>
-                <div class="bci-header-right">
-                    <div class="bci-badge-sichuan" title="四川省在全国医疗机器人产业布局中位列全国第3、西部第1">
-                        ⭐ 四川重点布局 (11家企业 / 5位领军学者)
-                    </div>
-                    <button class="bci-action-header-btn btn-fullscreen" id="btnToggleRobotFullscreen" title="切换全屏沉浸大屏模式" onclick="toggleRobotFullscreen()">
-                        <span class="fullscreen-icon" id="fullscreenRobotIcon">⛶</span>
-                        <span class="fullscreen-text" id="fullscreenRobotText">全屏展示</span>
-                    </button>
-                    <button class="bci-action-header-btn btn-back-system" id="modalRobotCloseBtn" title="返回系统主页" onclick="closeRobotModal()">
-                        <span>✕ 返回主页</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- 顶部高光 KPI 指标核心看板 -->
-            <div class="bci-kpi-bar">
-                <div class="bci-kpi-item">
-                    <span class="bci-kpi-label">全国机器人核心企业</span>
-                    <strong class="bci-kpi-num" id="robotKpiTotalEnt">93 <small>家</small></strong>
-                </div>
-                <div class="bci-kpi-item">
-                    <span class="bci-kpi-label">全国领军专家学者</span>
-                    <strong class="bci-kpi-num" id="robotKpiTotalExp">58 <small>位</small></strong>
-                </div>
-                <div class="bci-kpi-item highlight-sc">
-                    <span class="bci-kpi-label">四川本土重点标的</span>
-                    <strong class="bci-kpi-num" id="robotKpiScEnt">11 <small>家 (成都)</small></strong>
-                </div>
-                <div class="bci-kpi-item">
-                    <span class="bci-kpi-label">四川重点医工平台</span>
-                    <strong class="bci-kpi-num" style="color:#059669;">国家精准医学 <small>+华西转化</small></strong>
-                </div>
-                <div class="bci-kpi-item">
-                    <span class="bci-kpi-label">核心覆盖技术流派</span>
-                    <strong class="bci-kpi-num" style="color:#0284c7;">5 <small>大前沿路线</small></strong>
-                </div>
-            </div>
-
-            <!-- 主体双栏联动交互区 (左侧交互中国地图 + 右侧重点标的穿透看板) -->
-            <div class="bci-main-grid-layout">
-                <!-- 左侧: 交互式中国地图及地理标注 (纯净大地图，无任何浮层遮挡) -->
-                <div class="bci-map-panel">
-                    <div class="bci-panel-header">
-                        <div class="bci-panel-title-wrap">
-                            <span class="bci-panel-title">🗺️ 全国医疗机器人产业热度分布与地理标注 (点击省份/城市精准穿透)</span>
-                            <span class="bci-panel-subtitle">以地理坐标定位全国核心产业极 · 重点标注成都市、北京市、上海市、深圳市等</span>
-                        </div>
-                        <div class="bci-region-quick-nav" id="robotRegionQuickNav">
-                            <button class="bci-nav-btn active" data-region="all">全部全国</button>
-                            <button class="bci-nav-btn btn-sc-nav" data-region="四川省">⭐ 四川重点</button>
-                            <button class="bci-nav-btn" data-region="长三角">长三角</button>
-                            <button class="bci-nav-btn" data-region="京津冀">京津冀</button>
-                            <button class="bci-nav-btn" data-region="大湾区">粤港澳</button>
-                            <select id="robotProvinceSelect" class="bci-province-select" title="全部省份精准筛选直达">
-                                <option value="all">📍 全部16个省市直达...</option>
-                                <option value="北京市">北京市 (14家企业 / 14位专家)</option>
-                                <option value="上海市">上海市 (9家企业 / 8位专家)</option>
-                                <option value="江苏省">江苏省 (8家企业 / 3位专家)</option>
-                                <option value="四川省">四川省 (7家企业 / 5位专家)</option>
-                                <option value="广东省">广东省 (7家企业 / 5位专家)</option>
-                                <option value="浙江省">浙江省 (6家企业 / 4位专家)</option>
-                                <option value="天津市">天津市 (3家企业 / 3位专家)</option>
-                                <option value="湖北省">湖北省 (3家企业 / 2位专家)</option>
-                                <option value="陕西省">陕西省 (2家企业 / 2位专家)</option>
-                                <option value="重庆市">重庆市 (2家企业 / 1位专家)</option>
-                                <option value="山东省">山东省 (1家企业 / 2位专家)</option>
-                                <option value="河南省">河南省 (1家企业 / 1位专家)</option>
-                                <option value="黑龙江省">黑龙江省 (1家企业 / 1位专家)</option>
-                                <option value="辽宁省">辽宁省 (1家企业 / 1位专家)</option>
-                                <option value="云南省">云南省 (1家企业)</option>
-                                <option value="香港特别行政区">香港特别行政区 (1位专家)</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <!-- ECharts 中国地图主容器 -->
-                    <div class="bci-map-wrapper-relative">
-                        <div id="chartChinaRobotMap" class="bci-china-map-container" style="height: 520px; width: 100%; min-height: 480px;"></div>
-                    </div>
-                </div>
-
-                <!-- 右侧: 重点标的研判与专家穿透详情看板 -->
-                <div class="bci-detail-panel">
-                    <div class="bci-panel-header" style="flex-wrap: wrap; gap: 8px;">
-                        <!-- 当前选中区域状态指示与一键重置 -->
-                        <div class="bci-current-focus-status" id="robotCurrentFocusBanner">
-                            <span>📍 当前聚焦：<strong id="robotFocusRegionName" style="color:#0284c7;">全国全域</strong> (<span id="robotFocusEntCount">93</span> 家企业 / <span id="robotFocusExpCount">58</span> 位学者)</span>
-                            <button class="btn-reset-focus hidden" id="btnResetRobotFocus" title="恢复展示全国" onclick="resetRobotFocus()">🔄 恢复全国</button>
-                        </div>
-                        <!-- 模式切换: 重点企业 / 领军智库 -->
-                        <div class="bci-view-switch">
-                            <button class="bci-switch-btn active" data-view="enterprises" id="btnSwitchRobotEntView">
-                                🏢 重点企业 (<span id="robotViewEntBadge">93</span>)
-                            </button>
-                            <button class="bci-switch-btn" data-view="experts" id="btnSwitchRobotExpView">
-                                👨‍🔬 领军智库 (<span id="robotViewExpBadge">58</span>)
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- 顶尖智库与高校学者专区 (根据用户选择动态调整、横向排布，0遮挡地图) -->
-                    <div class="sc-side-talents-wrapper" id="scSideRobotTalentsSection">
-                        <div class="sc-side-header">
-                            <div class="sc-side-title">
-                                <span>⭐</span>
-                                <strong id="sideRobotTalentsTitle">全国重点医疗机器人智库与高校学者 (动态联动)</strong>
-                            </div>
-                            <span class="sc-side-badge" id="sideRobotTalentsBadge">5 位学者</span>
-                        </div>
-                        <div class="sc-side-cards-row" id="sideRobotTalentsCardsRow">
-                            <!-- 动态 JavaScript 实时根据用户选取横向排布渲染学者卡片 -->
-                        </div>
-                    </div>
-
-                    <!-- 过滤栏: 评级/技术/专家类型 + 搜索框 -->
-                    <div class="bci-toolbar-wrapper">
-                        <!-- 企业模式工具栏 (评级 + 技术路线) -->
-                        <div class="bci-filter-section" id="robotEntFilterSection">
-                            <!-- 1. 评级维度 (互斥归类，总数完全严丝合缝) -->
-                            <div class="bci-filter-line">
-                                <span class="bci-filter-sublabel">🏆 研判评级:</span>
-                                <div class="bci-filter-chips" id="robotCompChips">
-                                    <button class="chip-filter active" data-comp="all">全部评级 (<span id="cnt-robot-comp-all">93</span>)</button>
-                                    <button class="chip-filter chip-high" data-comp="高">⭐ 高竞争力/领军 (<span id="cnt-robot-comp-high">44</span>)</button>
-                                    <button class="chip-filter chip-mid" data-comp="中高">🔥 中高价值 (<span id="cnt-robot-comp-mid">34</span>)</button>
-                                    <button class="chip-filter chip-norm" data-comp="中">💎 中等稳健 (<span id="cnt-robot-comp-norm">12</span>)</button>
-                                    <button class="chip-filter" data-comp="观察">👀 持续观察 (<span id="cnt-robot-comp-obs">3</span>)</button>
-                                </div>
-                            </div>
-                            <!-- 2. 技术路线维度 (互斥归类，总数完全严丝合缝) -->
-                            <div class="bci-filter-line">
-                                <span class="bci-filter-sublabel">⚡ 技术流派:</span>
-                                <div class="bci-filter-chips" id="robotTechChips">
-                                    <button class="chip-filter active" data-tech="all">全部路线 (<span id="cnt-robot-tech-all">93</span>)</button>
-                                    <button class="chip-filter chip-tech-tag" data-tech="腔镜/微创">🔬 腔镜/微创 (<span id="cnt-robot-tech-腔镜">15</span>)</button>
-                                    <button class="chip-filter chip-tech-tag" data-tech="骨科/关节">🦴 骨科/关节 (<span id="cnt-robot-tech-骨科">10</span>)</button>
-                                    <button class="chip-filter chip-tech-tag" data-tech="神经/介入/穿刺">🧠 神经/介入/穿刺 (<span id="cnt-robot-tech-神经介入">34</span>)</button>
-                                    <button class="chip-filter chip-tech-tag" data-tech="康复/外骨骼">🦾 康复/外骨骼 (<span id="cnt-robot-tech-康复">14</span>)</button>
-                                    <button class="chip-filter chip-tech-tag" data-tech="辅助/物流/诊疗">🏥 辅助/物流/诊疗 (<span id="cnt-robot-tech-辅助">20</span>)</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 专家模式工具栏 (专家分类) -->
-                        <div class="bci-filter-section hidden" id="robotExpFilterSection">
-                            <div class="bci-filter-line">
-                                <span class="bci-filter-sublabel">🎓 专家分类:</span>
-                                <div class="bci-filter-chips" id="robotExpTypeChips">
-                                    <button class="chip-filter active" data-exptype="all">全部类型 (<span id="cnt-robot-exp-all">58</span>)</button>
-                                    <button class="chip-filter" data-exptype="产业/领军">🏭 产业/领军 (<span id="cnt-robot-exp-ind">35</span>)</button>
-                                    <button class="chip-filter" data-exptype="学术/科研">🔬 学术/科研 (<span id="cnt-robot-exp-acad">9</span>)</button>
-                                    <button class="chip-filter" data-exptype="临床转化">🏥 临床转化 (<span id="cnt-robot-exp-clin">12</span>)</button>
-                                    <button class="chip-filter" data-exptype="标准/审评">📋 药监审评与标准 (<span id="cnt-robot-exp-std">2</span>)</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 即时搜索栏 -->
-                        <div class="bci-search-row">
-                            <div class="bci-search-input-wrap">
-                                <span class="bci-search-icon">🔍</span>
-                                <input type="text" id="robotSearchInput" placeholder="输入企业/专家/技术/产品/投资人检索...">
-                                <button class="btn-clear-search hidden" id="btnClearRobotSearch" title="清空搜索">×</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 标的/专家精炼卡片容器 -->
-                    <div class="bci-focus-cards-list" id="robotFocusCardsList">
-                        <div class="loading-state">正在调取医疗机器人重点标的数据库...</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 大屏最底部高品质政务科技装饰条板块 -->
-            <div class="bci-screen-footer-bar">
-                <div class="footer-bar-left">
-                    <span class="footer-live-indicator" style="background:#0284c7;box-shadow:0 0 8px #0284c7;"></span>
-                    <span class="footer-source-text">数据权威溯源：国家药品监督管理局 (NMPA) · 国家卫健委 · 四川省药监局 · 成都市经信局 · 医疗机器人全景产业图谱</span>
-                </div>
-                <div class="footer-bar-center">
-                    <span class="footer-center-tag">★ 四川发展·医药健康产业集团 创新事业部 决策内参 ★</span>
-                </div>
-                <div class="footer-bar-right">
-                    <span class="footer-version-tag">🛡️ 实时监测引擎 v2026.08 · 官方权威认证</span>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- 核医药（核药）企业投资与专家智库地图 - 全屏级产业大屏模态弹窗 (集成ECharts中国地图与省份/城市精准下钻) -->
-    <div id="nuclearMapModal" class="nmpa-modal-backdrop hidden">
-        <div class="nmpa-modal-card bci-modal-card nuclear-modal-card">
-            <!-- 头部标题栏 -->
-            <div class="modal-header bci-header robot-header">
-                <div class="modal-title-wrap">
-                    <h3 class="modal-title">☢️ 中国核医药（核药）产业智库与重点企业投资决策全景地图</h3>
-                    <span class="modal-subtitle">覆盖全国 34 家核药研发/同位素供应/CXO核心主体与 25 位核医学领军专家 · 基于公开可溯源信息整理</span>
-                </div>
-                <div class="bci-header-right">
-                    <div class="bci-badge-sichuan" title="四川拥有核动院体系+全球最大医用同位素生产基地，为全国核药产业核心极">
-                        ⭐ 四川重点布局 (5家企业 / 4位领军专家)
-                    </div>
-                    <button class="bci-action-header-btn btn-fullscreen" id="btnToggleNuclearFullscreen" title="切换全屏沉浸大屏模式" onclick="toggleNuclearFullscreen()">
-                        <span class="fullscreen-icon" id="fullscreenNuclearIcon">⛶</span>
-                        <span class="fullscreen-text" id="fullscreenNuclearText">全屏展示</span>
-                    </button>
-                    <button class="bci-action-header-btn btn-back-system" id="modalNuclearCloseBtn" title="返回系统主页" onclick="closeNuclearModal()">
-                        <span>✕ 返回主页</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- 顶部高光 KPI 指标核心看板 -->
-            <div class="bci-kpi-bar">
-                <div class="bci-kpi-item">
-                    <span class="bci-kpi-label">全国核药核心主体</span>
-                    <strong class="bci-kpi-num" id="nuclearKpiTotalEnt">22 <small>家</small></strong>
-                </div>
-                <div class="bci-kpi-item">
-                    <span class="bci-kpi-label">全国领军专家学者</span>
-                    <strong class="bci-kpi-num" id="nuclearKpiTotalExp">23 <small>位</small></strong>
-                </div>
-                <div class="bci-kpi-item highlight-sc">
-                    <span class="bci-kpi-label">四川本土重点标的</span>
-                    <strong class="bci-kpi-num" id="nuclearKpiScEnt">5 <small>家 (成都/乐山)</small></strong>
-                </div>
-                <div class="bci-kpi-item">
-                    <span class="bci-kpi-label">四川同位素供应优势</span>
-                    <strong class="bci-kpi-num" style="color:#059669;">全球最大 <small>堆照同位素基地</small></strong>
-                </div>
-                <div class="bci-kpi-item">
-                    <span class="bci-kpi-label">产业链覆盖环节</span>
-                    <strong class="bci-kpi-num" style="color:#d97706;">4 <small>大链条环节</small></strong>
-                </div>
-            </div>
-
-            <!-- 主体双栏联动交互区 (左侧交互中国地图 + 右侧重点标的穿透看板) -->
-            <div class="bci-main-grid-layout">
-                <!-- 左侧: 交互式中国地图及地理标注 -->
-                <div class="bci-map-panel">
-                    <div class="bci-panel-header">
-                        <div class="bci-panel-title-wrap">
-                            <span class="bci-panel-title">🗺️ 全国核药产业热度分布与地理标注 (点击省份只看该省 · 再点城市只看该市)</span>
-                            <span class="bci-panel-subtitle">以地理坐标定位全国核药产业极 · 重点标注成都市、乐山市、北京市、烟台市等</span>
-                        </div>
-                        <div class="bci-region-quick-nav" id="nuclearRegionQuickNav">
-                            <button class="bci-nav-btn active" data-region="all">全部全国</button>
-                            <button class="bci-nav-btn btn-sc-nav" data-region="四川省">⭐ 四川重点</button>
-                            <button class="bci-nav-btn" data-region="长三角">长三角</button>
-                            <button class="bci-nav-btn" data-region="京津冀">京津冀</button>
-                            <button class="bci-nav-btn" data-region="大湾区">粤港澳</button>
-                            <select id="nuclearProvinceSelect" class="bci-province-select" title="全部省份精准筛选直达">
-                                <option value="all">📍 全部省份直达...</option>
-                                <option value="北京市">北京市 (6家企业 / 5位专家)</option>
-                                <option value="四川省">四川省 (5家企业 / 4位专家)</option>
-                                <option value="上海市">上海市 (3家企业 / 3位专家)</option>
+            </div>
+        </div>
+    </div>
+
+    <!-- NMPA 标志性权威大标题区 (Header) -->
+    <header class="nmpa-header">
+        <div class="nmpa-header-wrap">
+            <div class="nmpa-brand">
+                <div class="nmpa-emblem">
+                    <div class="emblem-inner">
+                        <span class="emblem-star">★</span>
+                        <span class="emblem-text">医药</span>
+                    </div>
+                </div>
+                <div class="nmpa-title-box">
+                    <div class="main-title">四川生物医药产业集团创新事业部政策信息系统</div>
+                </div>
+            </div>
+
+            <!-- 头部右侧检索更新按钮 (保留核心操作，适配移动端) -->
+            <div class="nmpa-header-actions">
+                <button class="action-btn action-scrape-btn" id="btnScrape" onclick="handleScrapeNow()" title="触发全网最新政策检索更新">
+                    <span class="btn-i">🔄</span>
+                    <span class="btn-text">检索更新</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- NMPA 经典政务主导航栏 (带下拉子菜单 · 五大赛道与工具深度聚合) -->
+    <nav class="nmpa-navbar">
+        <div class="nmpa-nav-wrap">
+            <ul class="nav-menu">
+                <!-- 1. 首页 (带房屋图标) -->
+                <li class="nav-item nav-item-home active" data-track="all" id="navHome">
+                    <a href="javascript:void(0)" title="返回首页查看全部最新政策">
+                        <span class="nav-icon-home">🏠</span>
+                        <span>首 页</span>
+                    </a>
+                </li>
+
+                <!-- 2. 重点产业赛道 (五大赛道深度整合下拉大菜单) -->
+                <li class="nav-item nav-item-dropdown" id="navTrackDropdown">
+                    <a href="javascript:void(0)" class="dropdown-trigger">
+                        <span>🧬 重点产业赛道</span>
+                        <span class="nav-arrow-icon">▼</span>
+                    </a>
+                    <!-- 下拉子菜单选项 -->
+                    <div class="nmpa-dropdown-menu">
+                        <a href="javascript:void(0)" class="dropdown-item" data-track="核医药">
+                            <span class="dropdown-item-icon">⚛️</span>
+                            <div class="dropdown-item-text">
+                                <span class="dropdown-item-title">核医药与放射性药物</span>
+                                <span class="dropdown-item-badge" id="count-核医药">0</span>
+                            </div>
+                        </a>
+                        <a href="javascript:void(0)" class="dropdown-item" data-track="脑机接口">
+                            <span class="dropdown-item-icon">🧠</span>
+                            <div class="dropdown-item-text">
+                                <span class="dropdown-item-title">脑机接口与神经工程</span>
+                                <span class="dropdown-item-badge" id="count-脑机接口">0</span>
+                            </div>
+                        </a>
+                        <a href="javascript:void(0)" class="dropdown-item" data-track="AI制药">
+                            <span class="dropdown-item-icon">🧬</span>
+                            <div class="dropdown-item-text">
+                                <span class="dropdown-item-title">AI制药与前沿算法</span>
+                                <span class="dropdown-item-badge" id="count-AI制药">0</span>
+                            </div>
+                        </a>
+                        <a href="javascript:void(0)" class="dropdown-item" data-track="医疗机器人">
+                            <span class="dropdown-item-icon">🤖</span>
+                            <div class="dropdown-item-text">
+                                <span class="dropdown-item-title">医疗机器人与智能器械</span>
+                                <span class="dropdown-item-badge" id="count-医疗机器人">0</span>
+                            </div>
+                        </a>
+                        <a href="javascript:void(0)" class="dropdown-item" data-track="合成生物">
+                            <span class="dropdown-item-icon">🧪</span>
+                            <div class="dropdown-item-text">
+                                <span class="dropdown-item-title">合成生物与先进制造</span>
+                                <span class="dropdown-item-badge" id="count-合成生物">0</span>
+                            </div>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="javascript:void(0)" class="dropdown-item dropdown-item-all" data-track="all">
+                            <span class="dropdown-item-icon">🌐</span>
+                            <div class="dropdown-item-text">
+                                <span class="dropdown-item-title">全景赛道总览 (全部)</span>
+                                <span class="dropdown-item-badge" id="count-all">0</span>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+
+                <!-- 3. 科技创新与申报通知 -->
+                <li class="nav-item nav-item-dropdown" data-track="科技申报政策" id="navTechDropdown">
+                    <a href="javascript:void(0)" class="dropdown-trigger">
+                        <span>📑 科技申报与奖补</span>
+                        <span class="nav-arrow-icon">▼</span>
+                    </a>
+                    <div class="nmpa-dropdown-menu">
+                        <a href="javascript:void(0)" class="dropdown-item" data-track="科技申报政策" data-sub="平台资金">
+                            <span class="dropdown-item-icon">🏆</span>
+                            <div class="dropdown-item-text">
+                                <span class="dropdown-item-title">科技厅重大专项与创新平台</span>
+                                <span class="dropdown-item-badge" id="count-tech-平台资金">0</span>
+                            </div>
+                        </a>
+                        <a href="javascript:void(0)" class="dropdown-item" data-track="科技申报政策" data-sub="经信技改">
+                            <span class="dropdown-item-icon">💰</span>
+                            <div class="dropdown-item-text">
+                                <span class="dropdown-item-title">经信厅工业发展与技改资金</span>
+                                <span class="dropdown-item-badge" id="count-tech-经信技改">0</span>
+                            </div>
+                        </a>
+                        <a href="javascript:void(0)" class="dropdown-item" data-track="科技申报政策" data-sub="发改产业">
+                            <span class="dropdown-item-icon">🏛️</span>
+                            <div class="dropdown-item-text">
+                                <span class="dropdown-item-title">发改委产业基金与重大工程</span>
+                                <span class="dropdown-item-badge" id="count-tech-发改产业">0</span>
+                            </div>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="javascript:void(0)" class="dropdown-item dropdown-item-all" data-track="科技申报政策" data-sub="all">
+                            <span class="dropdown-item-icon">🌐</span>
+                            <div class="dropdown-item-text">
+                                <span class="dropdown-item-title">科技申报总览 (全部)</span>
+                                <span class="dropdown-item-badge" id="count-科技申报政策">0</span>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+
+                <!-- 4. 医保政策与集采支付 -->
+                <li class="nav-item nav-item-dropdown" data-track="医保政策" id="navMedDropdown">
+                    <a href="javascript:void(0)" class="dropdown-trigger">
+                        <span>💳 医保准入与集采</span>
+                        <span class="nav-arrow-icon">▼</span>
+                    </a>
+                    <div class="nmpa-dropdown-menu">
+                        <a href="javascript:void(0)" class="dropdown-item" data-track="医保政策" data-sub="集采">
+                            <span class="dropdown-item-icon">💊</span>
+                            <div class="dropdown-item-text">
+                                <span class="dropdown-item-title">国家/省级药品集中带量采购</span>
+                                <span class="dropdown-item-badge" id="count-med-集采">0</span>
+                            </div>
+                        </a>
+                        <a href="javascript:void(0)" class="dropdown-item" data-track="医保政策" data-sub="双通道">
+                            <span class="dropdown-item-icon">🏥</span>
+                            <div class="dropdown-item-text">
+                                <span class="dropdown-item-title">创新药挂网与双通道支付</span>
+                                <span class="dropdown-item-badge" id="count-med-双通道">0</span>
+                            </div>
+                        </a>
+                        <a href="javascript:void(0)" class="dropdown-item" data-track="医保政策" data-sub="DRG">
+                            <span class="dropdown-item-icon">🩺</span>
+                            <div class="dropdown-item-text">
+                                <span class="dropdown-item-title">医保DRG/DIP支付方式改革</span>
+                                <span class="dropdown-item-badge" id="count-med-DRG">0</span>
+                            </div>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="javascript:void(0)" class="dropdown-item dropdown-item-all" data-track="医保政策" data-sub="all">
+                            <span class="dropdown-item-icon">🌐</span>
+                            <div class="dropdown-item-text">
+                                <span class="dropdown-item-title">医保集采总览 (全部)</span>
+                                <span class="dropdown-item-badge" id="count-医保政策">0</span>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+
+                <!-- 5. 产业智库与决策大屏 -->
+                <li class="nav-item nav-item-dropdown" id="navMapsDropdown">
+                    <a href="javascript:void(0)" class="dropdown-trigger">
+                        <span>🗺️ 产业智库与大屏</span>
+                        <span class="nav-arrow-icon">▼</span>
+                    </a>
+                    <div class="nmpa-dropdown-menu">
+                                                <a href="javascript:void(0)" class="dropdown-item" onclick="openRobotModal()">
+                            <span class="dropdown-item-icon">🦾</span>
+                            <div class="dropdown-item-text">
+                                <span class="dropdown-item-title">全国医疗机器人企业与专家地图</span>
+                                <span class="dropdown-tag-hot">66家企业 / 53位专家</span>
+                            </div>
+                        </a>
+                        <a href="javascript:void(0)" class="dropdown-item" onclick="openBciModal()">
+                            <span class="dropdown-item-icon">🧠</span>
+                            <div class="dropdown-item-text">
+                                <span class="dropdown-item-title">全国脑机接口企业与专家地图</span>
+                                <span class="dropdown-tag-hot">173家企业 / 85位专家</span>
+                            </div>
+                        </a>
+                        <a href="javascript:void(0)" class="dropdown-item" onclick="openNuclearModal()">
+                            <span class="dropdown-item-icon">☢️</span>
+                            <div class="dropdown-item-text">
+                                <span class="dropdown-item-title">全国核医药（核药）企业与专家地图</span>
+                                <span class="dropdown-tag-hot">34家企业 / 25位专家</span>
+                            </div>
+                        </a>
+                        <a href="javascript:void(0)" class="dropdown-item" onclick="openVisitorAnalyticsModal()">
+                            <span class="dropdown-item-icon">📊</span>
+                            <div class="dropdown-item-text">
+                                <span class="dropdown-item-title">访问态势与地域可视化大屏</span>
+                                <span class="dropdown-tag-live">实时打点</span>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+
+                <!-- 6. AI 政策智囊 -->
+                <li class="nav-item nav-item-dropdown" id="navAiDropdown">
+                    <a href="javascript:void(0)" class="dropdown-trigger">
+                        <span>🤖 AI 政策智囊</span>
+                        <span class="nav-arrow-icon">▼</span>
+                    </a>
+                    <div class="nmpa-dropdown-menu">
+                        <a href="javascript:void(0)" class="dropdown-item" id="navAiDirect">
+                            <span class="dropdown-item-icon">💬</span>
+                            <span class="dropdown-item-title">直达 AI 政策智能专家助手</span>
+                        </a>
+                        <a href="javascript:void(0)" class="dropdown-item" id="navAiConfigDirect">
+                            <span class="dropdown-item-icon">🔑</span>
+                            <span class="dropdown-item-title">配置 AI 研判模型密钥 (API Key)</span>
+                        </a>
+                    </div>
+                </li>
+
+                <!-- 7. 系统工具 -->
+                <li class="nav-item nav-item-dropdown" id="navToolsDropdown">
+                    <a href="javascript:void(0)" class="dropdown-trigger">
+                        <span>⚙️ 导出与工具</span>
+                        <span class="nav-arrow-icon">▼</span>
+                    </a>
+                    <div class="nmpa-dropdown-menu">
+                        <a href="javascript:void(0)" class="dropdown-item" id="navExportWordDirect">
+                            <span class="dropdown-item-icon">📄</span>
+                            <span class="dropdown-item-title">导出国家标准公文Word简报</span>
+                        </a>
+                        <a href="javascript:void(0)" class="dropdown-item" id="navScrapeDirect">
+                            <span class="dropdown-item-icon">🔄</span>
+                            <span class="dropdown-item-title">触发全网最新政策检索更新</span>
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 主体内容区 -->
+    <main class="nmpa-main">
+        <div class="nmpa-main-grid">
+            <!-- 左侧主栏 (70%): 官方政策法规与通知公告列表 -->
+            <section class="nmpa-left-col">
+                <div class="gov-card">
+                    <!-- 第一行：大标题与搜索框 -->
+                    <div class="gov-card-title-row">
+                        <div class="header-left">
+                            <span class="header-red-bar"></span>
+                            <h2 class="header-title">政策法规与通知公告</h2>
+                        </div>
+                        <div class="header-search">
+                            <input type="text" id="searchInput" placeholder="搜索政策标题、文号、发文单位...">
+                            <button id="searchBtn" class="search-btn">搜索</button>
+                        </div>
+                    </div>
+
+                    <!-- 第二行：时间范围切换栏与当前赛道状态 -->
+                    <div class="gov-card-filter-row">
+                        <div class="time-filter-tabs">
+                            <button class="time-tab active" data-time="all" id="tabTimeAll">📚 现行在期政策库 (全量)</button>
+                            <button class="time-tab" data-time="month" id="tabTimeMonth">📅 近期发布与修订</button>
+                            <button class="time-tab" data-time="week" id="tabTimeWeek">🔥 本周最新监测</button>
+                        </div>
+                        <div class="filter-status-tag" id="listBadge">全部赛道 · 📚 现行在期政策库</div>
+                    </div>
+
+                    <!-- 动态状态提示横条 -->
+                    <div class="filter-status-banner" id="filterStatusBanner">
+                        <span>📌 严格按当前日期筛选：<strong>本周最新政策更新已置顶</strong>，历史政策已归入政策库。</span>
+                    </div>
+
+                    <!-- 政策法规列表 -->
+                    <div class="policy-table-stream" id="policyList">
+                        <div class="loading-state">正在调取国家及省局官方政策库...</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 右侧辅栏 (30%): 四川省专项周回顾 & 智能研判工作台 -->
+            <aside class="nmpa-right-col">
+                <!-- 专栏一：四川省生物医药科技奖补周回顾 -->
+                <div class="gov-card special-sichuan-box">
+                    <div class="special-card-top">
+                        <div class="special-badge">四川省专项内参</div>
+                        <h3 class="special-card-title">生物医药科技创新与奖补周回顾</h3>
+                        <p class="special-card-desc">
+                            重点跟踪四川省科技厅、省发改委、成都市经信局关于科技创新奖励、研发补助、重大专项及资金奖补政策。
+                        </p>
+                        <div class="weekly-btn-group" style="display:flex; gap:8px; margin-top:8px;">
+                            <button class="btn-generate-report" id="btnGenWeekly" style="flex:1;">
+                                ⚡ 一键生成本周回顾报告
+                            </button>
+                            <button class="btn-export-weekly-doc" id="btnExportWeeklyDoc" title="将本周回顾报告导出为规范公文 Word" style="background:#f0f5fb; color:var(--nmpa-blue-main); border:1px solid #c0d8f0; font-weight:600; padding:0 12px; border-radius:3px; cursor:pointer; font-size:12.5px; display:inline-flex; align-items:center; gap:4px; white-space:nowrap;">
+                                📄 导出周报Word
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 专栏二：AI·政策研判与申报咨询 -->
+                <div class="gov-card consult-box">
+                    <div class="consult-top">
+                        <div class="consult-title-area">
+                            <span class="consult-icon">🤖</span>
+                            <h4>AI·政策研判与申报咨询</h4>
+                        </div>
+                        <div class="consult-actions">
+                            <button class="btn-clear-chat" id="btnClearChat" title="清除对话研判记录">
+                                🗑️ 清除记录
+                            </button>
+                            <button class="btn-ai-setup" id="toggleApiKey">
+                                🔑 配置 AI 密钥
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 模型密钥配置抽屉 -->
+                    <div class="config-drawer hidden" id="apiKeyDrawer">
+                        <div class="drawer-header">
+                            <strong>🔑 AI 政策研判大模型参数配置</strong>
+                            <span style="font-size:11px;color:var(--text-muted)">（默认直连 DeepSeek 官方接口）</span>
+                        </div>
+                        
+                        <!-- API Key 输入与明文查看切换 -->
+                        <div class="drawer-field">
+                            <label style="font-size:11.5px;color:var(--text-muted);display:flex;justify-content:space-between;margin-bottom:3px;">
+                                <span>API Key（保存在本地浏览器，安全私密）：</span>
+                                <span id="keyStatusHint" style="color:var(--nmpa-blue-main);font-weight:600;font-size:11px;">已绑定 DeepSeek</span>
+                            </label>
+                            <div class="input-with-eye">
+                                <input type="password" id="inputApiKey" placeholder="sk-1be5b76a1ca7418e8e0ca3ca94744297">
+                                <button type="button" id="btnToggleKeyEye" class="btn-toggle-eye" title="点击查看/隐藏明文密钥">👁️</button>
+                            </div>
+                        </div>
+
+                        <!-- 接口地址与模型选择 -->
+                        <div class="drawer-row">
+                            <div style="flex:1">
+                                <label style="font-size:11.5px;color:var(--text-muted);display:block;margin-bottom:3px;">接口地址 (Base URL):</label>
+                                <input type="text" id="inputBaseUrl" placeholder="https://api.deepseek.com">
+                            </div>
+                        </div>
+
+                        <!-- 模型选择与自定义输入 -->
+                        <div class="drawer-row" style="margin-top:6px;">
+                            <div style="flex:1.15">
+                                <label style="font-size:11.5px;color:var(--text-muted);display:block;margin-bottom:3px;">选择常用模型:</label>
+                                <select id="selectModel" class="drawer-select">
+                                    <option value="deepseek-chat" selected>deepseek-chat (DeepSeek V3 官方通用·推荐)</option>
+                                    <option value="deepseek-reasoner">deepseek-reasoner (DeepSeek R1 深度思考推理)</option>
+                                    <option value="qwen-plus">qwen-plus (通义千问 Plus)</option>
+                                    <option value="qwen-max">qwen-max (通义千问 Max)</option>
+                                    <option value="gpt-4o">gpt-4o (OpenAI GPT-4o)</option>
+                                    <option value="gpt-4o-mini">gpt-4o-mini (OpenAI Mini)</option>
+                                    <option value="custom">⚙️ 自定义模型名称...</option>
+                                </select>
+                            </div>
+                            <div style="flex:0.85">
+                                <label style="font-size:11.5px;color:var(--text-muted);display:block;margin-bottom:3px;">模型标识 (Model ID):</label>
+                                <input type="text" id="inputModel" placeholder="deepseek-chat">
+                            </div>
+                        </div>
+
+                        <div style="display:flex; gap:8px; margin-top:10px;">
+                            <button class="btn-save-key-full" id="btnSaveKey" style="flex:1;">✓ 保存配置并启用</button>
+                            <button class="btn-reset-key" id="btnResetKey" type="button" style="background:var(--bg-inset);border:1px solid var(--border-color);color:var(--text-muted);font-size:12px;padding:0 12px;border-radius:3px;cursor:pointer;">🔄 恢复默认</button>
+                        </div>
+                    </div>
+
+                    <!-- 常用高频政策研判议题 -->
+                    <div class="query-tags">
+                        <button class="tag-chip" data-prompt="梳理四川省及成都市对核医疗、放射性药物产业的最新扶持举措与申报要求。">四川核医疗政策</button>
+                        <button class="tag-chip" data-prompt="分析最新国家医保目录谈判及挂网集采政策对创新药械企业的影响。">医保集采影响</button>
+                        <button class="tag-chip" data-prompt="当前四川省科技创新重大专项中，脑机接口与AI制药支持方向与资助标准。">脑机接口申报</button>
+                        <button class="tag-chip" data-prompt="起草一份生物医药科技成果转化与研发费用奖补资金申报策略要点。">资金申报策略</button>
+                    </div>
+
+                    <!-- 对话交流区 -->
+                    <div class="consult-dialog-viewport" id="chatMessages">
+                        <div class="dialog-row bot-row">
+                            <div class="dialog-card">
+                                <div class="dialog-author">AI·政策研判与申报咨询</div>
+                                本系统已对接国家药监局、国家医保局、四川省药监局及省科技厅官方政策库，默认接入 DeepSeek 智能分析。您可以直接咨询核医药、脑机接口、AI制药、医疗机器人、医保集采或科技资金申报等具体问题，或点击上方按钮生成 <strong>《四川省生物医药周回顾报告》</strong>。
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 底部输入框 -->
+                    <div class="consult-input-area">
+                        <textarea id="chatInput" placeholder="输入政策咨询议题或品种申报疑问..." rows="2"></textarea>
+                        <button id="btnSendChat" class="btn-send-msg">发送研判</button>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <!-- 底部权威政务版记与部门官网导航 (复刻 NMPA 国家药监局标准底栏) -->
+    <footer class="nmpa-footer">
+        <!-- 友情链接与各单位官网导航条 -->
+        <div class="footer-links-bar">
+            <div class="footer-links-container">
+                <!-- 重点部委直达链接 -->
+                <div class="footer-quick-links">
+                    <a href="https://www.gov.cn/" target="_blank" rel="noopener" class="foot-link">
+                        <span class="foot-icon">🇨🇳</span>中国政府网
+                    </a>
+                    <span class="foot-divider">|</span>
+                    <a href="https://www.gov.cn/guowuyuan/index.htm" target="_blank" rel="noopener" class="foot-link">
+                        <span class="foot-icon">🏛️</span>国务院客户端
+                    </a>
+                    <span class="foot-divider">|</span>
+                    <a href="https://www.samr.gov.cn/" target="_blank" rel="noopener" class="foot-link">国家市场监督管理总局</a>
+                    <span class="foot-divider">|</span>
+                    <a href="https://www.nmpa.gov.cn/" target="_blank" rel="noopener" class="foot-link highlight">国家药品监督管理局</a>
+                    <span class="foot-divider">|</span>
+                    <a href="https://www.nhsa.gov.cn/" target="_blank" rel="noopener" class="foot-link highlight">国家医疗保障局</a>
+                    <span class="foot-divider">|</span>
+                    <a href="http://www.nhc.gov.cn/" target="_blank" rel="noopener" class="foot-link">国家卫生健康委</a>
+                    <span class="foot-divider">|</span>
+                    <a href="https://yjj.sc.gov.cn/" target="_blank" rel="noopener" class="foot-link highlight">四川省药监局</a>
+                    <span class="foot-divider">|</span>
+                    <a href="https://ylbz.sc.gov.cn/" target="_blank" rel="noopener" class="foot-link highlight">四川省医保局</a>
+                    <span class="foot-divider">|</span>
+                    <a href="https://kjt.sc.gov.cn/" target="_blank" rel="noopener" class="foot-link highlight">四川省科技厅</a>
+                </div>
+
+                <!-- 快捷下拉菜单 -->
+                <div class="footer-selects">
+                    <select class="gov-select" onchange="if(this.value) window.open(this.value, '_blank')">
+                        <option value="">----- 国家部委及直属机构 -----</option>
+                        <option value="https://www.nmpa.gov.cn/">国家药品监督管理局 (NMPA)</option>
+                        <option value="https://www.nhsa.gov.cn/">国家医疗保障局 (NHSA)</option>
+                        <option value="http://www.nhc.gov.cn/">国家卫生健康委员会 (NHC)</option>
+                        <option value="http://www.natcm.gov.cn/">国家中医药管理局</option>
+                        <option value="https://www.most.gov.cn/">科学技术部 (MOST)</option>
+                        <option value="https://www.miit.gov.cn/">工业和信息化部 (MIIT)</option>
+                        <option value="https://www.cde.org.cn/">国家药监局药品审评中心 (CDE)</option>
+                        <option value="https://www.cmde.org.cn/">国家药监局医疗器械技术审评中心 (CMDE)</option>
+                        <option value="https://www.nifdc.org.cn/">中国食品药品检定研究院 (中检院)</option>
+                        <option value="https://www.cfdi.org.cn/">国家药监局食品药品审核查验中心 (CFDI)</option>
+                        <option value="https://www.chp.org.cn/">国家药典委员会</option>
+                    </select>
+
+                    <select class="gov-select" onchange="if(this.value) window.open(this.value, '_blank')">
+                        <option value="">----- 四川及地方监管部门 -----</option>
+                        <option value="https://yjj.sc.gov.cn/">四川省药品监督管理局</option>
+                        <option value="https://ylbz.sc.gov.cn/">四川省医疗保障局</option>
+                        <option value="https://kjt.sc.gov.cn/">四川省科学技术厅</option>
+                        <option value="http://wsjkw.sc.gov.cn/">四川省卫生健康委员会</option>
+                        <option value="https://jxt.sc.gov.cn/">四川省经济和信息化厅</option>
+                        <option value="https://fgw.sc.gov.cn/">四川省发展和改革委员会</option>
+                        <option value="https://gzw.sc.gov.cn/">四川省国有资产监督管理委员会</option>
+                        <option value="http://scjg.chengdu.gov.cn/">成都市市场监督管理局</option>
+                        <option value="http://yjj.beijing.gov.cn/">北京市药品监督管理局</option>
+                        <option value="https://yjj.sh.gov.cn/">上海市药品监督管理局</option>
+                        <option value="http://mpa.gd.gov.cn/">广东省药品监督管理局</option>
+                        <option value="http://da.jiangsu.gov.cn/">江苏省药品监督管理局</option>
+                        <option value="http://mpa.zj.gov.cn/">浙江省药品监督管理局</option>
+                        <option value="http://www.sdholding.com/">四川发展（控股）有限责任公司</option>
+                    </select>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 下层政务版权与权威说明 -->
+        <div class="footer-main-bar">
+            <div class="footer-main-container">
+                <div class="footer-info-text">
+                    <div class="footer-org">
+                        四川生物医药产业集团 · 创新事业部
+                    </div>
+                    <div class="footer-meta">
+                        数据来源：国家药品监督管理局 (NMPA) · 国家医疗保障局 (NHSA) · 国家卫生健康委员会 (NHC) · 四川省药品监督管理局 (Sichuan MPA) · 四川省科学技术厅 · 四川省发展改革委 · 中国政府网
+                    </div>
+                </div>
+
+                <!-- 右侧政务权威标识卡片 -->
+                <div class="footer-gov-badges">
+                    <!-- 党政机关红盾标识 -->
+                    <div class="gov-badge-card badge-red-shield" title="党政机关主办权威认证">
+                        <div class="shield-icon">🏛️</div>
+                        <div class="shield-text">
+                            <span class="shield-line1">党政机关</span>
+                            <span class="shield-line2">权威发布</span>
+                        </div>
+                    </div>
+
+                    <!-- 政府网站找错徽章 -->
+                    <a href="https://zfwzjc.www.gov.cn/" target="_blank" rel="noopener" class="gov-badge-card badge-error-check" title="全国政府网站找错平台">
+                        <div class="error-icon">🔍</div>
+                        <div class="error-text">
+                            <span class="error-line1">政府网站</span>
+                            <span class="error-line2">找 错</span>
+                        </div>
+                    </a>
+
+                    <!-- 适老化与无障碍服务 -->
+                    <div class="gov-badge-card badge-barrier-free" title="适老化及无障碍无缝服务">
+                        <div class="bf-icon">♿</div>
+                        <div class="bf-text">
+                            <span class="bf-line1">适老化</span>
+                            <span class="bf-line2">无障碍服务</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 政策文件详情与官方权威直达弹窗 -->
+    <div id="policyDetailModal" class="nmpa-modal-backdrop hidden">
+        <div class="nmpa-modal-card">
+            <div class="modal-header">
+                <div class="modal-title-wrap">
+                    <span class="modal-badge-icon">🏛️</span>
+                    <h3 id="modalPolicyTitle" class="modal-title">政策文件详情与研判指引</h3>
+                </div>
+                <button class="modal-close-btn" id="modalCloseBtn" title="关闭窗口">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-meta-bar">
+                    <span class="modal-tag" id="modalDeptTag">发布单位</span>
+                    <span class="modal-tag category-tag" id="modalCategoryTag">赛道分类</span>
+                    <span class="modal-meta-date" id="modalDate">发布日期: 2026-08-18</span>
+                </div>
+                
+                <div class="modal-section-box">
+                    <h4 class="section-title">📋 文件核心内容与申报要点摘要</h4>
+                    <p id="modalSummary" class="modal-summary-text"></p>
+                </div>
+
+                <div class="modal-section-box" style="background:#f0f7fd; border-color:#bee3f8;">
+                    <h4 class="section-title" style="color:#004886;">💡 官方文件查阅指引</h4>
+                    <p style="font-size:12.5px; color:#2d3748; line-height:1.6; margin:0;">
+                        点击下方 <strong>【🏛️ 访问发文机关官网 ➔】</strong> 即可在新标签页直达发文部门官方门户，查阅最新政务公开专栏与申报通知；亦可点击 <strong>【📋 复制公文全称】</strong> 便于在官网站内精准核验。
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn btn-ai-ask" id="modalAiAskBtn">
+                    🤖 咨询AI申报机会
+                </button>
+                <button class="modal-btn btn-copy-title" id="modalCopyTitleBtn">
+                    📋 复制公文全称
+                </button>
+                <a href="#" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" class="modal-btn btn-visit-gov" id="modalGovLinkBtn" title="直达发文主管机关官方网站">
+                    🏛️ 访问发文机关官网 ➔
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 访客时间、地点与人数统计 - 高端政务可视化大屏模态弹窗 -->
+    <div id="visitorAnalyticsModal" class="nmpa-modal-backdrop hidden">
+        <div class="nmpa-modal-card analytics-modal-card">
+            <!-- 头部标题栏 -->
+            <div class="modal-header analytics-header">
+                <div class="modal-title-wrap">
+                    <span class="modal-badge-icon">📊</span>
+                    <div>
+                        <h3 class="modal-title">医药集团政策监测系统 · 访问态势与地域可视化大屏</h3>
+                        <span class="modal-subtitle">全网实时接入监测 · 访客来源与时段趋势分析</span>
+                    </div>
+                </div>
+                <div class="analytics-header-right">
+                    <div class="live-status-pill">
+                        <span class="live-dot-pulse"></span>
+                        <span>实时监测在线</span>
+                    </div>
+                    <button class="btn-refresh-analytics" id="btnRefreshAnalyticsModal" title="刷新最新数据">🔄 刷新数据</button>
+                    <button class="modal-close-btn" id="modalAnalyticsCloseBtn" title="关闭大屏">×</button>
+                </div>
+            </div>
+
+            <!-- 大屏主体内容 -->
+            <div class="modal-body analytics-modal-body">
+                <!-- 1. 4 大核心 KPI 指标卡 -->
+                <div class="analytics-kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-icon">📈</div>
+                        <div class="kpi-info">
+                            <div class="kpi-label">累计访问量 (PV)</div>
+                            <div class="kpi-value" id="kpiTotalPv">0</div>
+                            <div class="kpi-tip">全网总浏览人次</div>
+                        </div>
+                    </div>
+                    <div class="kpi-card highlight-uv">
+                        <div class="kpi-icon">👥</div>
+                        <div class="kpi-info">
+                            <div class="kpi-label">独立访客数 (UV)</div>
+                            <div class="kpi-value" id="kpiTotalUv">0</div>
+                            <div class="kpi-tip">累计独立服务人数</div>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon">🔥</div>
+                        <div class="kpi-info">
+                            <div class="kpi-label">今日访问人次</div>
+                            <div class="kpi-value" id="kpiTodayPv">0</div>
+                            <div class="kpi-tip" id="kpiTodayUvTip">今日访客: 0 人</div>
+                        </div>
+                    </div>
+                    <div class="kpi-card loc-card">
+                        <div class="kpi-icon">📍</div>
+                        <div class="kpi-info">
+                            <div class="kpi-label">当前接入地点</div>
+                            <div class="kpi-value loc-text" id="kpiCurrentLoc" title="您的网络接入归属地">四川省成都市</div>
+                            <div class="kpi-tip" id="kpiCurrentTime">--:--:--</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. 双 ECharts 图表区 -->
+                <div class="analytics-charts-row">
+                    <!-- 左侧：访问时段趋势图 -->
+                    <div class="chart-panel">
+                        <div class="chart-panel-header">
+                            <span class="chart-title">📈 访问时间与热度趋势 (时段波动)</span>
+                            <span class="chart-subtitle">近7日及今日各时段 PV/UV 访问分布</span>
+                        </div>
+                        <div id="chartVisitTrend" class="echarts-container"></div>
+                    </div>
+
+                    <!-- 右侧：访客地域分布玫瑰图 -->
+                    <div class="chart-panel">
+                        <div class="chart-panel-header">
+                            <span class="chart-title">🍩 访客来源地域分布 (省市占比)</span>
+                            <span class="chart-subtitle">全国各省市医药同仁访问热度排行</span>
+                        </div>
+                        <div id="chartRegionRose" class="echarts-container"></div>
+                    </div>
+                </div>
+
+                <!-- 3. 下层：终端设备分布条 + 最新访问实时足迹流水 -->
+                <div class="analytics-bottom-row">
+                    <!-- 左下：终端与网络类型 -->
+                    <div class="bottom-left-panel">
+                        <div class="chart-panel-header">
+                            <span class="chart-title">💻 终端设备与接入结构</span>
+                            <span class="chart-subtitle">桌面端/移动端/专线占比</span>
+                        </div>
+                        <div id="chartDeviceRatio" class="echarts-mini-container"></div>
+                    </div>
+
+                    <!-- 右下：实时访问足迹流水线 -->
+                    <div class="bottom-right-panel">
+                        <div class="chart-panel-header">
+                            <span class="chart-title">🕒 实时接入足迹动态流水</span>
+                            <span style="font-size:11px;color:var(--text-muted);">最新访问记录实时同步</span>
+                        </div>
+                        <div class="modal-stream-list" id="modalVisitsStream">
+                            <div class="stream-empty-hint">正在调取访问动态...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 脑机接口企业投资与专家智库地图 - 全屏级产业大屏模态弹窗 (集成ECharts中国地图与重点穿透) -->
+    <div id="bciMapModal" class="nmpa-modal-backdrop hidden">
+        <div class="nmpa-modal-card bci-modal-card">
+            <!-- 头部标题与控制区 -->
+            <div class="modal-header bci-header">
+                <div class="modal-title-wrap">
+                    <span class="modal-badge-icon" style="background:#4f46e5;">🧠</span>
+                    <div>
+                        <h3 class="modal-title">中国脑机接口产业智库与重点企业投资决策全景地图</h3>
+                        <span class="modal-subtitle">全国 173 家核心企业标的 · 85 位领军科学家智库 · 四川重点产业布局全览</span>
+                    </div>
+                </div>
+                <div class="bci-header-right">
+                    <div class="bci-badge-sichuan" title="四川省在全国脑机接口企业分布中位列全国第6、中西部第1">
+                        ⭐ 四川重点: 11家标的 (中西部第一)
+                    </div>
+                    <!-- 全屏展示切换按钮 -->
+                    <button class="bci-action-header-btn btn-fullscreen" id="btnToggleBciFullscreen" title="切换全屏沉浸大屏模式">
+                        <span id="fullscreenIcon">⛶</span>
+                        <span id="fullscreenText">全屏展示</span>
+                    </button>
+                    <!-- 返回系统主页按钮 -->
+                    <button class="bci-action-header-btn btn-back-system" id="modalBciCloseBtn" title="返回系统主页">
+                        <span>⬅️ 返回系统</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 顶部 4 大宏观 KPI 态势条 -->
+            <div class="bci-kpi-bar">
+                <div class="bci-kpi-item">
+                    <span class="bci-kpi-label">全国脑机核心企业</span>
+                    <strong class="bci-kpi-num" id="bciKpiTotalEnt">173 <small>家</small></strong>
+                </div>
+                <div class="bci-kpi-item">
+                    <span class="bci-kpi-label">全国领军专家学者</span>
+                    <strong class="bci-kpi-num" id="bciKpiTotalExp">85 <small>位</small></strong>
+                </div>
+                <div class="bci-kpi-item highlight-sc">
+                    <span class="bci-kpi-label">四川本土重点标的</span>
+                    <strong class="bci-kpi-num" id="bciKpiScEnt">11 <small>家 (成都)</small></strong>
+                </div>
+                <div class="bci-kpi-item">
+                    <span class="bci-kpi-label">四川重点半年融资</span>
+                    <strong class="bci-kpi-num" style="color:#059669;">5.7 <small>亿元 (格式塔超声)</small></strong>
+                </div>
+                <div class="bci-kpi-item">
+                    <span class="bci-kpi-label">核心覆盖技术流派</span>
+                    <strong class="bci-kpi-num" style="color:#4f46e5;">5 <small>大前沿路线</small></strong>
+                </div>
+            </div>
+
+            <!-- 主体双栏联动交互区 (左侧交互中国地图 + 右侧重点标的穿透看板) -->
+            <div class="bci-main-grid-layout">
+                <!-- 左侧: 交互式中国地图及地理标注 (纯净大地图，无任何浮层遮挡) -->
+                <div class="bci-map-panel">
+                    <div class="bci-panel-header">
+                        <div class="bci-panel-title-wrap">
+                            <span class="bci-panel-title">🗺️ 全国脑机产业热度分布与地理标注 (点击省份/城市精准穿透)</span>
+                            <span class="bci-panel-subtitle">以地理坐标定位全国核心产业极 · 重点标注成都市、北京市、上海市等</span>
+                        </div>
+                        <div class="bci-region-quick-nav" id="bciRegionQuickNav">
+                            <button class="bci-nav-btn active" data-region="all">全部全国</button>
+                            <button class="bci-nav-btn btn-sc-nav" data-region="四川省">⭐ 四川重点</button>
+                            <button class="bci-nav-btn" data-region="长三角">长三角</button>
+                            <button class="bci-nav-btn" data-region="京津冀">京津冀</button>
+                            <button class="bci-nav-btn" data-region="大湾区">粤港澳</button>
+                            <select id="bciProvinceSelect" class="bci-province-select" title="全部省份精准筛选直达">
+                                <option value="all">📍 全部21个省市直达...</option>
+                                <option value="江苏省">江苏省 (32家企业 / 3位专家)</option>
+                                <option value="浙江省">浙江省 (27家企业 / 9位专家)</option>
+                                <option value="上海市">上海市 (26家企业 / 10位专家)</option>
+                                <option value="北京市">北京市 (20家企业 / 26位专家)</option>
+                                <option value="广东省">广东省 (20家企业 / 7位专家)</option>
+                                <option value="四川省">四川省 (11家企业 / 3位专家)</option>
+                                <option value="天津市">天津市 (7家企业 / 5位专家)</option>
+                                <option value="湖北省">湖北省 (6家企业 / 2位专家)</option>
+                                <option value="山东省">山东省 (4家企业 / 2位专家)</option>
+                                <option value="安徽省">安徽省 (3家企业 / 3位专家)</option>
+                                <option value="陕西省">陕西省 (2家企业 / 3位专家)</option>
+                                <option value="江西省">江西省 (3家企业)</option>
+                                <option value="福建省">福建省 (2家企业)</option>
+                                <option value="河南省">河南省 (2家企业 / 1位专家)</option>
+                                <option value="重庆市">重庆市 (2家企业 / 2位专家)</option>
+                                <option value="河北省">河北省 (1家企业 / 2位专家)</option>
+                                <option value="辽宁省">辽宁省 (1家企业 / 1位专家)</option>
+                                <option value="黑龙江省">黑龙江省 (1位专家)</option>
+                                <option value="湖南省">湖南省 (1家企业 / 2位专家)</option>
+                                <option value="海南省">海南省 (1家企业 / 1位专家)</option>
+                                <option value="贵州省">贵州省 (1家企业)</option>
+                                <option value="云南省">云南省 (1家企业 / 1位专家)</option>
+                                <option value="香港特别行政区">香港特别行政区 (1位专家)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- ECharts 中国地图主容器 (全屏视野清晰展现) -->
+                    <div class="bci-map-wrapper-relative">
+                        <div id="chartChinaBciMap" class="bci-china-map-container" style="height: 520px; width: 100%; min-height: 480px;">
+                            <div class="map-loading-hint">正在加载中国矢量地理图层与标注点...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右侧: 重点标的与领军智库速查看板 (学者与高校在右侧列表旁边优雅呈现) -->
+                <div class="bci-detail-panel">
+                    <div class="bci-panel-header" style="flex-wrap: wrap; gap: 8px;">
+                        <div class="bci-current-focus-status" id="bciCurrentFocusBanner">
+                            <span>📍 当前聚焦：<strong id="bciFocusRegionName" style="color:#c5161d;">全国全域</strong> (<span id="bciFocusEntCount">173</span> 家企业 / <span id="bciFocusExpCount">85</span> 位专家)</span>
+                            <button class="btn-reset-focus hidden" id="btnResetBciFocus" title="恢复展示全国">🔄 恢复全国</button>
+                        </div>
+                        <!-- 模式切换: 重点企业 / 领军智库 -->
+                        <div class="bci-view-switch">
+                            <button class="bci-switch-btn active" data-view="enterprises" id="btnSwitchEntView">
+                                🏢 重点企业 (<span id="bciViewEntBadge">173</span>)
+                            </button>
+                            <button class="bci-switch-btn" data-view="experts" id="btnSwitchExpView">
+                                👨‍🔬 领军智库 (<span id="bciViewExpBadge">85</span>)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 顶尖智库与高校学者专区 (根据用户选择动态调整、横向排布，0遮挡地图) -->
+                    <div class="sc-side-talents-wrapper" id="scSideTalentsSection">
+                        <div class="sc-side-header">
+                            <div class="sc-side-title">
+                                <span>⭐</span>
+                                <strong id="sideTalentsTitle">全国重点脑机智库与高校学者 (动态联动)</strong>
+                            </div>
+                            <span class="sc-side-badge" id="sideTalentsBadge">3 位学者</span>
+                        </div>
+                        <div class="sc-side-cards-row" id="sideTalentsCardsRow">
+                            <!-- 动态 JavaScript 实时根据用户选取横向排布渲染学者卡片 -->
+                        </div>
+                    </div>
+
+                    <!-- 过滤栏: 评级/技术/专家类型 + 搜索框 -->
+                    <div class="bci-toolbar-wrapper">
+                        <!-- 企业模式工具栏 (评级 + 技术路线) -->
+                        <div class="bci-filter-section" id="bciEntFilterSection">
+                            <!-- 1. 评级维度 (互斥归类，总数完全严丝合缝) -->
+                            <div class="bci-filter-line">
+                                <span class="bci-filter-sublabel">🏆 研判评级:</span>
+                                <div class="bci-filter-chips" id="bciCompChips">
+                                    <button class="chip-filter active" data-comp="all">全部评级 (<span id="cnt-comp-all">173</span>)</button>
+                                    <button class="chip-filter chip-high" data-comp="高">⭐ 高竞争力/稀缺 (<span id="cnt-comp-high">23</span>)</button>
+                                    <button class="chip-filter chip-mid" data-comp="中高">🔥 中高价值 (<span id="cnt-comp-mid">79</span>)</button>
+                                    <button class="chip-filter chip-norm" data-comp="中">💎 中等稳健 (<span id="cnt-comp-norm">49</span>)</button>
+                                    <button class="chip-filter" data-comp="观察">👀 持续观察 (<span id="cnt-comp-obs">22</span>)</button>
+                                </div>
+                            </div>
+                            <!-- 2. 技术路线维度 (互斥归类，总数完全严丝合缝) -->
+                            <div class="bci-filter-line">
+                                <span class="bci-filter-sublabel">⚡ 技术路径:</span>
+                                <div class="bci-filter-chips" id="bciTechChips">
+                                    <button class="chip-filter active" data-tech="all">全部路线 (<span id="cnt-tech-all">173</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-tech="非侵入">⚡ 非侵入/脑电 (<span id="cnt-tech-非侵入">89</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-tech="侵入">🧬 侵入/植入 (<span id="cnt-tech-侵入">44</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-tech="闭环">🔄 闭环调控 (<span id="cnt-tech-闭环">23</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-tech="光学">💡 光学/脑磁 (<span id="cnt-tech-光学">10</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-tech="超声">🌊 超声脑机 (<span id="cnt-tech-超声">7</span>)</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 专家模式工具栏 (专家分类) -->
+                        <div class="bci-filter-section hidden" id="bciExpFilterSection">
+                            <div class="bci-filter-line">
+                                <span class="bci-filter-sublabel">🎓 专家分类:</span>
+                                <div class="bci-filter-chips" id="bciExpTypeChips">
+                                    <button class="chip-filter active" data-exptype="all">全部类型 (<span id="cnt-exp-all">85</span>)</button>
+                                    <button class="chip-filter" data-exptype="前沿学术">🔬 前沿学术 (<span id="cnt-exp-acad">31</span>)</button>
+                                    <button class="chip-filter" data-exptype="学术/产业">🚀 学术/产业转化 (<span id="cnt-exp-trans">21</span>)</button>
+                                    <button class="chip-filter" data-exptype="产业领军">🏭 产业领军 (<span id="cnt-exp-ind">16</span>)</button>
+                                    <button class="chip-filter" data-exptype="标准">📋 药监审评与标准 (<span id="cnt-exp-std">9</span>)</button>
+                                    <button class="chip-filter" data-exptype="临床">🏥 临床试验 (<span id="cnt-exp-clin">8</span>)</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 即时搜索栏 -->
+                        <div class="bci-search-row">
+                            <div class="bci-search-input-wrap">
+                                <span class="bci-search-icon">🔍</span>
+                                <input type="text" id="bciSearchInput" placeholder="输入企业/专家/技术/产品/投资人检索...">
+                                <button class="btn-clear-search hidden" id="btnClearBciSearch" title="清空搜索">×</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 标的/专家精炼卡片容器 -->
+                    <div class="bci-focus-cards-list" id="bciFocusCardsList">
+                        <div class="loading-state">正在调取脑机接口重点标的数据库...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 大屏最底部高品质政务科技装饰条板块 -->
+            <div class="bci-screen-footer-bar">
+                <div class="footer-bar-left">
+                    <span class="footer-live-indicator"></span>
+                    <span class="footer-source-text">数据权威溯源：国家药品监督管理局 (NMPA) · 科技部 · 四川省药监局 · 成都市经信局 · 全景脑机产业图谱</span>
+                </div>
+                <div class="footer-bar-center">
+                    <span class="footer-center-tag">★ 四川发展·医药健康产业集团 创新事业部 决策内参 ★</span>
+                </div>
+                <div class="footer-bar-right">
+                    <span class="footer-version-tag">🛡️ 实时监测引擎 v2026.08 · 官方权威认证</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 医疗机器人企业投资与专家智库地图 - 全屏级产业大屏模态弹窗 (集成ECharts中国地图与重点穿透) -->
+    <div id="robotMapModal" class="nmpa-modal-backdrop hidden">
+        <div class="nmpa-modal-card bci-modal-card robot-modal-card">
+            <!-- 头部标题栏 -->
+            <div class="modal-header bci-header robot-header">
+                <div class="modal-title-wrap">
+                    <h3 class="modal-title">🦾 中国医疗机器人产业智库与重点企业投资决策全景地图</h3>
+                    <span class="modal-subtitle">覆盖全国 66 家核心手术/康复/介入机器人企业与 53 位顶尖专家学者 · 融合国家药监局三类器械获批与临床转化数据</span>
+                </div>
+                <div class="bci-header-right">
+                    <div class="bci-badge-sichuan" title="四川省在全国医疗机器人产业布局中位列全国第3、西部第1">
+                        ⭐ 四川重点布局 (11家企业 / 5位领军学者)
+                    </div>
+                    <button class="bci-action-header-btn btn-fullscreen" id="btnToggleRobotFullscreen" title="切换全屏沉浸大屏模式" onclick="toggleRobotFullscreen()">
+                        <span class="fullscreen-icon" id="fullscreenRobotIcon">⛶</span>
+                        <span class="fullscreen-text" id="fullscreenRobotText">全屏展示</span>
+                    </button>
+                    <button class="bci-action-header-btn btn-back-system" id="modalRobotCloseBtn" title="返回系统主页" onclick="closeRobotModal()">
+                        <span>✕ 返回主页</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 顶部高光 KPI 指标核心看板 -->
+            <div class="bci-kpi-bar">
+                <div class="bci-kpi-item">
+                    <span class="bci-kpi-label">全国机器人核心企业</span>
+                    <strong class="bci-kpi-num" id="robotKpiTotalEnt">93 <small>家</small></strong>
+                </div>
+                <div class="bci-kpi-item">
+                    <span class="bci-kpi-label">全国领军专家学者</span>
+                    <strong class="bci-kpi-num" id="robotKpiTotalExp">58 <small>位</small></strong>
+                </div>
+                <div class="bci-kpi-item highlight-sc">
+                    <span class="bci-kpi-label">四川本土重点标的</span>
+                    <strong class="bci-kpi-num" id="robotKpiScEnt">11 <small>家 (成都)</small></strong>
+                </div>
+                <div class="bci-kpi-item">
+                    <span class="bci-kpi-label">四川重点医工平台</span>
+                    <strong class="bci-kpi-num" style="color:#059669;">国家精准医学 <small>+华西转化</small></strong>
+                </div>
+                <div class="bci-kpi-item">
+                    <span class="bci-kpi-label">核心覆盖技术流派</span>
+                    <strong class="bci-kpi-num" style="color:#0284c7;">5 <small>大前沿路线</small></strong>
+                </div>
+            </div>
+
+            <!-- 主体双栏联动交互区 (左侧交互中国地图 + 右侧重点标的穿透看板) -->
+            <div class="bci-main-grid-layout">
+                <!-- 左侧: 交互式中国地图及地理标注 (纯净大地图，无任何浮层遮挡) -->
+                <div class="bci-map-panel">
+                    <div class="bci-panel-header">
+                        <div class="bci-panel-title-wrap">
+                            <span class="bci-panel-title">🗺️ 全国医疗机器人产业热度分布与地理标注 (点击省份/城市精准穿透)</span>
+                            <span class="bci-panel-subtitle">以地理坐标定位全国核心产业极 · 重点标注成都市、北京市、上海市、深圳市等</span>
+                        </div>
+                        <div class="bci-region-quick-nav" id="robotRegionQuickNav">
+                            <button class="bci-nav-btn active" data-region="all">全部全国</button>
+                            <button class="bci-nav-btn btn-sc-nav" data-region="四川省">⭐ 四川重点</button>
+                            <button class="bci-nav-btn" data-region="长三角">长三角</button>
+                            <button class="bci-nav-btn" data-region="京津冀">京津冀</button>
+                            <button class="bci-nav-btn" data-region="大湾区">粤港澳</button>
+                            <select id="robotProvinceSelect" class="bci-province-select" title="全部省份精准筛选直达">
+                                <option value="all">📍 全部16个省市直达...</option>
+                                <option value="北京市">北京市 (14家企业 / 14位专家)</option>
+                                <option value="上海市">上海市 (9家企业 / 8位专家)</option>
+                                <option value="江苏省">江苏省 (8家企业 / 3位专家)</option>
+                                <option value="四川省">四川省 (7家企业 / 5位专家)</option>
+                                <option value="广东省">广东省 (7家企业 / 5位专家)</option>
+                                <option value="浙江省">浙江省 (6家企业 / 4位专家)</option>
+                                <option value="天津市">天津市 (3家企业 / 3位专家)</option>
+                                <option value="湖北省">湖北省 (3家企业 / 2位专家)</option>
+                                <option value="陕西省">陕西省 (2家企业 / 2位专家)</option>
+                                <option value="重庆市">重庆市 (2家企业 / 1位专家)</option>
+                                <option value="山东省">山东省 (1家企业 / 2位专家)</option>
+                                <option value="河南省">河南省 (1家企业 / 1位专家)</option>
+                                <option value="黑龙江省">黑龙江省 (1家企业 / 1位专家)</option>
+                                <option value="辽宁省">辽宁省 (1家企业 / 1位专家)</option>
+                                <option value="云南省">云南省 (1家企业)</option>
+                                <option value="香港特别行政区">香港特别行政区 (1位专家)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- ECharts 中国地图主容器 -->
+                    <div class="bci-map-wrapper-relative">
+                        <div id="chartChinaRobotMap" class="bci-china-map-container" style="height: 520px; width: 100%; min-height: 480px;"></div>
+                    </div>
+                </div>
+
+                <!-- 右侧: 重点标的研判与专家穿透详情看板 -->
+                <div class="bci-detail-panel">
+                    <div class="bci-panel-header" style="flex-wrap: wrap; gap: 8px;">
+                        <!-- 当前选中区域状态指示与一键重置 -->
+                        <div class="bci-current-focus-status" id="robotCurrentFocusBanner">
+                            <span>📍 当前聚焦：<strong id="robotFocusRegionName" style="color:#0284c7;">全国全域</strong> (<span id="robotFocusEntCount">93</span> 家企业 / <span id="robotFocusExpCount">58</span> 位学者)</span>
+                            <button class="btn-reset-focus hidden" id="btnResetRobotFocus" title="恢复展示全国" onclick="resetRobotFocus()">🔄 恢复全国</button>
+                        </div>
+                        <!-- 模式切换: 重点企业 / 领军智库 -->
+                        <div class="bci-view-switch">
+                            <button class="bci-switch-btn active" data-view="enterprises" id="btnSwitchRobotEntView">
+                                🏢 重点企业 (<span id="robotViewEntBadge">93</span>)
+                            </button>
+                            <button class="bci-switch-btn" data-view="experts" id="btnSwitchRobotExpView">
+                                👨‍🔬 领军智库 (<span id="robotViewExpBadge">58</span>)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 顶尖智库与高校学者专区 (根据用户选择动态调整、横向排布，0遮挡地图) -->
+                    <div class="sc-side-talents-wrapper" id="scSideRobotTalentsSection">
+                        <div class="sc-side-header">
+                            <div class="sc-side-title">
+                                <span>⭐</span>
+                                <strong id="sideRobotTalentsTitle">全国重点医疗机器人智库与高校学者 (动态联动)</strong>
+                            </div>
+                            <span class="sc-side-badge" id="sideRobotTalentsBadge">5 位学者</span>
+                        </div>
+                        <div class="sc-side-cards-row" id="sideRobotTalentsCardsRow">
+                            <!-- 动态 JavaScript 实时根据用户选取横向排布渲染学者卡片 -->
+                        </div>
+                    </div>
+
+                    <!-- 过滤栏: 评级/技术/专家类型 + 搜索框 -->
+                    <div class="bci-toolbar-wrapper">
+                        <!-- 企业模式工具栏 (评级 + 技术路线) -->
+                        <div class="bci-filter-section" id="robotEntFilterSection">
+                            <!-- 1. 评级维度 (互斥归类，总数完全严丝合缝) -->
+                            <div class="bci-filter-line">
+                                <span class="bci-filter-sublabel">🏆 研判评级:</span>
+                                <div class="bci-filter-chips" id="robotCompChips">
+                                    <button class="chip-filter active" data-comp="all">全部评级 (<span id="cnt-robot-comp-all">93</span>)</button>
+                                    <button class="chip-filter chip-high" data-comp="高">⭐ 高竞争力/领军 (<span id="cnt-robot-comp-high">44</span>)</button>
+                                    <button class="chip-filter chip-mid" data-comp="中高">🔥 中高价值 (<span id="cnt-robot-comp-mid">34</span>)</button>
+                                    <button class="chip-filter chip-norm" data-comp="中">💎 中等稳健 (<span id="cnt-robot-comp-norm">12</span>)</button>
+                                    <button class="chip-filter" data-comp="观察">👀 持续观察 (<span id="cnt-robot-comp-obs">3</span>)</button>
+                                </div>
+                            </div>
+                            <!-- 2. 技术路线维度 (互斥归类，总数完全严丝合缝) -->
+                            <div class="bci-filter-line">
+                                <span class="bci-filter-sublabel">⚡ 技术流派:</span>
+                                <div class="bci-filter-chips" id="robotTechChips">
+                                    <button class="chip-filter active" data-tech="all">全部路线 (<span id="cnt-robot-tech-all">93</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-tech="腔镜/微创">🔬 腔镜/微创 (<span id="cnt-robot-tech-腔镜">15</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-tech="骨科/关节">🦴 骨科/关节 (<span id="cnt-robot-tech-骨科">10</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-tech="神经/介入/穿刺">🧠 神经/介入/穿刺 (<span id="cnt-robot-tech-神经介入">34</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-tech="康复/外骨骼">🦾 康复/外骨骼 (<span id="cnt-robot-tech-康复">14</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-tech="辅助/物流/诊疗">🏥 辅助/物流/诊疗 (<span id="cnt-robot-tech-辅助">20</span>)</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 专家模式工具栏 (专家分类) -->
+                        <div class="bci-filter-section hidden" id="robotExpFilterSection">
+                            <div class="bci-filter-line">
+                                <span class="bci-filter-sublabel">🎓 专家分类:</span>
+                                <div class="bci-filter-chips" id="robotExpTypeChips">
+                                    <button class="chip-filter active" data-exptype="all">全部类型 (<span id="cnt-robot-exp-all">58</span>)</button>
+                                    <button class="chip-filter" data-exptype="产业/领军">🏭 产业/领军 (<span id="cnt-robot-exp-ind">35</span>)</button>
+                                    <button class="chip-filter" data-exptype="学术/科研">🔬 学术/科研 (<span id="cnt-robot-exp-acad">9</span>)</button>
+                                    <button class="chip-filter" data-exptype="临床转化">🏥 临床转化 (<span id="cnt-robot-exp-clin">12</span>)</button>
+                                    <button class="chip-filter" data-exptype="标准/审评">📋 药监审评与标准 (<span id="cnt-robot-exp-std">2</span>)</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 即时搜索栏 -->
+                        <div class="bci-search-row">
+                            <div class="bci-search-input-wrap">
+                                <span class="bci-search-icon">🔍</span>
+                                <input type="text" id="robotSearchInput" placeholder="输入企业/专家/技术/产品/投资人检索...">
+                                <button class="btn-clear-search hidden" id="btnClearRobotSearch" title="清空搜索">×</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 标的/专家精炼卡片容器 -->
+                    <div class="bci-focus-cards-list" id="robotFocusCardsList">
+                        <div class="loading-state">正在调取医疗机器人重点标的数据库...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 大屏最底部高品质政务科技装饰条板块 -->
+            <div class="bci-screen-footer-bar">
+                <div class="footer-bar-left">
+                    <span class="footer-live-indicator" style="background:#0284c7;box-shadow:0 0 8px #0284c7;"></span>
+                    <span class="footer-source-text">数据权威溯源：国家药品监督管理局 (NMPA) · 国家卫健委 · 四川省药监局 · 成都市经信局 · 医疗机器人全景产业图谱</span>
+                </div>
+                <div class="footer-bar-center">
+                    <span class="footer-center-tag">★ 四川发展·医药健康产业集团 创新事业部 决策内参 ★</span>
+                </div>
+                <div class="footer-bar-right">
+                    <span class="footer-version-tag">🛡️ 实时监测引擎 v2026.08 · 官方权威认证</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 核医药（核药）企业投资与专家智库地图 - 全屏级产业大屏模态弹窗 (集成ECharts中国地图与省份/城市精准下钻) -->
+    <div id="nuclearMapModal" class="nmpa-modal-backdrop hidden">
+        <div class="nmpa-modal-card bci-modal-card nuclear-modal-card">
+            <!-- 头部标题栏 -->
+            <div class="modal-header bci-header robot-header">
+                <div class="modal-title-wrap">
+                    <h3 class="modal-title">☢️ 中国核医药（核药）产业智库与重点企业投资决策全景地图</h3>
+                    <span class="modal-subtitle">覆盖全国 34 家核药研发/同位素供应/CXO核心主体与 25 位核医学领军专家 · 基于公开可溯源信息整理</span>
+                </div>
+                <div class="bci-header-right">
+                    <div class="bci-badge-sichuan" title="四川拥有核动院体系+全球最大医用同位素生产基地，为全国核药产业核心极">
+                        ⭐ 四川重点布局 (5家企业 / 4位领军专家)
+                    </div>
+                    <button class="bci-action-header-btn btn-fullscreen" id="btnToggleNuclearFullscreen" title="切换全屏沉浸大屏模式" onclick="toggleNuclearFullscreen()">
+                        <span class="fullscreen-icon" id="fullscreenNuclearIcon">⛶</span>
+                        <span class="fullscreen-text" id="fullscreenNuclearText">全屏展示</span>
+                    </button>
+                    <button class="bci-action-header-btn btn-back-system" id="modalNuclearCloseBtn" title="返回系统主页" onclick="closeNuclearModal()">
+                        <span>✕ 返回主页</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 顶部高光 KPI 指标核心看板 -->
+            <div class="bci-kpi-bar">
+                <div class="bci-kpi-item">
+                    <span class="bci-kpi-label">全国核药核心主体</span>
+                    <strong class="bci-kpi-num" id="nuclearKpiTotalEnt">22 <small>家</small></strong>
+                </div>
+                <div class="bci-kpi-item">
+                    <span class="bci-kpi-label">全国领军专家学者</span>
+                    <strong class="bci-kpi-num" id="nuclearKpiTotalExp">23 <small>位</small></strong>
+                </div>
+                <div class="bci-kpi-item highlight-sc">
+                    <span class="bci-kpi-label">四川本土重点标的</span>
+                    <strong class="bci-kpi-num" id="nuclearKpiScEnt">5 <small>家 (成都/乐山)</small></strong>
+                </div>
+                <div class="bci-kpi-item">
+                    <span class="bci-kpi-label">四川同位素供应优势</span>
+                    <strong class="bci-kpi-num" style="color:#059669;">全球最大 <small>堆照同位素基地</small></strong>
+                </div>
+                <div class="bci-kpi-item">
+                    <span class="bci-kpi-label">产业链覆盖环节</span>
+                    <strong class="bci-kpi-num" style="color:#d97706;">4 <small>大链条环节</small></strong>
+                </div>
+            </div>
+
+            <!-- 主体双栏联动交互区 (左侧交互中国地图 + 右侧重点标的穿透看板) -->
+            <div class="bci-main-grid-layout">
+                <!-- 左侧: 交互式中国地图及地理标注 -->
+                <div class="bci-map-panel">
+                    <div class="bci-panel-header">
+                        <div class="bci-panel-title-wrap">
+                            <span class="bci-panel-title">🗺️ 全国核药产业热度分布与地理标注 (点击省份只看该省 · 再点城市只看该市)</span>
+                            <span class="bci-panel-subtitle">以地理坐标定位全国核药产业极 · 重点标注成都市、乐山市、北京市、烟台市等</span>
+                        </div>
+                        <div class="bci-region-quick-nav" id="nuclearRegionQuickNav">
+                            <button class="bci-nav-btn active" data-region="all">全部全国</button>
+                            <button class="bci-nav-btn btn-sc-nav" data-region="四川省">⭐ 四川重点</button>
+                            <button class="bci-nav-btn" data-region="长三角">长三角</button>
+                            <button class="bci-nav-btn" data-region="京津冀">京津冀</button>
+                            <button class="bci-nav-btn" data-region="大湾区">粤港澳</button>
+                            <select id="nuclearProvinceSelect" class="bci-province-select" title="全部省份精准筛选直达">
+                                <option value="all">📍 全部省份直达...</option>
+                                <option value="北京市">北京市 (6家企业 / 5位专家)</option>
+                                <option value="四川省">四川省 (5家企业 / 4位专家)</option>
+                                <option value="上海市">上海市 (3家企业 / 3位专家)</option>
                                 <option value="江苏省">江苏省 (8家企业 / 2位专家)</option>
-                                <option value="重庆市">重庆市 (3家企业 / 2位专家)</option>
-                                <option value="广东省">广东省 (3家企业 / 2位专家)</option>
-                                <option value="山东省">山东省 (3家企业)</option>
-                                <option value="湖北省">湖北省 (1家企业 / 2位专家)</option>
-                                <option value="云南省">云南省 (1家企业)</option>
-                                <option value="天津市">天津市 (1家企业 / 1位专家)</option>
-                                <option value="山西省">山西省 (1位专家)</option>
-                                <option value="辽宁省">辽宁省 (1位专家)</option>
-                                <option value="浙江省">浙江省 (1位专家)</option>
-                                <option value="陕西省">陕西省 (1位专家)</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <!-- ECharts 中国地图主容器 -->
-                    <div class="bci-map-wrapper-relative">
-                        <div id="chartChinaNuclearMap" class="bci-china-map-container" style="height: 520px; width: 100%; min-height: 480px;"></div>
-                    </div>
-                </div>
-
-                <!-- 右侧: 重点标的研判与专家穿透详情看板 -->
-                <div class="bci-detail-panel">
-                    <div class="bci-panel-header" style="flex-wrap: wrap; gap: 8px;">
-                        <div class="bci-current-focus-status" id="nuclearCurrentFocusBanner">
-                            <span>📍 当前聚焦：<strong id="nuclearFocusRegionName" style="color:#d97706;">全国全域</strong> (<span id="nuclearFocusEntCount">22</span> 家企业 / <span id="nuclearFocusExpCount">23</span> 位专家)</span>
-                            <button class="btn-reset-focus hidden" id="btnResetNuclearFocus" title="恢复展示全国" onclick="resetNuclearFocus()">🔄 恢复全国</button>
-                        </div>
-                        <div class="bci-view-switch">
-                            <button class="bci-switch-btn active" data-view="enterprises" id="btnSwitchNuclearEntView">
-                                🏢 重点企业 (<span id="nuclearViewEntBadge">22</span>)
-                            </button>
-                            <button class="bci-switch-btn" data-view="experts" id="btnSwitchNuclearExpView">
-                                👨‍🔬 领军智库 (<span id="nuclearViewExpBadge">23</span>)
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- 顶尖智库与临床核医学专家专区 (动态联动) -->
-                    <div class="sc-side-talents-wrapper" id="scSideNuclearTalentsSection">
-                        <div class="sc-side-header">
-                            <div class="sc-side-title">
-                                <span>⭐</span>
-                                <strong id="sideNuclearTalentsTitle">全国重点核医学智库与领军专家 (动态联动)</strong>
-                            </div>
-                            <span class="sc-side-badge" id="sideNuclearTalentsBadge">23 位专家</span>
-                        </div>
-                        <div class="sc-side-cards-row" id="sideNuclearTalentsCardsRow">
-                            <!-- 动态 JavaScript 实时根据用户选取横向排布渲染专家卡片 -->
-                        </div>
-                    </div>
-
-                    <!-- 过滤栏 -->
-                    <div class="bci-toolbar-wrapper">
-                        <!-- 企业模式工具栏 (评级 + 产业链环节) -->
-                        <div class="bci-filter-section" id="nuclearEntFilterSection">
-                            <div class="bci-filter-line">
-                                <span class="bci-filter-sublabel">🏆 研判评级:</span>
-                                <div class="bci-filter-chips" id="nuclearCompChips">
-                                    <button class="chip-filter active" data-comp="all">全部评级 (<span id="cnt-nuclear-comp-all">22</span>)</button>
-                                    <button class="chip-filter chip-high" data-comp="高">⭐ 高竞争力/领军 (<span id="cnt-nuclear-comp-high">10</span>)</button>
-                                    <button class="chip-filter chip-mid" data-comp="中高">🔥 中高价值 (<span id="cnt-nuclear-comp-mid">9</span>)</button>
-                                    <button class="chip-filter chip-norm" data-comp="中">💎 中等稳健 (<span id="cnt-nuclear-comp-norm">2</span>)</button>
-                                    <button class="chip-filter" data-comp="观察">👀 持续观察 (<span id="cnt-nuclear-comp-obs">1</span>)</button>
-                                </div>
-                            </div>
-                            <div class="bci-filter-line">
-                                <span class="bci-filter-sublabel">⚡ 产业链环节:</span>
-                                <div class="bci-filter-chips" id="nuclearCatChips">
-                                    <button class="chip-filter active" data-cat="all">全部环节 (<span id="cnt-nuclear-cat-all">22</span>)</button>
-                                    <button class="chip-filter chip-tech-tag" data-cat="核心企业">💊 核药研发/生产 (<span id="cnt-nuclear-cat-core">13</span>)</button>
-                                    <button class="chip-filter chip-tech-tag" data-cat="核素供应">☢️ 同位素供应 (<span id="cnt-nuclear-cat-iso">3</span>)</button>
-                                    <button class="chip-filter chip-tech-tag" data-cat="研发服务">🧪 CXO/非临床评价 (<span id="cnt-nuclear-cat-cxo">3</span>)</button>
-                                    <button class="chip-filter chip-tech-tag" data-cat="关联布局">🏦 上市公司关联布局 (<span id="cnt-nuclear-cat-rel">3</span>)</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 专家模式工具栏 -->
-                        <div class="bci-filter-section hidden" id="nuclearExpFilterSection">
-                            <div class="bci-filter-line">
-                                <span class="bci-filter-sublabel">🎓 专家分类:</span>
-                                <div class="bci-filter-chips" id="nuclearExpTypeChips">
-                                    <button class="chip-filter active" data-exptype="all">全部类型 (<span id="cnt-nuclear-exp-all">23</span>)</button>
-                                    <button class="chip-filter" data-exptype="临床/学术">🏥 临床/学术带头人 (<span id="cnt-nuclear-exp-clin-acad">14</span>)</button>
-                                    <button class="chip-filter" data-exptype="临床">🩺 临床核医学 (<span id="cnt-nuclear-exp-clin">4</span>)</button>
-                                    <button class="chip-filter" data-exptype="研发/工程">🏭 研发/同位素工程 (<span id="cnt-nuclear-exp-rd">2</span>)</button>
-                                    <button class="chip-filter" data-exptype="学术/转化">🔬 学术/成果转化 (<span id="cnt-nuclear-exp-trans">3</span>)</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 即时搜索栏 -->
-                        <div class="bci-search-row">
-                            <div class="bci-search-input-wrap">
-                                <span class="bci-search-icon">🔍</span>
-                                <input type="text" id="nuclearSearchInput" placeholder="输入企业/专家/核素/管线/城市检索...">
-                                <button class="btn-clear-search hidden" id="btnClearNuclearSearch" title="清空搜索">×</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 标的/专家精炼卡片容器 -->
-                    <div class="bci-focus-cards-list" id="nuclearFocusCardsList">
-                        <div class="loading-state">正在调取核医药重点标的数据库...</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 大屏最底部装饰条 -->
-            <div class="bci-screen-footer-bar">
-                <div class="footer-bar-left">
-                    <span class="footer-live-indicator" style="background:#d97706;box-shadow:0 0 8px #d97706;"></span>
-                    <span class="footer-source-text">数据公开溯源：国家药监局 (NMPA) · 中华医学会核医学分会 · 上市公司公告/年报 · 前瞻产业研究院 · 主流财经媒体</span>
-                </div>
-                <div class="footer-bar-center">
-                    <span class="footer-center-tag">★ 四川发展·医药健康产业集团 创新事业部 决策内参 ★</span>
-                </div>
-                <div class="footer-bar-right">
-                    <span class="footer-version-tag">🛡️ 核验日期 2026-08-20 · 公开可溯源口径</span>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- 弹窗通知 -->
-    <div id="toast" class="nmpa-toast hidden"></div>
-
-    <!-- Apache ECharts 5.5 高端政务数据可视化图表库 -->
-    <script src="lib/echarts.min.js"></script>
-    <!-- 中国地图地理矢量离线数据 (确保100%秒级离线免跨域加载) -->
-    <script src="data/china_map_data.js"></script>
-    <!-- 原生 OpenXML docx 生成库 -->
-    <script src="lib/docx.umd.js"></script>
-    <script src="app.js?v=20260821v85"></script>
-</body>
-</html>
+                                <option value="重庆市">重庆市 (3家企业 / 2位专家)</option>
+                                <option value="广东省">广东省 (3家企业 / 2位专家)</option>
+                                <option value="山东省">山东省 (3家企业)</option>
+                                <option value="湖北省">湖北省 (1家企业 / 2位专家)</option>
+                                <option value="云南省">云南省 (1家企业)</option>
+                                <option value="天津市">天津市 (1家企业 / 1位专家)</option>
+                                <option value="山西省">山西省 (1位专家)</option>
+                                <option value="辽宁省">辽宁省 (1位专家)</option>
+                                <option value="浙江省">浙江省 (1位专家)</option>
+                                <option value="陕西省">陕西省 (1位专家)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- ECharts 中国地图主容器 -->
+                    <div class="bci-map-wrapper-relative">
+                        <div id="chartChinaNuclearMap" class="bci-china-map-container" style="height: 520px; width: 100%; min-height: 480px;"></div>
+                    </div>
+                </div>
+
+                <!-- 右侧: 重点标的研判与专家穿透详情看板 -->
+                <div class="bci-detail-panel">
+                    <div class="bci-panel-header" style="flex-wrap: wrap; gap: 8px;">
+                        <div class="bci-current-focus-status" id="nuclearCurrentFocusBanner">
+                            <span>📍 当前聚焦：<strong id="nuclearFocusRegionName" style="color:#d97706;">全国全域</strong> (<span id="nuclearFocusEntCount">22</span> 家企业 / <span id="nuclearFocusExpCount">23</span> 位专家)</span>
+                            <button class="btn-reset-focus hidden" id="btnResetNuclearFocus" title="恢复展示全国" onclick="resetNuclearFocus()">🔄 恢复全国</button>
+                        </div>
+                        <div class="bci-view-switch">
+                            <button class="bci-switch-btn active" data-view="enterprises" id="btnSwitchNuclearEntView">
+                                🏢 重点企业 (<span id="nuclearViewEntBadge">22</span>)
+                            </button>
+                            <button class="bci-switch-btn" data-view="experts" id="btnSwitchNuclearExpView">
+                                👨‍🔬 领军智库 (<span id="nuclearViewExpBadge">23</span>)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 顶尖智库与临床核医学专家专区 (动态联动) -->
+                    <div class="sc-side-talents-wrapper" id="scSideNuclearTalentsSection">
+                        <div class="sc-side-header">
+                            <div class="sc-side-title">
+                                <span>⭐</span>
+                                <strong id="sideNuclearTalentsTitle">全国重点核医学智库与领军专家 (动态联动)</strong>
+                            </div>
+                            <span class="sc-side-badge" id="sideNuclearTalentsBadge">23 位专家</span>
+                        </div>
+                        <div class="sc-side-cards-row" id="sideNuclearTalentsCardsRow">
+                            <!-- 动态 JavaScript 实时根据用户选取横向排布渲染专家卡片 -->
+                        </div>
+                    </div>
+
+                    <!-- 过滤栏 -->
+                    <div class="bci-toolbar-wrapper">
+                        <!-- 企业模式工具栏 (评级 + 产业链环节) -->
+                        <div class="bci-filter-section" id="nuclearEntFilterSection">
+                            <div class="bci-filter-line">
+                                <span class="bci-filter-sublabel">🏆 研判评级:</span>
+                                <div class="bci-filter-chips" id="nuclearCompChips">
+                                    <button class="chip-filter active" data-comp="all">全部评级 (<span id="cnt-nuclear-comp-all">22</span>)</button>
+                                    <button class="chip-filter chip-high" data-comp="高">⭐ 高竞争力/领军 (<span id="cnt-nuclear-comp-high">10</span>)</button>
+                                    <button class="chip-filter chip-mid" data-comp="中高">🔥 中高价值 (<span id="cnt-nuclear-comp-mid">9</span>)</button>
+                                    <button class="chip-filter chip-norm" data-comp="中">💎 中等稳健 (<span id="cnt-nuclear-comp-norm">2</span>)</button>
+                                    <button class="chip-filter" data-comp="观察">👀 持续观察 (<span id="cnt-nuclear-comp-obs">1</span>)</button>
+                                </div>
+                            </div>
+                            <div class="bci-filter-line">
+                                <span class="bci-filter-sublabel">⚡ 产业链环节:</span>
+                                <div class="bci-filter-chips" id="nuclearCatChips">
+                                    <button class="chip-filter active" data-cat="all">全部环节 (<span id="cnt-nuclear-cat-all">22</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-cat="核心企业">💊 核药研发/生产 (<span id="cnt-nuclear-cat-core">13</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-cat="核素供应">☢️ 同位素供应 (<span id="cnt-nuclear-cat-iso">3</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-cat="研发服务">🧪 CXO/非临床评价 (<span id="cnt-nuclear-cat-cxo">3</span>)</button>
+                                    <button class="chip-filter chip-tech-tag" data-cat="关联布局">🏦 上市公司关联布局 (<span id="cnt-nuclear-cat-rel">3</span>)</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 专家模式工具栏 -->
+                        <div class="bci-filter-section hidden" id="nuclearExpFilterSection">
+                            <div class="bci-filter-line">
+                                <span class="bci-filter-sublabel">🎓 专家分类:</span>
+                                <div class="bci-filter-chips" id="nuclearExpTypeChips">
+                                    <button class="chip-filter active" data-exptype="all">全部类型 (<span id="cnt-nuclear-exp-all">23</span>)</button>
+                                    <button class="chip-filter" data-exptype="临床/学术">🏥 临床/学术带头人 (<span id="cnt-nuclear-exp-clin-acad">14</span>)</button>
+                                    <button class="chip-filter" data-exptype="临床">🩺 临床核医学 (<span id="cnt-nuclear-exp-clin">4</span>)</button>
+                                    <button class="chip-filter" data-exptype="研发/工程">🏭 研发/同位素工程 (<span id="cnt-nuclear-exp-rd">2</span>)</button>
+                                    <button class="chip-filter" data-exptype="学术/转化">🔬 学术/成果转化 (<span id="cnt-nuclear-exp-trans">3</span>)</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 即时搜索栏 -->
+                        <div class="bci-search-row">
+                            <div class="bci-search-input-wrap">
+                                <span class="bci-search-icon">🔍</span>
+                                <input type="text" id="nuclearSearchInput" placeholder="输入企业/专家/核素/管线/城市检索...">
+                                <button class="btn-clear-search hidden" id="btnClearNuclearSearch" title="清空搜索">×</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 标的/专家精炼卡片容器 -->
+                    <div class="bci-focus-cards-list" id="nuclearFocusCardsList">
+                        <div class="loading-state">正在调取核医药重点标的数据库...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 大屏最底部装饰条 -->
+            <div class="bci-screen-footer-bar">
+                <div class="footer-bar-left">
+                    <span class="footer-live-indicator" style="background:#d97706;box-shadow:0 0 8px #d97706;"></span>
+                    <span class="footer-source-text">数据公开溯源：国家药监局 (NMPA) · 中华医学会核医学分会 · 上市公司公告/年报 · 前瞻产业研究院 · 主流财经媒体</span>
+                </div>
+                <div class="footer-bar-center">
+                    <span class="footer-center-tag">★ 四川发展·医药健康产业集团 创新事业部 决策内参 ★</span>
+                </div>
+                <div class="footer-bar-right">
+                    <span class="footer-version-tag">🛡️ 核验日期 2026-08-20 · 公开可溯源口径</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 弹窗通知 -->
+    <div id="toast" class="nmpa-toast hidden"></div>
+
+    <!-- Apache ECharts 5.5 高端政务数据可视化图表库 -->
+    <script src="lib/echarts.min.js"></script>
+    <!-- 中国地图地理矢量离线数据 (确保100%秒级离线免跨域加载) -->
+    <script src="data/china_map_data.js"></script>
+    <!-- 原生 OpenXML docx 生成库 -->
+    <script src="lib/docx.umd.js"></script>
+    <script src="app.js?v=20260825v105"></script>
+</body>
+</html>
