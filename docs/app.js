@@ -868,10 +868,19 @@ function renderVisitTrendChart(stats) {
             textStyle: { color: isDark ? '#f8fafc' : '#0f172a', fontSize: 12 }
         },
         legend: {
-            data: ['访问量 (PV)', '独立访客 (UV)'],
-            top: 0,
-            right: '4%',
-            textStyle: { color: textColor, fontSize: 12, fontWeight: 'bold' }
+            data: (data.categories || []).map(c => c.name),
+            bottom: 8,
+            left: 12,
+            orient: 'horizontal',
+            backgroundColor: isDark ? 'rgba(15, 23, 42, 0.88)' : 'rgba(255, 255, 255, 0.92)',
+            borderColor: isDark ? '#334155' : '#cbd5e1',
+            borderWidth: 1,
+            borderRadius: 5,
+            padding: [4, 10],
+            itemGap: 12,
+            itemWidth: 14,
+            itemHeight: 8,
+            textStyle: { color: textColor, fontSize: 11, fontWeight: '600' }
         },
         grid: {
             left: '3%',
@@ -964,12 +973,19 @@ function renderRegionRoseChart(stats) {
             textStyle: { color: isDark ? '#f8fafc' : '#0f172a', fontSize: 12 }
         },
         legend: {
-            orient: 'vertical',
-            left: 'left',
-            top: 'middle',
-            itemWidth: 10,
-            itemHeight: 10,
-            textStyle: { color: textColor, fontSize: 11 }
+            data: (data.categories || []).map(c => c.name),
+            bottom: 8,
+            left: 12,
+            orient: 'horizontal',
+            backgroundColor: isDark ? 'rgba(15, 23, 42, 0.88)' : 'rgba(255, 255, 255, 0.92)',
+            borderColor: isDark ? '#334155' : '#cbd5e1',
+            borderWidth: 1,
+            borderRadius: 5,
+            padding: [4, 10],
+            itemGap: 12,
+            itemWidth: 14,
+            itemHeight: 8,
+            textStyle: { color: textColor, fontSize: 11, fontWeight: '600' }
         },
         color: colors,
         series: [
@@ -7424,9 +7440,18 @@ function renderIndustryNetworkGraph(data) {
         },
         legend: {
             data: (data.categories || []).map(c => c.name),
-            top: 6,
+            bottom: 8,
             left: 12,
-            textStyle: { color: textColor, fontSize: 11 }
+            orient: 'horizontal',
+            backgroundColor: isDark ? 'rgba(15, 23, 42, 0.88)' : 'rgba(255, 255, 255, 0.92)',
+            borderColor: isDark ? '#334155' : '#cbd5e1',
+            borderWidth: 1,
+            borderRadius: 5,
+            padding: [4, 10],
+            itemGap: 12,
+            itemWidth: 14,
+            itemHeight: 8,
+            textStyle: { color: textColor, fontSize: 11, fontWeight: '600' }
         },
         animationDuration: 800,
         animationEasingUpdate: 'quinticInOut',
