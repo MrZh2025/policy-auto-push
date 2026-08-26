@@ -105,7 +105,13 @@ def run_pipeline(force_push: bool = False):
                 json.dump({"code": 0, "data": {"stats": db.get_stats(), "categories": cat_stats}}, f, ensure_ascii=False, indent=2)
             with open(os.path.join(data_dir, "visitor_stats.json"), "w", encoding="utf-8") as f:
                 json.dump({"code": 0, "data": db.get_visitor_stats()}, f, ensure_ascii=False, indent=2)
-        logger.info("[静态数据] 已成功同步 web/data/ 和 docs/data/ 供 GitHub Pages 在线访问！")
+        # 自动重算并同步产业关联图谱与未来走势数据
+        try:
+            from graph_generator import IndustryGraphGenerator
+            IndustryGraphGenerator.generate(db)
+        except Exception as e:
+            logger.warning(f"生成知识图谱数据异常: {e}")
+        logger.info("[静态数据] 已成功同步 web/data/ 和 docs/data/ (含政策库、统计态势与知识图谱) 供 GitHub Pages 在线访问！")
     except Exception as e:
         logger.warning(f"导出静态网页数据失败: {e}")
 
