@@ -17,7 +17,7 @@ CURATED_POLICIES: List[Dict[str, Any]] = [
     },
     {
         "title": "辽宁省药品监督管理局关于公开征求《中国（辽宁）自贸试验区生物医药研发用物品进口“白名单”制度试点方案（征求意见稿）》意见的通告",
-        "url": "http://ypjg.ln.gov.cn/ypjg/zwfw/ggtg/qt/index.shtml",
+        "url": "https://ypjg.ln.gov.cn/ypjg/gzhd/yjzj/2026082417273930274/index.shtmlypjg/gzhd/yjzj/2026082417273930274/index.shtml",
         "source": "辽宁省药品监督管理局",
         "pub_date": "2026-08-24",
         "category": "科技申报政策",
