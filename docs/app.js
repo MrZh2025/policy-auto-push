@@ -7405,7 +7405,6 @@ function renderIndustryNetworkGraph(data) {
     const container = document.getElementById('chartIndustryGraph');
     if (!container || typeof echarts === 'undefined' || !data) return;
 
-    // 清空任何文本残留并销毁旧实例，确保 DOM 绑定 100% 绝对有效，彻底杜绝白屏/卡在loading
     container.innerHTML = '';
     if (chartIndustryGraphInstance) {
         try {
@@ -7419,21 +7418,31 @@ function renderIndustryNetworkGraph(data) {
 
     const option = {
         backgroundColor: 'transparent',
+        // 彻底解决点击节点左上角弹出无内容白色大方块的问题
         tooltip: {
+            show: true,
             trigger: 'item',
-            backgroundColor: isDark ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.95)',
-            borderColor: isDark ? '#334155' : '#e2e8f0',
-            textStyle: { color: textColor, fontSize: 12 },
+            triggerOn: 'mousemove', // 仅鼠标悬浮时显示，点击时绝不吸附或常驻
+            confine: true,          // 限制在图表内
+            hideDelay: 50,
+            backgroundColor: 'rgba(15, 23, 42, 0.94)',
+            borderColor: '#38bdf8',
+            borderWidth: 1,
+            padding: [8, 12],
+            textStyle: { color: '#ffffff', fontSize: 12 },
+            extraCssText: 'box-shadow: 0 4px 16px rgba(0,0,0,0.35); border-radius: 6px; pointer-events: none;',
             formatter: function(params) {
                 if (params.dataType === 'node') {
                     const extra = params.data.extra || {};
-                    let html = `<div style="font-weight:700;font-size:13px;margin-bottom:4px;">${params.name}</div>`;
-                    if (extra.desc) html += `<div style="font-size:11.5px;color:#64748b;">${extra.desc}</div>`;
-                    if (extra.note) html += `<div style="font-size:11.5px;color:#10b981;margin-top:3px;">📌 ${extra.note}</div>`;
-                    if (extra.future) html += `<div style="font-size:11.5px;color:#f59e0b;margin-top:3px;">📈 ${extra.future}</div>`;
-                    return html;
+                    const catObj = (industryGraphData && industryGraphData.categories && industryGraphData.categories[params.data.category]) || {};
+                    const catName = catObj.name || '要素节点';
+                    return `
+                        <div style="font-weight:700;color:#38bdf8;font-size:12.5px;margin-bottom:3px;">${params.name}</div>
+                        <div style="font-size:11px;color:#cbd5e1;">🏷️ 类型：<span style="color:#ffffff;font-weight:600;">${catName}</span></div>
+                        <div style="font-size:10.5px;color:#94a3b8;margin-top:4px;">👉 点击此节点：右侧将实时切换至深度情报探针</div>
+                    `;
                 }
-                return `${params.data.source} ➔ ${params.data.target}`;
+                return `<div style="font-size:11.5px;color:#ffffff;">🔗 关联关系：${params.data.source} ➔ ${params.data.target}</div>`;
             }
         },
         legend: {
