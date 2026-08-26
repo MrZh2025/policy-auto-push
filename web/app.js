@@ -7496,14 +7496,115 @@ function renderIndustryNetworkGraph(data) {
     setTimeout(forceResizeIndustryGraph, 60);
 }
 
+// ==========================================================================
+// 🤝 动态省际产业关联度测算引擎 (计算与目标省份关联最强的省份榜单)
+// ==========================================================================
+
+const PROVINCE_SYNERGY_KNOWLEDGE = {
+    "四川省-重庆市": {
+        level: "极强协同 (成渝走廊)",
+        score: 96,
+        synergy: "共建成渝地区双城经济圈生物医药走廊：四川核医疗堆产资源与重庆微无创超声医学装备、IVD试剂联合攻坚，推进川渝两地医疗器械审评审批联合检验与医保价格互认互通。"
+    },
+    "四川省-上海市": {
+        level: "研发对标与成果转化",
+        score: 88,
+        synergy: "对标张江与临港高地：上海输出前沿AI制药算法、具身智能机器人及脑机接口核心技术，四川提供丰富临床三甲资源与国家战略腹地低成本规模化转化承载。"
+    },
+    "四川省-广东省": {
+        level: "智造链与集采互补",
+        score: 82,
+        synergy: "大湾区精密机械与电子产业链为四川医学影像与机器人提供核心零部件支持；四川借助广东药交中心与集采枢纽，推进集团创新药械全国放量与出海。"
+    },
+    "四川省-辽宁省": {
+        level: "自贸制度借梯登高",
+        score: 76,
+        synergy: "四川自贸试验区（成都天府国际生物城）深度借鉴辽宁大连自贸片区‘生物医药研发用物品免通关单白名单’创新经验，打通跨境研发试剂绿色通关堵点。"
+    },
+    "四川省-江苏省": {
+        level: "新药管线并购与代工",
+        score: 72,
+        synergy: "江苏BioBAY集聚了全国最密集的Biotech创新药企群，四川医药集团可重点承接江苏因资本周期收紧而外溢的创新药管线并购受让与CDMO/CMO代工生产。"
+    },
+    "四川省-浙江省": {
+        level: "数字医疗场景互补",
+        score: 68,
+        synergy: "引进浙江数字健康、智能康复外骨骼装备与互联网医院管理方案，在四川及西南各级医院与康养基地开展场景化落地应用。"
+    },
+    "四川省-湖北省": {
+        level: "光电药械中枢协同",
+        score: 65,
+        synergy: "依托武汉光谷生物城的光电医疗器械优势，与四川高端医学影像及中药现代化开展长江经济带中上游产业技术对接。"
+    },
+    "四川省-山东省": {
+        level: "大宗原料药与高分子耗材",
+        score: 62,
+        synergy: "对接山东威高高分子耗材与青岛海洋生物制药，构建大宗医用耗材与原料药供应互保体系。"
+    }
+};
+
+function calculateProvinceAffinityList(targetProv) {
+    if (!industryGraphData) return [];
+
+    const allProvs = Object.keys(industryGraphData.province_profiles || {});
+    const targetInfo = (industryGraphData.province_profiles || {})[targetProv];
+    if (!targetInfo) return [];
+
+    const targetIndustries = new Set(targetInfo.focus_industries || []);
+    const affinityResults = [];
+
+    allProvs.forEach(otherProv => {
+        if (otherProv === targetProv) return;
+        const otherInfo = industryGraphData.province_profiles[otherProv];
+        if (!otherInfo) return;
+
+        const otherIndustries = otherInfo.focus_industries || [];
+        const sharedTracks = otherIndustries.filter(ind => {
+            // 模糊匹配相同或相似赛道
+            for (let t of targetIndustries) {
+                if (t.includes(ind) || ind.includes(t) || 
+                   (t.includes('器械') && ind.includes('器械')) ||
+                   (t.includes('机器人') && ind.includes('机器人')) ||
+                   (t.includes('中药') && ind.includes('中药')) ||
+                   (t.includes('核') && ind.includes('放药')) ||
+                   (t.includes('AI') && ind.includes('算法'))) {
+                    return true;
+                }
+            }
+            return false;
+        });
+
+        const key1 = `${targetProv}-${otherProv}`;
+        const key2 = `${otherProv}-${targetProv}`;
+        const synergyInfo = PROVINCE_SYNERGY_KNOWLEDGE[key1] || PROVINCE_SYNERGY_KNOWLEDGE[key2] || {
+            level: "产业互补协同",
+            score: Math.min(90, Math.max(50, sharedTracks.length * 20 + 35)),
+            synergy: `${targetProv}与${otherProv}在${sharedTracks.join('、') || '前沿生物医药领域'}具有显著的产业协同与省际合作空间。`
+        };
+
+        affinityResults.push({
+            name: otherProv,
+            score: synergyInfo.score,
+            level: synergyInfo.level,
+            synergy: synergyInfo.synergy,
+            sharedTracks: sharedTracks.length > 0 ? sharedTracks : (otherIndustries.slice(0, 2))
+        });
+    });
+
+    affinityResults.sort((a, b) => b.score - a.score);
+    return affinityResults;
+}
+
 function inspectGraphNode(nodeData) {
     switchGraphTab('inspector');
     
-    // 同步顶部省份下拉选择框选中态
-    const selectEl = document.getElementById('selectGraphProvince');
-    if (selectEl && nodeData.extra && nodeData.extra.type === 'province') {
-        selectEl.value = nodeData.name;
+    // 同步顶部省份多选选中态
+    if (nodeData.extra && nodeData.extra.type === 'province') {
+        selectedProvincesSet.clear();
+        selectedProvincesSet.add(nodeData.name);
+        updateProvincePillButtonsUI();
     }
+
     const emptyEl = document.getElementById('graphNodeInspectorEmpty');
     const detailEl = document.getElementById('graphNodeInspectorDetail');
     const tagEl = document.getElementById('inspectCatTag');
@@ -7525,6 +7626,8 @@ function inspectGraphNode(nodeData) {
     if (extra.type === 'province') {
         const provInfo = (industryGraphData.province_profiles || {})[nodeData.name];
         if (provInfo) {
+            const affinityList = calculateProvinceAffinityList(nodeData.name);
+            
             html += `
                 <div style="margin-bottom:10px;">
                     <div style="font-weight:700;color:#004886;margin-bottom:4px;">🎯 地方真实重点产业：</div>
@@ -7534,7 +7637,45 @@ function inspectGraphNode(nodeData) {
                 </div>
                 <div style="margin-bottom:8px;"><strong>🏭 核心产业载体/园区：</strong>${provInfo.industry_clusters || '重点园区'}</div>
                 <div style="margin-bottom:8px;"><strong>💡 产业真实战略意图：</strong>${provInfo.real_intent || provInfo.key_advantages}</div>
-                <div style="color:#004886;"><strong>🚀 区域产业发展走势：</strong>${provInfo.future_outlook}</div>
+                <div style="color:#004886;margin-bottom:12px;"><strong>🚀 区域产业发展走势：</strong>${provInfo.future_outlook}</div>
+
+                <!-- 🤝 与该省份产业关联最强的省份榜单 -->
+                <div class="affinity-section">
+                    <div class="affinity-section-header">
+                        <span class="affinity-section-title">🤝 与【${nodeData.name}】产业关联最强省份研判</span>
+                        <span style="font-size:10.5px;color:#059669;font-weight:700;">按关联交汇强度排序</span>
+                    </div>
+                    <div class="affinity-card-list">
+                        ${affinityList.map((item, idx) => {
+                            const rankClass = idx === 0 ? 'rank-1' : idx === 1 ? 'rank-2' : idx === 2 ? 'rank-3' : 'rank-other';
+                            return `
+                                <div class="affinity-card-item">
+                                    <div class="affinity-card-top">
+                                        <div class="affinity-prov-name">
+                                            <span class="affinity-rank-badge ${rankClass}">TOP${idx+1}</span>
+                                            <span>${item.name}</span>
+                                            <span style="font-size:10.5px;color:#64748b;font-weight:normal;">(${item.level})</span>
+                                        </div>
+                                        <div class="affinity-score-wrap">
+                                            <span class="affinity-score-val">${item.score}%</span>
+                                            <div class="affinity-progress-bar-bg">
+                                                <div class="affinity-progress-bar-fill" style="width: ${item.score}%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="affinity-shared-tracks">
+                                        <span style="font-size:10.5px;color:#64748b;">交汇赛道：</span>
+                                        ${item.sharedTracks.map(t => `<span class="affinity-track-pill">${t}</span>`).join('')}
+                                    </div>
+                                    <div class="affinity-synergy-text"><strong>📌 协同着力点：</strong>${item.synergy}</div>
+                                    <button class="affinity-explore-btn" onclick="applyProvincePreset(['${nodeData.name}', '${item.name}'])">
+                                        🔍 联动查看【${nodeData.name} ✖ ${item.name}】交汇子图谱 ➔
+                                    </button>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
             `;
         } else {
             html += `<p>${extra.desc || '地方重点医药产业创新节点。'}</p>`;
