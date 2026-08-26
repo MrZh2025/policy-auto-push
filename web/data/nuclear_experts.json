@@ -1,6 +1,6 @@
 {
   "code": 0,
-  "count": 23,
+  "count": 25,
   "data": [
     {
       "id": 1,
@@ -277,6 +277,30 @@
       "expert_type": "临床/学术",
       "source_url": "https://mic.sxmu.edu.cn/info/1021/1003.htm",
       "date": "2026-08-20"
+    },
+    {
+      "name": "庞华",
+      "direction": "核素分子影像诊断与放射性核素治疗（131I治疗甲状腺疾病）",
+      "paper": "EJNMMI、J Nanobiotechnology、Theranostics等发表SCI论文40余篇；主持国家自然科学基金面上项目2项、国家重点研发计划子课题1项",
+      "associated_enterprise": "国家核医学质量控制中心副主任；重庆市核医学质控中心副主任",
+      "institution": "重庆医科大学附属第一医院核医学科（主任）",
+      "province": "重庆市",
+      "expert_type": "临床/学科带头人",
+      "source_url": "https://www.hospital-cqmu.com/gw_ksjs_hyxk_ysjs/020033900003832.html",
+      "date": "2026-08-20",
+      "id": 24
+    },
+    {
+      "name": "陈晓良",
+      "direction": "核素分子探针、多模态分子影像与核素靶向诊疗",
+      "paper": "主持重庆市自然科学基金\"靶向三阴性乳腺癌223Ra/68Ga仿生纳米递药系统\"等项目；18F/177Lu标记FAPI诊疗一体化研究",
+      "associated_enterprise": "中国抗癌协会肿瘤核医学专业副主任委员；重庆市核医学学术技术带头人",
+      "institution": "重庆大学附属肿瘤医院核医学科（主任）",
+      "province": "重庆市",
+      "expert_type": "临床/转化",
+      "source_url": "https://med.cqu.edu.cn/info/1168/4275.htm",
+      "date": "2026-08-20",
+      "id": 25
     }
   ]
 }
