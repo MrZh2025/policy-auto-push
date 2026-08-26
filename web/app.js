@@ -7412,8 +7412,8 @@ function renderIndustryNetworkGraph(data) {
         },
         legend: {
             data: (data.categories || []).map(c => c.name),
-            top: 8,
-            left: 15,
+            top: 6,
+            left: 12,
             textStyle: { color: textColor, fontSize: 11 }
         },
         animationDuration: 1000,
@@ -7422,6 +7422,8 @@ function renderIndustryNetworkGraph(data) {
             {
                 type: 'graph',
                 layout: 'force',
+                center: ['50%', '50%'],
+                zoom: 1.08,
                 data: (data.nodes || []).map(n => {
                     return Object.assign({}, n, {
                         itemStyle: {
@@ -7442,10 +7444,10 @@ function renderIndustryNetworkGraph(data) {
                     formatter: '{b}',
                     fontSize: 10.5,
                     color: textColor,
-                    backgroundColor: isDark ? 'rgba(15, 23, 42, 0.8)' : 'rgba(255, 255, 255, 0.85)',
+                    backgroundColor: isDark ? 'rgba(15, 23, 42, 0.8)' : 'rgba(255, 255, 255, 0.88)',
                     padding: [2, 5],
                     borderRadius: 3,
-                    borderColor: isDark ? 'rgba(51, 65, 85, 0.6)' : 'rgba(226, 232, 240, 0.8)',
+                    borderColor: isDark ? 'rgba(51, 65, 85, 0.6)' : 'rgba(226, 232, 240, 0.85)',
                     borderWidth: 0.5
                 },
                 edgeSymbol: ['none', 'arrow'],
@@ -7460,10 +7462,11 @@ function renderIndustryNetworkGraph(data) {
                     focus: 'adjacency',
                     lineStyle: { width: 2.8, opacity: 0.95 }
                 },
+                // 深度扩展力导向间距与斥力，让节点自然充盈全图，消除上下留白
                 force: {
-                    repulsion: 480,
-                    gravity: 0.03,
-                    edgeLength: [90, 190],
+                    repulsion: 650,
+                    gravity: 0.025,
+                    edgeLength: [110, 220],
                     layoutAnimation: true
                 }
             }

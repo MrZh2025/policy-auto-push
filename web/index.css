@@ -4712,3 +4712,85 @@ body {
     padding: 8px 6px !important;
     font-size: 11.5px !important;
 }
+
+
+/* ==========================================================================
+   🎯 彻底解决底部留白过大问题 —— 容器、画布与侧栏 100% 高度无缝贴合
+   ========================================================================== */
+
+.graph-modal-card {
+    height: 88vh !important;
+    max-height: 850px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+}
+
+.graph-modal-body {
+    flex: 1 !important;
+    display: grid !important;
+    grid-template-columns: 1fr 420px !important;
+    height: calc(100% - 70px) !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.graph-canvas-wrapper {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    border-right: 1px solid var(--border-color, #e2e8f0) !important;
+    background: #fafbfc !important;
+}
+
+.echarts-graph-container {
+    flex: 1 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+}
+
+.graph-side-panel {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    background: #ffffff !important;
+}
+
+.panel-tabs {
+    flex-shrink: 0 !important;
+    display: flex !important;
+    border-bottom: 1px solid var(--border-color, #e2e8f0) !important;
+    background: #f8fafc !important;
+}
+
+.panel-tab-content {
+    flex: 1 !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    padding: 14px !important;
+}
+
+/* 全屏沉浸模式下完美贴合 */
+.graph-modal-card.fullscreen-mode {
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: 100vw !important;
+    max-height: 100vh !important;
+}
+
+.graph-modal-card.fullscreen-mode .graph-modal-body {
+    grid-template-columns: 1fr 460px !important;
+    height: calc(100vh - 72px) !important;
+}
+
+.graph-modal-card.fullscreen-mode .echarts-graph-container {
+    height: 100% !important;
+}
