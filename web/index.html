@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#004886">
     <title>四川生物医药产业集团创新事业部政策信息系统 - 四川发展·医药集团</title>
-    <link rel="stylesheet" href="index.css?v=20260826v1787729764">
+    <link rel="stylesheet" href="index.css?v=20260826v1787730247">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700;900&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -677,15 +677,20 @@
                         </div>
                     </div>
 
-                    <!-- 选项卡 3：节点详情探针 -->
+                                        <!-- 选项卡 3：节点详情探针 -->
                     <div id="tabContentInspector" class="panel-tab-content">
                         <div id="graphNodeInspectorEmpty" class="inspector-empty">
-                            <span style="font-size:32px;">👆</span>
-                            <p>在左侧拓扑图谱中点击任意省份、产业赛道或战略政策节点，即可在此查阅其关联政策列表与实施细则。</p>
+                            <div class="inspector-empty-card">
+                                <span class="empty-icon">👆</span>
+                                <div class="empty-text-wrap">
+                                    <div class="empty-title">点击图谱节点查阅深度情报</div>
+                                    <div class="empty-desc">在左侧拓扑网络中点击任意省份或赛道，此处将即时呈现核心园区载体与战略意图</div>
+                                </div>
+                            </div>
                         </div>
                         <div id="graphNodeInspectorDetail" class="inspector-detail hidden">
                             <div class="inspector-header">
-                                <span class="inspector-category-tag" id="inspectCatTag">赛道</span>
+                                <span class="inspector-category-tag" id="inspectCatTag">地方重点省份</span>
                                 <h4 class="inspector-title" id="inspectTitle">节点名称</h4>
                             </div>
                             <div class="inspector-body" id="inspectBody"></div>
@@ -1454,6 +1459,6 @@
     <script src="data/china_map_data.js"></script>
     <!-- 原生 OpenXML docx 生成库 -->
     <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
-    <script src="app.js?v=20260826v1787729764"></script>
+    <script src="app.js?v=20260826v1787730247"></script>
 </body>
 </html>
