@@ -7498,6 +7498,12 @@ function renderIndustryNetworkGraph(data) {
 
 function inspectGraphNode(nodeData) {
     switchGraphTab('inspector');
+    
+    // 同步顶部省份下拉选择框选中态
+    const selectEl = document.getElementById('selectGraphProvince');
+    if (selectEl && nodeData.extra && nodeData.extra.type === 'province') {
+        selectEl.value = nodeData.name;
+    }
     const emptyEl = document.getElementById('graphNodeInspectorEmpty');
     const detailEl = document.getElementById('graphNodeInspectorDetail');
     const tagEl = document.getElementById('inspectCatTag');
@@ -7590,4 +7596,76 @@ function buildFallbackGraphData() {
         province_profiles: {},
         trend_insights: {}
     };
+}
+
+
+function handleGraphProvinceFilter(provName) {
+    if (!industryGraphData) return;
+
+    if (provName === 'all') {
+        // 恢复全景图谱
+        renderIndustryNetworkGraph(industryGraphData);
+        if (chartIndustryGraphInstance) {
+            chartIndustryGraphInstance.dispatchAction({ type: 'restore' });
+        }
+        return;
+    }
+
+    const provNodeId = `prov_${provName}`;
+    const allNodes = industryGraphData.nodes || [];
+    const allLinks = industryGraphData.links || [];
+
+    // 找出与该省份直接关联的所有目标节点 (产业赛道、核心园区载体)
+    const directLinkedNodeIds = new Set([provNodeId]);
+    const filteredLinks = [];
+
+    allLinks.forEach(l => {
+        if (l.source === provNodeId) {
+            directLinkedNodeIds.add(l.target);
+            filteredLinks.push(l);
+        } else if (l.target === provNodeId) {
+            directLinkedNodeIds.add(l.source);
+            filteredLinks.push(l);
+        }
+    });
+
+    // 级联找出与相关赛道关联的竞合趋势微节点
+    allLinks.forEach(l => {
+        if (directLinkedNodeIds.has(l.source) && !l.target.startsWith('prov_')) {
+            directLinkedNodeIds.add(l.target);
+            filteredLinks.push(l);
+        }
+    });
+
+    const filteredNodes = allNodes.filter(n => directLinkedNodeIds.has(n.id)).map(n => {
+        if (n.id === provNodeId) {
+            return Object.assign({}, n, {
+                symbolSize: 22,
+                itemStyle: {
+                    borderWidth: 3,
+                    borderColor: '#f59e0b',
+                    shadowBlur: 14,
+                    shadowColor: 'rgba(245, 158, 11, 0.4)'
+                }
+            });
+        }
+        return n;
+    });
+
+    const subGraphData = {
+        nodes: filteredNodes,
+        links: filteredLinks,
+        categories: industryGraphData.categories,
+        province_profiles: industryGraphData.province_profiles,
+        trend_insights: industryGraphData.trend_insights
+    };
+
+    // 渲染该省份的专属聚焦子图谱
+    renderIndustryNetworkGraph(subGraphData);
+
+    // 联动右侧【🔍 节点详情探针】即时呈现该省份的深度情报画像
+    const selectedNode = allNodes.find(n => n.name === provName);
+    if (selectedNode) {
+        inspectGraphNode(selectedNode);
+    }
 }
