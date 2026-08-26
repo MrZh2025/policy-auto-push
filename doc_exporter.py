@@ -313,7 +313,8 @@ class PolicyDocExporter:
             dept = strip_markdown(item.get("source", "国家部委"))
             date_str = strip_markdown(item.get("pub_date", "") or "近期")
             summary = strip_markdown(item.get("summary", "") or title)
-            url = item.get("url", "")
+            raw_url = item.get("url", "") or ""
+            url = raw_url.split('\n')[0].split(';')[0].strip() if isinstance(raw_url, str) else ""
 
             # 条目标题段落（小4号 方正仿宋加粗，首行缩进 2 字符，1.5 倍行距）
             p_item = doc.add_paragraph()

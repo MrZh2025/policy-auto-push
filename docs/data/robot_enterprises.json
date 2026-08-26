@@ -13,7 +13,7 @@
       "province": "北京市",
       "city": "北京",
       "category": "核心企业",
-      "source_url": "https://www.tinavi.com\nhttps://www.sse.com.cn",
+      "source_url": "https://www.tinavi.com",
       "date": "2026-08-20"
     },
     {
@@ -27,7 +27,7 @@
       "province": "北京市",
       "city": "北京",
       "category": "核心企业",
-      "source_url": "https://www.surgerii.com\nhttps://www.nmpa.gov.cn",
+      "source_url": "https://www.surgerii.com",
       "date": "2026-08-20"
     },
     {
@@ -42,7 +42,8 @@
       "city": "北京",
       "category": "核心企业",
       "source_url": "https://www.sinovation.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.sinovation.com"
     },
     {
       "id": 4,
@@ -56,7 +57,8 @@
       "city": "北京",
       "category": "核心企业",
       "source_url": "https://www.deepmotion.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.deepmotion.com"
     },
     {
       "id": 5,
@@ -84,7 +86,8 @@
       "city": "北京",
       "category": "核心企业",
       "source_url": "https://www.cas-r.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.cas-r.com"
     },
     {
       "id": 7,
@@ -112,7 +115,8 @@
       "city": "北京",
       "category": "核心企业",
       "source_url": "https://www.truemed-tech.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.truemed-tech.com"
     },
     {
       "id": 9,
@@ -126,7 +130,8 @@
       "city": "北京",
       "category": "核心企业",
       "source_url": "https://www.yakebot.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.yakebot.com"
     },
     {
       "id": 10,
@@ -140,7 +145,8 @@
       "city": "北京",
       "category": "核心企业",
       "source_url": "https://www.rosenbot.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.rosenbot.com"
     },
     {
       "id": 11,
@@ -154,7 +160,8 @@
       "city": "北京",
       "category": "核心企业",
       "source_url": "https://www.hurwa.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.hurwa.com"
     },
     {
       "id": 12,
@@ -168,7 +175,8 @@
       "city": "北京",
       "category": "核心企业",
       "source_url": "https://www.weimai-medical.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "http://www.weimai-med.com"
     },
     {
       "id": 13,
@@ -182,7 +190,8 @@
       "city": "北京",
       "category": "核心企业",
       "source_url": "https://www.langmu-med.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.langmu-med.com"
     },
     {
       "id": 14,
@@ -196,7 +205,8 @@
       "city": "北京",
       "category": "核心企业",
       "source_url": "https://www.quantonmed.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.quantonmed.com"
     },
     {
       "id": 15,
@@ -210,7 +220,8 @@
       "city": "上海",
       "category": "核心企业",
       "source_url": "https://www.medrobotics.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.medrobotics.com"
     },
     {
       "id": 16,
@@ -224,7 +235,8 @@
       "city": "上海",
       "category": "核心企业",
       "source_url": "https://www.united-imaging.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.united-imaging.com"
     },
     {
       "id": 17,
@@ -238,7 +250,8 @@
       "city": "上海",
       "category": "核心企业",
       "source_url": "https://www.fftai.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.fftai.com"
     },
     {
       "id": 18,
@@ -252,7 +265,8 @@
       "city": "上海",
       "category": "核心企业",
       "source_url": "https://www.zhaodao.com.cn",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.zhaodao.com.cn"
     },
     {
       "id": 19,
@@ -266,7 +280,8 @@
       "city": "上海",
       "category": "核心企业",
       "source_url": "https://www.oHand.cn",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.oHand.cn"
     },
     {
       "id": 20,
@@ -280,7 +295,8 @@
       "city": "上海",
       "category": "核心企业",
       "source_url": "https://www.siyiintelligence.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.siyiintelligence.com"
     },
     {
       "id": 21,
@@ -294,7 +310,8 @@
       "city": "上海",
       "category": "核心企业",
       "source_url": "https://www.allpeng.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.allpeng.com"
     },
     {
       "id": 22,
@@ -308,7 +325,8 @@
       "city": "上海",
       "category": "核心企业",
       "source_url": "https://www.langhemed.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.langhemed.com"
     },
     {
       "id": 23,
@@ -322,7 +340,8 @@
       "city": "杭州",
       "category": "核心企业",
       "source_url": "https://www.jianjia-med.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.jianjia-med.com"
     },
     {
       "id": 24,
@@ -336,7 +355,8 @@
       "city": "苏州",
       "category": "核心企业",
       "source_url": "https://www.dcarer.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.dcarer.com"
     },
     {
       "id": 25,
@@ -350,7 +370,8 @@
       "city": "苏州",
       "category": "核心企业",
       "source_url": "https://www.rainmed.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.rainmed.com"
     },
     {
       "id": 26,
@@ -364,7 +385,8 @@
       "city": "常州",
       "category": "核心企业",
       "source_url": "https://www.qianjing.cn",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.qianjing.cn"
     },
     {
       "id": 27,
@@ -378,7 +400,8 @@
       "city": "南京",
       "category": "核心企业",
       "source_url": "https://www.vishee.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.vishee.com"
     },
     {
       "id": 28,
@@ -392,7 +415,8 @@
       "city": "南京",
       "category": "核心企业",
       "source_url": "https://www.medlander.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.medlander.com"
     },
     {
       "id": 29,
@@ -406,7 +430,8 @@
       "city": "苏州",
       "category": "核心企业",
       "source_url": "https://www.mayomagnetic.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.mayomagnetic.com"
     },
     {
       "id": 30,
@@ -420,7 +445,8 @@
       "city": "杭州",
       "category": "核心企业",
       "source_url": "https://www.ctrobotics.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.ctrobotics.com"
     },
     {
       "id": 31,
@@ -434,7 +460,8 @@
       "city": "杭州",
       "category": "核心企业",
       "source_url": "https://www.anjelrobot.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.anjelrobot.com"
     },
     {
       "id": 32,
@@ -448,7 +475,8 @@
       "city": "杭州",
       "category": "核心企业",
       "source_url": "https://www.neurology-med.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.neurology-med.com"
     },
     {
       "id": 33,
@@ -462,7 +490,8 @@
       "city": "杭州",
       "category": "核心企业",
       "source_url": "https://www.zylox-tbpt.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.zylox-tbpt.com"
     },
     {
       "id": 34,
@@ -476,7 +505,8 @@
       "city": "杭州",
       "category": "核心企业",
       "source_url": "https://www.brainco.cn",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.brainco.cn"
     },
     {
       "id": 35,
@@ -490,7 +520,8 @@
       "city": "深圳",
       "category": "核心企业",
       "source_url": "https://www.edge-medical.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.edge-medical.com"
     },
     {
       "id": 36,
@@ -504,7 +535,8 @@
       "city": "深圳",
       "category": "核心企业",
       "source_url": "https://www.genextech.cn",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.genextech.cn"
     },
     {
       "id": 37,
@@ -518,7 +550,8 @@
       "city": "深圳",
       "category": "核心企业",
       "source_url": "https://www.milebot.com.cn",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.milebot.com.cn"
     },
     {
       "id": 38,
@@ -532,7 +565,8 @@
       "city": "深圳",
       "category": "核心企业",
       "source_url": "https://www.cornerstonerobotics.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.cornerstonerobotics.com"
     },
     {
       "id": 39,
@@ -546,7 +580,8 @@
       "city": "广州",
       "category": "核心企业",
       "source_url": "https://www.scut-bci.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.scut-bci.com"
     },
     {
       "id": 40,
@@ -560,7 +595,8 @@
       "city": "成都",
       "category": "核心企业",
       "source_url": "https://www.buffalo-robot.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.buffalo-robot.com"
     },
     {
       "id": 41,
@@ -574,7 +610,8 @@
       "city": "成都",
       "category": "核心企业",
       "source_url": "https://www.hx-precision.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.hx-precision.com"
     },
     {
       "id": 42,
@@ -588,7 +625,8 @@
       "city": "成都",
       "category": "核心企业",
       "source_url": "https://www.biomems.com.cn",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.biomems.com.cn"
     },
     {
       "id": 43,
@@ -602,7 +640,8 @@
       "city": "成都",
       "category": "核心企业",
       "source_url": "https://www.tiger-medtech.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.tiger-medtech.com"
     },
     {
       "id": 44,
@@ -616,7 +655,8 @@
       "city": "成都",
       "category": "核心企业",
       "source_url": "https://www.casit.com.cn",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.casit.com.cn"
     },
     {
       "id": 45,
@@ -630,7 +670,8 @@
       "city": "成都",
       "category": "核心企业",
       "source_url": "https://www.brain-frontiers.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.brain-frontiers.com"
     },
     {
       "id": 46,
@@ -644,7 +685,8 @@
       "city": "成都",
       "category": "核心企业",
       "source_url": "https://www.vabo-tech.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.vabo-tech.com"
     },
     {
       "id": 47,
@@ -658,7 +700,8 @@
       "city": "天津",
       "category": "核心企业",
       "source_url": "https://www.weimai-med.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "http://www.weimai-med.com"
     },
     {
       "id": 48,
@@ -672,7 +715,8 @@
       "city": "天津",
       "category": "核心企业",
       "source_url": "https://www.tju-medtech.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.tju-medtech.com"
     },
     {
       "id": 49,
@@ -686,7 +730,8 @@
       "city": "天津",
       "category": "核心企业",
       "source_url": "https://www.cecbrain.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "http://www.cecbrain.com"
     },
     {
       "id": 50,
@@ -700,7 +745,8 @@
       "city": "威海",
       "category": "核心企业",
       "source_url": "https://www.wego.com.cn",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.wego.com.cn"
     },
     {
       "id": 51,
@@ -714,7 +760,8 @@
       "city": "武汉",
       "category": "核心企业",
       "source_url": "https://www.ankoninc.com.cn",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.ankoninc.com.cn"
     },
     {
       "id": 52,
@@ -728,7 +775,8 @@
       "city": "武汉",
       "category": "核心企业",
       "source_url": "https://www.united-imaging.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.united-imaging.com"
     },
     {
       "id": 53,
@@ -742,7 +790,8 @@
       "city": "武汉",
       "category": "核心企业",
       "source_url": "https://www.zhonghuabci.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.zhonghuabci.com"
     },
     {
       "id": 54,
@@ -756,7 +805,8 @@
       "city": "安阳",
       "category": "核心企业",
       "source_url": "https://www.xiangyu.cn",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "http://www.xiangyu.com.cn"
     },
     {
       "id": 55,
@@ -770,7 +820,8 @@
       "city": "哈尔滨",
       "category": "核心企业",
       "source_url": "https://www.sagebot.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.sagebot.com"
     },
     {
       "id": 56,
@@ -784,7 +835,8 @@
       "city": "沈阳",
       "category": "核心企业",
       "source_url": "https://www.siasunmed.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.siasunmed.com"
     },
     {
       "id": 57,
@@ -798,7 +850,8 @@
       "city": "西安",
       "category": "核心企业",
       "source_url": "https://www.zhentaicn.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.zhentaicn.com"
     },
     {
       "id": 58,
@@ -812,7 +865,8 @@
       "city": "西安",
       "category": "核心企业",
       "source_url": "https://www.xjtu.edu.cn",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.xjtu.edu.cn"
     },
     {
       "id": 59,
@@ -826,7 +880,8 @@
       "city": "重庆",
       "category": "核心企业",
       "source_url": "https://www.jinshangroup.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.jinshangroup.com"
     },
     {
       "id": 60,
@@ -840,7 +895,8 @@
       "city": "昆明",
       "category": "核心企业",
       "source_url": "https://www.km-ortho.com",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "official_website": "https://www.baidu.com/s?wd=%E6%98%86%E6%98%8E%E5%BE%AE%E5%88%9B%E9%AA%A8%E7%A7%91%E6%8A%80%E6%9C%AF%E7%A0%94%E5%8F%91%E4%B8%AD%E5%BF%83"
     },
     {
       "id": 61,
@@ -853,8 +909,9 @@
       "province": "重庆市",
       "city": "重庆",
       "category": "核心企业",
-      "source_url": "https://www.frostchina.com/en/content/insight/detail/634f58b71741eafe0c8406f0\nhttps://www.zhaopin.com/companydetail/CZL1300484570.htm",
-      "date": "2026-08-20"
+      "source_url": "https://www.frostchina.com/en/content/insight/detail/634f58b71741eafe0c8406f0",
+      "date": "2026-08-20",
+      "official_website": "https://www.jinshangroup.com"
     },
     {
       "id": 62,
@@ -867,8 +924,9 @@
       "province": "江苏省",
       "city": "南京",
       "category": "核心企业",
-      "source_url": "https://www.tuodaomedical.com/news/197\nhttps://company.cnstock.com/company/scp_gsxw/202208/4945388.htm",
-      "date": "2026-08-20"
+      "source_url": "https://www.tuodaomedical.com/news/197",
+      "date": "2026-08-20",
+      "official_website": "https://www.tuodaomed.com"
     },
     {
       "id": 63,
@@ -881,8 +939,9 @@
       "province": "广东省",
       "city": "深圳",
       "category": "核心企业",
-      "source_url": "https://www.futurtec.com/guanyuwomen\nhttps://www.sznews.com/news/content/2021-03/18/content_24056036.htm",
-      "date": "2026-08-20"
+      "source_url": "https://www.futurtec.com/guanyuwomen",
+      "date": "2026-08-20",
+      "official_website": "https://www.futurtec.com"
     },
     {
       "id": 64,
@@ -895,8 +954,9 @@
       "province": "广东省",
       "city": "深圳",
       "category": "核心企业",
-      "source_url": "https://www.brainmed.com/info/detail?id=47489\nhttps://www.vbdata.cn/1518982738",
-      "date": "2026-08-20"
+      "source_url": "https://www.brainmed.com/info/detail?id=47489",
+      "date": "2026-08-20",
+      "official_website": "https://www.aibo-robotics.com"
     },
     {
       "id": 65,
@@ -909,8 +969,9 @@
       "province": "江苏省",
       "city": "苏州",
       "category": "核心企业",
-      "source_url": "https://www.qxw18.com/sc/KZrVSPqwAA.html\nhttps://bydrug.pharmcube.com/news/detail/1a9985e7327d248d09cbebbac874088b",
-      "date": "2026-08-20"
+      "source_url": "https://www.qxw18.com/sc/KZrVSPqwAA.html",
+      "date": "2026-08-20",
+      "official_website": "http://www.cast-robot.com"
     },
     {
       "id": 66,
@@ -923,8 +984,9 @@
       "province": "上海市",
       "city": "上海",
       "category": "核心企业",
-      "source_url": "https://www.medvalley.cn/yiliaoqixie/76955.html\nhttps://www.vbdata.cn/1519010314",
-      "date": "2026-08-20"
+      "source_url": "https://www.medvalley.cn/yiliaoqixie/76955.html",
+      "date": "2026-08-20",
+      "official_website": "https://www.ronovosurgical.com"
     }
   ]
 }

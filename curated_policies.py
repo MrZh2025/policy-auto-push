@@ -8,6 +8,22 @@ from typing import List, Dict, Any
 
 CURATED_POLICIES: List[Dict[str, Any]] = [
     {
+        "title": "工业和信息化部科技司关于征求《国家脑机接口产业标准体系建设指南（2026版）》（征求意见稿）意见的通知",
+        "url": "https://www.miit.gov.cn/gzcy/yjzj/art/2026/art_b3607ad3661b4f4fbb0b98cad124d8d7.htmlart/2026/art_b3607ad3661b4f4fbb0b98cad124d8d7.htmlart/2026/art_b3607ad3661b4f4fbb0b98cad124d8d7.html",
+        "source": "工业和信息化部科技司",
+        "pub_date": "2026-08-24",
+        "category": "脑机接口",
+        "summary": "【国家脑机接口标准体系】工信部科技司面向社会公开征求意见（公示期截至2026年9月23日），明确到2028年制修订脑机接口标准40项以上、参与国际标准10项以上；到2030年研制标准80项以上。涵盖基础共性、硬件、软件算法、数据通信、产品系统（含医疗器械类等六大类）、行业应用与安全治理七大维度，符合医疗器械定义的脑机接口产品严格遵循医疗器械法规标准监管。"
+    },
+    {
+        "title": "辽宁省药品监督管理局关于公开征求《中国（辽宁）自贸试验区生物医药研发用物品进口“白名单”制度试点方案（征求意见稿）》意见的通告",
+        "url": "http://ypjg.ln.gov.cn/ypjg/zwfw/ggtg/qt/index.shtml",
+        "source": "辽宁省药品监督管理局",
+        "pub_date": "2026-08-24",
+        "category": "科技申报政策",
+        "summary": "【生物医药进口白名单】辽宁省药监局公开征求自贸试验区生物医药研发用物品进口“白名单”制度试点方案意见（反馈期截至2026年8月30日，邮箱zcc.syjj@ln.gov.cn）。对研发用生物制品、化学原料药等建立进口联合评估与白名单协同监管机制，优化通关查验流程，提升跨境贸易便利化与创新药研发效率。"
+    },
+    {
         "title": "国家药监局关于“人工智能+药品监管”的实施意见",
         "url": "https://www.gov.cn/zhengce/zhengceku/202604/content_7064591.htm",
         "source": "国家药监局",

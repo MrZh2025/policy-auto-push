@@ -69,7 +69,7 @@
       "province": "北京市",
       "city": "北京",
       "category": "核心企业",
-      "source_url": "https://zscqj.hubei.gov.cn/bmdt/ztzl/2023zt/zhlh2023/202601/t20260116_5857083.shtml\nhttps://pdf.dfcfw.com/pdf/H301_AP202605101822122234_1.pdf",
+      "source_url": "https://zscqj.hubei.gov.cn/bmdt/ztzl/2023zt/zhlh2023/202601/t20260116_5857083.shtml",
       "date": "2026-08-18"
     },
     {
@@ -83,7 +83,7 @@
       "province": "北京市",
       "city": "北京",
       "category": "核心企业",
-      "source_url": "https://www.ncsti.gov.cn/kjdt/ztbd/xydrgzn/lbt_848/202112/P020211231639066065610.pdf\nhttps://www.460.net.cn/news/show-359821.html",
+      "source_url": "https://www.ncsti.gov.cn/kjdt/ztbd/xydrgzn/lbt_848/202112/P020211231639066065610.pdf",
       "date": "2026-08-18"
     },
     {
@@ -97,7 +97,7 @@
       "province": "北京市",
       "city": "北京",
       "category": "关联布局",
-      "source_url": "https://wap.miit.gov.cn/cms_files/filemanager/1226211233/attach/20256/65ade62451fe4eb09e40e5576208b989.docx\nhttps://pdf.dfcfw.com/pdf/H301_AP202605101822122234_1.pdf",
+      "source_url": "https://wap.miit.gov.cn/cms_files/filemanager/1226211233/attach/20256/65ade62451fe4eb09e40e5576208b989.docx",
       "date": "2026-08-18"
     },
     {
@@ -111,7 +111,7 @@
       "province": "北京市",
       "city": "北京",
       "category": "邻近应用/神经调控",
-      "source_url": "https://xxcx.yjj.beijing.gov.cn/eportal/ui?pageId=723864\nhttps://kcycrawlerfile.oss-cn-beijing.aliyuncs.com/2026/01/12/900eeb7687194399bf85a452ae3d180c.pdf",
+      "source_url": "https://xxcx.yjj.beijing.gov.cn/eportal/ui?pageId=723864",
       "date": "2026-08-18"
     },
     {
@@ -139,7 +139,7 @@
       "province": "北京市",
       "city": "北京",
       "category": "核心企业",
-      "source_url": "https://paper.people.com.cn/rmrb/pc/attachement/202604/14/7cc56cec-11a5-491b-97d2-a98ba8423cad.pdf\nhttps://www.460.net.cn/news/show-359821.html",
+      "source_url": "https://paper.people.com.cn/rmrb/pc/attachement/202604/14/7cc56cec-11a5-491b-97d2-a98ba8423cad.pdf",
       "date": "2026-08-18"
     },
     {
@@ -153,7 +153,7 @@
       "province": "北京市",
       "city": "北京",
       "category": "邻近应用/神经调控",
-      "source_url": "https://invest.beijing.gov.cn/zwgk/sqgzdt/202606/t20260626_4726234.html\nhttps://kcycrawlerfile.oss-cn-beijing.aliyuncs.com/2026/01/12/900eeb7687194399bf85a452ae3d180c.pdf",
+      "source_url": "https://invest.beijing.gov.cn/zwgk/sqgzdt/202606/t20260626_4726234.html",
       "date": "2026-08-18"
     },
     {
@@ -167,7 +167,7 @@
       "province": "北京市",
       "city": "北京",
       "category": "核心企业",
-      "source_url": "https://pdf.dfcfw.com/pdf/H3_AP202503041644026495_1.pdf\nhttps://www.460.net.cn/news/show-359821.html",
+      "source_url": "https://pdf.dfcfw.com/pdf/H3_AP202503041644026495_1.pdf",
       "date": "2026-08-18"
     },
     {
@@ -181,7 +181,7 @@
       "province": "北京市",
       "city": "北京",
       "category": "核心企业",
-      "source_url": "https://www.460.net.cn/news/show-359821.html\nhttps://pdf.dfcfw.com/pdf/H301_AP202605101822122234_1.pdf",
+      "source_url": "https://www.460.net.cn/news/show-359821.html",
       "date": "2026-08-18"
     },
     {
@@ -265,7 +265,7 @@
       "province": "北京市",
       "city": "北京",
       "category": "邻近应用/临床设备",
-      "source_url": "https://www.ncsti.gov.cn/kjdt/scyq/zgckxc/zgcdt/202603/t20260311_240593.html\nhttps://www.sohu.com/a/1017268693_121277055",
+      "source_url": "https://www.ncsti.gov.cn/kjdt/scyq/zgckxc/zgcdt/202603/t20260311_240593.html",
       "date": "2026-08-18"
     },
     {
@@ -378,7 +378,8 @@
       "city": "天津",
       "category": "核心企业",
       "source_url": "https://www.cecbrain.com/",
-      "date": "2026-08-18"
+      "date": "2026-08-18",
+      "official_website": "http://www.cecbrain.com"
     },
     {
       "id": 28,
@@ -462,7 +463,8 @@
       "city": "上海",
       "category": "核心企业",
       "source_url": "https://www.460.net.cn/news/show-359821.html",
-      "date": "2026-08-18"
+      "date": "2026-08-18",
+      "official_website": "https://www.oHand.cn"
     },
     {
       "id": 34,
@@ -531,7 +533,7 @@
       "province": "上海市",
       "city": "上海",
       "category": "核心企业",
-      "source_url": "https://www.460.net.cn/news/show-359821.html\nhttps://pdf.dfcfw.com/pdf/H301_AP202605101822122234_1.pdf",
+      "source_url": "https://www.460.net.cn/news/show-359821.html",
       "date": "2026-08-18"
     },
     {
@@ -587,7 +589,7 @@
       "province": "上海市",
       "city": "上海",
       "category": "核心企业",
-      "source_url": "https://www.shanghai.gov.cn/nw15343/20260701/d70cbf021f944ad48aeeb72c5e8a6ce4.html\nhttps://pdf.dfcfw.com/pdf/H301_AP202605101822122234_1.pdf",
+      "source_url": "https://www.shanghai.gov.cn/nw15343/20260701/d70cbf021f944ad48aeeb72c5e8a6ce4.html",
       "date": "2026-08-18"
     },
     {
@@ -601,7 +603,7 @@
       "province": "上海市",
       "city": "上海",
       "category": "邻近应用/早期企业",
-      "source_url": "https://stcsm.sh.gov.cn/cmsres/a3/a39dcd06338c46fbbcf83f507b68e256/e89f86f04c780532c020527f31cbc698.pdf\nhttps://www.shanghai.gov.cn/nw15343/20250714/38d480e4573a49778830ea605991e599.html",
+      "source_url": "https://stcsm.sh.gov.cn/cmsres/a3/a39dcd06338c46fbbcf83f507b68e256/e89f86f04c780532c020527f31cbc698.pdf",
       "date": "2026-08-18"
     },
     {
@@ -629,7 +631,7 @@
       "province": "上海市",
       "city": "上海",
       "category": "核心企业",
-      "source_url": "https://econtek.cn/aboutus\nhttps://www.460.net.cn/news/show-359821.html",
+      "source_url": "https://econtek.cn/aboutus",
       "date": "2026-08-18"
     },
     {
@@ -643,7 +645,7 @@
       "province": "上海市",
       "city": "上海",
       "category": "邻近应用/临床电生理",
-      "source_url": "https://www.cnnation.com/\nhttps://www.nccmed.com.cn/newsinfo/11117329.html",
+      "source_url": "https://www.cnnation.com/",
       "date": "2026-08-18"
     },
     {
@@ -671,7 +673,7 @@
       "province": "上海市",
       "city": "上海",
       "category": "核心企业",
-      "source_url": "https://www.460.net.cn/news/show-359821.html\nhttps://pdf.dfcfw.com/pdf/H301_AP202605101822122234_1.pdf",
+      "source_url": "https://www.460.net.cn/news/show-359821.html",
       "date": "2026-08-18"
     },
     {
@@ -685,7 +687,7 @@
       "province": "上海市",
       "city": "上海",
       "category": "核心企业/早期",
-      "source_url": "https://www.vbdata.cn/newsDetail/5108b9185eec11f1a50800163e034e34\nhttps://finance.sina.com.cn/jjxw/2026-07-23/doc-iniiusky8286446.shtml",
+      "source_url": "https://www.vbdata.cn/newsDetail/5108b9185eec11f1a50800163e034e34",
       "date": "2026-08-18"
     },
     {
@@ -713,7 +715,7 @@
       "province": "上海市",
       "city": "上海",
       "category": "关联布局/算法平台",
-      "source_url": "https://www.insidebrain.com/\nhttps://pdf.dfcfw.com/pdf/H2_AN202508251734159068_1.PDF?t=1758170224558",
+      "source_url": "https://www.insidebrain.com/",
       "date": "2026-08-18"
     },
     {
@@ -755,7 +757,7 @@
       "province": "上海市",
       "city": "上海",
       "category": "邻近应用/早期企业",
-      "source_url": "https://www.shanghai.gov.cn/nw15343/20250714/38d480e4573a49778830ea605991e599.html\nhttps://finance.sina.com.cn/jjxw/2026-07-23/doc-iniiusky8286446.shtml",
+      "source_url": "https://www.shanghai.gov.cn/nw15343/20250714/38d480e4573a49778830ea605991e599.html",
       "date": "2026-08-18"
     },
     {
@@ -769,7 +771,7 @@
       "province": "江苏省",
       "city": "常州",
       "category": "核心企业",
-      "source_url": "https://qxb-pdf-osscache.qixin.com/AnBaseinfo/38576b8f5a72cec662cce82d85be813f.pdf\nhttps://pdf.dfcfw.com/pdf/H301_AP202605101822122234_1.pdf",
+      "source_url": "https://qxb-pdf-osscache.qixin.com/AnBaseinfo/38576b8f5a72cec662cce82d85be813f.pdf",
       "date": "2026-08-18"
     },
     {
@@ -1008,7 +1010,8 @@
       "city": "南京",
       "category": "关联布局",
       "source_url": "https://pdf.dfcfw.com/pdf/H22_AN202512241807228939_1.pdf",
-      "date": "2026-08-18"
+      "date": "2026-08-18",
+      "official_website": "https://www.medlander.com"
     },
     {
       "id": 73,
@@ -1050,7 +1053,8 @@
       "city": "南京",
       "category": "关联布局",
       "source_url": "https://pdf.dfcfw.com/pdf/H3_AP202601061816142041_1.pdf?1767725152000.pdf=",
-      "date": "2026-08-18"
+      "date": "2026-08-18",
+      "official_website": "https://www.vishee.com"
     },
     {
       "id": 76,
@@ -1091,7 +1095,7 @@
       "province": "江苏省",
       "city": "南京",
       "category": "邻近应用/临床设备",
-      "source_url": "https://invest.nanjing.gov.cn/gzdt/202603/t20260303_5799363.html\nhttps://www.sohu.com/a/1017268693_121277055",
+      "source_url": "https://invest.nanjing.gov.cn/gzdt/202603/t20260303_5799363.html",
       "date": "2026-08-18"
     },
     {
@@ -1161,7 +1165,7 @@
       "province": "江苏省",
       "city": "无锡",
       "category": "邻近应用/康复设备",
-      "source_url": "https://sirrem.com/about\nhttps://www.sohu.com/a/1017268693_121277055",
+      "source_url": "https://sirrem.com/about",
       "date": "2026-08-18"
     },
     {
@@ -1218,7 +1222,8 @@
       "city": "杭州",
       "category": "邻近应用/康复设备",
       "source_url": "https://www.sohu.com/a/1017268693_121277055",
-      "date": "2026-08-18"
+      "date": "2026-08-18",
+      "official_website": "https://www.anjelrobot.com"
     },
     {
       "id": 88,
@@ -1260,7 +1265,8 @@
       "city": "杭州",
       "category": "邻近应用/康复设备",
       "source_url": "https://kcycrawlerfile.oss-cn-beijing.aliyuncs.com/2026/01/12/900eeb7687194399bf85a452ae3d180c.pdf",
-      "date": "2026-08-18"
+      "date": "2026-08-18",
+      "official_website": "https://www.ctrobotics.com"
     },
     {
       "id": 91,
@@ -1302,7 +1308,8 @@
       "city": "杭州",
       "category": "核心企业",
       "source_url": "https://www.460.net.cn/news/show-359821.html",
-      "date": "2026-08-18"
+      "date": "2026-08-18",
+      "official_website": "https://www.neurology-med.com"
     },
     {
       "id": 94,
@@ -1315,7 +1322,7 @@
       "province": "浙江省",
       "city": "杭州",
       "category": "关键器件/科研平台",
-      "source_url": "https://www.sohu.com/a/1017268693_121277055\nhttps://finance.sina.com.cn/jjxw/2025-12-11/doc-inhamhsi8155176.shtml",
+      "source_url": "https://www.sohu.com/a/1017268693_121277055",
       "date": "2026-08-18"
     },
     {
@@ -1357,7 +1364,7 @@
       "province": "浙江省",
       "city": "杭州",
       "category": "邻近应用/植入调控",
-      "source_url": "https://cn.genlight.com/aboutus\nhttps://kcycrawlerfile.oss-cn-beijing.aliyuncs.com/2026/01/12/900eeb7687194399bf85a452ae3d180c.pdf",
+      "source_url": "https://cn.genlight.com/aboutus",
       "date": "2026-08-18"
     },
     {
@@ -1539,7 +1546,7 @@
       "province": "浙江省",
       "city": "杭州",
       "category": "邻近应用/神经假体",
-      "source_url": "https://www.sohu.com/a/1017268693_121277055\nhttps://finance.sina.com.cn/wm/2026-03-10/doc-inhqpnue6083089.shtml",
+      "source_url": "https://www.sohu.com/a/1017268693_121277055",
       "date": "2026-08-18"
     },
     {
@@ -1554,7 +1561,8 @@
       "city": "杭州",
       "category": "核心企业",
       "source_url": "https://www.460.net.cn/news/show-359821.html",
-      "date": "2026-08-18"
+      "date": "2026-08-18",
+      "official_website": "https://www.brainco.cn"
     },
     {
       "id": 112,
@@ -1567,7 +1575,7 @@
       "province": "浙江省",
       "city": "杭州",
       "category": "核心企业",
-      "source_url": "https://flectothink.com/\nhttps://www.460.net.cn/news/show-359821.html",
+      "source_url": "https://flectothink.com/",
       "date": "2026-08-18"
     },
     {
@@ -1777,8 +1785,9 @@
       "province": "河南省",
       "city": "安阳",
       "category": "核心企业",
-      "source_url": "https://www.xyyl.com/\nhttps://pdf.dfcfw.com/pdf/H2_AN202604231821513670_1.pdf",
-      "date": "2026-08-18"
+      "source_url": "https://www.xyyl.com/",
+      "date": "2026-08-18",
+      "official_website": "http://www.xiangyu.com.cn"
     },
     {
       "id": 128,
@@ -1862,7 +1871,8 @@
       "city": "武汉",
       "category": "核心企业",
       "source_url": "https://jxt.hubei.gov.cn/bmdt/rdjj/202505/t20250501_5638507.shtml",
-      "date": "2026-08-18"
+      "date": "2026-08-18",
+      "official_website": "https://www.zhonghuabci.com"
     },
     {
       "id": 134,
@@ -1904,7 +1914,8 @@
       "city": "广州",
       "category": "核心企业",
       "source_url": "https://pdf.dfcfw.com/pdf/H301_AP202605101822122234_1.pdf",
-      "date": "2026-08-18"
+      "date": "2026-08-18",
+      "official_website": "https://www.scut-bci.com"
     },
     {
       "id": 137,
@@ -2085,7 +2096,7 @@
       "province": "广东省",
       "city": "深圳",
       "category": "关键器件/供应链",
-      "source_url": "https://pdf.dfcfw.com/pdf/H3_AP202601061816142041_1.pdf?1767725152000.pdf=\nhttps://www.sohu.com/a/1017268693_121277055",
+      "source_url": "https://www.sohu.com/a/1017268693_121277055",
       "date": "2026-08-18"
     },
     {
@@ -2127,7 +2138,7 @@
       "province": "广东省",
       "city": "深圳",
       "category": "核心企业",
-      "source_url": "https://fgw.sz.gov.cn/ztzl/qtztzl/szscjmyjjfzzhfwpt/xwdt/cyfz/content/post_12623378.html\nhttps://www.460.net.cn/news/show-359821.html",
+      "source_url": "https://fgw.sz.gov.cn/ztzl/qtztzl/szscjmyjjfzzhfwpt/xwdt/cyfz/content/post_12623378.html",
       "date": "2026-08-18"
     },
     {
@@ -2169,7 +2180,7 @@
       "province": "海南省",
       "city": "海口",
       "category": "关键器件/平台",
-      "source_url": "https://www.sensingx.com/\nhttps://www.460.net.cn/news/show-359821.html",
+      "source_url": "https://www.sensingx.com/",
       "date": "2026-08-18"
     },
     {
@@ -2197,7 +2208,7 @@
       "province": "重庆市",
       "city": "重庆",
       "category": "核心企业",
-      "source_url": "https://jkq.cq.gov.cn/zwxx/jkdt/202508/t20250825_14933166_wap.html\nhttps://yunnaomedical.com/",
+      "source_url": "https://jkq.cq.gov.cn/zwxx/jkdt/202508/t20250825_14933166_wap.html",
       "date": "2026-08-18"
     },
     {
@@ -2212,7 +2223,8 @@
       "city": "成都",
       "category": "产业平台",
       "source_url": "https://www.kczg.org.cn/org/orgdetail?id=349461",
-      "date": "2026-08-18"
+      "date": "2026-08-18",
+      "official_website": "https://www.brain-frontiers.com"
     },
     {
       "id": 159,
@@ -2226,7 +2238,8 @@
       "city": "成都",
       "category": "核心企业",
       "source_url": "https://www.460.net.cn/news/show-359821.html",
-      "date": "2026-08-18"
+      "date": "2026-08-18",
+      "official_website": "https://www.vabo-tech.com"
     },
     {
       "id": 160,
@@ -2352,7 +2365,8 @@
       "city": "成都",
       "category": "关联布局",
       "source_url": "https://pdf.dfcfw.com/pdf/H301_AP202605101822122234_1.pdf",
-      "date": "2026-08-18"
+      "date": "2026-08-18",
+      "official_website": "https://www.casit.com.cn"
     },
     {
       "id": 169,
@@ -2408,7 +2422,8 @@
       "city": "西安",
       "category": "核心企业",
       "source_url": "https://www.460.net.cn/news/show-359821.html",
-      "date": "2026-08-18"
+      "date": "2026-08-18",
+      "official_website": "https://www.zhentaicn.com"
     },
     {
       "id": 0,
