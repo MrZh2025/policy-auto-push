@@ -4589,3 +4589,126 @@ body {
     background: #ef4444 !important;
     color: #ffffff !important;
 }
+
+
+/* ==========================================================================
+   🚀 极致空间压缩样式 —— 顶部收缩70%，大幅扩大图谱可视化有效展示面积
+   ========================================================================== */
+
+.graph-modal-card {
+    height: 95vh !important;
+    max-height: 980px !important;
+}
+
+/* 1. 紧凑头部 */
+.graph-header.compact-header {
+    padding: 8px 16px !important;
+    min-height: auto !important;
+}
+
+.modal-badge-icon.compact-badge {
+    width: 30px !important;
+    height: 30px !important;
+    font-size: 16px !important;
+    border-radius: 6px !important;
+}
+
+.compact-title-box .modal-title {
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    line-height: 1.2 !important;
+    margin: 0 !important;
+}
+
+.compact-title-box .modal-subtitle {
+    font-size: 11px !important;
+    margin-top: 1px !important;
+    line-height: 1.2 !important;
+}
+
+.compact-actions {
+    gap: 6px !important;
+}
+
+.compact-btn {
+    padding: 4px 10px !important;
+    font-size: 11.5px !important;
+    height: 28px !important;
+}
+
+.compact-close {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 18px !important;
+}
+
+/* 2. 紧凑单行战略概览条 */
+.graph-kpi-ribbon.compact-ribbon {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 4px 16px !important;
+    background: #f8fafc !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+
+.compact-ribbon-item {
+    flex: 1 !important;
+    min-width: 190px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 5px !important;
+    padding: 3px 8px !important;
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 4px !important;
+    box-shadow: none !important;
+}
+
+.compact-ribbon-item .ribbon-label {
+    font-size: 10.5px !important;
+    font-weight: 700 !important;
+    color: #64748b !important;
+    white-space: nowrap !important;
+}
+
+.compact-ribbon-item .ribbon-val {
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    color: #0f172a !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+/* 3. 紧凑工具栏与全高度图表画布 */
+.graph-canvas-toolbar {
+    padding: 5px 12px !important;
+    min-height: auto !important;
+}
+
+.legend-pill {
+    padding: 2px 6px !important;
+    font-size: 10.5px !important;
+}
+
+.graph-canvas-tip {
+    font-size: 10.5px !important;
+}
+
+.echarts-graph-container {
+    height: calc(95vh - 105px) !important;
+    min-height: 600px !important;
+}
+
+.graph-modal-card.fullscreen-mode .echarts-graph-container {
+    height: calc(100vh - 85px) !important;
+}
+
+.panel-tab-btn {
+    padding: 8px 6px !important;
+    font-size: 11.5px !important;
+}

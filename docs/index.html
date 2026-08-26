@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#004886">
     <title>四川生物医药产业集团创新事业部政策信息系统 - 四川发展·医药集团</title>
-    <link rel="stylesheet" href="index.css?v=20260826v1787724676">
+    <link rel="stylesheet" href="index.css?v=20260826v1787724815">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700;900&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -596,38 +596,38 @@
     <!-- 全国省份·重点产业关联拓扑图谱与未来走势可视化大屏模态弹窗 -->
     <div id="industryGraphModal" class="nmpa-modal-backdrop hidden">
         <div class="nmpa-modal-card graph-modal-card">
-            <!-- 头部标题栏 -->
-            <div class="modal-header graph-header">
+                        <!-- 头部标题栏 (极致紧凑设计，大幅释放图谱可视空间) -->
+            <div class="modal-header graph-header compact-header">
                 <div class="modal-title-wrap">
-                    <span class="modal-badge-icon">🕸️</span>
-                    <div>
+                    <span class="modal-badge-icon compact-badge">🕸️</span>
+                    <div class="compact-title-box">
                         <h3 class="modal-title">全国省份·前沿产业关联拓扑图谱与未来发展走势研判</h3>
                         <span class="modal-subtitle">基于全库 77+ 篇国家及重点省份政策深度挖掘 · 产业拓扑 / 区域定位 / 发展动态 / 战略指引</span>
                     </div>
                 </div>
-                <div class="analytics-header-right">
-                    <button class="btn-refresh-analytics" id="btnToggleGraphFullscreen" title="切换全屏大屏模式" onclick="toggleGraphFullscreen()">⛶ 全屏大屏查看</button>
-                    <button class="btn-refresh-analytics" id="btnResetGraphView" title="重置拓扑视角" onclick="resetGraphZoom()">🎯 复位视角</button>
-                    <button class="modal-close-btn" id="modalGraphCloseBtn" onclick="closeIndustryGraphModal()" title="关闭图谱">×</button>
+                <div class="analytics-header-right compact-actions">
+                    <button class="btn-refresh-analytics compact-btn" id="btnToggleGraphFullscreen" title="切换全屏大屏模式" onclick="toggleGraphFullscreen()">⛶ 全屏大屏</button>
+                    <button class="btn-refresh-analytics compact-btn" id="btnResetGraphView" title="重置拓扑视角" onclick="resetGraphZoom()">🎯 复位</button>
+                    <button class="modal-close-btn compact-close" id="modalGraphCloseBtn" onclick="closeIndustryGraphModal()" title="关闭图谱">×</button>
                 </div>
             </div>
 
-            <!-- 顶部 KPI 战略概览条 -->
-            <div class="graph-kpi-ribbon">
-                <div class="ribbon-item">
-                    <span class="ribbon-label">🏛️ 核心联动省市</span>
+            <!-- 顶部 KPI 战略概览条 (单行极简高密信息条，仅占用极少高度) -->
+            <div class="graph-kpi-ribbon compact-ribbon">
+                <div class="ribbon-item compact-ribbon-item">
+                    <span class="ribbon-label">🏛️ 核心联动省市:</span>
                     <span class="ribbon-val">四川 · 北京 · 上海 · 广东 · 辽宁 · 江苏</span>
                 </div>
-                <div class="ribbon-item">
-                    <span class="ribbon-label">🚀 6 大重点前沿赛道</span>
-                    <span class="ribbon-val">核医药 · 脑机接口 · AI制药 · 医疗机器人 · 医保集采 · 科技创新</span>
+                <div class="ribbon-item compact-ribbon-item">
+                    <span class="ribbon-label">🚀 6大重点赛道:</span>
+                    <span class="ribbon-val">核医药 · 脑机接口 · AI制药 · 机器人 · 医保 · 科技</span>
                 </div>
-                <div class="ribbon-item">
-                    <span class="ribbon-label">📈 未来政策核心走势</span>
-                    <span class="ribbon-val" style="color:#10b981;">国家标准立标 + 全生命周期前置加速 + 跨境要素免通关</span>
+                <div class="ribbon-item compact-ribbon-item">
+                    <span class="ribbon-label">📈 未来政策走势:</span>
+                    <span class="ribbon-val" style="color:#059669;">国家标准立标 + 全周期前置加速 + 跨境免通关</span>
                 </div>
-                <div class="ribbon-item">
-                    <span class="ribbon-label">🎯 集团战略定位</span>
+                <div class="ribbon-item compact-ribbon-item">
+                    <span class="ribbon-label">🎯 集团战略定位:</span>
                     <span class="ribbon-val" style="color:#0284c7;">打造国家战略腹地生物医药新质生产力核心策源地</span>
                 </div>
             </div>
@@ -1415,6 +1415,6 @@
     <script src="data/china_map_data.js"></script>
     <!-- 原生 OpenXML docx 生成库 -->
     <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
-    <script src="app.js?v=20260826v1787724676"></script>
+    <script src="app.js?v=20260826v1787724815"></script>
 </body>
 </html>
