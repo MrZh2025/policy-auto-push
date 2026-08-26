@@ -7254,7 +7254,31 @@ function openIndustryGraphModal() {
 
 function closeIndustryGraphModal() {
     const modal = document.getElementById('industryGraphModal');
-    if (modal) modal.classList.add('hidden');
+    if (modal) {
+        modal.classList.add('hidden');
+        const card = document.querySelector('.graph-modal-card');
+        if (card) card.classList.remove('fullscreen-mode');
+        const btn = document.getElementById('btnToggleGraphFullscreen');
+        if (btn) btn.innerHTML = '⛶ 全屏大屏查看';
+    }
+}
+
+function toggleGraphFullscreen() {
+    const card = document.querySelector('.graph-modal-card');
+    const btn = document.getElementById('btnToggleGraphFullscreen');
+    if (!card) return;
+    
+    const isFS = card.classList.toggle('fullscreen-mode');
+    if (btn) {
+        btn.innerHTML = isFS ? '🗗 退出全屏' : '⛶ 全屏大屏查看';
+    }
+    
+    setTimeout(() => {
+        if (chartIndustryGraphInstance) {
+            chartIndustryGraphInstance.resize();
+            chartIndustryGraphInstance.dispatchAction({ type: 'restore' });
+        }
+    }, 120);
 }
 
 function resetGraphZoom() {
@@ -7306,7 +7330,6 @@ function fetchIndustryGraphData() {
         })
         .catch(err => {
             console.warn('加载 industry_graph.json 失败，尝试动态构造:', err);
-            // 容灾构造
             industryGraphData = buildFallbackGraphData();
             renderIndustryNetworkGraph(industryGraphData);
             populateGraphSidePanels(industryGraphData);
@@ -7389,11 +7412,11 @@ function renderIndustryNetworkGraph(data) {
         },
         legend: {
             data: (data.categories || []).map(c => c.name),
-            top: 10,
-            left: 20,
+            top: 8,
+            left: 15,
             textStyle: { color: textColor, fontSize: 11 }
         },
-        animationDuration: 1500,
+        animationDuration: 1200,
         animationEasingUpdate: 'quinticInOut',
         series: [
             {
@@ -7405,25 +7428,29 @@ function renderIndustryNetworkGraph(data) {
                 roam: true,
                 label: {
                     show: true,
-                    position: 'right',
+                    position: 'bottom',
+                    distance: 6,
                     formatter: '{b}',
-                    fontSize: 11,
+                    fontSize: 10.5,
+                    fontWeight: 'bold',
                     color: textColor
                 },
                 edgeSymbol: ['none', 'arrow'],
-                edgeSymbolSize: [4, 7],
+                edgeSymbolSize: [3, 6],
                 lineStyle: {
                     color: 'source',
-                    curveness: 0.2
+                    curveness: 0.12,
+                    opacity: 0.65
                 },
                 emphasis: {
                     focus: 'adjacency',
-                    lineStyle: { width: 4 }
+                    lineStyle: { width: 3.5, opacity: 0.95 }
                 },
+                // 深度优化力导向排斥与引力，大幅拉开节点距离，杜绝文字和球体遮挡
                 force: {
-                    repulsion: 380,
-                    gravity: 0.11,
-                    edgeLength: [60, 150],
+                    repulsion: 850,
+                    gravity: 0.04,
+                    edgeLength: [120, 240],
                     layoutAnimation: true
                 }
             }
@@ -7501,12 +7528,12 @@ function inspectGraphNode(nodeData) {
 function buildFallbackGraphData() {
     return {
         nodes: [
-            { id: 'prov_sc', name: '四川省', category: 0, symbolSize: 75, extra: { type: 'province' } },
-            { id: 'prov_bj', name: '北京市', category: 0, symbolSize: 70, extra: { type: 'province' } },
-            { id: 'prov_sh', name: '上海市', category: 0, symbolSize: 60, extra: { type: 'province' } },
-            { id: 'prov_gd', name: '广东省', category: 0, symbolSize: 58, extra: { type: 'province' } },
-            { id: 'track_nuc', name: '⚛️ 核医药与放药监管', category: 1, symbolSize: 65, extra: { type: 'track', desc: '医用同位素与PRRT核药' } },
-            { id: 'track_bci', name: '🧠 脑机接口与前沿器械', category: 1, symbolSize: 68, extra: { type: 'track', desc: '国家标准指南与审评要点' } }
+            { id: 'prov_sc', name: '四川省', category: 0, symbolSize: 36, extra: { type: 'province' } },
+            { id: 'prov_bj', name: '北京市', category: 0, symbolSize: 34, extra: { type: 'province' } },
+            { id: 'prov_sh', name: '上海市', category: 0, symbolSize: 30, extra: { type: 'province' } },
+            { id: 'prov_gd', name: '广东省', category: 0, symbolSize: 29, extra: { type: 'province' } },
+            { id: 'track_nuc', name: '⚛️ 核医药与放药监管', category: 1, symbolSize: 28, extra: { type: 'track', desc: '医用同位素与PRRT核药' } },
+            { id: 'track_bci', name: '🧠 脑机接口与前沿器械', category: 1, symbolSize: 30, extra: { type: 'track', desc: '国家标准指南与审评要点' } }
         ],
         links: [
             { source: 'prov_sc', target: 'track_nuc', value: 5 },
