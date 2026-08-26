@@ -7227,10 +7227,11 @@ window.resetNuclearFocus = resetNuclearFocus;
 
 
 // ==========================================================================
-// 🕸️ 全国省份·重点产业拓扑图谱与未来发展走势研判大屏核心逻辑
+// 🕸️ 全国省份·重点产业拓扑图谱与未来发展走势研判大屏核心逻辑 (消除底部空白版)
 // ==========================================================================
 let chartIndustryGraphInstance = null;
 let industryGraphData = null;
+let graphResizeObserver = null;
 
 function openIndustryGraphModal() {
     const modal = document.getElementById('industryGraphModal');
@@ -7244,12 +7245,13 @@ function openIndustryGraphModal() {
         fetchIndustryGraphData();
     }
 
-    setTimeout(() => {
-        if (chartIndustryGraphInstance) chartIndustryGraphInstance.resize();
-    }, 80);
-    setTimeout(() => {
-        if (chartIndustryGraphInstance) chartIndustryGraphInstance.resize();
-    }, 250);
+    // 绑定 ResizeObserver 实时监听容器尺寸变化并精准重绘
+    setupGraphResizeObserver();
+
+    // 延迟 50ms, 150ms, 300ms 连续触发三次精准尺寸重绘，确保画布 100% 填满无底部死角
+    setTimeout(forceResizeIndustryGraph, 50);
+    setTimeout(forceResizeIndustryGraph, 150);
+    setTimeout(forceResizeIndustryGraph, 350);
 }
 
 function closeIndustryGraphModal() {
@@ -7259,7 +7261,33 @@ function closeIndustryGraphModal() {
         const card = document.querySelector('.graph-modal-card');
         if (card) card.classList.remove('fullscreen-mode');
         const btn = document.getElementById('btnToggleGraphFullscreen');
-        if (btn) btn.innerHTML = '⛶ 全屏大屏查看';
+        if (btn) btn.innerHTML = '⛶ 全屏大屏';
+    }
+}
+
+function forceResizeIndustryGraph() {
+    const container = document.getElementById('chartIndustryGraph');
+    if (container && chartIndustryGraphInstance) {
+        const rect = container.getBoundingClientRect();
+        if (rect.width > 50 && rect.height > 50) {
+            chartIndustryGraphInstance.resize({
+                width: rect.width,
+                height: rect.height
+            });
+        }
+    }
+}
+
+function setupGraphResizeObserver() {
+    if (graphResizeObserver) return;
+    const container = document.getElementById('chartIndustryGraph');
+    if (container && window.ResizeObserver) {
+        graphResizeObserver = new ResizeObserver(() => {
+            if (chartIndustryGraphInstance) {
+                chartIndustryGraphInstance.resize();
+            }
+        });
+        graphResizeObserver.observe(container);
     }
 }
 
@@ -7270,15 +7298,15 @@ function toggleGraphFullscreen() {
     
     const isFS = card.classList.toggle('fullscreen-mode');
     if (btn) {
-        btn.innerHTML = isFS ? '🗗 退出全屏' : '⛶ 全屏大屏查看';
+        btn.innerHTML = isFS ? '🗗 退出全屏' : '⛶ 全屏大屏';
     }
     
     setTimeout(() => {
+        forceResizeIndustryGraph();
         if (chartIndustryGraphInstance) {
-            chartIndustryGraphInstance.resize();
             chartIndustryGraphInstance.dispatchAction({ type: 'restore' });
         }
-    }, 120);
+    }, 100);
 }
 
 function resetGraphZoom() {
@@ -7316,7 +7344,7 @@ function switchGraphTab(tabName) {
 function fetchIndustryGraphData() {
     const container = document.getElementById('chartIndustryGraph');
     if (container) {
-        container.innerHTML = '<div style="display:flex;height:100%;align-items:center;justify-content:center;color:#64748b;font-size:13px;">🕸️ 正在深度计算省份-产业拓扑关系与发展走势...</div>';
+        container.innerHTML = '<div style="display:flex;height:100%;align-items:center;justify-content:center;color:#64748b;font-size:13px;">🕸️ 正在计算省份-产业拓扑关系与发展走势...</div>';
     }
 
     fetch('data/industry_graph.json')
@@ -7326,13 +7354,15 @@ function fetchIndustryGraphData() {
                 industryGraphData = res.data;
                 renderIndustryNetworkGraph(industryGraphData);
                 populateGraphSidePanels(industryGraphData);
+                setTimeout(forceResizeIndustryGraph, 80);
             }
         })
         .catch(err => {
-            console.warn('加载 industry_graph.json 失败，尝试动态构造:', err);
+            console.warn('加载 industry_graph.json 失败，使用备用数据:', err);
             industryGraphData = buildFallbackGraphData();
             renderIndustryNetworkGraph(industryGraphData);
             populateGraphSidePanels(industryGraphData);
+            setTimeout(forceResizeIndustryGraph, 80);
         });
 }
 
@@ -7388,6 +7418,14 @@ function renderIndustryNetworkGraph(data) {
         chartIndustryGraphInstance = echarts.init(container);
     }
 
+    const rect = container.getBoundingClientRect();
+    if (rect.width > 50 && rect.height > 50) {
+        chartIndustryGraphInstance.resize({
+            width: rect.width,
+            height: rect.height
+        });
+    }
+
     const isDark = (state.theme === 'dark');
     const textColor = isDark ? '#cbd5e1' : '#1e293b';
 
@@ -7416,14 +7454,14 @@ function renderIndustryNetworkGraph(data) {
             left: 12,
             textStyle: { color: textColor, fontSize: 11 }
         },
-        animationDuration: 1000,
+        animationDuration: 800,
         animationEasingUpdate: 'quinticInOut',
         series: [
             {
                 type: 'graph',
                 layout: 'force',
                 center: ['50%', '50%'],
-                zoom: 1.08,
+                zoom: 1.05,
                 data: (data.nodes || []).map(n => {
                     return Object.assign({}, n, {
                         itemStyle: {
@@ -7462,11 +7500,10 @@ function renderIndustryNetworkGraph(data) {
                     focus: 'adjacency',
                     lineStyle: { width: 2.8, opacity: 0.95 }
                 },
-                // 深度扩展力导向间距与斥力，让节点自然充盈全图，消除上下留白
                 force: {
-                    repulsion: 650,
-                    gravity: 0.025,
-                    edgeLength: [110, 220],
+                    repulsion: 580,
+                    gravity: 0.03,
+                    edgeLength: [90, 180],
                     layoutAnimation: true
                 }
             }
@@ -7543,12 +7580,12 @@ function inspectGraphNode(nodeData) {
 function buildFallbackGraphData() {
     return {
         nodes: [
-            { id: 'prov_sc', name: '四川省', category: 0, symbolSize: 36, extra: { type: 'province' } },
-            { id: 'prov_bj', name: '北京市', category: 0, symbolSize: 34, extra: { type: 'province' } },
-            { id: 'prov_sh', name: '上海市', category: 0, symbolSize: 30, extra: { type: 'province' } },
-            { id: 'prov_gd', name: '广东省', category: 0, symbolSize: 29, extra: { type: 'province' } },
-            { id: 'track_nuc', name: '⚛️ 核医药与放药监管', category: 1, symbolSize: 28, extra: { type: 'track', desc: '医用同位素与PRRT核药' } },
-            { id: 'track_bci', name: '🧠 脑机接口与前沿器械', category: 1, symbolSize: 30, extra: { type: 'track', desc: '国家标准指南与审评要点' } }
+            { id: 'prov_sc', name: '四川省', category: 0, symbolSize: 20, extra: { type: 'province' } },
+            { id: 'prov_bj', name: '北京市', category: 0, symbolSize: 18, extra: { type: 'province' } },
+            { id: 'prov_sh', name: '上海市', category: 0, symbolSize: 16, extra: { type: 'province' } },
+            { id: 'prov_gd', name: '广东省', category: 0, symbolSize: 16, extra: { type: 'province' } },
+            { id: 'track_nuc', name: '⚛️ 核医药与放药监管', category: 1, symbolSize: 15, extra: { type: 'track', desc: '医用同位素与PRRT核药' } },
+            { id: 'track_bci', name: '🧠 脑机接口与前沿器械', category: 1, symbolSize: 16, extra: { type: 'track', desc: '国家标准指南与审评要点' } }
         ],
         links: [
             { source: 'prov_sc', target: 'track_nuc', value: 5 },

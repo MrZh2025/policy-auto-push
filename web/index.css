@@ -4794,3 +4794,124 @@ body {
 .graph-modal-card.fullscreen-mode .echarts-graph-container {
     height: 100% !important;
 }
+
+
+/* ==========================================================================
+   🎯 彻底消除底部大片空白 —— ResizeObserver 驱动 + 视口绝对填满
+   ========================================================================== */
+
+#industryGraphModal {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+#industryGraphModal.hidden {
+    display: none !important;
+}
+
+.graph-modal-card {
+    width: 95vw !important;
+    max-width: 1400px !important;
+    height: 85vh !important;
+    max-height: 800px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    background: #ffffff !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+}
+
+.graph-header.compact-header {
+    flex-shrink: 0 !important;
+    padding: 8px 16px !important;
+    background: linear-gradient(135deg, #001f3f 0%, #003366 50%, #004886 100%) !important;
+}
+
+.graph-kpi-ribbon.compact-ribbon {
+    flex-shrink: 0 !important;
+    padding: 5px 16px !important;
+    background: #f8fafc !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+
+.graph-modal-body {
+    flex: 1 1 0% !important;
+    display: grid !important;
+    grid-template-columns: 1fr 390px !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.graph-canvas-wrapper {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    border-right: 1px solid #e2e8f0 !important;
+    background: #fafbfc !important;
+    position: relative !important;
+}
+
+.graph-canvas-toolbar {
+    flex-shrink: 0 !important;
+    padding: 6px 12px !important;
+    background: #ffffff !important;
+    border-bottom: 1px solid #edf2f7 !important;
+}
+
+.echarts-graph-container {
+    flex: 1 1 0% !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 380px !important;
+    position: relative !important;
+}
+
+.echarts-graph-container > div,
+.echarts-graph-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.graph-side-panel {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    background: #ffffff !important;
+}
+
+.panel-tabs {
+    flex-shrink: 0 !important;
+    display: flex !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    background: #f8fafc !important;
+}
+
+.panel-tab-content {
+    flex: 1 1 0% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    padding: 12px 14px !important;
+}
+
+/* 全屏沉浸模式 */
+.graph-modal-card.fullscreen-mode {
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: 100vw !important;
+    max-height: 100vh !important;
+    border-radius: 0 !important;
+}
+
+.graph-modal-card.fullscreen-mode .graph-modal-body {
+    grid-template-columns: 1fr 440px !important;
+}
