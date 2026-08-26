@@ -608,17 +608,6 @@
           "type": "solid",
           "opacity": 0.7
         }
-      },
-      {
-        "source": "prov_四川省",
-        "target": "prov_重庆市",
-        "value": 5,
-        "lineStyle": {
-          "color": "#0284c7",
-          "width": 2.0,
-          "type": "dotted",
-          "opacity": 0.8
-        }
       }
     ],
     "categories": [
