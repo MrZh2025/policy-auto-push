@@ -7416,41 +7416,54 @@ function renderIndustryNetworkGraph(data) {
             left: 15,
             textStyle: { color: textColor, fontSize: 11 }
         },
-        animationDuration: 1200,
+        animationDuration: 1000,
         animationEasingUpdate: 'quinticInOut',
         series: [
             {
                 type: 'graph',
                 layout: 'force',
-                data: data.nodes,
+                data: (data.nodes || []).map(n => {
+                    return Object.assign({}, n, {
+                        itemStyle: {
+                            borderWidth: 2,
+                            borderColor: isDark ? '#1e293b' : '#ffffff',
+                            shadowBlur: 8,
+                            shadowColor: 'rgba(0, 0, 0, 0.15)'
+                        }
+                    });
+                }),
                 links: data.links,
                 categories: data.categories,
                 roam: true,
                 label: {
                     show: true,
                     position: 'bottom',
-                    distance: 6,
+                    distance: 5,
                     formatter: '{b}',
                     fontSize: 10.5,
-                    fontWeight: 'bold',
-                    color: textColor
+                    color: textColor,
+                    backgroundColor: isDark ? 'rgba(15, 23, 42, 0.8)' : 'rgba(255, 255, 255, 0.85)',
+                    padding: [2, 5],
+                    borderRadius: 3,
+                    borderColor: isDark ? 'rgba(51, 65, 85, 0.6)' : 'rgba(226, 232, 240, 0.8)',
+                    borderWidth: 0.5
                 },
                 edgeSymbol: ['none', 'arrow'],
-                edgeSymbolSize: [3, 6],
+                edgeSymbolSize: [0, 5],
                 lineStyle: {
                     color: 'source',
-                    curveness: 0.12,
-                    opacity: 0.65
+                    curveness: 0.1,
+                    opacity: 0.5,
+                    width: 1.2
                 },
                 emphasis: {
                     focus: 'adjacency',
-                    lineStyle: { width: 3.5, opacity: 0.95 }
+                    lineStyle: { width: 2.8, opacity: 0.95 }
                 },
-                // 深度优化力导向排斥与引力，大幅拉开节点距离，杜绝文字和球体遮挡
                 force: {
-                    repulsion: 850,
-                    gravity: 0.04,
-                    edgeLength: [120, 240],
+                    repulsion: 480,
+                    gravity: 0.03,
+                    edgeLength: [90, 190],
                     layoutAnimation: true
                 }
             }
@@ -7459,7 +7472,6 @@ function renderIndustryNetworkGraph(data) {
 
     chartIndustryGraphInstance.setOption(option);
 
-    // 绑定节点点击探针联动
     chartIndustryGraphInstance.off('click');
     chartIndustryGraphInstance.on('click', function(params) {
         if (params.dataType === 'node') {

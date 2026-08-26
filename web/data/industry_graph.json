@@ -6,7 +6,7 @@
         "id": "prov_四川省",
         "name": "四川省",
         "category": 0,
-        "symbolSize": 36,
+        "symbolSize": 20,
         "value": 3,
         "extra": {
           "type": "province",
@@ -17,7 +17,7 @@
         "id": "prov_北京市",
         "name": "北京市",
         "category": 0,
-        "symbolSize": 34,
+        "symbolSize": 18,
         "value": 76,
         "extra": {
           "type": "province",
@@ -28,7 +28,7 @@
         "id": "prov_上海市",
         "name": "上海市",
         "category": 0,
-        "symbolSize": 30,
+        "symbolSize": 16,
         "value": 2,
         "extra": {
           "type": "province",
@@ -39,7 +39,7 @@
         "id": "prov_广东省",
         "name": "广东省",
         "category": 0,
-        "symbolSize": 29,
+        "symbolSize": 16,
         "value": 2,
         "extra": {
           "type": "province",
@@ -50,7 +50,7 @@
         "id": "prov_辽宁省",
         "name": "辽宁省",
         "category": 0,
-        "symbolSize": 28,
+        "symbolSize": 15,
         "value": 3,
         "extra": {
           "type": "province",
@@ -61,7 +61,7 @@
         "id": "prov_江苏省",
         "name": "江苏省",
         "category": 0,
-        "symbolSize": 27,
+        "symbolSize": 15,
         "value": 3,
         "extra": {
           "type": "province",
@@ -72,7 +72,7 @@
         "id": "prov_浙江省",
         "name": "浙江省",
         "category": 0,
-        "symbolSize": 25,
+        "symbolSize": 14,
         "value": 1,
         "extra": {
           "type": "province",
@@ -83,7 +83,7 @@
         "id": "prov_陕西省",
         "name": "陕西省",
         "category": 0,
-        "symbolSize": 24,
+        "symbolSize": 14,
         "value": 1,
         "extra": {
           "type": "province",
@@ -94,7 +94,7 @@
         "id": "track_核医药与放药监管",
         "name": "⚛️ 核医药与放药监管",
         "category": 1,
-        "symbolSize": 28,
+        "symbolSize": 15,
         "value": 1,
         "extra": {
           "type": "track",
@@ -106,7 +106,7 @@
         "id": "track_脑机接口与前沿器械",
         "name": "🧠 脑机接口与前沿器械",
         "category": 1,
-        "symbolSize": 30,
+        "symbolSize": 16,
         "value": 8,
         "extra": {
           "type": "track",
@@ -118,7 +118,7 @@
         "id": "track_AI制药与算法模型",
         "name": "🧬 AI制药与算法模型",
         "category": 1,
-        "symbolSize": 26,
+        "symbolSize": 14,
         "value": 3,
         "extra": {
           "type": "track",
@@ -130,7 +130,7 @@
         "id": "track_医疗机器人与智能装备",
         "name": "🤖 医疗机器人与智能装备",
         "category": 1,
-        "symbolSize": 27,
+        "symbolSize": 15,
         "value": 4,
         "extra": {
           "type": "track",
@@ -142,7 +142,7 @@
         "id": "track_医保政策与集采支付",
         "name": "💳 医保政策与集采支付",
         "category": 1,
-        "symbolSize": 28,
+        "symbolSize": 15,
         "value": 15,
         "extra": {
           "type": "track",
@@ -154,7 +154,7 @@
         "id": "track_科技创新与资金申报",
         "name": "📑 科技创新与资金申报",
         "category": 1,
-        "symbolSize": 29,
+        "symbolSize": 15,
         "value": 54,
         "extra": {
           "type": "track",
@@ -166,7 +166,7 @@
         "id": "policy_bci_std",
         "name": "工信部《脑机接口标准指南》",
         "category": 2,
-        "symbolSize": 18,
+        "symbolSize": 10,
         "value": 1,
         "extra": {
           "type": "policy",
@@ -177,7 +177,7 @@
         "id": "policy_bci_cmde",
         "name": "CMDE《植入式脑机接口审评要点》",
         "category": 2,
-        "symbolSize": 17,
+        "symbolSize": 10,
         "value": 1,
         "extra": {
           "type": "policy",
@@ -188,7 +188,7 @@
         "id": "policy_sc_device",
         "name": "四川省《医疗器械高质量发展39号文》",
         "category": 2,
-        "symbolSize": 18,
+        "symbolSize": 11,
         "value": 1,
         "extra": {
           "type": "policy",
@@ -199,7 +199,7 @@
         "id": "policy_177lu",
         "name": "CDE《177Lu仿制药技术要求》",
         "category": 2,
-        "symbolSize": 18,
+        "symbolSize": 10,
         "value": 1,
         "extra": {
           "type": "policy",
@@ -210,7 +210,7 @@
         "id": "policy_ln_whitelist",
         "name": "辽宁自贸区《生物医药进口白名单》",
         "category": 2,
-        "symbolSize": 18,
+        "symbolSize": 11,
         "value": 1,
         "extra": {
           "type": "policy",
@@ -221,7 +221,7 @@
         "id": "policy_sh_155",
         "name": "上海市《十五五新型工业化规划》",
         "category": 2,
-        "symbolSize": 17,
+        "symbolSize": 10,
         "value": 1,
         "extra": {
           "type": "policy",
@@ -232,7 +232,7 @@
         "id": "policy_gd_vessel",
         "name": "广东省《3类耗材集采文件》",
         "category": 2,
-        "symbolSize": 16,
+        "symbolSize": 9,
         "value": 1,
         "extra": {
           "type": "policy",
@@ -243,7 +243,7 @@
         "id": "policy_cgt_sharp",
         "name": "CDE《CGT药品先锐计划》",
         "category": 2,
-        "symbolSize": 17,
+        "symbolSize": 10,
         "value": 1,
         "extra": {
           "type": "policy",
@@ -254,7 +254,7 @@
         "id": "policy_ich_m15",
         "name": "ICH《M15模型引导药物研发》",
         "category": 2,
-        "symbolSize": 16,
+        "symbolSize": 9,
         "value": 1,
         "extra": {
           "type": "policy",
@@ -265,7 +265,7 @@
         "id": "trend_2028_bci",
         "name": "2028脑机标准成网",
         "category": 3,
-        "symbolSize": 17,
+        "symbolSize": 10,
         "value": 1,
         "extra": {
           "type": "trend",
@@ -276,7 +276,7 @@
         "id": "trend_prrt_boom",
         "name": "PRRT放药仿制潮",
         "category": 3,
-        "symbolSize": 17,
+        "symbolSize": 10,
         "value": 1,
         "extra": {
           "type": "trend",
@@ -287,7 +287,7 @@
         "id": "trend_vbp_full",
         "name": "耗材集采全品类扩面",
         "category": 3,
-        "symbolSize": 16,
+        "symbolSize": 9,
         "value": 1,
         "extra": {
           "type": "trend",
@@ -298,7 +298,7 @@
         "id": "trend_free_port",
         "name": "自贸区要素零关卡",
         "category": 3,
-        "symbolSize": 16,
+        "symbolSize": 9,
         "value": 1,
         "extra": {
           "type": "trend",
@@ -312,8 +312,8 @@
         "target": "track_脑机接口与前沿器械",
         "value": 1,
         "lineStyle": {
-          "width": 1.2,
-          "opacity": 0.65
+          "width": 1.0,
+          "opacity": 0.55
         }
       },
       {
@@ -321,8 +321,8 @@
         "target": "track_科技创新与资金申报",
         "value": 2,
         "lineStyle": {
-          "width": 1.2,
-          "opacity": 0.65
+          "width": 1.0,
+          "opacity": 0.55
         }
       },
       {
@@ -330,8 +330,8 @@
         "target": "track_核医药与放药监管",
         "value": 1,
         "lineStyle": {
-          "width": 1.2,
-          "opacity": 0.65
+          "width": 1.0,
+          "opacity": 0.55
         }
       },
       {
@@ -339,8 +339,8 @@
         "target": "track_脑机接口与前沿器械",
         "value": 6,
         "lineStyle": {
-          "width": 2.4000000000000004,
-          "opacity": 0.65
+          "width": 1.7999999999999998,
+          "opacity": 0.55
         }
       },
       {
@@ -348,8 +348,8 @@
         "target": "track_AI制药与算法模型",
         "value": 3,
         "lineStyle": {
-          "width": 1.2000000000000002,
-          "opacity": 0.65
+          "width": 1.0,
+          "opacity": 0.55
         }
       },
       {
@@ -357,8 +357,8 @@
         "target": "track_医疗机器人与智能装备",
         "value": 4,
         "lineStyle": {
-          "width": 1.6,
-          "opacity": 0.65
+          "width": 1.2,
+          "opacity": 0.55
         }
       },
       {
@@ -366,8 +366,8 @@
         "target": "track_医保政策与集采支付",
         "value": 12,
         "lineStyle": {
-          "width": 3.5,
-          "opacity": 0.65
+          "width": 2.5,
+          "opacity": 0.55
         }
       },
       {
@@ -375,8 +375,8 @@
         "target": "track_科技创新与资金申报",
         "value": 50,
         "lineStyle": {
-          "width": 3.5,
-          "opacity": 0.65
+          "width": 2.5,
+          "opacity": 0.55
         }
       },
       {
@@ -384,8 +384,8 @@
         "target": "track_脑机接口与前沿器械",
         "value": 1,
         "lineStyle": {
-          "width": 1.2,
-          "opacity": 0.65
+          "width": 1.0,
+          "opacity": 0.55
         }
       },
       {
@@ -393,8 +393,8 @@
         "target": "track_科技创新与资金申报",
         "value": 1,
         "lineStyle": {
-          "width": 1.2,
-          "opacity": 0.65
+          "width": 1.0,
+          "opacity": 0.55
         }
       },
       {
@@ -402,8 +402,8 @@
         "target": "track_医保政策与集采支付",
         "value": 1,
         "lineStyle": {
-          "width": 1.2,
-          "opacity": 0.65
+          "width": 1.0,
+          "opacity": 0.55
         }
       },
       {
@@ -411,8 +411,8 @@
         "target": "track_科技创新与资金申报",
         "value": 1,
         "lineStyle": {
-          "width": 1.2,
-          "opacity": 0.65
+          "width": 1.0,
+          "opacity": 0.55
         }
       },
       {
@@ -420,8 +420,8 @@
         "target": "track_医保政策与集采支付",
         "value": 1,
         "lineStyle": {
-          "width": 1.2,
-          "opacity": 0.65
+          "width": 1.0,
+          "opacity": 0.55
         }
       },
       {
@@ -429,8 +429,8 @@
         "target": "track_科技创新与资金申报",
         "value": 2,
         "lineStyle": {
-          "width": 1.2,
-          "opacity": 0.65
+          "width": 1.0,
+          "opacity": 0.55
         }
       },
       {
@@ -438,8 +438,8 @@
         "target": "track_医保政策与集采支付",
         "value": 1,
         "lineStyle": {
-          "width": 1.2,
-          "opacity": 0.65
+          "width": 1.0,
+          "opacity": 0.55
         }
       },
       {
@@ -447,8 +447,8 @@
         "target": "track_科技创新与资金申报",
         "value": 2,
         "lineStyle": {
-          "width": 1.2,
-          "opacity": 0.65
+          "width": 1.0,
+          "opacity": 0.55
         }
       },
       {
@@ -456,8 +456,8 @@
         "target": "track_科技创新与资金申报",
         "value": 1,
         "lineStyle": {
-          "width": 1.2,
-          "opacity": 0.65
+          "width": 1.0,
+          "opacity": 0.55
         }
       },
       {
@@ -465,8 +465,8 @@
         "target": "track_科技创新与资金申报",
         "value": 1,
         "lineStyle": {
-          "width": 1.2,
-          "opacity": 0.65
+          "width": 1.0,
+          "opacity": 0.55
         }
       },
       {
@@ -475,8 +475,8 @@
         "value": 1,
         "lineStyle": {
           "type": "dashed",
-          "width": 1.2,
-          "opacity": 0.55
+          "width": 1.0,
+          "opacity": 0.45
         }
       },
       {
@@ -485,8 +485,8 @@
         "value": 1,
         "lineStyle": {
           "type": "dotted",
-          "width": 1.0,
-          "opacity": 0.45
+          "width": 0.8,
+          "opacity": 0.35
         }
       },
       {
@@ -495,8 +495,8 @@
         "value": 1,
         "lineStyle": {
           "type": "dashed",
-          "width": 1.2,
-          "opacity": 0.55
+          "width": 1.0,
+          "opacity": 0.45
         }
       },
       {
@@ -505,8 +505,8 @@
         "value": 1,
         "lineStyle": {
           "type": "dotted",
-          "width": 1.0,
-          "opacity": 0.45
+          "width": 0.8,
+          "opacity": 0.35
         }
       },
       {
@@ -515,8 +515,8 @@
         "value": 1,
         "lineStyle": {
           "type": "dashed",
-          "width": 1.2,
-          "opacity": 0.55
+          "width": 1.0,
+          "opacity": 0.45
         }
       },
       {
@@ -525,8 +525,8 @@
         "value": 1,
         "lineStyle": {
           "type": "dotted",
-          "width": 1.0,
-          "opacity": 0.45
+          "width": 0.8,
+          "opacity": 0.35
         }
       },
       {
@@ -535,8 +535,8 @@
         "value": 1,
         "lineStyle": {
           "type": "dashed",
-          "width": 1.2,
-          "opacity": 0.55
+          "width": 1.0,
+          "opacity": 0.45
         }
       },
       {
@@ -545,8 +545,8 @@
         "value": 1,
         "lineStyle": {
           "type": "dotted",
-          "width": 1.0,
-          "opacity": 0.45
+          "width": 0.8,
+          "opacity": 0.35
         }
       },
       {
@@ -555,8 +555,8 @@
         "value": 1,
         "lineStyle": {
           "type": "dashed",
-          "width": 1.2,
-          "opacity": 0.55
+          "width": 1.0,
+          "opacity": 0.45
         }
       },
       {
@@ -565,8 +565,8 @@
         "value": 1,
         "lineStyle": {
           "type": "dotted",
-          "width": 1.0,
-          "opacity": 0.45
+          "width": 0.8,
+          "opacity": 0.35
         }
       },
       {
@@ -575,8 +575,8 @@
         "value": 1,
         "lineStyle": {
           "type": "dashed",
-          "width": 1.2,
-          "opacity": 0.55
+          "width": 1.0,
+          "opacity": 0.45
         }
       },
       {
@@ -585,8 +585,8 @@
         "value": 1,
         "lineStyle": {
           "type": "dotted",
-          "width": 1.0,
-          "opacity": 0.45
+          "width": 0.8,
+          "opacity": 0.35
         }
       },
       {
@@ -595,8 +595,8 @@
         "value": 1,
         "lineStyle": {
           "type": "dashed",
-          "width": 1.2,
-          "opacity": 0.55
+          "width": 1.0,
+          "opacity": 0.45
         }
       },
       {
@@ -605,8 +605,8 @@
         "value": 1,
         "lineStyle": {
           "type": "dotted",
-          "width": 1.0,
-          "opacity": 0.45
+          "width": 0.8,
+          "opacity": 0.35
         }
       },
       {
@@ -615,8 +615,8 @@
         "value": 1,
         "lineStyle": {
           "type": "dashed",
-          "width": 1.2,
-          "opacity": 0.55
+          "width": 1.0,
+          "opacity": 0.45
         }
       },
       {
@@ -625,8 +625,8 @@
         "value": 1,
         "lineStyle": {
           "type": "dotted",
-          "width": 1.0,
-          "opacity": 0.45
+          "width": 0.8,
+          "opacity": 0.35
         }
       },
       {
@@ -635,8 +635,8 @@
         "value": 1,
         "lineStyle": {
           "type": "dashed",
-          "width": 1.2,
-          "opacity": 0.55
+          "width": 1.0,
+          "opacity": 0.45
         }
       },
       {
@@ -645,8 +645,8 @@
         "value": 1,
         "lineStyle": {
           "type": "dotted",
-          "width": 1.0,
-          "opacity": 0.45
+          "width": 0.8,
+          "opacity": 0.35
         }
       },
       {
@@ -655,9 +655,9 @@
         "value": 1,
         "lineStyle": {
           "color": "#f59e0b",
-          "width": 1.6,
+          "width": 1.2,
           "type": "solid",
-          "opacity": 0.8
+          "opacity": 0.7
         }
       },
       {
@@ -666,9 +666,9 @@
         "value": 1,
         "lineStyle": {
           "color": "#f59e0b",
-          "width": 1.6,
+          "width": 1.2,
           "type": "solid",
-          "opacity": 0.8
+          "opacity": 0.7
         }
       },
       {
@@ -677,9 +677,9 @@
         "value": 1,
         "lineStyle": {
           "color": "#f59e0b",
-          "width": 1.6,
+          "width": 1.2,
           "type": "solid",
-          "opacity": 0.8
+          "opacity": 0.7
         }
       },
       {
@@ -688,9 +688,9 @@
         "value": 1,
         "lineStyle": {
           "color": "#f59e0b",
-          "width": 1.6,
+          "width": 1.2,
           "type": "solid",
-          "opacity": 0.8
+          "opacity": 0.7
         }
       }
     ],
@@ -698,25 +698,33 @@
       {
         "name": "重点区域/省市",
         "itemStyle": {
-          "color": "#004886"
+          "color": "#004886",
+          "borderColor": "#38bdf8",
+          "borderWidth": 1.5
         }
       },
       {
         "name": "前沿产业赛道",
         "itemStyle": {
-          "color": "#0284c7"
+          "color": "#0284c7",
+          "borderColor": "#7dd3fc",
+          "borderWidth": 1.5
         }
       },
       {
         "name": "核心突破政策",
         "itemStyle": {
-          "color": "#10b981"
+          "color": "#10b981",
+          "borderColor": "#6ee7b7",
+          "borderWidth": 1.5
         }
       },
       {
         "name": "未来战略趋势",
         "itemStyle": {
-          "color": "#f59e0b"
+          "color": "#f59e0b",
+          "borderColor": "#fcd34d",
+          "borderWidth": 1.5
         }
       }
     ],
