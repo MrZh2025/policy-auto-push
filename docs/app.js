@@ -7227,7 +7227,7 @@ window.resetNuclearFocus = resetNuclearFocus;
 
 
 // ==========================================================================
-// 🕸️ 全国省份·重点产业拓扑图谱与未来发展走势研判大屏核心逻辑 (消除底部空白版)
+// 🕸️ 全国重点地方省份·前沿医药产业真实布局拓扑与发展走势 (免白屏高可用版)
 // ==========================================================================
 let chartIndustryGraphInstance = null;
 let industryGraphData = null;
@@ -7245,13 +7245,10 @@ function openIndustryGraphModal() {
         fetchIndustryGraphData();
     }
 
-    // 绑定 ResizeObserver 实时监听容器尺寸变化并精准重绘
     setupGraphResizeObserver();
 
-    // 延迟 50ms, 150ms, 300ms 连续触发三次精准尺寸重绘，确保画布 100% 填满无底部死角
-    setTimeout(forceResizeIndustryGraph, 50);
-    setTimeout(forceResizeIndustryGraph, 150);
-    setTimeout(forceResizeIndustryGraph, 350);
+    setTimeout(forceResizeIndustryGraph, 60);
+    setTimeout(forceResizeIndustryGraph, 200);
 }
 
 function closeIndustryGraphModal() {
@@ -7269,7 +7266,7 @@ function forceResizeIndustryGraph() {
     const container = document.getElementById('chartIndustryGraph');
     if (container && chartIndustryGraphInstance) {
         const rect = container.getBoundingClientRect();
-        if (rect.width > 50 && rect.height > 50) {
+        if (rect.width > 20 && rect.height > 20) {
             chartIndustryGraphInstance.resize({
                 width: rect.width,
                 height: rect.height
@@ -7342,11 +7339,6 @@ function switchGraphTab(tabName) {
 }
 
 function fetchIndustryGraphData() {
-    const container = document.getElementById('chartIndustryGraph');
-    if (container) {
-        container.innerHTML = '<div style="display:flex;height:100%;align-items:center;justify-content:center;color:#64748b;font-size:13px;">🕸️ 正在计算省份-产业拓扑关系与发展走势...</div>';
-    }
-
     fetch('data/industry_graph.json')
         .then(res => res.json())
         .then(res => {
@@ -7354,15 +7346,13 @@ function fetchIndustryGraphData() {
                 industryGraphData = res.data;
                 renderIndustryNetworkGraph(industryGraphData);
                 populateGraphSidePanels(industryGraphData);
-                setTimeout(forceResizeIndustryGraph, 80);
             }
         })
         .catch(err => {
-            console.warn('加载 industry_graph.json 失败，使用备用数据:', err);
+            console.warn('加载 industry_graph.json 异常，使用本地纯地方产业数据:', err);
             industryGraphData = buildFallbackGraphData();
             renderIndustryNetworkGraph(industryGraphData);
             populateGraphSidePanels(industryGraphData);
-            setTimeout(forceResizeIndustryGraph, 80);
         });
 }
 
@@ -7409,6 +7399,115 @@ function populateGraphSidePanels(data) {
             `;
         }).join('');
     }
+}
+
+function renderIndustryNetworkGraph(data) {
+    const container = document.getElementById('chartIndustryGraph');
+    if (!container || typeof echarts === 'undefined' || !data) return;
+
+    // 清空任何文本残留并销毁旧实例，确保 DOM 绑定 100% 绝对有效，彻底杜绝白屏/卡在loading
+    container.innerHTML = '';
+    if (chartIndustryGraphInstance) {
+        try {
+            chartIndustryGraphInstance.dispose();
+        } catch (e) {}
+    }
+    chartIndustryGraphInstance = echarts.init(container);
+
+    const isDark = (state.theme === 'dark');
+    const textColor = isDark ? '#cbd5e1' : '#1e293b';
+
+    const option = {
+        backgroundColor: 'transparent',
+        tooltip: {
+            trigger: 'item',
+            backgroundColor: isDark ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+            borderColor: isDark ? '#334155' : '#e2e8f0',
+            textStyle: { color: textColor, fontSize: 12 },
+            formatter: function(params) {
+                if (params.dataType === 'node') {
+                    const extra = params.data.extra || {};
+                    let html = `<div style="font-weight:700;font-size:13px;margin-bottom:4px;">${params.name}</div>`;
+                    if (extra.desc) html += `<div style="font-size:11.5px;color:#64748b;">${extra.desc}</div>`;
+                    if (extra.note) html += `<div style="font-size:11.5px;color:#10b981;margin-top:3px;">📌 ${extra.note}</div>`;
+                    if (extra.future) html += `<div style="font-size:11.5px;color:#f59e0b;margin-top:3px;">📈 ${extra.future}</div>`;
+                    return html;
+                }
+                return `${params.data.source} ➔ ${params.data.target}`;
+            }
+        },
+        legend: {
+            data: (data.categories || []).map(c => c.name),
+            top: 6,
+            left: 12,
+            textStyle: { color: textColor, fontSize: 11 }
+        },
+        animationDuration: 800,
+        animationEasingUpdate: 'quinticInOut',
+        series: [
+            {
+                type: 'graph',
+                layout: 'force',
+                center: ['50%', '50%'],
+                zoom: 1.05,
+                data: (data.nodes || []).map(n => {
+                    return Object.assign({}, n, {
+                        itemStyle: {
+                            borderWidth: 2,
+                            borderColor: isDark ? '#1e293b' : '#ffffff',
+                            shadowBlur: 8,
+                            shadowColor: 'rgba(0, 0, 0, 0.15)'
+                        }
+                    });
+                }),
+                links: data.links,
+                categories: data.categories,
+                roam: true,
+                label: {
+                    show: true,
+                    position: 'bottom',
+                    distance: 5,
+                    formatter: '{b}',
+                    fontSize: 10.5,
+                    color: textColor,
+                    backgroundColor: isDark ? 'rgba(15, 23, 42, 0.8)' : 'rgba(255, 255, 255, 0.88)',
+                    padding: [2, 5],
+                    borderRadius: 3,
+                    borderColor: isDark ? 'rgba(51, 65, 85, 0.6)' : 'rgba(226, 232, 240, 0.85)',
+                    borderWidth: 0.5
+                },
+                edgeSymbol: ['none', 'arrow'],
+                edgeSymbolSize: [0, 5],
+                lineStyle: {
+                    color: 'source',
+                    curveness: 0.1,
+                    opacity: 0.5,
+                    width: 1.2
+                },
+                emphasis: {
+                    focus: 'adjacency',
+                    lineStyle: { width: 2.8, opacity: 0.95 }
+                },
+                force: {
+                    repulsion: 580,
+                    gravity: 0.03,
+                    edgeLength: [90, 180],
+                    layoutAnimation: true
+                }
+            }
+        ]
+    };
+
+    chartIndustryGraphInstance.setOption(option, true);
+
+    chartIndustryGraphInstance.off('click');
+    chartIndustryGraphInstance.on('click', function(params) {
+        if (params.dataType === 'node') {
+            inspectGraphNode(params.data);
+        }
+    });
+
+    setTimeout(forceResizeIndustryGraph, 60);
 }
 
 function inspectGraphNode(nodeData) {
@@ -7469,27 +7568,38 @@ function inspectGraphNode(nodeData) {
     bodyEl.innerHTML = html;
 }
 
-
 function buildFallbackGraphData() {
     return {
         nodes: [
-            { id: 'prov_sc', name: '四川省', category: 0, symbolSize: 20, extra: { type: 'province' } },
-            { id: 'prov_bj', name: '北京市', category: 0, symbolSize: 18, extra: { type: 'province' } },
-            { id: 'prov_sh', name: '上海市', category: 0, symbolSize: 16, extra: { type: 'province' } },
-            { id: 'prov_gd', name: '广东省', category: 0, symbolSize: 16, extra: { type: 'province' } },
-            { id: 'track_nuc', name: '⚛️ 核医药与放药监管', category: 1, symbolSize: 15, extra: { type: 'track', desc: '医用同位素与PRRT核药' } },
-            { id: 'track_bci', name: '🧠 脑机接口与前沿器械', category: 1, symbolSize: 16, extra: { type: 'track', desc: '国家标准指南与审评要点' } }
+            { id: 'prov_sc', name: '四川省', category: 0, symbolSize: 18, extra: { type: 'province', desc: '成都天府生物城/绵阳科技城' } },
+            { id: 'prov_sh', name: '上海市', category: 0, symbolSize: 17, extra: { type: 'province', desc: '张江药谷/徐汇大模型' } },
+            { id: 'prov_gd', name: '广东省', category: 0, symbolSize: 17, extra: { type: 'province', desc: '深圳坪山/广州生物岛' } },
+            { id: 'prov_js', name: '江苏省', category: 0, symbolSize: 17, extra: { type: 'province', desc: '苏州BioBAY/南京药谷' } },
+            { id: 'prov_zj', name: '浙江省', category: 0, symbolSize: 15, extra: { type: 'province', desc: '杭州医药港小镇' } },
+            { id: 'prov_ln', name: '辽宁省', category: 0, symbolSize: 15, extra: { type: 'province', desc: '大连自贸区免关' } },
+            { id: 'track_nuc', name: '⚛️ 核医疗与放药监管', category: 1, symbolSize: 15, extra: { type: 'track', desc: '医用同位素与PRRT靶向核药' } },
+            { id: 'track_bci', name: '🧠 脑机接口与前沿器械', category: 1, symbolSize: 15, extra: { type: 'track', desc: '运动代偿器械与全生命周期审评' } },
+            { id: 'track_ai', name: '🧬 AI制药与算法模型', category: 1, symbolSize: 15, extra: { type: 'track', desc: '模型引导研发(MIDD)与AIDD' } },
+            { id: 'track_bot', name: '🤖 医疗机器人与智能装备', category: 1, symbolSize: 15, extra: { type: 'track', desc: '微创手术与具身智能机器人' } },
+            { id: 'track_vbp', name: '💳 医保集采与价格治理', category: 1, symbolSize: 15, extra: { type: 'track', desc: '耗材带量采购与价格联动' } },
+            { id: 'track_ftz', name: '🚢 自贸区研发要素免关', category: 1, symbolSize: 15, extra: { type: 'track', desc: '研发物品免通关单白名单' } }
         ],
         links: [
             { source: 'prov_sc', target: 'track_nuc', value: 5 },
             { source: 'prov_sc', target: 'track_bci', value: 4 },
-            { source: 'prov_bj', target: 'track_bci', value: 8 }
+            { source: 'prov_sh', target: 'track_bot', value: 5 },
+            { source: 'prov_sh', target: 'track_ai', value: 5 },
+            { source: 'prov_gd', target: 'track_bot', value: 5 },
+            { source: 'prov_gd', target: 'track_vbp', value: 4 },
+            { source: 'prov_js', target: 'track_ai', value: 4 },
+            { source: 'prov_js', target: 'track_vbp', value: 5 },
+            { source: 'prov_ln', target: 'track_ftz', value: 5 }
         ],
         categories: [
-            { name: '重点区域/省市' },
-            { name: '前沿产业赛道' },
-            { name: '核心突破政策' },
-            { name: '未来战略趋势' }
+            { name: '地方重点省份' },
+            { name: '地方重点产业赛道' },
+            { name: '核心产业集群/园区载体' },
+            { name: '省际产业竞合趋势' }
         ],
         province_profiles: {},
         trend_insights: {}
