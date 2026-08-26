@@ -6,44 +6,55 @@
         "id": "prov_四川省",
         "name": "四川省",
         "category": 0,
-        "symbolSize": 20,
-        "value": 3,
-        "extra": {
-          "type": "province",
-          "desc": "关联重点政策 3 篇"
-        }
-      },
-      {
-        "id": "prov_北京市",
-        "name": "北京市",
-        "category": 0,
         "symbolSize": 18,
-        "value": 76,
+        "value": 4,
         "extra": {
           "type": "province",
-          "desc": "关联重点政策 76 篇"
+          "desc": "实体园区: 成都天府国际生物城、成都医学城（温江）、中国绵阳科技城（..."
         }
       },
       {
         "id": "prov_上海市",
         "name": "上海市",
         "category": 0,
-        "symbolSize": 16,
-        "value": 2,
+        "symbolSize": 17,
+        "value": 4,
         "extra": {
           "type": "province",
-          "desc": "关联重点政策 2 篇"
+          "desc": "实体园区: 张江药谷、临港新片区生命蓝湾、徐汇AI大模型产业集聚区..."
         }
       },
       {
         "id": "prov_广东省",
         "name": "广东省",
         "category": 0,
-        "symbolSize": 16,
-        "value": 2,
+        "symbolSize": 17,
+        "value": 4,
         "extra": {
           "type": "province",
-          "desc": "关联重点政策 2 篇"
+          "desc": "实体园区: 深圳坪山生物医药产业基地、广州国际生物岛、珠海金湾生物医..."
+        }
+      },
+      {
+        "id": "prov_江苏省",
+        "name": "江苏省",
+        "category": 0,
+        "symbolSize": 17,
+        "value": 4,
+        "extra": {
+          "type": "province",
+          "desc": "实体园区: 苏州工业园区（BioBAY）、南京生物医药谷、连云港新医..."
+        }
+      },
+      {
+        "id": "prov_浙江省",
+        "name": "浙江省",
+        "category": 0,
+        "symbolSize": 15,
+        "value": 4,
+        "extra": {
+          "type": "province",
+          "desc": "实体园区: 杭州医药港小镇（下沙）、余杭未来科技城生物医药区、绍兴滨..."
         }
       },
       {
@@ -51,79 +62,68 @@
         "name": "辽宁省",
         "category": 0,
         "symbolSize": 15,
-        "value": 3,
+        "value": 4,
         "extra": {
           "type": "province",
-          "desc": "关联重点政策 3 篇"
+          "desc": "实体园区: 大连金普新区生物医药产业园、沈阳本溪药都、自贸试验区大连..."
         }
       },
       {
-        "id": "prov_江苏省",
-        "name": "江苏省",
+        "id": "prov_山东省",
+        "name": "山东省",
         "category": 0,
         "symbolSize": 15,
-        "value": 3,
+        "value": 4,
         "extra": {
           "type": "province",
-          "desc": "关联重点政策 3 篇"
+          "desc": "实体园区: 威海医疗器械产业园（威高基地）、青岛蓝色药谷、烟台牟平国..."
         }
       },
       {
-        "id": "prov_浙江省",
-        "name": "浙江省",
+        "id": "prov_湖北省",
+        "name": "湖北省",
         "category": 0,
-        "symbolSize": 14,
-        "value": 1,
+        "symbolSize": 15,
+        "value": 4,
         "extra": {
           "type": "province",
-          "desc": "关联重点政策 1 篇"
+          "desc": "实体园区: 武汉国家生物产业基地（光谷生物城）、宜昌生物医药产业园..."
         }
       },
       {
-        "id": "prov_陕西省",
-        "name": "陕西省",
-        "category": 0,
-        "symbolSize": 14,
-        "value": 1,
-        "extra": {
-          "type": "province",
-          "desc": "关联重点政策 1 篇"
-        }
-      },
-      {
-        "id": "track_核医药与放药监管",
-        "name": "⚛️ 核医药与放药监管",
+        "id": "track_核医疗与放药监管",
+        "name": "⚛️ 核医疗与放药监管",
         "category": 1,
         "symbolSize": 15,
-        "value": 1,
+        "value": 38,
         "extra": {
           "type": "track",
-          "desc": "医用同位素自给化、PRRT靶向放射性核素治疗、放药仿制与质控标准、院内制剂转化",
-          "future": "2026-2028将迎来镥[177Lu]、锕[225Ac]等治疗性核药仿制申报高峰，国家级放药技术审评标准全面落地，区域核医疗中心与医用同位素堆产化成为核心支撑。"
+          "desc": "医用同位素自研自产、177Lu/225Ac靶向PRRT核药、院内制剂跨省转化",
+          "future": "2026-2028年迎来治疗性核药仿制申报高峰，四川凭借绵阳与成都堆产资源成为全国核心承载区。"
         }
       },
       {
         "id": "track_脑机接口与前沿器械",
         "name": "🧠 脑机接口与前沿器械",
         "category": 1,
-        "symbolSize": 16,
-        "value": 8,
+        "symbolSize": 15,
+        "value": 29,
         "extra": {
           "type": "track",
-          "desc": "侵入式运动代偿器械、非侵入脑电采集、神经调控、国家产业标准体系（2026-2030）、康复装备",
-          "future": "到2028年制修订标准40项以上，2030年突破80项。植入式BCI医疗器械进入临床前审评要点合规阶段，偏瘫康复、癫痫治疗与人机协作加速商业化。"
+          "desc": "侵入/非侵入运动代偿、神经调控、智能康复电极、临床试验要点",
+          "future": "上海与四川率先在全生命周期监管中推进BCI前置服务，2028年前形成区域临床试验集聚。"
         }
       },
       {
         "id": "track_AI制药与算法模型",
         "name": "🧬 AI制药与算法模型",
         "category": 1,
-        "symbolSize": 14,
-        "value": 3,
+        "symbolSize": 15,
+        "value": 35,
         "extra": {
           "type": "track",
-          "desc": "模型引导药物研发(ICH M15)、AIDD靶点发现、计算生物学、临床试验算法设计、AI医疗影像",
-          "future": "定量药理学与模型引导（MIDD）全面纳入国家审评体系，AI大模型从纯虚拟筛选向临床试验设计优化、晶型预测及真实世界数据闭环渗透。"
+          "desc": "模型引导药物研发(MIDD)、AIDD靶点发现、计算生物学、大模型算力",
+          "future": "上海张江与江苏BioBAY依托顶尖算法生态，推动AI从虚拟筛选进入临床试验设计与监管审评决策。"
         }
       },
       {
@@ -131,447 +131,303 @@
         "name": "🤖 医疗机器人与智能装备",
         "category": 1,
         "symbolSize": 15,
-        "value": 4,
+        "value": 30,
         "extra": {
           "type": "track",
-          "desc": "腔镜/骨科手术机器人、康复外骨骼、特种医疗协作装备、产用结对攻关、具身智能",
-          "future": "工信部深化医疗场景产用攻关推广，具备规模化优势与临床协作的国产手术机器人加速下沉三级/二级医院，具身智能与多模态机器人走进临床。"
+          "desc": "微创腔镜/骨科机器人、具身智能协作装备、康复外骨骼、产用攻关",
+          "future": "广东制造供应链与上海具身智能双轮驱动，国产高性价比手术机器人加速向下沉医院替代进口。"
         }
       },
       {
-        "id": "track_医保政策与集采支付",
-        "name": "💳 医保政策与集采支付",
+        "id": "track_医保集采与价格治理",
+        "name": "💳 医保集采与价格治理",
         "category": 1,
         "symbolSize": 15,
-        "value": 15,
+        "value": 28,
         "extra": {
           "type": "track",
-          "desc": "全民医保十五五规划、耗材带量采购、省级限价挂网、DRG/DIP支付方式改革、智能监管两库",
-          "future": "集采常态化向耗材细分品种全覆盖，限价挂网价格联动加剧，智能监管限二线规则精细化，创新药‘绿色挂网’与快速进院机制成为政策对冲关键。"
+          "desc": "耗材全品类集采、限价挂网增补、价格动态联动、智能监管两库",
+          "future": "广东与江苏成为全国耗材价格联动的‘压舱石’，倒逼传统仿制企业向高壁垒创新药械转型。"
         }
       },
       {
-        "id": "track_科技创新与资金申报",
-        "name": "📑 科技创新与资金申报",
+        "id": "track_自贸区研发要素免关",
+        "name": "🚢 自贸区研发要素免关",
         "category": 1,
         "symbolSize": 15,
-        "value": 54,
+        "value": 29,
         "extra": {
           "type": "track",
-          "desc": "CGT先锐计划、重大新药创制专项、研发用物品进口白名单、科技奖补基金、专精特新培育",
-          "future": "自贸区生物医药研发物品免通关单‘白名单’在辽宁、上海等推广；CDE对细胞与基因治疗实施先锐计划前置辅导；科技资金全面向新质生产力倾斜。"
+          "desc": "生物医药研发物品免通关单白名单、跨境生物物料验放、保税研发",
+          "future": "辽宁自贸区首创的白名单模式正向全国自贸区扩散，为四川自贸区天府生物城提供成熟制度样板。"
         }
       },
       {
-        "id": "policy_bci_std",
-        "name": "工信部《脑机接口标准指南》",
+        "id": "cluster_sc_bio",
+        "name": "成都天府生物城·核医疗高地",
         "category": 2,
         "symbolSize": 10,
         "value": 1,
         "extra": {
-          "type": "policy",
-          "note": "2028年研制40项标准，2030年80项"
+          "type": "cluster",
+          "note": "四川核医学堆产资源与转化中心"
         }
       },
       {
-        "id": "policy_bci_cmde",
-        "name": "CMDE《植入式脑机接口审评要点》",
+        "id": "cluster_sh_zj",
+        "name": "上海张江药谷·具身智能中心",
         "category": 2,
         "symbolSize": 10,
         "value": 1,
         "extra": {
-          "type": "policy",
-          "note": "国家首个侵入式BCI器械审评判定标准"
+          "type": "cluster",
+          "note": "三大先导产业与AI大模型集聚区"
         }
       },
       {
-        "id": "policy_sc_device",
-        "name": "四川省《医疗器械高质量发展39号文》",
-        "category": 2,
-        "symbolSize": 11,
-        "value": 1,
-        "extra": {
-          "type": "policy",
-          "note": "全生命周期监管，培育脑机接口、核医疗设备"
-        }
-      },
-      {
-        "id": "policy_177lu",
-        "name": "CDE《177Lu仿制药技术要求》",
+        "id": "cluster_gd_sz",
+        "name": "深圳坪山·微创机器人智造链",
         "category": 2,
         "symbolSize": 10,
         "value": 1,
         "extra": {
-          "type": "policy",
-          "note": "国内首个PRRT核素仿制药药学标准"
+          "type": "cluster",
+          "note": "全国最完备的精密医疗电子制造集群"
         }
       },
       {
-        "id": "policy_ln_whitelist",
-        "name": "辽宁自贸区《生物医药进口白名单》",
-        "category": 2,
-        "symbolSize": 11,
-        "value": 1,
-        "extra": {
-          "type": "policy",
-          "note": "免通关单快速验放，全流程闭环可追溯"
-        }
-      },
-      {
-        "id": "policy_sh_155",
-        "name": "上海市《十五五新型工业化规划》",
+        "id": "cluster_js_bio",
+        "name": "苏州BioBAY·创新药集聚地",
         "category": 2,
         "symbolSize": 10,
         "value": 1,
         "extra": {
-          "type": "policy",
-          "note": "生物医药先导产业，发展脑机接口与具身机器人"
+          "type": "cluster",
+          "note": "创新抗体与小分子新药研发主阵地"
         }
       },
       {
-        "id": "policy_gd_vessel",
-        "name": "广东省《3类耗材集采文件》",
-        "category": 2,
-        "symbolSize": 9,
-        "value": 1,
-        "extra": {
-          "type": "policy",
-          "note": "冠脉扩张球囊集采常态化，以量换价"
-        }
-      },
-      {
-        "id": "policy_cgt_sharp",
-        "name": "CDE《CGT药品先锐计划》",
+        "id": "cluster_ln_ftz",
+        "name": "辽宁自贸试验区·保税研发港",
         "category": 2,
         "symbolSize": 10,
         "value": 1,
         "extra": {
-          "type": "policy",
-          "note": "年限15个重大创新品种前置审评加速"
+          "type": "cluster",
+          "note": "研发用物品免通关单绿色验放闭环"
         }
       },
       {
-        "id": "policy_ich_m15",
-        "name": "ICH《M15模型引导药物研发》",
-        "category": 2,
-        "symbolSize": 9,
-        "value": 1,
-        "extra": {
-          "type": "policy",
-          "note": "定量药理学与AI计算建模审评落地"
-        }
-      },
-      {
-        "id": "trend_2028_bci",
-        "name": "2028脑机标准成网",
-        "category": 3,
-        "symbolSize": 10,
-        "value": 1,
-        "extra": {
-          "type": "trend",
-          "note": "牵头参与国际标准10项以上，覆盖超100家领军企业"
-        }
-      },
-      {
-        "id": "trend_prrt_boom",
-        "name": "PRRT放药仿制潮",
-        "category": 3,
-        "symbolSize": 10,
-        "value": 1,
-        "extra": {
-          "type": "trend",
-          "note": "177Lu与225Ac靶向核药迎来研发与生产爆发期"
-        }
-      },
-      {
-        "id": "trend_vbp_full",
-        "name": "耗材集采全品类扩面",
+        "id": "trend_west_nuc",
+        "name": "西南核医疗转化第一极",
         "category": 3,
         "symbolSize": 9,
         "value": 1,
         "extra": {
           "type": "trend",
-          "note": "DRG/DIP深水区，价格联动与智能两库强监管"
+          "note": "四川依托堆产优势打造国家战略腹地放药中枢"
         }
       },
       {
-        "id": "trend_free_port",
-        "name": "自贸区要素零关卡",
+        "id": "trend_east_ai",
+        "name": "长三角具身智能与AI高地",
         "category": 3,
         "symbolSize": 9,
         "value": 1,
         "extra": {
           "type": "trend",
-          "note": "白名单机制全国多省复制，进口通关周期缩减80%"
+          "note": "上海与江苏主导算力算法与微创器械研发"
+        }
+      },
+      {
+        "id": "trend_south_vbp",
+        "name": "大湾区规模化智造与集采",
+        "category": 3,
+        "symbolSize": 9,
+        "value": 1,
+        "extra": {
+          "type": "trend",
+          "note": "广东以产业链制造优势抢占集采与出口大盘"
+        }
+      },
+      {
+        "id": "trend_ftz_open",
+        "name": "自贸区研发要素免通关复制",
+        "category": 3,
+        "symbolSize": 9,
+        "value": 1,
+        "extra": {
+          "type": "trend",
+          "note": "辽宁模式向全国自贸区推广，缩短研发周期80%"
         }
       }
     ],
     "links": [
       {
         "source": "prov_四川省",
-        "target": "track_脑机接口与前沿器械",
-        "value": 1,
+        "target": "track_核医疗与放药监管",
+        "value": 4,
         "lineStyle": {
-          "width": 1.0,
+          "width": 1.6,
           "opacity": 0.55
         }
       },
       {
         "source": "prov_四川省",
-        "target": "track_科技创新与资金申报",
-        "value": 2,
-        "lineStyle": {
-          "width": 1.0,
-          "opacity": 0.55
-        }
-      },
-      {
-        "source": "prov_北京市",
-        "target": "track_核医药与放药监管",
-        "value": 1,
-        "lineStyle": {
-          "width": 1.0,
-          "opacity": 0.55
-        }
-      },
-      {
-        "source": "prov_北京市",
         "target": "track_脑机接口与前沿器械",
-        "value": 6,
-        "lineStyle": {
-          "width": 1.7999999999999998,
-          "opacity": 0.55
-        }
-      },
-      {
-        "source": "prov_北京市",
-        "target": "track_AI制药与算法模型",
         "value": 3,
         "lineStyle": {
+          "width": 1.2000000000000002,
+          "opacity": 0.55
+        }
+      },
+      {
+        "source": "prov_四川省",
+        "target": "track_医疗机器人与智能装备",
+        "value": 2,
+        "lineStyle": {
           "width": 1.0,
           "opacity": 0.55
         }
       },
       {
-        "source": "prov_北京市",
+        "source": "prov_上海市",
         "target": "track_医疗机器人与智能装备",
-        "value": 4,
+        "value": 5,
         "lineStyle": {
-          "width": 1.2,
+          "width": 2.0,
           "opacity": 0.55
         }
       },
       {
-        "source": "prov_北京市",
-        "target": "track_医保政策与集采支付",
-        "value": 12,
+        "source": "prov_上海市",
+        "target": "track_AI制药与算法模型",
+        "value": 5,
         "lineStyle": {
-          "width": 2.5,
-          "opacity": 0.55
-        }
-      },
-      {
-        "source": "prov_北京市",
-        "target": "track_科技创新与资金申报",
-        "value": 50,
-        "lineStyle": {
-          "width": 2.5,
+          "width": 2.0,
           "opacity": 0.55
         }
       },
       {
         "source": "prov_上海市",
         "target": "track_脑机接口与前沿器械",
-        "value": 1,
+        "value": 4,
         "lineStyle": {
-          "width": 1.0,
-          "opacity": 0.55
-        }
-      },
-      {
-        "source": "prov_上海市",
-        "target": "track_科技创新与资金申报",
-        "value": 1,
-        "lineStyle": {
-          "width": 1.0,
+          "width": 1.6,
           "opacity": 0.55
         }
       },
       {
         "source": "prov_广东省",
-        "target": "track_医保政策与集采支付",
-        "value": 1,
+        "target": "track_医疗机器人与智能装备",
+        "value": 5,
         "lineStyle": {
-          "width": 1.0,
+          "width": 2.0,
           "opacity": 0.55
         }
       },
       {
         "source": "prov_广东省",
-        "target": "track_科技创新与资金申报",
-        "value": 1,
+        "target": "track_医保集采与价格治理",
+        "value": 4,
         "lineStyle": {
-          "width": 1.0,
-          "opacity": 0.55
-        }
-      },
-      {
-        "source": "prov_辽宁省",
-        "target": "track_医保政策与集采支付",
-        "value": 1,
-        "lineStyle": {
-          "width": 1.0,
-          "opacity": 0.55
-        }
-      },
-      {
-        "source": "prov_辽宁省",
-        "target": "track_科技创新与资金申报",
-        "value": 2,
-        "lineStyle": {
-          "width": 1.0,
+          "width": 1.6,
           "opacity": 0.55
         }
       },
       {
         "source": "prov_江苏省",
-        "target": "track_医保政策与集采支付",
-        "value": 1,
+        "target": "track_AI制药与算法模型",
+        "value": 4,
         "lineStyle": {
-          "width": 1.0,
+          "width": 1.6,
           "opacity": 0.55
         }
       },
       {
         "source": "prov_江苏省",
-        "target": "track_科技创新与资金申报",
-        "value": 2,
+        "target": "track_医保集采与价格治理",
+        "value": 5,
         "lineStyle": {
-          "width": 1.0,
+          "width": 2.0,
+          "opacity": 0.55
+        }
+      },
+      {
+        "source": "prov_江苏省",
+        "target": "track_自贸区研发要素免关",
+        "value": 3,
+        "lineStyle": {
+          "width": 1.2000000000000002,
           "opacity": 0.55
         }
       },
       {
         "source": "prov_浙江省",
-        "target": "track_科技创新与资金申报",
-        "value": 1,
+        "target": "track_AI制药与算法模型",
+        "value": 3,
         "lineStyle": {
-          "width": 1.0,
+          "width": 1.2000000000000002,
           "opacity": 0.55
         }
       },
       {
-        "source": "prov_陕西省",
-        "target": "track_科技创新与资金申报",
-        "value": 1,
+        "source": "prov_浙江省",
+        "target": "track_医疗机器人与智能装备",
+        "value": 3,
         "lineStyle": {
-          "width": 1.0,
+          "width": 1.2000000000000002,
           "opacity": 0.55
-        }
-      },
-      {
-        "source": "track_脑机接口与前沿器械",
-        "target": "policy_bci_std",
-        "value": 1,
-        "lineStyle": {
-          "type": "dashed",
-          "width": 1.0,
-          "opacity": 0.45
-        }
-      },
-      {
-        "source": "prov_北京市",
-        "target": "policy_bci_std",
-        "value": 1,
-        "lineStyle": {
-          "type": "dotted",
-          "width": 0.8,
-          "opacity": 0.35
-        }
-      },
-      {
-        "source": "track_脑机接口与前沿器械",
-        "target": "policy_bci_cmde",
-        "value": 1,
-        "lineStyle": {
-          "type": "dashed",
-          "width": 1.0,
-          "opacity": 0.45
-        }
-      },
-      {
-        "source": "prov_北京市",
-        "target": "policy_bci_cmde",
-        "value": 1,
-        "lineStyle": {
-          "type": "dotted",
-          "width": 0.8,
-          "opacity": 0.35
-        }
-      },
-      {
-        "source": "track_脑机接口与前沿器械",
-        "target": "policy_sc_device",
-        "value": 1,
-        "lineStyle": {
-          "type": "dashed",
-          "width": 1.0,
-          "opacity": 0.45
-        }
-      },
-      {
-        "source": "prov_四川省",
-        "target": "policy_sc_device",
-        "value": 1,
-        "lineStyle": {
-          "type": "dotted",
-          "width": 0.8,
-          "opacity": 0.35
-        }
-      },
-      {
-        "source": "track_核医药与放药监管",
-        "target": "policy_177lu",
-        "value": 1,
-        "lineStyle": {
-          "type": "dashed",
-          "width": 1.0,
-          "opacity": 0.45
-        }
-      },
-      {
-        "source": "prov_北京市",
-        "target": "policy_177lu",
-        "value": 1,
-        "lineStyle": {
-          "type": "dotted",
-          "width": 0.8,
-          "opacity": 0.35
-        }
-      },
-      {
-        "source": "track_科技创新与资金申报",
-        "target": "policy_ln_whitelist",
-        "value": 1,
-        "lineStyle": {
-          "type": "dashed",
-          "width": 1.0,
-          "opacity": 0.45
         }
       },
       {
         "source": "prov_辽宁省",
-        "target": "policy_ln_whitelist",
-        "value": 1,
+        "target": "track_自贸区研发要素免关",
+        "value": 5,
         "lineStyle": {
-          "type": "dotted",
-          "width": 0.8,
-          "opacity": 0.35
+          "width": 2.0,
+          "opacity": 0.55
         }
       },
       {
-        "source": "track_医疗机器人与智能装备",
-        "target": "policy_sh_155",
+        "source": "prov_辽宁省",
+        "target": "track_医保集采与价格治理",
+        "value": 3,
+        "lineStyle": {
+          "width": 1.2000000000000002,
+          "opacity": 0.55
+        }
+      },
+      {
+        "source": "prov_山东省",
+        "target": "track_医保集采与价格治理",
+        "value": 3,
+        "lineStyle": {
+          "width": 1.2000000000000002,
+          "opacity": 0.55
+        }
+      },
+      {
+        "source": "prov_湖北省",
+        "target": "track_AI制药与算法模型",
+        "value": 3,
+        "lineStyle": {
+          "width": 1.2000000000000002,
+          "opacity": 0.55
+        }
+      },
+      {
+        "source": "prov_湖北省",
+        "target": "track_医疗机器人与智能装备",
+        "value": 3,
+        "lineStyle": {
+          "width": 1.2000000000000002,
+          "opacity": 0.55
+        }
+      },
+      {
+        "source": "prov_四川省",
+        "target": "cluster_sc_bio",
         "value": 1,
         "lineStyle": {
           "type": "dashed",
@@ -581,17 +437,7 @@
       },
       {
         "source": "prov_上海市",
-        "target": "policy_sh_155",
-        "value": 1,
-        "lineStyle": {
-          "type": "dotted",
-          "width": 0.8,
-          "opacity": 0.35
-        }
-      },
-      {
-        "source": "track_医保政策与集采支付",
-        "target": "policy_gd_vessel",
+        "target": "cluster_sh_zj",
         "value": 1,
         "lineStyle": {
           "type": "dashed",
@@ -601,17 +447,7 @@
       },
       {
         "source": "prov_广东省",
-        "target": "policy_gd_vessel",
-        "value": 1,
-        "lineStyle": {
-          "type": "dotted",
-          "width": 0.8,
-          "opacity": 0.35
-        }
-      },
-      {
-        "source": "track_科技创新与资金申报",
-        "target": "policy_cgt_sharp",
+        "target": "cluster_gd_sz",
         "value": 1,
         "lineStyle": {
           "type": "dashed",
@@ -620,38 +456,39 @@
         }
       },
       {
-        "source": "prov_北京市",
-        "target": "policy_cgt_sharp",
+        "source": "prov_江苏省",
+        "target": "cluster_js_bio",
         "value": 1,
         "lineStyle": {
-          "type": "dotted",
-          "width": 0.8,
-          "opacity": 0.35
+          "type": "dashed",
+          "width": 1.0,
+          "opacity": 0.45
+        }
+      },
+      {
+        "source": "prov_辽宁省",
+        "target": "cluster_ln_ftz",
+        "value": 1,
+        "lineStyle": {
+          "type": "dashed",
+          "width": 1.0,
+          "opacity": 0.45
+        }
+      },
+      {
+        "source": "track_核医疗与放药监管",
+        "target": "trend_west_nuc",
+        "value": 1,
+        "lineStyle": {
+          "color": "#f59e0b",
+          "width": 1.2,
+          "type": "solid",
+          "opacity": 0.7
         }
       },
       {
         "source": "track_AI制药与算法模型",
-        "target": "policy_ich_m15",
-        "value": 1,
-        "lineStyle": {
-          "type": "dashed",
-          "width": 1.0,
-          "opacity": 0.45
-        }
-      },
-      {
-        "source": "prov_北京市",
-        "target": "policy_ich_m15",
-        "value": 1,
-        "lineStyle": {
-          "type": "dotted",
-          "width": 0.8,
-          "opacity": 0.35
-        }
-      },
-      {
-        "source": "track_脑机接口与前沿器械",
-        "target": "trend_2028_bci",
+        "target": "trend_east_ai",
         "value": 1,
         "lineStyle": {
           "color": "#f59e0b",
@@ -661,8 +498,8 @@
         }
       },
       {
-        "source": "track_核医药与放药监管",
-        "target": "trend_prrt_boom",
+        "source": "track_医疗机器人与智能装备",
+        "target": "trend_south_vbp",
         "value": 1,
         "lineStyle": {
           "color": "#f59e0b",
@@ -672,19 +509,8 @@
         }
       },
       {
-        "source": "track_医保政策与集采支付",
-        "target": "trend_vbp_full",
-        "value": 1,
-        "lineStyle": {
-          "color": "#f59e0b",
-          "width": 1.2,
-          "type": "solid",
-          "opacity": 0.7
-        }
-      },
-      {
-        "source": "track_科技创新与资金申报",
-        "target": "trend_free_port",
+        "source": "track_自贸区研发要素免关",
+        "target": "trend_ftz_open",
         "value": 1,
         "lineStyle": {
           "color": "#f59e0b",
@@ -696,7 +522,7 @@
     ],
     "categories": [
       {
-        "name": "重点区域/省市",
+        "name": "地方重点省份",
         "itemStyle": {
           "color": "#004886",
           "borderColor": "#38bdf8",
@@ -704,7 +530,7 @@
         }
       },
       {
-        "name": "前沿产业赛道",
+        "name": "地方重点产业赛道",
         "itemStyle": {
           "color": "#0284c7",
           "borderColor": "#7dd3fc",
@@ -712,7 +538,7 @@
         }
       },
       {
-        "name": "核心突破政策",
+        "name": "核心产业集群/园区载体",
         "itemStyle": {
           "color": "#10b981",
           "borderColor": "#6ee7b7",
@@ -720,7 +546,7 @@
         }
       },
       {
-        "name": "未来战略趋势",
+        "name": "省际产业竞合趋势",
         "itemStyle": {
           "color": "#f59e0b",
           "borderColor": "#fcd34d",
@@ -730,102 +556,129 @@
     ],
     "province_profiles": {
       "四川省": {
-        "title": "四川省 · 西南生物医药新质生产力核心策源地",
+        "title": "四川省 · 西南核医疗与战略腹地新质策源地",
         "focus_industries": [
           "核医疗与医用同位素",
           "脑机接口与前沿器械",
-          "创新药与中药现代化",
-          "医疗机器人"
+          "高端医学影像与机器人",
+          "中药现代化"
         ],
-        "key_advantages": "依托成都医学城、天府国际生物城及中国绵阳科技城核技术优势，出台《川药监发39号文》，在审评审批绿色通道、全生命周期监管及核医药转化上走在全国前列。",
-        "future_outlook": "深化川渝生物医药协同，加速放药院内制剂跨省调剂与转化，成为国家战略腹地生物医药创新高地。"
-      },
-      "北京市": {
-        "title": "北京市 · 国家监管创新与前沿原创标准高地",
-        "focus_industries": [
-          "国家标准体系构建",
-          "植入式脑机接口",
-          "AI制药与计算生物",
-          "CGT细胞基因治疗"
-        ],
-        "key_advantages": "汇聚工信部、国家药监局(CDE/CMDE)、国家医保局等核心监管中枢，主导脑机接口标准指南(2026版)、CGT先锐计划及ICH M15国际接轨。",
-        "future_outlook": "统领全国标准体系话语权，亦庄与海淀加速原创药物研发与高端器械转化。"
+        "industry_clusters": "成都天府国际生物城、成都医学城（温江）、中国绵阳科技城（核技术高地）、泸州医药产业园",
+        "real_intent": "依托全国独一无二的核堆与堆照同位素资源攻坚放药国产化；以《川药监39号文》开辟全生命周期审评绿色通道，做强西部战略腹地生物医药制造。",
+        "future_outlook": "打通放射性药品院内制剂跨省调剂转化，建设国家级核医疗健康产业高地与创新器械转化首选地。"
       },
       "上海市": {
-        "title": "上海市 · 国际化先导产业与具身智能医药高地",
+        "title": "上海市 · 具身智能医疗机器人与AI制药全球创新极",
         "focus_industries": [
-          "高端医疗器械与装备",
-          "脑机接口产业化",
           "具身智能医疗机器人",
-          "AI制药大模型"
+          "AI制药与前沿大模型",
+          "脑机接口产业化",
+          "CGT细胞基因治疗"
         ],
-        "key_advantages": "《十五五新型工业化规划》将生物医药列为三大先导产业之一，张江药谷与徐汇大模型生态领先，研发物品白名单与自贸改革成熟。",
-        "future_outlook": "深化AI+生物医药融合，推动脑机接口、微创手术机器人走进全省与国际医院。"
+        "industry_clusters": "张江药谷、临港新片区生命蓝湾、徐汇AI大模型产业集聚区",
+        "real_intent": "将生物医药列为三大先导产业之首，重点攻坚“AI+机器人+生物医药”跨界融合，打造全球创新药械出海与高端智造中枢。",
+        "future_outlook": "加速微创手术机器人进三甲医院，建立全球领先的定量药理学与AIDD算力平台。"
       },
       "广东省": {
-        "title": "广东省 · 粤港澳大湾区集采挂网与智能装备产业高地",
+        "title": "广东省 · 粤港澳微创器械智造与超大规模商业化枢纽",
         "focus_industries": [
-          "医用耗材集中带量采购",
-          "医疗机器人制造",
-          "创新药挂网商业化",
-          "大湾区药械通"
+          "微创手术机器人制造",
+          "医用耗材高端替代",
+          "数字医疗与智能穿戴",
+          "大湾区创新药械通"
         ],
-        "key_advantages": "广东药品交易中心主导多轮耗材集采规则制定，深圳与广州在手术机器人、智能穿戴康复设备制造端产业链完备。",
-        "future_outlook": "依托大湾区“药械通”加速国际创新药械引进，以超大规模市场驱动国产设备以价换量。"
-      },
-      "辽宁省": {
-        "title": "辽宁省 · 东北亚跨境研发要素与自贸白名单先试先行区",
-        "focus_industries": [
-          "生物医药研发物品进口白名单",
-          "省际耗材限价挂网",
-          "医药数智化转型"
-        ],
-        "key_advantages": "率先发布自贸区研发物品‘白名单’征求意见稿，建立药监/海关/商务多部门联合免通关单绿色验放机制。",
-        "future_outlook": "大幅降低进出口制度性交易成本，吸引跨国 CRO 与新药研发企业在辽集聚。"
+        "industry_clusters": "深圳坪山生物医药产业基地、广州国际生物岛、珠海金湾生物医药基地",
+        "real_intent": "依托完备的电子信息与精密机械产业链，将手术机器人做成具有国际成本竞争力的优势产业；以大湾区集采大盘撬动国产替代。",
+        "future_outlook": "以“大湾区药械通”加速国际前沿产品落地，构建全国最大的高端耗材智造出口基地。"
       },
       "江苏省": {
-        "title": "江苏省 · 创新药械全产业链集聚与价格治理标杆",
+        "title": "江苏省 · 全国创新药械集聚第一大省与全链条研发极",
         "focus_industries": [
-          "创新药商业化",
-          "耗材价格联动治理",
-          "高端医疗器械制造"
+          "创新抗体与小分子新药",
+          "高值植介入耗材",
+          "生物医药CXO供应链",
+          "核酸与偶联药物"
         ],
-        "key_advantages": "苏州工业园区与南京生物医药谷产业集聚度全国领先，在价格动态联动与挂网合规管理上体系严密。",
-        "future_outlook": "保持新药获批数量全国领先，推进创新药全生命周期降本增效。"
+        "industry_clusters": "苏州工业园区（BioBAY）、南京生物医药谷、连云港新医药产业基地",
+        "real_intent": "坐拥全国最密集的 Biotech 创新药企群，在医保限价挂网与价格动态联动下，倒逼企业向差异化原始创新与高附加值器械转型。",
+        "future_outlook": "保持创新药获批数量与高值耗材挂网规模全国第一，打造世界级生物医药产业集群。"
+      },
+      "浙江省": {
+        "title": "浙江省 · 数字医疗与生命健康智能制造新高地",
+        "focus_industries": [
+          "AI数字医疗与远程诊疗",
+          "高端医疗装备制造",
+          "智能康复外骨骼",
+          "合成生物学"
+        ],
+        "industry_clusters": "杭州医药港小镇（下沙）、余杭未来科技城生物医药区、绍兴滨海生命健康产业园",
+        "real_intent": "发挥数字经济与电商物流龙头优势，重点发展“数字医保+互联网医院+智能诊疗器械”，布局合成生物学前沿底盘。",
+        "future_outlook": "推动智能康复与医疗大数据场景化应用，建设全国数字健康第一省。"
+      },
+      "辽宁省": {
+        "title": "辽宁省 · 东北亚自贸区研发要素跨境免通关试验区",
+        "focus_industries": [
+          "研发物品保税研发",
+          "生物制品与血液制品",
+          "重特大仿制药智造",
+          "省际集采联动"
+        ],
+        "industry_clusters": "大连金普新区生物医药产业园、沈阳本溪药都、自贸试验区大连片区",
+        "real_intent": "通过自贸试验区率先试点研发用物品“白名单”免通关单绿色验放，攻克跨国研发物料进出口堵点，打造东北亚保税研发枢纽。",
+        "future_outlook": "吸引全球 CRO/CDMO 研发机构集聚，降低生物医药研发制度性交易成本。"
+      },
+      "山东省": {
+        "title": "山东省 · 海洋生物医药与高品质原料药/耗材生产大省",
+        "focus_industries": [
+          "海洋生物医药",
+          "高品质原料药与制剂",
+          "骨科与医用高分子耗材",
+          "现代中药"
+        ],
+        "industry_clusters": "威海医疗器械产业园（威高基地）、青岛蓝色药谷、烟台牟平国际生物药谷",
+        "real_intent": "依托强大的化工与重工制造基础，向高附加值海洋生物制品与高端医用耗材（骨科/血液净化）全面升级。",
+        "future_outlook": "建设全球最大的海洋药物与医用高分子耗材智能化制造基地。"
+      },
+      "湖北省": {
+        "title": "湖北省 · 华中前沿生物技术与光电医疗装备策源地",
+        "focus_industries": [
+          "光电医疗器械与激光医疗",
+          "新型疫苗与抗体药物",
+          "AI医学影像",
+          "生物育种与合成生物"
+        ],
+        "industry_clusters": "武汉国家生物产业基地（光谷生物城）、宜昌生物医药产业园",
+        "real_intent": "依托华中科研院所与光电技术优势，打造“光电+医疗器械”特色长板，构筑内陆创新药械中枢。",
+        "future_outlook": "巩固光谷生物城研发领先地位，辐射带动长江中游城市群医疗器械转化。"
       }
     },
     "trend_insights": {
-      "macro_trend": "全国生物医药政策正从【单一研发资金奖补】向【全生命周期前置审评加速 + 跨境要素免通关 + 国家标准立标 + 医保商保多元支付】的系统化生态演进。",
+      "macro_trend": "【穿透政策表象，看地方产业真实发力点】：全国地方省份已从泛化的医药招商全面转向【特色长板极化】——四川主攻核医疗同位素与全周期器械服务；上海主攻具身智能与AI制药；广东做大微创机器人智造；江苏深耕创新药与价格治理；辽宁突破自贸区研发免关。",
       "track_momentum": [
         {
-          "track": "⚛️ 核医药",
-          "status": "爆发前夜",
-          "summary": "177Lu仿制药标准的出台标志放药从探索期进入规模化申报期，医用同位素自主化攻坚是核心。"
+          "track": "⚛️ 四川核医疗",
+          "status": "全国领跑",
+          "summary": "依托绵阳堆产同位素与成都天府生物城，率先打通治疗性核药仿制与院内制剂转化。"
         },
         {
-          "track": "🧠 脑机接口",
-          "status": "国家立标期",
-          "summary": "工信部2026-2030标准指南与CMDE审评要点确立了国家战略地位，2028年将迎来40项标准落地。"
+          "track": "🤖 上海/广东机器人",
+          "status": "智造双核",
+          "summary": "上海偏重具身智能算法与三甲临床，广东偏重精密制造与大湾区集采出口。"
         },
         {
-          "track": "🧬 AI制药",
-          "status": "审评合规期",
-          "summary": "ICH M15推动定量药理与计算模型直接用于注册审评决策，算法模型从科研玩具转向合规工具。"
+          "track": "🧬 长三角AI制药",
+          "status": "算力合规",
+          "summary": "张江与BioBAY推动模型引导药物研发（MIDD）直接服务于创新药注册审评。"
         },
         {
-          "track": "🤖 医疗机器人",
-          "status": "场景下沉期",
-          "summary": "国家部委推进产用结对攻关，具备性价比优势的微创/骨科/康复机器人加速替代进口并向二级医院下沉。"
+          "track": "💳 粤苏集采大盘",
+          "status": "以价换量",
+          "summary": "广东药交中心与江苏医药集采网主导价格联动，倒逼企业向高附加值器械升级。"
         },
         {
-          "track": "💳 医保集采",
-          "status": "精细监管期",
-          "summary": "十五五医保规划推进集采全覆盖，限二线知识库智能化监管收紧，创新药全流程免进院壁垒政策增强。"
-        },
-        {
-          "track": "📑 科技申报",
-          "status": "制度型开放",
-          "summary": "辽宁等自贸区进口白名单、CDE先锐计划打通研发物料跨境通关与审评绿色通道。"
+          "track": "🚢 辽宁自贸免关",
+          "status": "制度突破",
+          "summary": "率先落地生物医药研发物品免通关单‘白名单’，大幅降低跨境研发物料时间成本。"
         }
       ]
     }

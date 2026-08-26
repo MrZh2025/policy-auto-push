@@ -7388,7 +7388,7 @@ function populateGraphSidePanels(data) {
         `).join('');
     }
 
-    // 2. 省份重点产业画像
+    // 2. 地方省份真实产业画像 (包含实体园区载体与真实战略意图)
     const provListEl = document.getElementById('graphProvinceList');
     if (provListEl && data.province_profiles) {
         const provs = data.province_profiles;
@@ -7402,122 +7402,13 @@ function populateGraphSidePanels(data) {
                     <div class="prov-tags-wrap">
                         ${(p.focus_industries || []).map(ind => `<span class="prov-tag">🎯 ${ind}</span>`).join('')}
                     </div>
-                    <div class="trend-card-body" style="margin-top:6px;"><strong>📌 核心优势：</strong>${p.key_advantages}</div>
-                    <div class="trend-card-body" style="margin-top:4px; color:#004886;"><strong>🚀 走势指引：</strong>${p.future_outlook}</div>
+                    <div class="trend-card-body" style="margin-top:6px;"><strong>🏭 核心产业集群/载体：</strong>${p.industry_clusters || '重点产业园区'}</div>
+                    <div class="trend-card-body" style="margin-top:4px;"><strong>💡 政策背后真实意图：</strong>${p.real_intent || p.key_advantages}</div>
+                    <div class="trend-card-body" style="margin-top:4px; color:#004886;"><strong>🚀 走势与协同机会：</strong>${p.future_outlook}</div>
                 </div>
             `;
         }).join('');
     }
-}
-
-function renderIndustryNetworkGraph(data) {
-    const container = document.getElementById('chartIndustryGraph');
-    if (!container || typeof echarts === 'undefined' || !data) return;
-
-    if (!chartIndustryGraphInstance) {
-        chartIndustryGraphInstance = echarts.init(container);
-    }
-
-    const rect = container.getBoundingClientRect();
-    if (rect.width > 50 && rect.height > 50) {
-        chartIndustryGraphInstance.resize({
-            width: rect.width,
-            height: rect.height
-        });
-    }
-
-    const isDark = (state.theme === 'dark');
-    const textColor = isDark ? '#cbd5e1' : '#1e293b';
-
-    const option = {
-        backgroundColor: 'transparent',
-        tooltip: {
-            trigger: 'item',
-            backgroundColor: isDark ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.95)',
-            borderColor: isDark ? '#334155' : '#e2e8f0',
-            textStyle: { color: textColor, fontSize: 12 },
-            formatter: function(params) {
-                if (params.dataType === 'node') {
-                    const extra = params.data.extra || {};
-                    let html = `<div style="font-weight:700;font-size:13px;margin-bottom:4px;">${params.name}</div>`;
-                    if (extra.desc) html += `<div style="font-size:11.5px;color:#64748b;">${extra.desc}</div>`;
-                    if (extra.note) html += `<div style="font-size:11.5px;color:#10b981;margin-top:3px;">📌 ${extra.note}</div>`;
-                    if (extra.future) html += `<div style="font-size:11.5px;color:#f59e0b;margin-top:3px;">📈 ${extra.future}</div>`;
-                    return html;
-                }
-                return `${params.data.source} ➔ ${params.data.target}`;
-            }
-        },
-        legend: {
-            data: (data.categories || []).map(c => c.name),
-            top: 6,
-            left: 12,
-            textStyle: { color: textColor, fontSize: 11 }
-        },
-        animationDuration: 800,
-        animationEasingUpdate: 'quinticInOut',
-        series: [
-            {
-                type: 'graph',
-                layout: 'force',
-                center: ['50%', '50%'],
-                zoom: 1.05,
-                data: (data.nodes || []).map(n => {
-                    return Object.assign({}, n, {
-                        itemStyle: {
-                            borderWidth: 2,
-                            borderColor: isDark ? '#1e293b' : '#ffffff',
-                            shadowBlur: 8,
-                            shadowColor: 'rgba(0, 0, 0, 0.15)'
-                        }
-                    });
-                }),
-                links: data.links,
-                categories: data.categories,
-                roam: true,
-                label: {
-                    show: true,
-                    position: 'bottom',
-                    distance: 5,
-                    formatter: '{b}',
-                    fontSize: 10.5,
-                    color: textColor,
-                    backgroundColor: isDark ? 'rgba(15, 23, 42, 0.8)' : 'rgba(255, 255, 255, 0.88)',
-                    padding: [2, 5],
-                    borderRadius: 3,
-                    borderColor: isDark ? 'rgba(51, 65, 85, 0.6)' : 'rgba(226, 232, 240, 0.85)',
-                    borderWidth: 0.5
-                },
-                edgeSymbol: ['none', 'arrow'],
-                edgeSymbolSize: [0, 5],
-                lineStyle: {
-                    color: 'source',
-                    curveness: 0.1,
-                    opacity: 0.5,
-                    width: 1.2
-                },
-                emphasis: {
-                    focus: 'adjacency',
-                    lineStyle: { width: 2.8, opacity: 0.95 }
-                },
-                force: {
-                    repulsion: 580,
-                    gravity: 0.03,
-                    edgeLength: [90, 180],
-                    layoutAnimation: true
-                }
-            }
-        ]
-    };
-
-    chartIndustryGraphInstance.setOption(option);
-
-    chartIndustryGraphInstance.off('click');
-    chartIndustryGraphInstance.on('click', function(params) {
-        if (params.dataType === 'node') {
-            inspectGraphNode(params.data);
-        }
-    });
 }
 
 function inspectGraphNode(nodeData) {
@@ -7545,37 +7436,39 @@ function inspectGraphNode(nodeData) {
         if (provInfo) {
             html += `
                 <div style="margin-bottom:10px;">
-                    <div style="font-weight:700;color:#004886;margin-bottom:4px;">🎯 重点布局产业：</div>
+                    <div style="font-weight:700;color:#004886;margin-bottom:4px;">🎯 地方真实重点产业：</div>
                     <div class="prov-tags-wrap">
                         ${(provInfo.focus_industries || []).map(i => `<span class="prov-tag">${i}</span>`).join('')}
                     </div>
                 </div>
-                <div style="margin-bottom:8px;"><strong>🏛️ 区域政策优势：</strong>${provInfo.key_advantages}</div>
-                <div style="color:#004886;"><strong>📈 未来发展走势：</strong>${provInfo.future_outlook}</div>
+                <div style="margin-bottom:8px;"><strong>🏭 核心产业载体/园区：</strong>${provInfo.industry_clusters || '重点园区'}</div>
+                <div style="margin-bottom:8px;"><strong>💡 产业真实战略意图：</strong>${provInfo.real_intent || provInfo.key_advantages}</div>
+                <div style="color:#004886;"><strong>🚀 区域产业发展走势：</strong>${provInfo.future_outlook}</div>
             `;
         } else {
-            html += `<p>${extra.desc || '区域重点医药产业创新节点。'}</p>`;
+            html += `<p>${extra.desc || '地方重点医药产业创新节点。'}</p>`;
         }
     } else if (extra.type === 'track') {
         html += `
             <div style="margin-bottom:8px;"><strong>🧬 赛道核心方向：</strong>${extra.desc || ''}</div>
             <div style="background:#fef3c7;border:1px solid #fde68a;padding:10px;border-radius:6px;color:#92400e;line-height:1.5;">
-                <strong>📈 2026-2030 未来走势预测：</strong><br>${extra.future || '国家级重点发展战略赛道，政策加速兑现。'}
+                <strong>📈 地方产业发展走势研判：</strong><br>${extra.future || '地方省份重点布局与攻坚方向。'}
             </div>
         `;
-    } else if (extra.type === 'policy') {
+    } else if (extra.type === 'cluster') {
         html += `
             <div style="background:#eff6ff;border:1px solid #bfdbfe;padding:10px;border-radius:6px;color:#1e40af;margin-bottom:8px;">
-                <strong>📑 政策核心亮点：</strong><br>${extra.note || ''}
+                <strong>🏭 核心实体园区/集群定位：</strong><br>${extra.note || ''}
             </div>
-            <p style="color:#64748b;font-size:12px;">该政策在图谱中作为国家/省级代表性重大举措，直接推动相应赛道与省份的产业化落地。</p>
+            <p style="color:#64748b;font-size:12px;">该园区承载了当地省份核心医药产业政策的资金、牌照、人才与临床试验资源转化。</p>
         `;
     } else {
-        html += `<p><strong>📈 战略趋势要点：</strong>${extra.note || '前沿产业演进关键里程碑。'}</p>`;
+        html += `<p><strong>📈 地方产业竞合趋势：</strong>${extra.note || '前沿产业演进关键节点。'}</p>`;
     }
 
     bodyEl.innerHTML = html;
 }
+
 
 function buildFallbackGraphData() {
     return {
