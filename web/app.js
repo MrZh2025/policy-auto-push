@@ -7599,53 +7599,109 @@ function buildFallbackGraphData() {
 }
 
 
-function handleGraphProvinceFilter(provName) {
+
+
+
+let selectedProvincesSet = new Set(['all']);
+
+function toggleProvincePill(provName) {
     if (!industryGraphData) return;
 
     if (provName === 'all') {
-        // 恢复全景图谱
+        selectedProvincesSet.clear();
+        selectedProvincesSet.add('all');
+    } else {
+        selectedProvincesSet.delete('all');
+        if (selectedProvincesSet.has(provName)) {
+            selectedProvincesSet.delete(provName);
+        } else {
+            selectedProvincesSet.add(provName);
+        }
+        if (selectedProvincesSet.size === 0) {
+            selectedProvincesSet.add('all');
+        }
+    }
+
+    updateProvincePillButtonsUI();
+    renderSelectedProvincesSubGraph();
+}
+
+function applyProvincePreset(provList) {
+    selectedProvincesSet.clear();
+    provList.forEach(p => selectedProvincesSet.add(p));
+    updateProvincePillButtonsUI();
+    renderSelectedProvincesSubGraph();
+}
+
+function updateProvincePillButtonsUI() {
+    const buttons = document.querySelectorAll('.prov-pill-btn');
+    const isAll = selectedProvincesSet.has('all');
+
+    buttons.forEach(btn => {
+        const prov = btn.getAttribute('data-prov');
+        if (isAll) {
+            if (prov === 'all') btn.classList.add('active');
+            else btn.classList.remove('active');
+        } else {
+            if (prov === 'all') btn.classList.remove('active');
+            else if (selectedProvincesSet.has(prov)) btn.classList.add('active');
+            else btn.classList.remove('active');
+        }
+    });
+}
+
+function renderSelectedProvincesSubGraph() {
+    if (!industryGraphData) return;
+
+    const isAll = selectedProvincesSet.has('all');
+    if (isAll) {
         renderIndustryNetworkGraph(industryGraphData);
+        populateGraphSidePanels(industryGraphData);
         if (chartIndustryGraphInstance) {
             chartIndustryGraphInstance.dispatchAction({ type: 'restore' });
         }
         return;
     }
 
-    const provNodeId = `prov_${provName}`;
     const allNodes = industryGraphData.nodes || [];
     const allLinks = industryGraphData.links || [];
 
-    // 找出与该省份直接关联的所有目标节点 (产业赛道、核心园区载体)
-    const directLinkedNodeIds = new Set([provNodeId]);
+    // 收集所有选中省份的节点ID
+    const targetProvNodeIds = new Set(Array.from(selectedProvincesSet).map(p => `prov_${p}`));
+    const activeNodeIds = new Set(targetProvNodeIds);
     const filteredLinks = [];
 
+    // 找出与这些选中省份直接相连的赛道、实体园区以及省际协同连线
     allLinks.forEach(l => {
-        if (l.source === provNodeId) {
-            directLinkedNodeIds.add(l.target);
-            filteredLinks.push(l);
-        } else if (l.target === provNodeId) {
-            directLinkedNodeIds.add(l.source);
+        const isSourceIn = targetProvNodeIds.has(l.source);
+        const isTargetIn = targetProvNodeIds.has(l.target);
+
+        if (isSourceIn || isTargetIn) {
+            activeNodeIds.add(l.source);
+            activeNodeIds.add(l.target);
             filteredLinks.push(l);
         }
     });
 
-    // 级联找出与相关赛道关联的竞合趋势微节点
+    // 级联找出相关的趋势微节点
     allLinks.forEach(l => {
-        if (directLinkedNodeIds.has(l.source) && !l.target.startsWith('prov_')) {
-            directLinkedNodeIds.add(l.target);
-            filteredLinks.push(l);
+        if (activeNodeIds.has(l.source) && !l.target.startsWith('prov_')) {
+            activeNodeIds.add(l.target);
+            if (!filteredLinks.includes(l)) {
+                filteredLinks.push(l);
+            }
         }
     });
 
-    const filteredNodes = allNodes.filter(n => directLinkedNodeIds.has(n.id)).map(n => {
-        if (n.id === provNodeId) {
+    const filteredNodes = allNodes.filter(n => activeNodeIds.has(n.id)).map(n => {
+        if (targetProvNodeIds.has(n.id)) {
             return Object.assign({}, n, {
-                symbolSize: 22,
+                symbolSize: 20,
                 itemStyle: {
                     borderWidth: 3,
                     borderColor: '#f59e0b',
                     shadowBlur: 14,
-                    shadowColor: 'rgba(245, 158, 11, 0.4)'
+                    shadowColor: 'rgba(245, 158, 11, 0.45)'
                 }
             });
         }
@@ -7660,12 +7716,57 @@ function handleGraphProvinceFilter(provName) {
         trend_insights: industryGraphData.trend_insights
     };
 
-    // 渲染该省份的专属聚焦子图谱
     renderIndustryNetworkGraph(subGraphData);
 
-    // 联动右侧【🔍 节点详情探针】即时呈现该省份的深度情报画像
-    const selectedNode = allNodes.find(n => n.name === provName);
-    if (selectedNode) {
-        inspectGraphNode(selectedNode);
+    // 联动右侧展示所选省份的联合情报对比
+    renderMultiProvincesInspector(Array.from(selectedProvincesSet));
+}
+
+function renderMultiProvincesInspector(selectedProvs) {
+    switchGraphTab('inspector');
+    const emptyEl = document.getElementById('graphNodeInspectorEmpty');
+    const detailEl = document.getElementById('graphNodeInspectorDetail');
+    const tagEl = document.getElementById('inspectCatTag');
+    const titleEl = document.getElementById('inspectTitle');
+    const bodyEl = document.getElementById('inspectBody');
+
+    if (!emptyEl || !detailEl) return;
+
+    emptyEl.classList.add('hidden');
+    detailEl.classList.remove('hidden');
+
+    if (selectedProvs.length === 1) {
+        const provName = selectedProvs[0];
+        const provNode = (industryGraphData.nodes || []).find(n => n.name === provName);
+        if (provNode) inspectGraphNode(provNode);
+        return;
     }
+
+    tagEl.textContent = `多省份跨区域协同比对 (${selectedProvs.length}省市)`;
+    titleEl.textContent = selectedProvs.join(' ✖ ');
+
+    let html = `
+        <div style="background:#eff6ff;border:1px solid #bfdbfe;padding:10px;border-radius:6px;color:#1e40af;margin-bottom:10px;">
+            <strong>🤝 跨省产业协同与共识方向：</strong><br>
+            已为您在左侧拓扑图谱中提取 <strong>${selectedProvs.join('、')}</strong> 的交汇赛道与实体产业网络。
+        </div>
+    `;
+
+    selectedProvs.forEach(pName => {
+        const pInfo = (industryGraphData.province_profiles || {})[pName];
+        if (pInfo) {
+            html += `
+                <div style="background:#ffffff;border:1px solid #e2e8f0;padding:10px;border-radius:6px;margin-bottom:8px;box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+                    <div style="font-weight:700;color:#004886;font-size:13px;margin-bottom:4px;">🏛️ ${pName}</div>
+                    <div class="prov-tags-wrap" style="margin-bottom:6px;">
+                        ${(pInfo.focus_industries || []).map(i => `<span class="prov-tag">🎯 ${i}</span>`).join('')}
+                    </div>
+                    <div style="font-size:11.5px;color:#475569;"><strong>🏭 实体园区：</strong>${pInfo.industry_clusters || ''}</div>
+                    <div style="font-size:11.5px;color:#334155;margin-top:2px;"><strong>💡 真实意图：</strong>${pInfo.real_intent || ''}</div>
+                </div>
+            `;
+        }
+    });
+
+    bodyEl.innerHTML = html;
 }

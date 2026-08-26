@@ -5374,3 +5374,116 @@ body {
     border-color: #0284c7 !important;
     box-shadow: 0 0 0 1.5px rgba(2, 132, 199, 0.2) !important;
 }
+
+
+/* ==========================================================================
+   🏛️ 省份多选比对胶囊与快捷联动组合专属样式
+   ========================================================================== */
+
+.multi-prov-filter-container {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex-wrap: wrap !important;
+}
+
+.prov-pills-selector {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    background: #f1f5f9 !important;
+    padding: 2px 4px !important;
+    border-radius: 5px !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+[data-theme="dark"] .prov-pills-selector {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+.prov-pill-btn {
+    border: none !important;
+    background: transparent !important;
+    font-size: 10.5px !important;
+    font-weight: 600 !important;
+    color: #475569 !important;
+    padding: 2px 6px !important;
+    border-radius: 3px !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+    line-height: 1.2 !important;
+}
+
+[data-theme="dark"] .prov-pill-btn {
+    color: #94a3b8 !important;
+}
+
+.prov-pill-btn:hover {
+    background: #e2e8f0 !important;
+    color: #0f172a !important;
+}
+
+[data-theme="dark"] .prov-pill-btn:hover {
+    background: #334155 !important;
+    color: #f8fafc !important;
+}
+
+.prov-pill-btn.active {
+    background: #004886 !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    box-shadow: 0 1px 4px rgba(0, 72, 134, 0.3) !important;
+}
+
+[data-theme="dark"] .prov-pill-btn.active {
+    background: #0284c7 !important;
+    color: #ffffff !important;
+}
+
+.quick-preset-wrap {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    padding-left: 4px !important;
+    border-left: 1px solid #cbd5e1 !important;
+}
+
+[data-theme="dark"] .quick-preset-wrap {
+    border-left-color: #475569 !important;
+}
+
+.quick-preset-label {
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    color: #64748b !important;
+    white-space: nowrap !important;
+}
+
+[data-theme="dark"] .quick-preset-label {
+    color: #94a3b8 !important;
+}
+
+.preset-btn {
+    border: 1px solid #e0e7ff !important;
+    background: #eef2ff !important;
+    color: #4338ca !important;
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    padding: 1px 5px !important;
+    border-radius: 3px !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+    white-space: nowrap !important;
+}
+
+[data-theme="dark"] .preset-btn {
+    background: #312e81 !important;
+    border-color: #4338ca !important;
+    color: #c7d2fe !important;
+}
+
+.preset-btn:hover {
+    background: #4338ca !important;
+    color: #ffffff !important;
+}
