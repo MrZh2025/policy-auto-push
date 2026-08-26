@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#004886">
     <title>四川生物医药产业集团创新事业部政策信息系统 - 四川发展·医药集团</title>
-    <link rel="stylesheet" href="index.css?v=20260826v1787722600">
+    <link rel="stylesheet" href="index.css?v=20260826v1787723951">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700;900&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -215,6 +215,13 @@
                             <div class="dropdown-item-text">
                                 <span class="dropdown-item-title">全国核医药（核药）企业与专家地图</span>
                                 <span class="dropdown-tag-hot">22家企业 / 23位专家</span>
+                            </div>
+                        </a>
+                        <a href="javascript:void(0)" class="dropdown-item"                         <a href="javascript:void(0)" class="dropdown-item" onclick="openIndustryGraphModal()">
+                            <span class="dropdown-item-icon">🕸️</span>
+                            <div class="dropdown-item-text">
+                                <span class="dropdown-item-title">全国省份·重点产业拓扑图谱与未来走势</span>
+                                <span class="dropdown-tag-hot">知识图谱/走势研判</span>
                             </div>
                         </a>
                         <a href="javascript:void(0)" class="dropdown-item" onclick="openVisitorAnalyticsModal()">
@@ -585,6 +592,108 @@
     </div>
 
     <!-- 访客时间、地点与人数统计 - 高端政务可视化大屏模态弹窗 -->
+    
+    <!-- 全国省份·重点产业关联拓扑图谱与未来走势可视化大屏模态弹窗 -->
+    <div id="industryGraphModal" class="nmpa-modal-backdrop hidden">
+        <div class="nmpa-modal-card graph-modal-card">
+            <!-- 头部标题栏 -->
+            <div class="modal-header graph-header">
+                <div class="modal-title-wrap">
+                    <span class="modal-badge-icon">🕸️</span>
+                    <div>
+                        <h3 class="modal-title">全国省份·前沿产业关联拓扑图谱与未来发展走势研判</h3>
+                        <span class="modal-subtitle">基于全库 77+ 篇国家及重点省份政策深度挖掘 · 产业拓扑 / 区域定位 / 发展动态 / 战略指引</span>
+                    </div>
+                </div>
+                <div class="analytics-header-right">
+                    <button class="btn-refresh-analytics" id="btnResetGraphView" title="重置拓扑视角" onclick="resetGraphZoom()">🎯 复位视角</button>
+                    <button class="modal-close-btn" id="modalGraphCloseBtn" onclick="closeIndustryGraphModal()" title="关闭图谱">×</button>
+                </div>
+            </div>
+
+            <!-- 顶部 KPI 战略概览条 -->
+            <div class="graph-kpi-ribbon">
+                <div class="ribbon-item">
+                    <span class="ribbon-label">🏛️ 核心联动省市</span>
+                    <span class="ribbon-val">四川 · 北京 · 上海 · 广东 · 辽宁 · 江苏</span>
+                </div>
+                <div class="ribbon-item">
+                    <span class="ribbon-label">🚀 6 大重点前沿赛道</span>
+                    <span class="ribbon-val">核医药 · 脑机接口 · AI制药 · 医疗机器人 · 医保集采 · 科技创新</span>
+                </div>
+                <div class="ribbon-item">
+                    <span class="ribbon-label">📈 未来政策核心走势</span>
+                    <span class="ribbon-val" style="color:#10b981;">国家标准立标 + 全生命周期前置加速 + 跨境要素免通关</span>
+                </div>
+                <div class="ribbon-item">
+                    <span class="ribbon-label">🎯 集团战略定位</span>
+                    <span class="ribbon-val" style="color:#0284c7;">打造国家战略腹地生物医药新质生产力核心策源地</span>
+                </div>
+            </div>
+
+            <!-- 图谱主体内容双栏布局 -->
+            <div class="modal-body graph-modal-body">
+                <!-- 左侧：ECharts 动态力导向拓扑关系画布 -->
+                <div class="graph-canvas-wrapper">
+                    <div class="graph-canvas-toolbar">
+                        <div class="graph-legend-pills">
+                            <span class="legend-pill pill-prov">🏛️ 重点省市</span>
+                            <span class="legend-pill pill-track">🧬 产业赛道</span>
+                            <span class="legend-pill pill-policy">📑 战略举措</span>
+                            <span class="legend-pill pill-trend">📈 未来趋势</span>
+                        </div>
+                        <span class="graph-canvas-tip">💡 交互提示：支持鼠标滚轮缩放、节点拖拽、点击节点高亮关联关系并在右侧查看详细研判</span>
+                    </div>
+                    <div id="chartIndustryGraph" class="echarts-graph-container"></div>
+                </div>
+
+                <!-- 右侧：多维情报研判面板 (选项卡切换) -->
+                <div class="graph-side-panel">
+                    <div class="panel-tabs">
+                        <button class="panel-tab-btn active" onclick="switchGraphTab('trends')">📈 走势与未来研判</button>
+                        <button class="panel-tab-btn" onclick="switchGraphTab('provinces')">🗺️ 省份产业定位</button>
+                        <button class="panel-tab-btn" onclick="switchGraphTab('inspector')">🔍 节点详情探针</button>
+                    </div>
+
+                    <!-- 选项卡 1：未来趋势走势 -->
+                    <div id="tabContentTrends" class="panel-tab-content active">
+                        <div class="trend-summary-box">
+                            <div class="trend-summary-title">🌐 宏观演进趋势研判</div>
+                            <div class="trend-summary-text" id="graphMacroTrendText">
+                                全国生物医药政策正从【单一研发资金奖补】向【全生命周期前置审评加速 + 跨境要素免通关 + 国家标准立标 + 医保商保多元支付】的系统化生态演进。
+                            </div>
+                        </div>
+                        <div class="trend-cards-list" id="graphTrackMomentumList">
+                            <!-- 动态注入各赛道发展动态与走势 -->
+                        </div>
+                    </div>
+
+                    <!-- 选项卡 2：省份产业画像 -->
+                    <div id="tabContentProvinces" class="panel-tab-content">
+                        <div class="province-cards-list" id="graphProvinceList">
+                            <!-- 动态注入四川、北京、上海、广东、辽宁、江苏等省份产业画像 -->
+                        </div>
+                    </div>
+
+                    <!-- 选项卡 3：节点详情探针 -->
+                    <div id="tabContentInspector" class="panel-tab-content">
+                        <div id="graphNodeInspectorEmpty" class="inspector-empty">
+                            <span style="font-size:32px;">👆</span>
+                            <p>在左侧拓扑图谱中点击任意省份、产业赛道或战略政策节点，即可在此查阅其关联政策列表与实施细则。</p>
+                        </div>
+                        <div id="graphNodeInspectorDetail" class="inspector-detail hidden">
+                            <div class="inspector-header">
+                                <span class="inspector-category-tag" id="inspectCatTag">赛道</span>
+                                <h4 class="inspector-title" id="inspectTitle">节点名称</h4>
+                            </div>
+                            <div class="inspector-body" id="inspectBody"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="visitorAnalyticsModal" class="nmpa-modal-backdrop hidden">
         <div class="nmpa-modal-card analytics-modal-card">
             <!-- 头部标题栏 -->
@@ -1305,6 +1414,6 @@
     <script src="data/china_map_data.js"></script>
     <!-- 原生 OpenXML docx 生成库 -->
     <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
-    <script src="app.js?v=20260826v1787722600"></script>
+    <script src="app.js?v=20260826v1787723951"></script>
 </body>
 </html>

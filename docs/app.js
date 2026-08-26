@@ -7224,3 +7224,302 @@ window.openNuclearModal = openNuclearModal;
 window.closeNuclearModal = closeNuclearModal;
 window.toggleNuclearFullscreen = toggleNuclearFullscreen;
 window.resetNuclearFocus = resetNuclearFocus;
+
+
+// ==========================================================================
+// 🕸️ 全国省份·重点产业拓扑图谱与未来发展走势研判大屏核心逻辑
+// ==========================================================================
+let chartIndustryGraphInstance = null;
+let industryGraphData = null;
+
+function openIndustryGraphModal() {
+    const modal = document.getElementById('industryGraphModal');
+    if (!modal) return;
+    modal.classList.remove('hidden');
+
+    if (industryGraphData) {
+        renderIndustryNetworkGraph(industryGraphData);
+        populateGraphSidePanels(industryGraphData);
+    } else {
+        fetchIndustryGraphData();
+    }
+
+    setTimeout(() => {
+        if (chartIndustryGraphInstance) chartIndustryGraphInstance.resize();
+    }, 80);
+    setTimeout(() => {
+        if (chartIndustryGraphInstance) chartIndustryGraphInstance.resize();
+    }, 250);
+}
+
+function closeIndustryGraphModal() {
+    const modal = document.getElementById('industryGraphModal');
+    if (modal) modal.classList.add('hidden');
+}
+
+function resetGraphZoom() {
+    if (chartIndustryGraphInstance) {
+        chartIndustryGraphInstance.dispatchAction({
+            type: 'restore'
+        });
+    }
+}
+
+function switchGraphTab(tabName) {
+    const tabs = ['trends', 'provinces', 'inspector'];
+    const tabBtns = document.querySelectorAll('.panel-tab-btn');
+    
+    tabBtns.forEach(btn => {
+        const text = btn.textContent || '';
+        if ((tabName === 'trends' && text.includes('走势')) ||
+            (tabName === 'provinces' && text.includes('省份')) ||
+            (tabName === 'inspector' && text.includes('探针'))) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+
+    tabs.forEach(t => {
+        const elTab = document.getElementById(`tabContent${t.charAt(0).toUpperCase() + t.slice(1)}`);
+        if (elTab) {
+            if (t === tabName) elTab.classList.add('active');
+            else elTab.classList.remove('active');
+        }
+    });
+}
+
+function fetchIndustryGraphData() {
+    const container = document.getElementById('chartIndustryGraph');
+    if (container) {
+        container.innerHTML = '<div style="display:flex;height:100%;align-items:center;justify-content:center;color:#64748b;font-size:13px;">🕸️ 正在深度计算省份-产业拓扑关系与发展走势...</div>';
+    }
+
+    fetch('data/industry_graph.json')
+        .then(res => res.json())
+        .then(res => {
+            if (res && res.data) {
+                industryGraphData = res.data;
+                renderIndustryNetworkGraph(industryGraphData);
+                populateGraphSidePanels(industryGraphData);
+            }
+        })
+        .catch(err => {
+            console.warn('加载 industry_graph.json 失败，尝试动态构造:', err);
+            // 容灾构造
+            industryGraphData = buildFallbackGraphData();
+            renderIndustryNetworkGraph(industryGraphData);
+            populateGraphSidePanels(industryGraphData);
+        });
+}
+
+function populateGraphSidePanels(data) {
+    if (!data) return;
+
+    // 1. 宏观走势与赛道动向
+    const macroEl = document.getElementById('graphMacroTrendText');
+    if (macroEl && data.trend_insights && data.trend_insights.macro_trend) {
+        macroEl.textContent = data.trend_insights.macro_trend;
+    }
+
+    const momentumListEl = document.getElementById('graphTrackMomentumList');
+    if (momentumListEl && data.trend_insights && data.trend_insights.track_momentum) {
+        momentumListEl.innerHTML = data.trend_insights.track_momentum.map(item => `
+            <div class="trend-card-item">
+                <div class="trend-card-head">
+                    <span class="trend-card-title">${item.track}</span>
+                    <span class="track-status-badge">${item.status}</span>
+                </div>
+                <div class="trend-card-body">${item.summary}</div>
+            </div>
+        `).join('');
+    }
+
+    // 2. 省份重点产业画像
+    const provListEl = document.getElementById('graphProvinceList');
+    if (provListEl && data.province_profiles) {
+        const provs = data.province_profiles;
+        provListEl.innerHTML = Object.keys(provs).map(k => {
+            const p = provs[k];
+            return `
+                <div class="prov-card-item">
+                    <div class="trend-card-head">
+                        <span class="trend-card-title">${p.title}</span>
+                    </div>
+                    <div class="prov-tags-wrap">
+                        ${(p.focus_industries || []).map(ind => `<span class="prov-tag">🎯 ${ind}</span>`).join('')}
+                    </div>
+                    <div class="trend-card-body" style="margin-top:6px;"><strong>📌 核心优势：</strong>${p.key_advantages}</div>
+                    <div class="trend-card-body" style="margin-top:4px; color:#004886;"><strong>🚀 走势指引：</strong>${p.future_outlook}</div>
+                </div>
+            `;
+        }).join('');
+    }
+}
+
+function renderIndustryNetworkGraph(data) {
+    const container = document.getElementById('chartIndustryGraph');
+    if (!container || typeof echarts === 'undefined' || !data) return;
+
+    if (!chartIndustryGraphInstance) {
+        chartIndustryGraphInstance = echarts.init(container);
+    }
+
+    const isDark = (state.theme === 'dark');
+    const textColor = isDark ? '#cbd5e1' : '#1e293b';
+
+    const option = {
+        backgroundColor: 'transparent',
+        tooltip: {
+            trigger: 'item',
+            backgroundColor: isDark ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+            borderColor: isDark ? '#334155' : '#e2e8f0',
+            textStyle: { color: textColor, fontSize: 12 },
+            formatter: function(params) {
+                if (params.dataType === 'node') {
+                    const extra = params.data.extra || {};
+                    let html = `<div style="font-weight:700;font-size:13px;margin-bottom:4px;">${params.name}</div>`;
+                    if (extra.desc) html += `<div style="font-size:11.5px;color:#64748b;">${extra.desc}</div>`;
+                    if (extra.note) html += `<div style="font-size:11.5px;color:#10b981;margin-top:3px;">📌 ${extra.note}</div>`;
+                    if (extra.future) html += `<div style="font-size:11.5px;color:#f59e0b;margin-top:3px;">📈 ${extra.future}</div>`;
+                    return html;
+                }
+                return `${params.data.source} ➔ ${params.data.target}`;
+            }
+        },
+        legend: {
+            data: (data.categories || []).map(c => c.name),
+            top: 10,
+            left: 20,
+            textStyle: { color: textColor, fontSize: 11 }
+        },
+        animationDuration: 1500,
+        animationEasingUpdate: 'quinticInOut',
+        series: [
+            {
+                type: 'graph',
+                layout: 'force',
+                data: data.nodes,
+                links: data.links,
+                categories: data.categories,
+                roam: true,
+                label: {
+                    show: true,
+                    position: 'right',
+                    formatter: '{b}',
+                    fontSize: 11,
+                    color: textColor
+                },
+                edgeSymbol: ['none', 'arrow'],
+                edgeSymbolSize: [4, 7],
+                lineStyle: {
+                    color: 'source',
+                    curveness: 0.2
+                },
+                emphasis: {
+                    focus: 'adjacency',
+                    lineStyle: { width: 4 }
+                },
+                force: {
+                    repulsion: 380,
+                    gravity: 0.11,
+                    edgeLength: [60, 150],
+                    layoutAnimation: true
+                }
+            }
+        ]
+    };
+
+    chartIndustryGraphInstance.setOption(option);
+
+    // 绑定节点点击探针联动
+    chartIndustryGraphInstance.off('click');
+    chartIndustryGraphInstance.on('click', function(params) {
+        if (params.dataType === 'node') {
+            inspectGraphNode(params.data);
+        }
+    });
+}
+
+function inspectGraphNode(nodeData) {
+    switchGraphTab('inspector');
+    const emptyEl = document.getElementById('graphNodeInspectorEmpty');
+    const detailEl = document.getElementById('graphNodeInspectorDetail');
+    const tagEl = document.getElementById('inspectCatTag');
+    const titleEl = document.getElementById('inspectTitle');
+    const bodyEl = document.getElementById('inspectBody');
+
+    if (!emptyEl || !detailEl) return;
+
+    emptyEl.classList.add('hidden');
+    detailEl.classList.remove('hidden');
+
+    const catName = (industryGraphData.categories[nodeData.category] || {}).name || '关联要素';
+    tagEl.textContent = catName;
+    titleEl.textContent = nodeData.name;
+
+    const extra = nodeData.extra || {};
+    let html = '';
+
+    if (extra.type === 'province') {
+        const provInfo = (industryGraphData.province_profiles || {})[nodeData.name];
+        if (provInfo) {
+            html += `
+                <div style="margin-bottom:10px;">
+                    <div style="font-weight:700;color:#004886;margin-bottom:4px;">🎯 重点布局产业：</div>
+                    <div class="prov-tags-wrap">
+                        ${(provInfo.focus_industries || []).map(i => `<span class="prov-tag">${i}</span>`).join('')}
+                    </div>
+                </div>
+                <div style="margin-bottom:8px;"><strong>🏛️ 区域政策优势：</strong>${provInfo.key_advantages}</div>
+                <div style="color:#004886;"><strong>📈 未来发展走势：</strong>${provInfo.future_outlook}</div>
+            `;
+        } else {
+            html += `<p>${extra.desc || '区域重点医药产业创新节点。'}</p>`;
+        }
+    } else if (extra.type === 'track') {
+        html += `
+            <div style="margin-bottom:8px;"><strong>🧬 赛道核心方向：</strong>${extra.desc || ''}</div>
+            <div style="background:#fef3c7;border:1px solid #fde68a;padding:10px;border-radius:6px;color:#92400e;line-height:1.5;">
+                <strong>📈 2026-2030 未来走势预测：</strong><br>${extra.future || '国家级重点发展战略赛道，政策加速兑现。'}
+            </div>
+        `;
+    } else if (extra.type === 'policy') {
+        html += `
+            <div style="background:#eff6ff;border:1px solid #bfdbfe;padding:10px;border-radius:6px;color:#1e40af;margin-bottom:8px;">
+                <strong>📑 政策核心亮点：</strong><br>${extra.note || ''}
+            </div>
+            <p style="color:#64748b;font-size:12px;">该政策在图谱中作为国家/省级代表性重大举措，直接推动相应赛道与省份的产业化落地。</p>
+        `;
+    } else {
+        html += `<p><strong>📈 战略趋势要点：</strong>${extra.note || '前沿产业演进关键里程碑。'}</p>`;
+    }
+
+    bodyEl.innerHTML = html;
+}
+
+function buildFallbackGraphData() {
+    return {
+        nodes: [
+            { id: 'prov_sc', name: '四川省', category: 0, symbolSize: 75, extra: { type: 'province' } },
+            { id: 'prov_bj', name: '北京市', category: 0, symbolSize: 70, extra: { type: 'province' } },
+            { id: 'prov_sh', name: '上海市', category: 0, symbolSize: 60, extra: { type: 'province' } },
+            { id: 'prov_gd', name: '广东省', category: 0, symbolSize: 58, extra: { type: 'province' } },
+            { id: 'track_nuc', name: '⚛️ 核医药与放药监管', category: 1, symbolSize: 65, extra: { type: 'track', desc: '医用同位素与PRRT核药' } },
+            { id: 'track_bci', name: '🧠 脑机接口与前沿器械', category: 1, symbolSize: 68, extra: { type: 'track', desc: '国家标准指南与审评要点' } }
+        ],
+        links: [
+            { source: 'prov_sc', target: 'track_nuc', value: 5 },
+            { source: 'prov_sc', target: 'track_bci', value: 4 },
+            { source: 'prov_bj', target: 'track_bci', value: 8 }
+        ],
+        categories: [
+            { name: '重点区域/省市' },
+            { name: '前沿产业赛道' },
+            { name: '核心突破政策' },
+            { name: '未来战略趋势' }
+        ],
+        province_profiles: {},
+        trend_insights: {}
+    };
+}
