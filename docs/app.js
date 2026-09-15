@@ -1,3 +1,33 @@
+// [性能优化] 全局彻底禁用 ECharts 动画，避免大屏持续重绘卡顿
+if (typeof echarts !== 'undefined' && echarts.init) {
+    (function() {
+        const _origInit = echarts.init;
+        echarts.init = function() {
+            const chart = _origInit.apply(this, arguments);
+            const _origSetOption = chart.setOption;
+            chart.setOption = function(opt, notMerge, lazyUpdate) {
+                if (opt && typeof opt === 'object') {
+                    opt.animation = false;
+                    opt.animationDuration = 0;
+                    opt.animationDurationUpdate = 0;
+                    if (Array.isArray(opt.series)) {
+                        opt.series.forEach(s => {
+                            if (s) {
+                                s.animation = false;
+                                s.animationDuration = 0;
+                                if (s.type === 'effectScatter') s.type = 'scatter';
+                                if (s.rippleEffect) s.rippleEffect = { show: false };
+                            }
+                        });
+                    }
+                }
+                return _origSetOption.call(this, opt, notMerge, lazyUpdate);
+            };
+            return chart;
+        };
+    })();
+}
+
 
 // 安全 HTML 转义函数
 function escapeHtml(str) {
@@ -3681,14 +3711,14 @@ async function renderChinaBciMap() {
         // 绑定地图点击穿透事件
         chartChinaMapInstance.on('click', function(params) {
             // 省内城市散点点击：二级下钻，只看该城市
-            if ((params.seriesType === 'effectScatter' || params.seriesType === 'scatter') && params.data && params.data.isCityPoint) {
+            if (((params.seriesType === 'scatter' || params.seriesType === 'effectScatter')) && params.data && params.data.isCityPoint) {
                 bciState.currentCity = (bciState.currentCity === params.data.city) ? 'all' : params.data.city;
                 applyBciFilterAndRender();
                 return;
             }
 
             let selectedProv = '';
-            if (params.seriesType === 'effectScatter') {
+            if ((params.seriesType === 'scatter' || params.seriesType === 'effectScatter')) {
                 selectedProv = params.data.province || params.name;
             } else if (params.seriesType === 'map') {
                 selectedProv = params.name;
@@ -3893,7 +3923,7 @@ async function renderChinaBciMap() {
         // 3. 四川专属：地理原点发光脉冲散点层 (0 文字，纯净呼吸圆点)
         seriesList.push({
             name: '地理原点',
-            type: 'effectScatter',
+            type: 'scatter',
             coordinateSystem: 'geo',
             data: scatterData,
             symbolSize: 15,
@@ -3953,7 +3983,7 @@ async function renderChinaBciMap() {
         // 全国视图：核心城市 / 高校智库标注散点层
         seriesList.push({
             name: '标注散点',
-            type: 'effectScatter',
+            type: 'scatter',
             coordinateSystem: 'geo',
             data: scatterData,
             symbolSize: function(val, params) {
@@ -4028,7 +4058,7 @@ async function renderChinaBciMap() {
                         <div style="font-size:10.5px; color:#0284c7; margin-top:4px;">👉 右侧看板已同步列出该机构相关详细档案</div>
                     `;
                 }
-                if (params.seriesType === 'effectScatter') {
+                if ((params.seriesType === 'scatter' || params.seriesType === 'effectScatter')) {
                     const d = params.data;
                     if (d.experts) {
                         return `
@@ -5347,14 +5377,14 @@ async function renderChinaRobotMap() {
         
         chartChinaRobotMapInstance.on('click', function(params) {
             // 省内城市散点点击：二级下钻，只看该城市
-            if ((params.seriesType === 'effectScatter' || params.seriesType === 'scatter') && params.data && params.data.isCityPoint) {
+            if (((params.seriesType === 'scatter' || params.seriesType === 'effectScatter')) && params.data && params.data.isCityPoint) {
                 robotState.currentCity = (robotState.currentCity === params.data.city) ? 'all' : params.data.city;
                 applyRobotFilterAndRender();
                 return;
             }
 
             let selectedProv = '';
-            if (params.seriesType === 'effectScatter' || params.seriesType === 'scatter') {
+            if ((params.seriesType === 'scatter' || params.seriesType === 'effectScatter')) {
                 selectedProv = params.data.province || params.name;
             } else if (params.seriesType === 'map') {
                 selectedProv = params.name;
@@ -5485,7 +5515,7 @@ async function renderChinaRobotMap() {
 
         seriesList.push({
             name: '地理原点',
-            type: 'effectScatter',
+            type: 'scatter',
             coordinateSystem: 'geo',
             data: scatterData,
             symbolSize: 15,
@@ -5548,7 +5578,7 @@ async function renderChinaRobotMap() {
     } else {
         seriesList.push({
             name: '标注散点',
-            type: 'effectScatter',
+            type: 'scatter',
             coordinateSystem: 'geo',
             data: scatterData,
             symbolSize: function(val, params) {
@@ -5617,7 +5647,7 @@ async function renderChinaRobotMap() {
                         <div style="font-size:10.5px; color:#0284c7; margin-top:4px;">👉 右侧看板已同步列出该机构相关详细档案</div>
                     `;
                 }
-                if (params.seriesType === 'effectScatter') {
+                if ((params.seriesType === 'scatter' || params.seriesType === 'effectScatter')) {
                     const d = params.data;
                     if (d.experts) {
                         return `
@@ -6516,14 +6546,14 @@ async function renderChinaNuclearMap() {
 
         chartChinaNuclearMapInstance.on('click', function(params) {
             // 省内城市散点点击：二级下钻，只看该城市
-            if ((params.seriesType === 'effectScatter' || params.seriesType === 'scatter') && params.data && params.data.isCityPoint) {
+            if (((params.seriesType === 'scatter' || params.seriesType === 'effectScatter')) && params.data && params.data.isCityPoint) {
                 nuclearState.currentCity = (nuclearState.currentCity === params.data.city) ? 'all' : params.data.city;
                 applyNuclearFilterAndRender();
                 return;
             }
 
             let selectedProv = '';
-            if (params.seriesType === 'effectScatter' || params.seriesType === 'scatter') {
+            if ((params.seriesType === 'scatter' || params.seriesType === 'effectScatter')) {
                 selectedProv = params.data.province || params.name;
             } else if (params.seriesType === 'map') {
                 selectedProv = params.name;
@@ -6606,7 +6636,7 @@ async function renderChinaNuclearMap() {
         },
         {
             name: '标注散点',
-            type: 'effectScatter',
+            type: 'scatter',
             coordinateSystem: 'geo',
             data: scatterData,
             symbolSize: function(val, params) {
@@ -6668,7 +6698,7 @@ async function renderChinaNuclearMap() {
             padding: [8, 12],
             textStyle: { color: isDark ? '#f8fafc' : '#0f172a', fontSize: 12 },
             formatter: function(params) {
-                if (params.seriesType === 'effectScatter') {
+                if ((params.seriesType === 'scatter' || params.seriesType === 'effectScatter')) {
                     const d = params.data;
                     if (d.isCityPoint) {
                         return `
